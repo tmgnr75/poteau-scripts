@@ -1,0 +1,24 @@
+# Firebase admin / service-account credentials — NEVER commit
+*-firebase-adminsdk-*.json
+*serviceAccount*.json
+*service-account*.json
+Poteau Billing IAM Admin.json
+
+# Local env
+.env
+.env.*
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
