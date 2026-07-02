@@ -47,8 +47,11 @@ const IOS_SIZES = [
   { suffix: '-20@2x',  px: 40  },
   { suffix: '-20@3x',  px: 60  },
   // iPad app icons (required by App Store validation to avoid ITMS-90892).
-  { suffix: '-76@2x',   px: 152 }, // iPad app icon (76pt @2x)
-  { suffix: '-83.5@2x', px: 167 }, // iPad Pro app icon (83.5pt @2x)
+  // Naming MUST follow Apple's canonical <size>x<size>@<scale>x pattern
+  // (NOT the -<pt>@2x convention used for iPhone alternate icons). App Store
+  // validator only recognizes explicit dimension-in-name for iPad sizes.
+  { suffix: '76x76@2x',     px: 152 }, // iPad app icon (76pt @2x)
+  { suffix: '83.5x83.5@2x', px: 167 }, // iPad Pro app icon (83.5pt @2x)
 ];
 
 // Android adaptive foreground sizes (logo on transparent, designed for 108dp canvas with 72dp safe zone).

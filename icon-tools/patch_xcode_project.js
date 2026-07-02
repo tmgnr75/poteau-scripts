@@ -19,8 +19,13 @@ const RUNNER_DIR = '/Users/tmgnr/poteau-workspace/poteau-app/ios/Runner';
 function listAlternateIconFiles() {
   return fs
     .readdirSync(RUNNER_DIR)
-    // Suffix allows a dot so iPad Pro's fractional point size (-83.5@2x) matches too.
-    .filter((f) => /^AppIcon-(PoteauLegacy|KrankLegacy)(-[\d.]+)?@\dx\.png$/.test(f))
+    // Matches three iOS icon-naming conventions used in this repo:
+    //   1. Bare:        AppIcon-PoteauLegacy@2x.png          (60pt iPhone app icon)
+    //   2. Dashed size: AppIcon-PoteauLegacy-40@2x.png       (spotlight/settings on iPhone)
+    //   3. Apple canon: AppIcon-PoteauLegacy76x76@2x.png     (iPad app icon; MUST use this
+    //                                                         format for App Store validator)
+    // Dots (.) in the size are supported for iPad Pro's 83.5x83.5@2x variant.
+    .filter((f) => /^AppIcon-(PoteauLegacy|KrankLegacy)(-[\d.]+|[\d.]+x[\d.]+)?@\dx\.png$/.test(f))
     .sort();
 }
 
