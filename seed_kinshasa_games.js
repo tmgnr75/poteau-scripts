@@ -37,20 +37,60 @@ const LIVE = argv.includes('--live');
 const FORCE = argv.includes('--force');
 const daysArg = (argv.find((a) => a.startsWith('--days=')) || '').split('=')[1];
 const DAYS_AHEAD = daysArg ? parseInt(daysArg, 10) : 3;
+const profileArg = (argv.find((a) => a.startsWith('--profile=')) || '').split('=')[1] ||
+  (argv.includes('--profile') ? argv[argv.indexOf('--profile') + 1] : '');
 
 // The organizer test account (owns the game). Resolved from the roster.
 const ORGANIZER_KEY = 'marc_organizer';
 
 // ---------------------------------------------------------------------------
-// Compute a future game date at 18:00 Kinshasa time (UTC+1, no DST).
-// Kinshasa is Africa/Kinshasa = WAT = UTC+1 year-round. 18:00 local = 17:00 UTC.
-// We avoid Date.now-style non-determinism concerns by using the real clock here
-// (this is a one-shot seeding script, not a resumable workflow).
+// Timeline PROFILES — position the game's `date` relative to now so a specific
+// V5 payment phase is exercised. All offsets are relative to remove_reserved_hours
+// (RRH = 5h in prod today; see reference_v5_payment_model). The join path is:
+//   date - now  >  RRH  → Path 1: free reservation, spot "reserved", NO PaymentSheet
+//   date - now  <= RRH  → Path 2: PaymentSheet opens, hold placed, spot "confirmed"
+//   capture/cancel happens at T-1h (handlePaymentAuth); sweep at T-RRH (unreserveSpots)
+//
+// Profiles (offset from now, in hours):
+//   far-out        +168h (7d)   — comfortably in Path 1; free reservation
+//   confirm-window +6h          — still Path 1 today (>5h) but close to the RRH sweep boundary
+//   near-removal   +5.5h        — just OUTSIDE RRH; about to enter the unreserveSpots sweep window
+//   authorize-now  +4h          — INSIDE RRH → Path 2: joining opens the Stripe PaymentSheet
+//   last-minute    +0.75h (45m) — < T-1h capture window; immediate/late behavior
+//
+// NOTE: today RRH=5h so "near-removal" and "authorize-now" are ~an hour apart. Post-V5
+// (RRH=120h) these profiles still make sense proportionally; adjust offsets if RRH changes.
 // ---------------------------------------------------------------------------
+// NOTE on far-out: the discovery feed only browses a limited date window
+// (day-tabs span ~the next few days), so a +7d game is hard for the agent to
+// reach. What "far-out" actually tests is Path 1 (free reservation, no
+// PaymentSheet), which triggers for ANY game > remove_reserved_hours (5h) out.
+// +40h (~1.7 days) is comfortably Path 1 AND stays inside the browsable range.
+const PROFILE_OFFSET_HOURS = {
+  'far-out': 40,
+  'confirm-window': 6,
+  'near-removal': 5.5,
+  'authorize-now': 4,
+  'last-minute': 0.75,
+};
+
+// 'default' (and no profile) → the legacy standing game (~3 days out).
+const isDefaultProfile = !profileArg || profileArg === 'default';
+
+// Compute game start/end as an offset-from-now (profile) OR the legacy day-ahead 18:00 slot.
 function kinshasaGameTimes() {
   const now = new Date();
+  if (profileArg && !isDefaultProfile) {
+    const offH = PROFILE_OFFSET_HOURS[profileArg];
+    if (offH === undefined) {
+      throw new Error(`Unknown --profile "${profileArg}". Valid: default, ${Object.keys(PROFILE_OFFSET_HOURS).join(', ')}`);
+    }
+    const start = new Date(now.getTime() + offH * 3600 * 1000);
+    const end = new Date(start.getTime() + cfg.SEED_GAME.duration * 60 * 1000);
+    return { start, end };
+  }
+  // Legacy: DAYS_AHEAD days out at 18:00 Kinshasa (17:00 UTC).
   const d = new Date(now.getTime() + DAYS_AHEAD * 24 * 3600 * 1000);
-  // 18:00 Kinshasa == 17:00 UTC
   const start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 17, 0, 0, 0));
   const end = new Date(start.getTime() + cfg.SEED_GAME.duration * 60 * 1000);
   return { start, end };
@@ -84,7 +124,9 @@ function buildGameDoc(organizerUid) {
     // --- scrubbed → Kinshasa, set at creation (never patched afterwards) ---
     location: new GeoPoint(K.lat, K.lng),
     place_id: K.placeId,           // synthetic 'test_kinshasa_padel_01'
-    centre: K.centreName,          // 'Kinshasa Padel Test' (not '4PADEL Montreuil')
+    // Profile-distinct name so multiple concurrent test games (and the agent)
+    // can tell them apart. 'Kinshasa Padel Test' for default; suffixed otherwise.
+    centre: isDefaultProfile ? K.centreName : `${K.centreName} [${profileArg}]`,
     address: K.address,
     country_code: K.countryCode,   // 'CD'
     time_zone: K.timeZone,         // 'Africa/Kinshasa'
@@ -113,6 +155,7 @@ function buildGameDoc(organizerUid) {
 
     // --- test markers (teardown + CF isolation belt-and-suspenders) ---
     is_test_game: true,
+    test_profile: profileArg || 'default',
   };
 }
 
@@ -140,13 +183,19 @@ function preview(v) {
   }
   console.log(`Organizer: ${organizerEmail} → ${organizer.uid}\n`);
 
-  // Idempotency: is there already an open test game for this organizer?
+  // Idempotency: is there already an open test game for this organizer WITH THE
+  // SAME profile? Different profiles are distinct fixtures, so we don't skip
+  // across profiles. (Filter profile client-side to avoid a composite index.)
   if (!FORCE) {
-    const existing = await db.collection('games')
+    const existingSnap = await db.collection('games')
       .where('organizer', '==', organizer.uid)
       .where('is_test_game', '==', true)
       .where('status', '==', 'published')
       .get();
+    const wantProfile = profileArg || 'default';
+    const existing = { docs: existingSnap.docs.filter((d) => (d.data().test_profile || 'default') === wantProfile) };
+    existing.empty = existing.docs.length === 0;
+    existing.size = existing.docs.length;
     if (!existing.empty) {
       console.log(`\x1b[33mSKIP\x1b[0m — ${existing.size} open test game(s) already exist for this organizer:`);
       existing.forEach((d) => {

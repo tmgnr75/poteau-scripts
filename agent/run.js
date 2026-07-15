@@ -56,11 +56,12 @@ function log(msg) { console.log(`[${new Date().toISOString().slice(11, 19)}] ${m
 function sh(cmd, opts = {}) { return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], ...opts }); }
 
 // idb invocation: companion addressed via IDB_COMPANION env (see memory note).
+// All idb calls carry a timeout so a wedged companion can't hang the loop.
 let COMPANION_PORT = null;
 function idb(args, opts = {}) {
   const env = { ...process.env };
   if (COMPANION_PORT) env.IDB_COMPANION = `localhost:${COMPANION_PORT}`;
-  return execFileSync(IDB, args, { encoding: 'utf8', env, ...opts });
+  return execFileSync(IDB, args, { encoding: 'utf8', env, timeout: 25000, killSignal: 'SIGKILL', ...opts });
 }
 function idbSafe(args, opts = {}) {
   try { return { ok: true, out: idb(args, opts) }; }
@@ -82,40 +83,78 @@ function bootSim(udid) {
 }
 
 let companionProc = null;
-// Detect a companion already listening (e.g. from a prior run / manual start).
-// Returns its port or null. idb_companion prints one line per LISTEN socket.
-function existingCompanionPort() {
-  try {
-    const pids = sh(`pgrep -f idb_companion`).trim().split('\n').filter(Boolean);
-    for (const pid of pids) {
-      const out = sh(`lsof -a -p ${pid} -iTCP -sTCP:LISTEN -P -n 2>/dev/null || true`);
-      const m = out.match(/:(\d+)\s+\(LISTEN\)/);
-      if (m) return m[1];
-    }
-  } catch {}
-  return null;
+const FIXED_COMPANION_PORT = '10882'; // pin the port so restarts are deterministic
+
+// Kill ALL companions and wait until none remain (up to ~5s). Deterministic —
+// no lsof/port-detection races. Returns when the port is free.
+function killAllCompanions() {
+  try { sh(`pkill -9 -f idb_companion`); } catch {}
+  for (let i = 0; i < 25; i++) {
+    let alive = '';
+    try { alive = sh(`pgrep -f idb_companion || true`).trim(); } catch {}
+    if (!alive) return;
+    try { sh(`sleep 0.2`); } catch {}
+  }
 }
+
+// Probe: does describe-all return a non-empty JSON array? Confirms the a11y
+// bridge is actually alive (not just the port open).
+function companionResponsive() {
+  const r = idbSafe(['ui', 'describe-all']);
+  if (!r.ok) return false;
+  try { const d = JSON.parse(r.out); return Array.isArray(d) && d.length > 0; }
+  catch { return false; }
+}
+
+// Start a companion on the FIXED port. Kills any existing one first so the port
+// is free. CRITICAL: the companion logs verbosely; if its stdout/stderr go to a
+// pipe that node doesn't drain, the pipe buffer fills and the companion BLOCKS
+// (stops serving requests → a11y "wedge"). So we DETACH it and redirect output
+// to a log FILE (never a node-held pipe), and poll the log file for readiness.
+let companionLogPath = null;
 function startCompanion(udid) {
-  const existing = existingCompanionPort();
-  if (existing) { COMPANION_PORT = existing; log(`Reusing companion on port ${existing}`); return Promise.resolve(); }
+  killAllCompanions();
   const { spawn } = require('child_process');
-  log('Starting idb companion...');
-  companionProc = spawn(IDB_COMPANION_BIN, ['--udid', udid], { stdio: ['ignore', 'pipe', 'pipe'] });
-  return new Promise((resolve, reject) => {
-    let buf = '';
-    const onData = (d) => {
-      buf += d.toString();
-      const m = buf.match(/"grpc_port":\s*(\d+)/) || buf.match(/swift server on tcp port (\d+)/i);
-      if (m && !COMPANION_PORT) { COMPANION_PORT = m[1]; log(`Companion on port ${COMPANION_PORT}`); resolve(); }
+  companionLogPath = path.join(RUNS_DIR, `companion-${FIXED_COMPANION_PORT}.log`);
+  fs.mkdirSync(RUNS_DIR, { recursive: true });
+  const out = fs.openSync(companionLogPath, 'w');
+  log(`Starting idb companion on port ${FIXED_COMPANION_PORT}...`);
+  companionProc = spawn(IDB_COMPANION_BIN, ['--udid', udid, '--grpc-port', FIXED_COMPANION_PORT],
+    { stdio: ['ignore', out, out], detached: true });
+  companionProc.unref(); // let it run independently of node's event loop
+  COMPANION_PORT = FIXED_COMPANION_PORT;
+  return new Promise((resolve) => {
+    const start = Date.now();
+    const poll = () => {
+      let logtxt = '';
+      try { logtxt = fs.readFileSync(companionLogPath, 'utf8'); } catch {}
+      if (/tcp port|grpc_port|Swift server started/i.test(logtxt)) { log(`Companion up on ${COMPANION_PORT}`); return resolve(); }
+      if (Date.now() - start > 12000) { log('Companion start timed out (probing anyway)'); return resolve(); }
+      setTimeout(poll, 400);
     };
-    companionProc.stdout.on('data', onData);
-    companionProc.stderr.on('data', onData);
-    companionProc.on('exit', (c) => { if (!COMPANION_PORT) reject(new Error(`companion exited ${c}`)); });
-    setTimeout(() => { if (!COMPANION_PORT) reject(new Error('companion port timeout')); }, 15000);
+    poll();
   });
 }
-// Only kill a companion WE started; leave a reused one alone.
-function stopCompanion() { if (companionProc) try { companionProc.kill(); } catch {} }
+
+// Restart on a wedged a11y bridge, then verify it's responsive (probe a few
+// times). Returns true if the bridge is back.
+async function restartCompanion(udid) {
+  log('Restarting companion to recover a11y bridge...');
+  killAllCompanions();
+  companionProc = null;
+  COMPANION_PORT = null;
+  try { await startCompanion(udid); } catch (e) { log(`restart start failed: ${e.message}`); }
+  // The companion needs several seconds to bring up its a11y bridge after the
+  // port opens. Warm up, then probe up to 6× (≈18s) before giving up.
+  await sleep(5000);
+  for (let i = 0; i < 6; i++) {
+    if (companionResponsive()) { log('a11y bridge recovered.'); return true; }
+    await sleep(3000);
+  }
+  log('a11y bridge still unresponsive after restart.');
+  return false;
+}
+function stopCompanion() { killAllCompanions(); }
 
 function installApp(udid) {
   if (!fs.existsSync(APP_PATH)) {
@@ -242,6 +281,18 @@ from the accessibility list using THEIR coordinates. Many icon/nav buttons are U
 listed coordinates. If tapping the same target twice produces no change, pick a DIFFERENT element
 from the list rather than repeating.
 
+APP NAVIGATION NOTES (Poteau):
+- The screen title like "Soccer near Kinshasa" / "Padel near Kinshasa" has a small pencil ✏️ next
+  to it — that pencil edits the LOCATION, NOT the sport. Do NOT tap the pencil to switch sports.
+- To switch between Soccer and Padel discovery, tap the SPORT ICONS in the BOTTOM nav bar (the row
+  of unlabeled images near y≈780): a soccer-ball icon and a tennis/padel-ball icon. Tap the
+  padel/tennis-ball one to see padel games.
+- The bottom nav (left→right) is roughly: Home (house), Soccer, Padel, Profile. Use the a11y
+  element coordinates (~y 780), not pixel guesses.
+- If the screen is completely BLANK (only a background color, no elements) for 2+ steps, you likely
+  hit a dead-end/unrendered screen — do NOT keep waiting. Report it as a warn red flag and the
+  driver will relaunch the app to recover.
+
 Run context (values you may need):
 ${Object.entries(runCtx).map(([k, v]) => `- ${k} = ${v}`).join('\n')}
 
@@ -259,13 +310,14 @@ Rules:
 ${journeyText}`;
 }
 
-async function decide(client, model, sys, imgB64, elements, history) {
+async function decide(client, model, sys, imgB64, elements, history, liveHint) {
   const elemText = elements.length
     ? elements.map((e, i) => `${i}. [${e.type}] ${e.label ? `"${e.label}"` : '(unlabeled ' + e.type + ')'} @(${e.x},${e.y})${e.enabled ? '' : ' (disabled)'}`).join('\n')
     : '(accessibility tree empty — reason from the screenshot, converting pixels→points by /3)';
   const histText = history.length
     ? history.slice(-8).map((h, i) => `${history.length - Math.min(8, history.length) + i + 1}. ${h.action}${h.text ? ` "${h.text}"` : ''}${h.coordinates ? ` @${JSON.stringify(h.coordinates)}` : ''} — ${h.reason}`).join('\n')
     : '(none yet)';
+  const hintText = liveHint ? `\n\nLIVE HINT (current, use if relevant): ${liveHint}` : '';
 
   const resp = await client.messages.create({
     model,
@@ -277,7 +329,7 @@ async function decide(client, model, sys, imgB64, elements, history) {
       role: 'user',
       content: [
         { type: 'image', source: { type: 'base64', media_type: 'image/png', data: imgB64 } },
-        { type: 'text', text: `Accessibility elements:\n${elemText}\n\nAction history (recent):\n${histText}\n\nDecide the next action.` },
+        { type: 'text', text: `Accessibility elements:\n${elemText}\n\nAction history (recent):\n${histText}${hintText}\n\nDecide the next action.` },
       ],
     }],
   });
@@ -301,6 +353,96 @@ function loadJourney(name) {
     if (m) conf[m[1]] = m[2];
   });
   return { text, conf };
+}
+
+// ---------------------------------------------------------------------------
+// FRESH persona (signup journeys) + profile seeding (payment journeys).
+// These shell out to the sibling scripts so all Firestore/Auth logic stays in
+// one place (create_test_accounts.js / seed_kinshasa_games.js / otp.js).
+// ---------------------------------------------------------------------------
+const SCRIPTS_DIR = path.resolve(__dirname, '..');
+
+// Create a throwaway signup account (Auth user, emailVerified so the app treats
+// the code as already-known, but the SIGNUP flow will still write a fresh
+// email_code we read). Returns { email, uid, password, phone }.
+async function createFreshAccount(ts) {
+  const admin = require('firebase-admin');
+  const serviceAccount = require(path.join(SCRIPTS_DIR, 'krank-club-firebase-adminsdk-bl4zy-d8facdf022.json'));
+  if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(serviceAccount), projectId: 'krank-club' });
+  const email = `test_signup_${ts.replace(/[^0-9]/g, '').slice(0, 14)}@${cfg.TEST_EMAIL_DOMAIN}`;
+  const password = cfg.TEST_PASSWORD;
+  // Do NOT pre-create the Firestore doc — the signup flow builds it. We only
+  // pre-create the Auth user so the app's createAccountWithEmail either signs in
+  // or the flow proceeds; but signup journeys exercise the real create path, so
+  // we leave Auth creation to the app and just reserve the email string here.
+  return { email, password, phone: cfg.phoneForIndex(0) };
+}
+
+// Delete a fresh signup account after the run (Auth + Firestore doc if created).
+async function deleteFreshAccount(email) {
+  const admin = require('firebase-admin');
+  if (!admin.apps.length) return;
+  const u = await admin.auth().getUserByEmail(email).catch(() => null);
+  if (!u) return;
+  if (!cfg.isTestEmail(u.email)) return; // safety
+  await admin.firestore().collection('users').doc(u.uid).delete().catch(() => {});
+  await admin.auth().deleteUser(u.uid).catch(() => {});
+  log(`Cleaned up fresh account ${email}`);
+}
+
+// Before a payment run: remove the joiner persona from every test game and
+// delete any OTHER-profile test games, so only the target profile's game exists
+// and the persona starts un-joined. Prevents cross-run confounding (identical
+// game names + stale membership).
+async function resetTestGamesFor(profile, personaKey) {
+  const admin = require('firebase-admin');
+  const serviceAccount = require(path.join(SCRIPTS_DIR, 'krank-club-firebase-adminsdk-bl4zy-d8facdf022.json'));
+  if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(serviceAccount), projectId: 'krank-club' });
+  const db2 = admin.firestore();
+  const personaUid = await otp.uidForEmail(cfg.emailFor(personaKey)).catch(() => null);
+  const snap = await db2.collection('games').where('is_test_game', '==', true).get();
+  for (const g of snap.docs) {
+    const d = g.data();
+    const p = d.test_profile || 'default';
+    if (p !== profile) {
+      // Delete other-profile test games so they don't pollute discovery.
+      await g.ref.delete().catch(() => {});
+      log(`Cleared stale test game games/${g.id} (profile ${p})`);
+      continue;
+    }
+    // Same profile: strip the persona out so they start un-joined.
+    if (personaUid) {
+      const teams = (d.teams || []).map((t) => (t.user_id === personaUid ? { team_side: t.team_side, status: 'open' } : t));
+      const attendees = (d.attendees || []).filter((r) => (r.id || r.path?.split('/').pop()) !== personaUid);
+      await g.ref.update({ teams, attendees }).catch(() => {});
+    }
+  }
+}
+
+// Seed a game for the given timeline profile, return its id. Idempotent per
+// profile (seed script skips if one exists), so we query it back either way.
+function seedProfileGame(profile) {
+  log(`Seeding game for profile "${profile}"...`);
+  try {
+    sh(`node "${path.join(SCRIPTS_DIR, 'seed_kinshasa_games.js')}" --profile ${profile} --live`);
+  } catch (e) {
+    // A skip (already exists) exits 0; a real error would throw. Log stderr.
+    log(`seed note: ${(e.stdout || '') + (e.stderr || e.message)}`.slice(0, 300));
+  }
+  // Query the game id back (organizer + profile).
+  const admin = require('firebase-admin');
+  const serviceAccount = require(path.join(SCRIPTS_DIR, 'krank-club-firebase-adminsdk-bl4zy-d8facdf022.json'));
+  if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(serviceAccount), projectId: 'krank-club' });
+  return admin.auth().getUserByEmail(cfg.emailFor('marc_organizer'))
+    .then((org) => admin.firestore().collection('games')
+      .where('organizer', '==', org.uid)
+      .where('is_test_game', '==', true)
+      .where('status', '==', 'published')
+      .get())
+    .then((snap) => {
+      const match = snap.docs.find((d) => (d.data().test_profile || 'default') === profile);
+      return match ? match.id : null;
+    });
 }
 
 // ---------------------------------------------------------------------------
@@ -358,34 +500,74 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   fs.mkdirSync(runDir, { recursive: true });
   log(`Run dir: ${runDir}`);
 
-  // Resolve persona. Poteau email login is email+password → Home. Also pre-set a
-  // known email_code in case a 4-digit code screen appears in some flow variant.
-  const personaEmail = cfg.emailFor(persona);
-  const personaUid = await otp.uidForEmail(personaEmail);
-  if (!personaUid) throw new Error(`Persona ${personaEmail} has no account.`);
-  const loginCode = await otp.setKnownCode(personaUid, otp.DEFAULT_CODE);
-  log(`Persona ${personaEmail} (${personaUid}) — password login, code fallback ${loginCode}`);
+  // --- Resolve persona / run context ---
+  const isFresh = persona === 'FRESH';
+  const runCtx = { KINSHASA: `${cfg.KINSHASA.lat},${cfg.KINSHASA.lng}` };
+  let freshEmail = null; // set for FRESH personas so we can tear down after
 
-  const runCtx = {
-    PERSONA_EMAIL: personaEmail,
-    LOGIN_PASSWORD: cfg.TEST_PASSWORD,
-    LOGIN_CODE: loginCode,
-    SEED_GAME_ID: 'Rx7D9yhKIHYg8ldxddo7',
-    KINSHASA: `${cfg.KINSHASA.lat},${cfg.KINSHASA.lng}`,
-  };
+  if (isFresh) {
+    // Signup journeys: no pre-provisioned account. Generate a throwaway email;
+    // the app's signup flow creates the account. The 4-digit email_code will be
+    // read live once the account doc exists (poll during the run).
+    const fresh = await createFreshAccount(ts);
+    freshEmail = fresh.email;
+    runCtx.SIGNUP_EMAIL = fresh.email;
+    runCtx.SIGNUP_PASSWORD = fresh.password;
+    runCtx.SIGNUP_PHONE = fresh.phone;
+    runCtx.LOGIN_CODE = '(will be read from Firestore after signup — the driver injects it)';
+    log(`FRESH signup persona: ${fresh.email}`);
+  } else {
+    // Pre-provisioned persona: email+password login → Home.
+    const personaEmail = cfg.emailFor(persona);
+    const personaUid = await otp.uidForEmail(personaEmail);
+    if (!personaUid) throw new Error(`Persona ${personaEmail} has no account.`);
+    const loginCode = await otp.setKnownCode(personaUid, otp.DEFAULT_CODE);
+    log(`Persona ${personaEmail} (${personaUid}) — password login, code fallback ${loginCode}`);
+    runCtx.PERSONA_EMAIL = personaEmail;
+    runCtx.LOGIN_PASSWORD = cfg.TEST_PASSWORD;
+    runCtx.LOGIN_CODE = loginCode;
+  }
+
+  // --- Seed the timeline game for payment journeys ---
+  if (conf.seedProfile) {
+    // Clear other-profile test games + un-join the persona so only this
+    // profile's game exists and the persona starts fresh (no stale membership).
+    await resetTestGamesFor(conf.seedProfile, persona).catch((e) => log(`reset note: ${e.message}`));
+    const gid = await seedProfileGame(conf.seedProfile);
+    runCtx.SEED_GAME_ID = gid || '(seed failed — check logs)';
+    runCtx.SEED_GAME_NAME = `Kinshasa Padel Test [${conf.seedProfile}]`;
+    log(`Seeded ${conf.seedProfile} game: ${runCtx.SEED_GAME_ID}`);
+  } else if (!isFresh) {
+    // Look up the current default standing test game (id is not hardcoded — it
+    // changes when re-seeded). Seed one if none exists.
+    const gid = await seedProfileGame('default').catch(() => null);
+    runCtx.SEED_GAME_ID = gid || '(no default game — check seed)';
+  }
 
   const client = new Anthropic();
   const sys = systemPrompt(journeyText, runCtx);
 
   // --- boot / install / launch ---
+  // Order: boot → terminate old app → reinstall (clean state, fixes stale
+  // calendar cache) → THEN start a FRESH companion → set location → launch.
+  // Installing before the companion avoids wedging the companion's UI bridge.
   bootSim(udid);
-  await startCompanion(udid);
-  // Put the sim in Kinshasa so location-based discovery matches.
-  idbSafe(['set-location', '--', String(cfg.KINSHASA.lat), String(cfg.KINSHASA.lng)]);
-  if (!noBuild) installApp(udid);
   terminateApp(udid);
+  if (!args.includes('--fast-launch')) installApp(udid);
+  await startCompanion(udid);
+  await sleep(4000); // let the companion's a11y bridge come up
+  idbSafe(['set-location', '--', String(cfg.KINSHASA.lat), String(cfg.KINSHASA.lng)]);
   launchApp(udid);
-  await sleep(6000); // splash
+  await sleep(7000); // splash + first render
+
+  // Confirm the a11y bridge is live before the loop; restart (with warm-up) if
+  // not. Probe a few times first — the bridge can lag the app launch.
+  let bridgeOk = false;
+  for (let i = 0; i < 4; i++) { if (companionResponsive()) { bridgeOk = true; break; } await sleep(2500); }
+  if (!bridgeOk) {
+    log('a11y bridge not responsive at launch — restarting companion.');
+    await restartCompanion(udid);
+  }
 
   // --- loop ---
   const steps = [];
@@ -393,6 +575,7 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   const tokens = { input: 0, output: 0 };
   let outcome = { status: 'inconclusive', reason: 'hit step/time budget' };
   const startedAt = Date.now();
+  let emptyA11yStreak = 0; // consecutive steps with an empty a11y tree
 
   for (let step = 1; step <= maxSteps; step++) {
     if (Date.now() - startedAt > timeoutMs) { outcome = { status: 'inconclusive', reason: 'timeout' }; break; }
@@ -400,11 +583,46 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     const shotPath = path.join(runDir, `step-${String(step).padStart(2, '0')}.png`);
     if (!screenshot(shotPath)) { log(`screenshot failed at step ${step}`); await sleep(1500); continue; }
     const imgB64 = fs.readFileSync(shotPath).toString('base64');
-    const elements = a11yElements();
+    let elements = a11yElements();
+
+    // Empty a11y has two causes: (a) a WEDGED companion bridge — restart fixes
+    // it; or (b) a genuinely BLANK app screen (dead-end / unrendered) — only an
+    // app relaunch escapes it. Try companion restart first; if a11y is STILL
+    // empty afterwards, the screen is truly blank → relaunch the app.
+    if (elements.length === 0) {
+      emptyA11yStreak++;
+      if (emptyA11yStreak === 2) {
+        log(`a11y empty ×2 — restarting companion (bridge-wedge recovery)`);
+        await restartCompanion(udid);
+        elements = a11yElements();
+        if (elements.length > 0) emptyA11yStreak = 0;
+      } else if (emptyA11yStreak >= 4) {
+        log(`a11y STILL empty ×${emptyA11yStreak} after companion restart — relaunching app to escape a blank dead-end`);
+        terminateApp(udid);
+        await sleep(1500);
+        launchApp(udid);
+        await sleep(6000);
+        elements = a11yElements();
+        emptyA11yStreak = 0;
+      }
+    } else {
+      emptyA11yStreak = 0;
+    }
+
+    // FRESH signup: once the account doc exists, read the live 4-digit email_code
+    // so the agent can enter it on the PIN screen. Surface it as a per-step hint.
+    let liveHint = null;
+    if (isFresh && freshEmail) {
+      const freshUid = await otp.uidForEmail(freshEmail).catch(() => null);
+      if (freshUid) {
+        const code = await otp.readCode(freshUid, { waitMs: 0 }).catch(() => null);
+        if (code) liveHint = `The 4-digit email verification code for this signup is ${code} — type it if a PIN/code screen is shown.`;
+      }
+    }
 
     let decision, usage;
     try {
-      ({ decision, usage } = await decide(client, model, sys, imgB64, elements, steps));
+      ({ decision, usage } = await decide(client, model, sys, imgB64, elements, steps, liveHint));
     } catch (e) {
       log(`decide error step ${step}: ${e.message}`);
       await sleep(2000); continue;
@@ -433,7 +651,10 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   // --- teardown + report ---
   if (!keepApp) terminateApp(udid);
   stopCompanion();
-  writeReport(runDir, { journey: journeyName, timestamp: ts, persona: personaEmail, model: conf.model || 'sonnet' }, steps, redFlags, outcome, tokens);
+  // Clean up a fresh signup account (Auth + doc) so runs don't accumulate them.
+  if (isFresh && freshEmail) { await deleteFreshAccount(freshEmail).catch((e) => log(`fresh cleanup failed: ${e.message}`)); }
+  const personaLabel = isFresh ? (freshEmail || 'FRESH') : cfg.emailFor(persona);
+  writeReport(runDir, { journey: journeyName, timestamp: ts, persona: personaLabel, model: conf.model || 'sonnet' }, steps, redFlags, outcome, tokens);
 
   // --- stdout summary ---
   console.log('\n' + '='.repeat(60));
