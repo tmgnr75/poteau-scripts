@@ -217,11 +217,21 @@ async function act(decision) {
       idbSafe(['ui', 'tap', String(coordinates[0]), String(coordinates[1])]);
       await sleep(1500);
       return;
-    case 'type':
+    case 'type': {
       if (text == null) throw new Error('type without text');
-      idbSafe(['ui', 'text', String(text)]);
+      const s = String(text);
+      // Flutter PinCodeTextField (the 4-digit email-verification screen) does
+      // NOT accept `idb ui text` — the digits never register. Pure-digit input
+      // must be sent as HID key events instead. USB HID keycodes: 1=30…9=38, 0=39.
+      if (/^\d+$/.test(s)) {
+        const codes = s.split('').map((d) => (d === '0' ? 39 : 29 + Number(d)));
+        idbSafe(['ui', 'key-sequence', ...codes.map(String)]);
+      } else {
+        idbSafe(['ui', 'text', s]);
+      }
       await sleep(1200);
       return;
+    }
     case 'swipe': {
       // coordinates = [x1,y1,x2,y2]; default a downward scroll if not given
       const c = coordinates && coordinates.length === 4 ? coordinates : [200, 600, 200, 300];
@@ -553,7 +563,31 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   // Installing before the companion avoids wedging the companion's UI bridge.
   bootSim(udid);
   terminateApp(udid);
+  // Clear the keychain so the app starts LOGGED OUT. Firebase persists the auth
+  // session in the iOS keychain, which survives app reinstall — without this,
+  // the app reopens as whoever logged in last (breaks signup journeys and makes
+  // login journeys silently reuse a stale session). Do it while the app is
+  // terminated, before install. Skip with --keep-session (e.g. to speed a
+  // login-journey rerun when you know the right account is already logged in).
+  if (!args.includes('--keep-session')) {
+    try { sh(`xcrun simctl keychain ${udid} reset`); log('Cleared keychain (logged-out start).'); }
+    catch (e) { log(`keychain reset note: ${e.message}`); }
+  }
   if (!args.includes('--fast-launch')) installApp(udid);
+  // Signup journeys hit a "Choose my photo" step that opens the native picker.
+  // Seed the library with an image AND (unless --deny-photo) pre-grant photo
+  // permission so the picker works and the funnel completes. The --deny-photo
+  // flag leaves permission ungranted so the journey can exercise the
+  // denied-permission path (see bug_onboarding_photo_silent_denial).
+  if (isFresh) {
+    const avatar = path.join(APP_PATH, 'AppIcon60x60@2x.png');
+    if (fs.existsSync(avatar)) { try { sh(`xcrun simctl addmedia ${udid} "${avatar}"`); log('Seeded sim photo library.'); } catch {} }
+    if (args.includes('--deny-photo')) {
+      try { sh(`xcrun simctl privacy ${udid} revoke photos ${APP_BUNDLE_ID}`); log('Photo permission REVOKED (deny-photo journey).'); } catch {}
+    } else {
+      try { sh(`xcrun simctl privacy ${udid} grant photos ${APP_BUNDLE_ID}`); log('Photo permission granted.'); } catch {}
+    }
+  }
   await startCompanion(udid);
   await sleep(4000); // let the companion's a11y bridge come up
   idbSafe(['set-location', '--', String(cfg.KINSHASA.lat), String(cfg.KINSHASA.lng)]);
@@ -609,14 +643,17 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
       emptyA11yStreak = 0;
     }
 
-    // FRESH signup: once the account doc exists, read the live 4-digit email_code
-    // so the agent can enter it on the PIN screen. Surface it as a per-step hint.
+    // FRESH signup: once the app has created the account (Auth user appears),
+    // FORCE a known 4-digit code on its doc and surface it so the agent types
+    // the real digits (not the literal "LOGIN_CODE"). The app verifies the PIN
+    // client-side against users/<uid>.email_code, so overwriting it is fine.
     let liveHint = null;
     if (isFresh && freshEmail) {
       const freshUid = await otp.uidForEmail(freshEmail).catch(() => null);
       if (freshUid) {
-        const code = await otp.readCode(freshUid, { waitMs: 0 }).catch(() => null);
-        if (code) liveHint = `The 4-digit email verification code for this signup is ${code} — type it if a PIN/code screen is shown.`;
+        let code = await otp.readCode(freshUid, { waitMs: 0 }).catch(() => null);
+        if (!code) { code = await otp.setKnownCode(freshUid, otp.DEFAULT_CODE).catch(() => null); }
+        if (code) liveHint = `THE ACTUAL 4-digit email verification code is ${code}. On a PIN/code screen, type the digits ${code} (NOT the words "LOGIN_CODE").`;
       }
     }
 
