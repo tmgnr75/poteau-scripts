@@ -385,7 +385,11 @@ async function createFreshAccount(ts) {
   // pre-create the Auth user so the app's createAccountWithEmail either signs in
   // or the flow proceeds; but signup journeys exercise the real create path, so
   // we leave Auth creation to the app and just reserve the email string here.
-  return { email, password, phone: cfg.phoneForIndex(0) };
+  // 13 local digits: the c_phone field validates checkPhoneNumber on the RAW
+  // typed text (>=11 digits, >=4 unique) — NOT including the country code — so a
+  // 9-digit DRC subscriber number fails. 13 digits passes regardless of the
+  // pre-selected country.
+  return { email, password, phone: '0812345670123' };
 }
 
 // Delete a fresh signup account after the run (Auth + Firestore doc if created).

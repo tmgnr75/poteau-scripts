@@ -3,8 +3,8 @@
 <!--config
 persona: FRESH
 model: sonnet
-max_steps: 45
-timeout_min: 20
+max_steps: 75
+timeout_min: 25
 -->
 
 ## Persona
@@ -28,17 +28,23 @@ Home as a fully set-up player.
 4. Onboarding steps follow in THIS ORDER (verified against the app's routing chain) — complete
    each with plausible values, tapping the continue/next affordance each time:
    1. **Name / nickname** (a_nickname): enter a display name ≥ 4 chars.
-   2. **Photo** (b_photo): tap "Choose my photo" → the native iOS photo picker opens → select the
-      first available image (the sim library is pre-seeded with one) → confirm/use it. If a photo
-      permission dialog appears, tap "Allow"/"Select Photos". There is NO skip button here; you must
-      pick the seeded photo to advance.
-   3. **Phone** (c_phone): country defaults to the locale; enter `SIGNUP_PHONE` (valid DRC number).
+   2. **Photo** (b_photo): in the TEST BUILD this step AUTO-ADVANCES for test accounts (a default
+      avatar is set and you're taken straight to the phone step) — the native iOS photo picker can't
+      be automated, so it's bypassed. You likely won't need to act here; if you briefly see a photo
+      screen, just wait one step and it should move on to phone.
+   3. **Phone** (c_phone): a country code is pre-selected (may default to +1 US — that is FINE, do
+      NOT fight the country picker). Tap the phone number text field and type **`0812345670123`**
+      (the field is validated on ≥11 typed digits, so use these 13 digits). Then tap Confirm/Valider.
+      IMPORTANT: type the digits exactly ONCE. If the field shows duplicated/extra text from a prior
+      attempt, tap the field, use "Select All" then re-type once. Do NOT touch the country selector.
    4. **Sport** (d_sports): pick a sport (soccer or padel) and a role if asked.
    5. **Location / area** (e_area): set/confirm a location (Kinshasa).
    6. **Timeslots** (f_timeslots): pick some availability slots if asked, else continue.
-   7. **Players / invite** (g_players): skip inviting anyone / continue.
-   8. **Share** (h_share): skip / continue.
-   9. **Games** (i_games): continue.
+   7. **Players / invite** (g_players): do NOT add anyone. Look for a **"Continuer" / "Continue"**
+      button — it's at the BOTTOM of the screen, below the player cards (you may need to scroll down
+      once). Tap it. Don't tap the per-player "Add" buttons.
+   8. **Share** (h_share): skip / tap **"Continuer" / "Continue"** (bottom of screen).
+   9. **Games** (i_games): tap **"Continuer" / "Continue"** to finish.
    (A level self-assessment or quiz may appear along the way — pick a mid value and continue.)
 5. Land on the **Home** screen ("Hi <name>!").
 
@@ -65,3 +71,13 @@ Home as a fully set-up player.
 - This is the FUNNEL test — note friction at each step (a `warn` per confusing step is valuable
   even if you get through it).
 - Never invent a real phone; use `SIGNUP_PHONE` from context. Never enter a Stripe card.
+- **FINDING THE CONTINUE BUTTON (important):** most onboarding screens have a Continue/Confirm/
+  "Continuer"/"Valider" button. It is almost always in the ACCESSIBILITY ELEMENT LIST — look there
+  FIRST for a Button whose label is Continue/Continuer/Valider/Suivant/Confirm and tap its listed
+  coordinates. Its y is usually ~760–790 in points (a fixed bottom bar). Do NOT scroll repeatedly
+  hoping it appears — if it's in the element list, tap it; if a grid (timeslots) fills the screen,
+  the Continue button is a SEPARATE fixed element below/over the grid, still in the a11y list.
+- On the **timeslots** grid: selecting ONE slot is enough; then find and tap the Continue button
+  from the element list (don't keep scrolling the grid).
+- If after 2 scrolls you can't find a Continue button, tap the a11y element that looks most like a
+  primary bottom button rather than continuing to scroll.
