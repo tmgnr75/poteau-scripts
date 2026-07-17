@@ -80,6 +80,15 @@ function bootSim(udid) {
   } else {
     log(`Sim ${udid} already booted.`);
   }
+  // Sims auto-shutdown after inactivity; a run started against a slept sim hangs
+  // with 0 steps. Verify the device is actually Booted and recover once if not.
+  for (let i = 0; i < 2; i++) {
+    const line = sh(`xcrun simctl list devices | grep ${udid} || true`);
+    if (/\(Booted\)/.test(line)) return;
+    log(`Sim not Booted (state check ${i + 1}) — (re)booting...`);
+    try { sh(`xcrun simctl boot ${udid}`); } catch {}
+    try { sh(`xcrun simctl bootstatus ${udid} -b`); } catch {}
+  }
 }
 
 let companionProc = null;
@@ -165,7 +174,18 @@ function installApp(udid) {
 }
 function launchApp(udid) {
   log('Launching app...');
-  sh(`xcrun simctl launch ${udid} ${APP_BUNDLE_ID}`);
+  // A launch right after install can transiently fail ("No such process") while
+  // the sim registers the app. Retry a few times with a short backoff.
+  for (let i = 0; i < 5; i++) {
+    try { sh(`xcrun simctl launch ${udid} ${APP_BUNDLE_ID}`); return; }
+    catch (e) {
+      if (i === 4) throw e;
+      log(`launch attempt ${i + 1} failed, retrying...`);
+      try { sh(`sleep 2`); } catch {}
+      // make sure the sim is up before retrying
+      try { sh(`xcrun simctl bootstatus ${udid} -b`); } catch {}
+    }
+  }
 }
 function terminateApp(udid) { try { sh(`xcrun simctl terminate ${udid} ${APP_BUNDLE_ID}`); } catch {} }
 
@@ -175,6 +195,34 @@ function terminateApp(udid) { try { sh(`xcrun simctl terminate ${udid} ${APP_BUN
 function screenshot(outPath) {
   const r = idbSafe(['screenshot', outPath]);
   return r.ok && fs.existsSync(outPath);
+}
+
+// Cheap perceptual signature of a screenshot for change-detection. We can't
+// pull in an image lib, so we sample the PNG bytes at regular offsets and sum
+// them. A tap that changes the screen shifts many pixels → the compressed PNG
+// bytes shift substantially; a no-op tap leaves a near-identical PNG. The clock
+// digit ticking over changes only a handful of bytes, well under the threshold.
+function shotSignature(buf) {
+  if (!buf || !buf.length) return { len: 0, sum: 0 };
+  let sum = 0;
+  const stride = Math.max(1, Math.floor(buf.length / 4096));
+  for (let i = 0; i < buf.length; i += stride) sum = (sum + buf[i]) >>> 0;
+  return { len: buf.length, sum };
+}
+// True if two signatures are "the same screen" (byte length within 0.5% AND
+// sampled-sum within 0.5%). Tuned so a real navigation always trips it while a
+// missed tap / clock tick does not.
+function sigSame(a, b) {
+  if (!a || !b) return false;
+  const lenDelta = Math.abs(a.len - b.len) / Math.max(1, a.len);
+  const sumDelta = Math.abs(a.sum - b.sum) / Math.max(1, a.sum);
+  return lenDelta < 0.005 && sumDelta < 0.005;
+}
+// Take a throwaway screenshot to a temp path and return its signature.
+const _probeShot = path.join(require('os').tmpdir(), `poteau-probe-${process.pid}.png`);
+function currentSignature() {
+  if (!screenshot(_probeShot)) return null;
+  try { return shotSignature(fs.readFileSync(_probeShot)); } catch { return null; }
 }
 function a11yElements() {
   const r = idbSafe(['ui', 'describe-all']);
@@ -212,11 +260,32 @@ function a11yElements() {
 async function act(decision) {
   const { action, coordinates, text } = decision;
   switch (action) {
-    case 'tap':
+    case 'tap': {
       if (!coordinates) throw new Error('tap without coordinates');
-      idbSafe(['ui', 'tap', String(coordinates[0]), String(coordinates[1])]);
-      await sleep(1500);
-      return;
+      const [x, y] = coordinates;
+      // Tap-verify-retry: idb taps intermittently drop, and the a11y frame
+      // centre is sometimes a few points off the real hit target. Rather than
+      // let a single missed tap look like an app dead-end, tap, check whether
+      // the screen changed, and if not retry — first the same point, then small
+      // nudges around it. Returns {changed} so the loop can tell the agent a tap
+      // genuinely did nothing (a real no-op) vs. it just kept missing.
+      const before = currentSignature();
+      // Nudge pattern: same point twice, then a small ring. Points are tiny so
+      // ±8pt stays within any reasonable button while escaping a dead border.
+      const nudges = [[0, 0], [0, 0], [0, -8], [0, 8], [-8, 0], [8, 0]];
+      let changed = false;
+      for (let i = 0; i < nudges.length; i++) {
+        const [dx, dy] = nudges[i];
+        idbSafe(['ui', 'tap', String(x + dx), String(y + dy)]);
+        await sleep(1200);
+        const after = currentSignature();
+        if (!before || !after || !sigSame(before, after)) { changed = true; break; }
+        // else: screen unchanged — retry with the next nudge
+      }
+      if (!changed) log(`  tap @[${x},${y}] produced NO screen change after ${nudges.length} attempts`);
+      await sleep(300);
+      return { changed };
+    }
     case 'type': {
       if (text == null) throw new Error('type without text');
       const s = String(text);
@@ -227,6 +296,12 @@ async function act(decision) {
         const codes = s.split('').map((d) => (d === '0' ? 39 : 29 + Number(d)));
         idbSafe(['ui', 'key-sequence', ...codes.map(String)]);
       } else {
+        // `idb ui text` APPENDS to the focused field. If the agent re-types
+        // (common when a slow render makes it think the first attempt failed),
+        // text duplicates and validation breaks. So CLEAR first: send backspace
+        // (HID 42) enough times to empty any existing content, then type.
+        const bk = Array(48).fill('42');
+        idbSafe(['ui', 'key-sequence', ...bk]);
         idbSafe(['ui', 'text', s]);
       }
       await sleep(1200);
@@ -240,7 +315,7 @@ async function act(decision) {
       return;
     }
     case 'wait':
-      await sleep(3000);
+      await sleep(5000); // 5s per wait — a few waits cover timer-gated reveals (~10s invite button)
       return;
     case 'done':
     case 'red_flag':
@@ -267,6 +342,7 @@ const DECISION_TOOL = {
       },
       text: { type: 'string', description: 'For type: the exact text to enter. Null otherwise.' },
       red_flag_severity: { type: 'string', enum: ['info', 'warn', 'block'], description: 'Set only when action=red_flag.' },
+      screen: { type: 'string', description: 'Short name of the current screen (e.g. "Welcome", "Email code", "Photo", "Phone", "Timeslots"). Set on red_flag so findings can be grouped by screen.' },
       goal_reached: { type: 'boolean', description: 'Set true only when action=done and success criteria are met.' },
     },
     required: ['reason', 'action'],
@@ -281,15 +357,24 @@ You are given, each step: a screenshot of the current screen, a list of accessib
 
 CRITICAL — COORDINATE SYSTEM: All taps use POINTS, not screenshot pixels. The screen is about
 402 points WIDE and 874 points TALL. The screenshot image is higher-resolution (3x: ~1206x2622
-pixels) — do NOT read pixel coordinates off the screenshot. ALWAYS use the (x,y) point
-coordinates from the accessibility element list. If you must estimate from the screenshot,
-convert: point_x = pixel_x / 3, point_y = pixel_y / 3.
+pixels): point_x = pixel_x / 3, point_y = pixel_y / 3. The accessibility list gives point
+coordinates directly — prefer them as a first guess, BUT they are not always accurate on this app:
+a frame's reported centre can be several points off the real tap target (especially for segmented
+bars, switches, and cards). When the a11y coordinate and the screenshot disagree about where an
+element is, TRUST THE SCREENSHOT — estimate the visible element's centre in pixels and divide by 3.
 
-Decide the SINGLE next action via the decide_next_action tool. STRONGLY prefer tapping elements
-from the accessibility list using THEIR coordinates. Many icon/nav buttons are UNLABELED images
-(shown as "(unlabeled Image)") — the bottom navigation bar is a row of these near y≈780; use their
-listed coordinates. If tapping the same target twice produces no change, pick a DIFFERENT element
-from the list rather than repeating.
+TAP RELIABILITY (important): the driver AUTO-RETRIES every tap — if your tap changes nothing it is
+re-sent up to 6× with small position nudges before you even see the result. So:
+- You do NOT need to re-tap a target yourself just because "nothing seemed to happen" once.
+- If a LIVE HINT tells you your previous tap "changed NOTHING after auto-retry", that spot is a
+  confirmed dead target — do NOT tap the same coordinate again. Pick a DIFFERENT element, or
+  re-estimate the element's position FROM THE SCREENSHOT (pixels÷3).
+- Only escalate to a "dead-end" red flag after you've tried at least TWO genuinely DIFFERENT
+  coordinates/elements for the thing you're trying to hit — never after repeating one coordinate.
+
+Decide the SINGLE next action via the decide_next_action tool. Many icon/nav buttons are UNLABELED
+images (shown as "(unlabeled Image)") — the bottom navigation bar is a row of these near y≈780; use
+their listed coordinates.
 
 APP NAVIGATION NOTES (Poteau):
 - The screen title like "Soccer near Kinshasa" / "Padel near Kinshasa" has a small pencil ✏️ next
@@ -315,6 +400,13 @@ Rules:
   normal action on the next step).
 - If a 4-digit PIN entry screen appears, type LOGIN_CODE.
 - Never invent Stripe card numbers unless TEST_CARD is provided in the run context.
+- TEXT ENTRY: a "type" action AUTOMATICALLY clears the field first, so type the full value ONCE and
+  do NOT re-type into the same field. PASSWORD fields render as dots/blank — after you type a
+  password, TRUST that it registered; do NOT re-type it just because you cannot see the characters.
+  If a Confirm button still looks disabled right after typing, tap it anyway (or wait one step) —
+  the enabled state can lag the input by a moment. Only re-enter a field if you have clear evidence
+  it holds the WRONG value (e.g. visibly wrong email text), and even then type the correct value
+  once (it will replace, not append).
 
 === JOURNEY DEFINITION ===
 ${journeyText}`;
@@ -385,11 +477,24 @@ async function createFreshAccount(ts) {
   // pre-create the Auth user so the app's createAccountWithEmail either signs in
   // or the flow proceeds; but signup journeys exercise the real create path, so
   // we leave Auth creation to the app and just reserve the email string here.
-  // 13 local digits: the c_phone field validates checkPhoneNumber on the RAW
-  // typed text (>=11 digits, >=4 unique) — NOT including the country code — so a
-  // 9-digit DRC subscriber number fails. 13 digits passes regardless of the
-  // pre-selected country.
-  return { email, password, phone: '0812345670123' };
+  // A NORMAL local phone number a real user would type. We deliberately do NOT
+  // engineer it to satisfy the app's hidden >=11-digit validation — if a normal
+  // number is silently rejected, that's a finding the friction report must catch.
+  return { email, password, phone: '612345678' };
+}
+
+// Flag an account as a test account so the CF isolation filters treat it as one.
+async function markAccountAsTest(uid) {
+  const admin = require('firebase-admin');
+  if (!admin.apps.length) return;
+  await admin.firestore().collection('users').doc(uid).set({ is_test_account: true }, { merge: true });
+}
+
+// Set an account's app language (fr/en/es/it) so the app renders in it.
+async function setAccountLanguage(uid, lang) {
+  const admin = require('firebase-admin');
+  if (!admin.apps.length) return;
+  await admin.firestore().collection('users').doc(uid).set({ language: lang }, { merge: true });
 }
 
 // Delete a fresh signup account after the run (Auth + Firestore doc if created).
@@ -464,29 +569,39 @@ function seedProfileGame(profile) {
 // ---------------------------------------------------------------------------
 function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   const rel = (p) => path.basename(p);
-  let md = `# UI Test Report — ${meta.journey}\n\n`;
-  md += `- **Run:** ${meta.timestamp}\n`;
-  md += `- **Persona:** ${meta.persona}\n`;
-  md += `- **Model:** ${meta.model}\n`;
-  md += `- **Outcome:** ${outcome.status === 'pass' ? '✅ PASS' : outcome.status === 'fail' ? '❌ FAIL' : '⚠️ INCONCLUSIVE'} — ${outcome.reason}\n`;
-  md += `- **Steps:** ${steps.length}\n`;
-  md += `- **Tokens:** ${tokens.input} in / ${tokens.output} out\n\n`;
+  const SEV = { block: '🔴 BLOCK', warn: '🟠 WARN', info: '🔵 INFO' };
+  const order = { block: 0, warn: 1, info: 2 };
+  const sorted = redFlags.slice().sort((a, b) => (order[a.severity] ?? 3) - (order[b.severity] ?? 3) || a.step - b.step);
+  const counts = { block: 0, warn: 0, info: 0 };
+  redFlags.forEach((r) => { counts[r.severity] = (counts[r.severity] || 0) + 1; });
 
-  if (redFlags.length) {
-    md += `## 🚩 Red flags (${redFlags.length})\n\n`;
-    for (const rf of redFlags) {
-      md += `### [${rf.severity.toUpperCase()}] step ${rf.step}: ${rf.reason}\n\n`;
-      if (rf.screenshot) md += `![step ${rf.step}](${rel(rf.screenshot)})\n\n`;
-    }
-  } else {
-    md += `## 🚩 Red flags\n\nNone.\n\n`;
+  let md = `# Onboarding Friction Report — Poteau\n\n`;
+  md += `*A first-time-user walkthrough of the sign-up / onboarding flow, run by an agent behaving like a real confused user. Each finding is what a REAL user would experience. "Blockers" are points a real user would likely be stuck or abandon.*\n\n`;
+  md += `**Run:** ${meta.timestamp} · **Persona:** first-time user (${meta.persona}) · **Model:** ${meta.model}\n\n`;
+  md += `**How far a real user gets:** ${outcome.reason}\n\n`;
+  md += `**Findings:** 🔴 ${counts.block || 0} blockers · 🟠 ${counts.warn || 0} friction · 🔵 ${counts.info || 0} minor  (${steps.length} steps observed)\n\n`;
+  md += `> Note on test limitations: the OTP email code is read from the backend (a simulator has no email inbox — a real user reads it from their email). The native iOS photo picker is Apple's own UI and can't be fully automated; where a finding is a test-tool limit rather than app friction, it says so.\n\n`;
+  md += `---\n\n`;
+
+  // FINDINGS, grouped by severity, each with screen + user-POV description + screenshot.
+  md += `## Findings\n\n`;
+  if (!sorted.length) {
+    md += `_No friction recorded — the agent moved through onboarding without flagging issues._\n\n`;
+  }
+  for (const rf of sorted) {
+    md += `### ${SEV[rf.severity] || rf.severity} · ${rf.screen}  <sub>(step ${rf.step})</sub>\n\n`;
+    md += `${rf.reason}\n\n`;
+    if (rf.screenshot) md += `![${rf.screen} step ${rf.step}](${rel(rf.screenshot)})\n\n`;
   }
 
-  md += `## Step-by-step trace\n\n`;
+  // APPENDIX: the full step trace so you can see exactly what the user did.
+  md += `---\n\n## Appendix — full walkthrough trace\n\n`;
   for (const s of steps) {
-    md += `**${s.step}. ${s.action}**${s.text ? ` \`${s.text}\`` : ''}${s.coordinates ? ` @${JSON.stringify(s.coordinates)}` : ''} — ${s.reason}\n\n`;
+    const flag = s.action === 'red_flag' ? ` ${SEV[s.red_flag_severity] || '🚩'}` : '';
+    md += `**${s.step}.${flag} ${s.action}**${s.text ? ` \`${s.text}\`` : ''}${s.coordinates ? ` @${JSON.stringify(s.coordinates)}` : ''} — ${s.reason}\n\n`;
     if (s.screenshot) md += `![step ${s.step}](${rel(s.screenshot)})\n\n`;
   }
+  md += `\n_Tokens: ${tokens.input} in / ${tokens.output} out._\n`;
   fs.writeFileSync(path.join(runDir, 'report.md'), md);
 }
 
@@ -500,6 +615,13 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   const udid = (args.includes('--udid') ? args[args.indexOf('--udid') + 1] : null) || DEFAULT_UDID;
   const noBuild = args.includes('--no-build');
   const keepApp = args.includes('--keep-app');
+  // --lang es|it|en|fr : render the app in that language. Sets the sim locale
+  // AND the persona/fresh account's `language` field. Default: fr (Kinshasa
+  // accounts are fr). Used for ES/IT localization coverage.
+  const langArg = (args.includes('--lang') ? args[args.indexOf('--lang') + 1] : '') ||
+    ((args.find((a) => a.startsWith('--lang=')) || '').split('=')[1] || '');
+  const LANG = ['en', 'fr', 'es', 'it'].includes(langArg) ? langArg : null;
+  const LOCALE = { en: 'en_US', fr: 'fr_FR', es: 'es_ES', it: 'it_IT' };
 
   if (!process.env.ANTHROPIC_API_KEY) { console.error('ANTHROPIC_API_KEY not set.'); process.exit(2); }
 
@@ -537,6 +659,8 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     if (!personaUid) throw new Error(`Persona ${personaEmail} has no account.`);
     const loginCode = await otp.setKnownCode(personaUid, otp.DEFAULT_CODE);
     log(`Persona ${personaEmail} (${personaUid}) — password login, code fallback ${loginCode}`);
+    // --lang: set the account's language so the app renders in it after login.
+    if (LANG) { try { await setAccountLanguage(personaUid, LANG); log(`Set persona language → ${LANG}`); } catch {} }
     runCtx.PERSONA_EMAIL = personaEmail;
     runCtx.LOGIN_PASSWORD = cfg.TEST_PASSWORD;
     runCtx.LOGIN_CODE = loginCode;
@@ -567,6 +691,20 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   // Installing before the companion avoids wedging the companion's UI bridge.
   bootSim(udid);
   terminateApp(udid);
+  // --lang: set the sim's locale + language so the app renders in ES/IT/etc.
+  // Writes the global preferences plist and restarts SpringBoard so the change
+  // takes effect. Done before install/launch. Kept best-effort (never fatal).
+  if (LANG) {
+    try {
+      const loc = LOCALE[LANG];
+      const plist = `${process.env.HOME}/Library/Developer/CoreSimulator/Devices/${udid}/data/Library/Preferences/.GlobalPreferences.plist`;
+      sh(`/usr/libexec/PlistBuddy -c "Set :AppleLocale ${loc}" "${plist}" 2>/dev/null || /usr/libexec/PlistBuddy -c "Add :AppleLocale string ${loc}" "${plist}"`);
+      sh(`/usr/libexec/PlistBuddy -c "Delete :AppleLanguages" "${plist}" 2>/dev/null; /usr/libexec/PlistBuddy -c "Add :AppleLanguages array" "${plist}"; /usr/libexec/PlistBuddy -c "Add :AppleLanguages:0 string ${LANG}" "${plist}"`);
+      sh(`xcrun simctl spawn ${udid} launchctl stop com.apple.SpringBoard 2>/dev/null || true`);
+      await sleep(3000);
+      log(`Set sim language → ${LANG} (${loc}).`);
+    } catch (e) { log(`lang set note: ${e.message}`); }
+  }
   // Clear the keychain so the app starts LOGGED OUT. Firebase persists the auth
   // session in the iOS keychain, which survives app reinstall — without this,
   // the app reopens as whoever logged in last (breaks signup journeys and makes
@@ -577,19 +715,26 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     try { sh(`xcrun simctl keychain ${udid} reset`); log('Cleared keychain (logged-out start).'); }
     catch (e) { log(`keychain reset note: ${e.message}`); }
   }
-  if (!args.includes('--fast-launch')) installApp(udid);
+  if (!args.includes('--fast-launch')) { installApp(udid); await sleep(2500); /* let the install register before launch */ }
   // Signup journeys hit a "Choose my photo" step that opens the native picker.
   // Seed the library with an image AND (unless --deny-photo) pre-grant photo
   // permission so the picker works and the funnel completes. The --deny-photo
   // flag leaves permission ungranted so the journey can exercise the
   // denied-permission path (see bug_onboarding_photo_silent_denial).
   if (isFresh) {
+    // Seed a photo so the library isn't empty (a real phone has photos) — the
+    // picker experience is then realistic. Photo/location PERMISSION is left at
+    // its natural state so the real iOS permission DIALOG appears and the agent
+    // responds like a user. Flags: --grant-photo pre-grants (skip the dialog);
+    // --deny-photo pre-revokes (test the denied path deterministically).
     const avatar = path.join(APP_PATH, 'AppIcon60x60@2x.png');
     if (fs.existsSync(avatar)) { try { sh(`xcrun simctl addmedia ${udid} "${avatar}"`); log('Seeded sim photo library.'); } catch {} }
     if (args.includes('--deny-photo')) {
       try { sh(`xcrun simctl privacy ${udid} revoke photos ${APP_BUNDLE_ID}`); log('Photo permission REVOKED (deny-photo journey).'); } catch {}
+    } else if (args.includes('--grant-photo')) {
+      try { sh(`xcrun simctl privacy ${udid} grant photos ${APP_BUNDLE_ID}`); log('Photo permission pre-granted.'); } catch {}
     } else {
-      try { sh(`xcrun simctl privacy ${udid} grant photos ${APP_BUNDLE_ID}`); log('Photo permission granted.'); } catch {}
+      try { sh(`xcrun simctl privacy ${udid} reset photos ${APP_BUNDLE_ID}`); log('Photo permission reset → real dialog will appear.'); } catch {}
     }
   }
   await startCompanion(udid);
@@ -614,6 +759,8 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
   let outcome = { status: 'inconclusive', reason: 'hit step/time budget' };
   const startedAt = Date.now();
   let emptyA11yStreak = 0; // consecutive steps with an empty a11y tree
+  let flaggedFreshTest = false; // set once we've stamped the fresh signup acct as a test account
+  let noOpTapHint = null; // set when the last tap produced no on-screen change (fed to next decision)
 
   for (let step = 1; step <= maxSteps; step++) {
     if (Date.now() - startedAt > timeoutMs) { outcome = { status: 'inconclusive', reason: 'timeout' }; break; }
@@ -655,6 +802,15 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     if (isFresh && freshEmail) {
       const freshUid = await otp.uidForEmail(freshEmail).catch(() => null);
       if (freshUid) {
+        // Flag the app-created signup account as a test account the FIRST time we
+        // see it, so the CF isolation filters (findCompatiblePlayers/Games) treat
+        // it as a test account and only ever show it OTHER test entities. Without
+        // this, the app creates the account WITHOUT is_test_account, and the
+        // "suggested players" step surfaces REAL users.
+        if (!flaggedFreshTest) {
+          await markAccountAsTest(freshUid).then(() => { flaggedFreshTest = true; log('Flagged fresh signup account is_test_account:true'); }).catch(() => {});
+          if (LANG) { await setAccountLanguage(freshUid, LANG).catch(() => {}); }
+        }
         let code = await otp.readCode(freshUid, { waitMs: 0 }).catch(() => null);
         if (!code) { code = await otp.setKnownCode(freshUid, otp.DEFAULT_CODE).catch(() => null); }
         if (code) liveHint = `THE ACTUAL 4-digit email verification code is ${code}. On a PIN/code screen, type the digits ${code} (NOT the words "LOGIN_CODE").`;
@@ -662,8 +818,10 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     }
 
     let decision, usage;
+    // Combine any live account hint with a no-op-tap hint from the previous step.
+    const combinedHint = [liveHint, noOpTapHint].filter(Boolean).join('\n\n') || null;
     try {
-      ({ decision, usage } = await decide(client, model, sys, imgB64, elements, steps, liveHint));
+      ({ decision, usage } = await decide(client, model, sys, imgB64, elements, steps, combinedHint));
     } catch (e) {
       log(`decide error step ${step}: ${e.message}`);
       await sleep(2000); continue;
@@ -676,7 +834,7 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
     log(`step ${step}: ${decision.action}${decision.text ? ` "${decision.text}"` : ''}${decision.coordinates ? ` @${JSON.stringify(decision.coordinates)}` : ''} — ${decision.reason}`);
 
     if (decision.action === 'red_flag') {
-      redFlags.push({ step, severity: decision.red_flag_severity || 'warn', reason: decision.reason, screenshot: shotPath });
+      redFlags.push({ step, severity: decision.red_flag_severity || 'warn', reason: decision.reason, screen: decision.screen || '(unlabeled screen)', screenshot: shotPath });
       if (decision.red_flag_severity === 'block') { outcome = { status: 'fail', reason: `blocking red flag: ${decision.reason}` }; break; }
       continue; // warn/info: keep going
     }
@@ -686,7 +844,15 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
         : { status: 'inconclusive', reason: `agent stopped: ${decision.reason}` };
       break;
     }
-    try { await act(decision); } catch (e) { log(`act error: ${e.message}`); }
+    try {
+      const res = await act(decision);
+      // If a tap changed nothing even after the driver's retry+nudge, tell the
+      // NEXT decision so the agent treats it as a genuine no-op (pick a different
+      // target / element) instead of hammering the same spot and crying dead-end.
+      noOpTapHint = (decision.action === 'tap' && res && res.changed === false)
+        ? `Your previous tap at [${decision.coordinates}] changed NOTHING on screen — the driver already auto-retried it 6× with small nudges, so that exact spot is a dead target. Do NOT tap there again. Either pick a DIFFERENT element/coordinate, or (if you believe the element is elsewhere) estimate its position from the screenshot (pixels÷3 = points).`
+        : null;
+    } catch (e) { log(`act error: ${e.message}`); }
   }
 
   // --- teardown + report ---

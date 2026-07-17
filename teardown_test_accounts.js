@@ -41,12 +41,14 @@ const QA_PRO_UID = 'zCvsukfMuuffsuPpSTQwb7MusMD2'; // centres@poteau.team
   // --- 1. Test accounts (Auth + Firestore) ---
   console.log('\n[1] Test accounts (@' + cfg.TEST_EMAIL_DOMAIN + '):');
   let acctDeleted = 0;
+  const testUids = []; // collect UIDs so we can also sweep games they organized
   for (const spec of cfg.ROSTER) {
     const email = cfg.emailFor(spec.key);
     const u = await auth.getUserByEmail(email).catch(() => null);
     if (!u) { console.log(`  (absent) ${email}`); continue; }
     // Safety assertion: never delete a non-test email.
     if (!cfg.isTestEmail(u.email)) { console.log(`  \x1b[31mSKIP non-test email ${u.email}\x1b[0m`); continue; }
+    testUids.push(u.uid);
     if (LIVE) {
       await db.collection('users').doc(u.uid).delete();
       await auth.deleteUser(u.uid);
@@ -72,6 +74,28 @@ const QA_PRO_UID = 'zCvsukfMuuffsuPpSTQwb7MusMD2'; // centres@poteau.team
     gameDeleted++;
   }
   if (!gamesSnap.size) console.log('  (none)');
+
+  // --- 2b. Games ORGANIZED by a test account but missing is_test_game ---
+  // Games created through the app UI by a test account do NOT get is_test_game
+  // set (only the seed script sets it), so [2] misses them. Sweep by organizer
+  // UID to catch UI-created games and their attendee-linked draft residue.
+  console.log('\n[2b] Games organized by a test account (any is_test_game value):');
+  const seen = new Set(gamesSnap.docs.map((d) => d.id));
+  for (const uid of testUids) {
+    const byOrg = await db.collection('games').where('organizer', '==', uid).get();
+    for (const g of byOrg.docs) {
+      if (seen.has(g.id)) continue; // already handled in [2]
+      seen.add(g.id);
+      const d = g.data();
+      if (LIVE) {
+        await g.ref.delete();
+        console.log(`  \x1b[32mDELETED\x1b[0m games/${g.id} (organizer=${uid}, ${d.sport}, ${d.status})`);
+      } else {
+        console.log(`  would delete games/${g.id} (organizer=${uid}, ${d.sport}, ${d.status}, is_test_game=${d.is_test_game})`);
+      }
+      gameDeleted++;
+    }
+  }
 
   // --- 3. Un-flag centres@poteau.team ---
   console.log('\n[3] Un-flag QA pro account (centres@poteau.team):');
