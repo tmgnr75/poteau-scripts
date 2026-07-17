@@ -270,9 +270,11 @@ async function act(decision) {
       // nudges around it. Returns {changed} so the loop can tell the agent a tap
       // genuinely did nothing (a real no-op) vs. it just kept missing.
       const before = currentSignature();
-      // Nudge pattern: same point twice, then a small ring. Points are tiny so
-      // ±8pt stays within any reasonable button while escaping a dead border.
-      const nudges = [[0, 0], [0, 0], [0, -8], [0, 8], [-8, 0], [8, 0]];
+      // Nudge pattern: same point twice, a small ring, then two larger VERTICAL
+      // offsets. idb's a11y frame centres drift most on the Y axis (labels report
+      // a few dozen points above the real button), so ±28pt vertical rescues a
+      // moderately-off tap without straying onto a neighbouring control.
+      const nudges = [[0, 0], [0, 0], [0, -8], [0, 8], [-8, 0], [8, 0], [0, -28], [0, 28]];
       let changed = false;
       for (let i = 0; i < nudges.length; i++) {
         const [dx, dy] = nudges[i];
@@ -811,7 +813,14 @@ function writeReport(runDir, meta, steps, redFlags, outcome, tokens) {
           await markAccountAsTest(freshUid).then(() => { flaggedFreshTest = true; log('Flagged fresh signup account is_test_account:true'); }).catch(() => {});
           if (LANG) { await setAccountLanguage(freshUid, LANG).catch(() => {}); }
         }
-        let code = await otp.readCode(freshUid, { waitMs: 0 }).catch(() => null);
+        // Read the code the APP generated for itself (it writes email_code
+        // during signup). Do NOT overwrite it: the app caches its own code in
+        // currentUserDocument, and the PIN sim-shim types THAT cached value — so
+        // if we force a different code here, the shim's typed digits and the
+        // backend's expected code diverge and verification fails. Poll briefly
+        // for the app's code; only if it never appears (not a real signup) fall
+        // back to writing a deterministic one.
+        let code = await otp.readCode(freshUid, { waitMs: 8000, intervalMs: 800 }).catch(() => null);
         if (!code) { code = await otp.setKnownCode(freshUid, otp.DEFAULT_CODE).catch(() => null); }
         if (code) liveHint = `THE ACTUAL 4-digit email verification code is ${code}. On a PIN/code screen, type the digits ${code} (NOT the words "LOGIN_CODE").`;
       }

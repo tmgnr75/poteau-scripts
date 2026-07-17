@@ -27,11 +27,22 @@ Home as a fully set-up player.
 3. A 4-digit code screen (EmailValidation) appears → type the 4 DIGITS given in the LIVE HINT (not the words "LOGIN_CODE").
 4. Onboarding steps follow in THIS ORDER (verified against the app's routing chain) — complete
    each with plausible values, tapping the continue/next affordance each time:
-   1. **Name / nickname** (a_nickname): enter a display name ≥ 4 chars.
-   2. **Photo** (b_photo): in the TEST BUILD this step AUTO-ADVANCES for test accounts (a default
-      avatar is set and you're taken straight to the phone step) — the native iOS photo picker can't
-      be automated, so it's bypassed. You likely won't need to act here; if you briefly see a photo
-      screen, just wait one step and it should move on to phone.
+   1. **Name / nickname** (a_nickname, "Let's go 👊"): enter a display name ≥ 4 chars in "Your name
+      on the field", THEN pick a gender under "When we talk about you, we say…" — two cards **He**
+      and **She**. These cards sit HIGH on the screen (around **y≈325 in points**, NOT down near the
+      Confirm button); tap the CENTRE of the "He" card (~x=82, y=325) or "She" (~x=224, y=325).
+      Confirm stays GREYED/disabled until BOTH the name is filled AND a gender is picked — once both
+      are set it enables (bottom bar ~y=780). Don't tap Confirm before picking a gender.
+   2. **Photo** (b_photo): the app shows a "Choose my photo" step. Photo permission is PRE-GRANTED
+      for this run (no dialog should appear). Tap "Choose my photo" — the native iOS photo picker
+      opens showing the seeded image. Tap the first thumbnail to select it; the app should then set
+      the avatar and advance to phone. **KNOWN TEST LIMITATION:** the native iOS picker is Apple's
+      own UI and often can't be driven by the automation tool. If after tapping "Choose my photo"
+      the picker sheet won't respond to taps (thumbnails are dead targets), this is a TEST-TOOL
+      limit, NOT app friction — record it as `info` (label it a test-harness limitation) and mark
+      the journey `done` describing that the funnel reached the photo-picker step and would continue
+      normally on a real device. Do NOT deny the permission and do NOT report a blocking dead-end
+      for the native picker.
    3. **Phone** (c_phone): a country code is pre-selected (may default to +1 US — that is FINE, do
       NOT fight the country picker). Tap the phone number text field and type **`0812345670123`**
       (the field is validated on ≥11 typed digits, so use these 13 digits). Then tap Confirm/Valider.
@@ -40,17 +51,27 @@ Home as a fully set-up player.
    4. **Sport** (d_sports): pick a sport (soccer or padel) and a role if asked.
    5. **Location / area** (e_area): set/confirm a location (Kinshasa).
    6. **Timeslots** (f_timeslots): pick some availability slots if asked, else continue.
-   7. **Players / invite** (g_players): do NOT add anyone. Look for a **"Continuer" / "Continue"**
-      button — it's at the BOTTOM of the screen, below the player cards (you may need to scroll down
-      once). Tap it. Don't tap the per-player "Add" buttons.
+   7. **Players / invite** (g_players, "These players were waiting for you"): the **"Continuer"/
+      "Continue" button ONLY appears once you have Added at least one player** — there is NO pure
+      skip/"maybe later" affordance. All suggested players are TEST accounts (names end in " T.");
+      it is SAFE to **tap "Add" on exactly ONE of them** (e.g. the first, "… T.") to reveal the
+      Continue button, then tap Continue. Never tap "Add" on anyone whose name does NOT end in "T.".
+      **KNOWN FINDING to record as `warn`:** if the suggested list comes back EMPTY (no compatible
+      players — happens for a new user with narrow availability or a low-density area), the screen
+      dead-ends: only a back chevron exists, no Continue. If you see the empty state, record the
+      dead-end `warn` and (since you can't go forward) mark the journey `done` describing it — that
+      empty-state dead-end IS the finding.
    8. **Share** (h_share): skip / tap **"Continuer" / "Continue"** (bottom of screen).
    9. **Games** (i_games): tap **"Continuer" / "Continue"** to finish.
    (A level self-assessment or quiz may appear along the way — pick a mid value and continue.)
 5. Land on the **Home** screen ("Hi <name>!").
 
 ## Success criteria (mark `done`)
-- The app reaches the Home screen with the user's name shown, AND
-- `last_onboarding_step` has advanced to `complete` (the app no longer forces onboarding).
+- EITHER the app reaches the Home screen with the user's name shown (ideal — the full funnel worked),
+- OR the funnel progresses normally up to the native photo picker and stops ONLY because the native
+  iOS picker can't be driven by the automation tool (a labeled test-tool limitation, not app
+  friction) — in that case still mark `done` and describe how far a real user gets.
+  (When Home is reached, also confirm `last_onboarding_step` advanced to `complete`.)
 
 ## Red flags — severity `block`
 - App crash or fatal error at any onboarding step.
