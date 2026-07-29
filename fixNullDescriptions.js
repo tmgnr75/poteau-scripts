@@ -38,12 +38,15 @@ const PREFIX = 'null';
 
 // A separator may or may not follow the stray "null", depending on whether the
 // organizer had also typed a real description. Strip a leading " • " too.
+// Returns the corrected string, or null when the doc needs no change.
+// A description that is exactly "null" (nothing typed, nothing selected)
+// becomes an empty string, which is what 64908 other games already store.
 function clean(description) {
     if (typeof description !== 'string') return null;
     if (!description.startsWith(PREFIX)) return null;
     let rest = description.slice(PREFIX.length);
     rest = rest.replace(/^\s*•\s*/, '').trim();
-    return rest.length > 0 ? rest : null;
+    return rest;
 }
 
 async function main() {
