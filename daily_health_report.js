@@ -48,24 +48,29 @@ const FIELDS = {
     messenger: 'sent_at', votes: 'voting_date',
 };
 
-async function activity(d1, d2) {
+// Three windows: the reported day (d0), the day before (d1), and the SAME
+// WEEKDAY a week earlier (d7). Day-over-day alone is misleading on this
+// product - Sunday is structurally busier than Saturday, so a Sunday report
+// always looks like a collapse against Saturday. Week-over-week is the
+// comparison that actually says whether something changed.
+async function activity(d0, d1, d7) {
     const out = {};
     for (const [col, f] of Object.entries(FIELDS)) {
         try {
-            const [a, b] = await Promise.all([
+            const [a, b, c] = await Promise.all([
+                db.collection(col).where(f, '>=', d0[0]).where(f, '<', d0[1]).count().get(),
                 db.collection(col).where(f, '>=', d1[0]).where(f, '<', d1[1]).count().get(),
-                db.collection(col).where(f, '>=', d2[0]).where(f, '<', d2[1]).count().get(),
+                db.collection(col).where(f, '>=', d7[0]).where(f, '<', d7[1]).count().get(),
             ]);
-            out[col] = { cur: a.data().count, prev: b.data().count };
+            out[col] = { cur: a.data().count, prev: b.data().count, week: c.data().count };
         } catch (e) {
             out[col] = { error: e.message.slice(0, 80) };
         }
     }
-    const [p1, p2] = await Promise.all([
-        db.collection('games').where('date', '>=', d1[0]).where('date', '<', d1[1]).where('status', '==', 'played').count().get(),
-        db.collection('games').where('date', '>=', d2[0]).where('date', '<', d2[1]).where('status', '==', 'played').count().get(),
-    ]);
-    out.games_played = { cur: p1.data().count, prev: p2.data().count };
+    const played = (w) => db.collection('games')
+        .where('date', '>=', w[0]).where('date', '<', w[1]).where('status', '==', 'played').count().get();
+    const [p0, p1, p7] = await Promise.all([played(d0), played(d1), played(d7)]);
+    out.games_played = { cur: p0.data().count, prev: p1.data().count, week: p7.data().count };
     return out;
 }
 
@@ -183,80 +188,111 @@ function deploys(sinceISO, untilISO) {
 
 // ------------------------------------------------------------------- render
 
-function delta(c) {
-    if (!c || c.error) return '—';
-    const d = c.cur - c.prev;
-    const sign = d > 0 ? `+${d}` : (d < 0 ? `${d}` : '=');
-    return `${c.cur.toLocaleString()}  (${sign})`;
+// Fixed-width padding so numbers form a column in Slack's proportional font.
+// Slack only renders monospace inside a code block, so the activity table is
+// emitted as one ``` block rather than as field pairs - field pairs put label
+// and value on separate lines and nothing lines up.
+function pad(s, n) { s = String(s); return s + ' '.repeat(Math.max(0, n - s.length)); }
+function padL(s, n) { s = String(s); return ' '.repeat(Math.max(0, n - s.length)) + s; }
+
+// Plain numbers, three columns: D-7, D-1, D0. No deltas, no percentages -
+// the eye compares the three figures directly and that is enough.
+const N = (v) => (v === undefined || v === null) ? '—' : v.toLocaleString();
+
+function row(label, c) {
+    if (!c || c.error) return `${pad(label, 16)}${padL('—', 8)}${padL('—', 9)}${padL('—', 9)}`;
+    return `${pad(label, 16)}${padL(N(c.week), 8)}${padL(N(c.prev), 9)}${padL(N(c.cur), 9)}`;
 }
 
 function build(day, a, e, c, h, dep) {
+    // Each warning is: severity dot, bold WHAT, then a plain-language SO WHAT
+    // on its own indented line. The consequence is the part worth reading and
+    // it should not be buried mid-sentence.
     const attention = [];
-    if (c.error) attention.push(`🔴 *Cron check FAILED* — ${c.error}`);
-    c.stale.forEach(s => attention.push(`🔴 *\`${s.name}\` has not run in ${s.ageH}h* (schedule: ${s.schedule})`));
-    if (e.indexErrors.length) attention.push(`🔴 *Missing Firestore index* — ${e.indexErrors.length} occurrences. Create it from the URL in the log.`);
-    h.malformed.forEach(m => attention.push(`🟡 *Malformed repeater* \`${m.centre}\` (${m.id}) — missing weekday/timezone, generating nothing`));
-    if (h.depth < 20) attention.push(`🔴 *Game horizon down to ${h.depth} days* (target 21)`);
-    h.thin.forEach(t => attention.push(`🟡 *${t.day} has only ${t.n} games* — unusually thin inside the window`));
-    Object.entries(e.byService).forEach(([svc, n]) => {
-        if (n >= 5) attention.push(`🟡 *\`${svc}\` — ${n} real errors*`);
+    const warn = (dot, what, soWhat) => attention.push(`${dot}  *${what}*\n${' '.repeat(4)}_${soWhat}_`);
+
+    if (c.error) warn('🔴', 'Cron liveness check failed', c.error);
+    c.stale.forEach(s => warn('🔴', `${s.name} has not run in ${Math.round(s.ageH)}h`,
+        `scheduled ${s.schedule} — whatever it does has silently stopped`));
+    if (e.indexErrors.length) warn('🔴', `Firestore index missing (${e.indexErrors.length} hits)`,
+        'queries are failing outright — create it from the console URL in the log');
+    if (h.depth < 20) warn('🔴', `Game horizon down to ${h.depth} days`,
+        'target is 21 — players browsing ahead will hit an empty calendar');
+    h.malformed.forEach(m => warn('🟡', `Repeater "${m.centre}" is malformed`,
+        'missing weekday or timezone — it generates no games at all'));
+    h.thin.forEach(t => warn('🟡', `${DateTime.fromISO(t.day).toFormat('ccc d LLL')} has only ${t.n} games`,
+        'unusually thin for a day inside the window'));
+    Object.entries(e.byService).sort((x, y) => y[1] - x[1]).forEach(([svc, n]) => {
+        if (n >= 5) warn('🟡', `${svc} — ${n} errors`, 'not capacity throttling, so something is actually failing');
     });
 
     const red = attention.some(x => x.startsWith('🔴'));
     const light = red ? '🔴' : (attention.length ? '🟡' : '🟢');
-    const verdict = red ? 'incident.' : (attention.length ? 'normal, some things to look at.' : 'all clear.');
 
-    const blocks = [
-        { type: 'header', text: { type: 'plain_text', text: `${light} Poteau daily health — ${day.toFormat('ccc d LLL')}`, emoji: true } },
-        { type: 'section', text: { type: 'mrkdwn', text: `*VERDICT: ${verdict}*` } },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: '*── needs attention ──*' } },
-        { type: 'section', text: { type: 'mrkdwn', text: attention.length ? attention.join('\n') : '_(nothing)_' } },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: '*── activity (vs day before) ──*' } },
-        {
-            type: 'section', fields: [
-                { type: 'mrkdwn', text: `*games created*\n${delta(a.games)}` },
-                { type: 'mrkdwn', text: `*games played*\n${delta(a.games_played)}` },
-                { type: 'mrkdwn', text: `*users signed up*\n${delta(a.users)}` },
-                { type: 'mrkdwn', text: `*messages*\n${delta(a.messages)}` },
-                { type: 'mrkdwn', text: `*availabilities*\n${delta(a.availabilities)}` },
-                { type: 'mrkdwn', text: `*draft games*\n${delta(a.draft_games)}` },
-                { type: 'mrkdwn', text: `*quiz replies*\n${delta(a.quiz_replies)}` },
-                { type: 'mrkdwn', text: `*payments*\n${delta(a.payments)}` },
-            ]
-        },
-        { type: 'context', elements: [{ type: 'mrkdwn', text: `alerts ${delta(a.alerts)} · votes ${delta(a.votes)} · invites ${delta(a.user_invitations)} · messenger ${delta(a.messenger)} — \`connect\`/\`game_invitations\` ≈600k/day each, normal fan-out` }] },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: '*── reliability ──*' } },
-        {
-            type: 'section', text: {
-                type: 'mrkdwn', text: [
-                    `• *errors* ${e.total} raw → *${e.real} real* (${e.throttled} capacity throttling, benign)`,
-                    `• *indexes* ${e.indexErrors.length ? `${e.indexErrors.length} missing 🔴` : 'none missing ✅'}`,
-                    `• *crons* ${c.error ? 'CHECK FAILED 🔴' : `${c.jobs.length - c.stale.length}/${c.jobs.length} fired on schedule${c.stale.length ? ` — *${c.stale.length} stale*` : ' ✅'}`}`,
-                    `• *deploys* ${dep.length ? `${dep.length} commit(s)` : 'none'}`,
-                ].join('\n')
-            }
-        },
-        { type: 'divider' },
-        { type: 'section', text: { type: 'mrkdwn', text: '*── recurring games ──*' } },
-        {
-            type: 'section', text: {
-                type: 'mrkdwn', text: [
-                    `• *horizon* ${h.depth} days ${h.depth >= 20 ? '✅' : '🔴'}`,
-                    `• *edge day* ${h.edge.day} (${h.edge.n} games) — newest day is thin by design`,
-                    `• *repeaters* ${h.published} published · ${h.malformed.length} malformed`,
-                ].join('\n')
-            }
-        },
-    ];
+    // Readability rules applied here:
+    //  1. ONE divider only, between "what's wrong" and "the data". More
+    //     dividers make every section look equally important.
+    //  2. Green is SILENT. No ✅ on healthy lines - ticks next to fine things
+    //     compete with the actual warnings for attention.
+    //  3. Numbers live in a code block so they form a real column. Slack's
+    //     proportional font makes field-pairs impossible to scan.
+    //  4. Everything healthy collapses into one dim context line at the bottom.
+    const blocks = [];
+
+    // --- headline: the verdict IS the header, not a separate line ---
+    const headline = red
+        ? `${light} Poteau — incident`
+        : (attention.length ? `${light} Poteau — ${attention.length} to look at` : `${light} Poteau — all clear`);
+    blocks.push({ type: 'header', text: { type: 'plain_text', text: headline, emoji: true } });
+    blocks.push({
+        type: 'context', elements: [{
+            type: 'mrkdwn',
+            text: `${day.toFormat('cccc d LLLL')}  ·  ${e.real} real error${e.real === 1 ? '' : 's'}  ·  ${c.error ? 'cron check failed' : `${c.stale.length} stale cron${c.stale.length === 1 ? '' : 's'}`}  ·  horizon ${h.depth}d`
+        }]
+    });
+
+    // --- what is wrong: the only thing that gets full-width prose ---
+    if (attention.length) {
+        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: attention.join('\n\n') } });
+    }
+
+    blocks.push({ type: 'divider' });
+
+    // --- the numbers: one monospace table, aligned ---
+    // Column headers carry the actual dates so "D-7" is never ambiguous.
+    // D-7 is the same weekday, which is the only fair comparison here.
+    const head = `${pad('', 16)}${padL('D-7', 8)}${padL('D-1', 9)}${padL('D0', 9)}\n`
+        + `${pad('', 16)}${padL(day.minus({ days: 7 }).toFormat('d LLL'), 8)}${padL(day.minus({ days: 1 }).toFormat('d LLL'), 9)}${padL(day.toFormat('d LLL'), 9)}`;
+    const table = [
+        head,
+        '',
+        row('games created', a.games),
+        row('games played', a.games_played),
+        row('users', a.users),
+        row('messages', a.messages),
+        row('availabilities', a.availabilities),
+        row('draft games', a.draft_games),
+        row('quiz replies', a.quiz_replies),
+        row('payments', a.payments),
+    ].join('\n');
+    blocks.push({
+        type: 'section',
+        text: { type: 'mrkdwn', text: `*Activity*  _D-7 is the same weekday (${day.toFormat('cccc')})_\n\`\`\`\n${table}\n\`\`\`` }
+    });
+
+    // --- everything healthy, compressed into dim one-liners ---
+    const quiet = [];
+    quiet.push(`errors  ${e.total} raw → ${e.real} real  (${e.throttled} throttling)`);
+    quiet.push(`crons  ${c.error ? '⚠️ check failed' : `${c.jobs.length - c.stale.length}/${c.jobs.length} on schedule`}`);
+    quiet.push(`indexes  ${e.indexErrors.length ? `${e.indexErrors.length} missing` : 'all present'}`);
+    quiet.push(`repeaters  ${h.published} published${h.malformed.length ? ` · ${h.malformed.length} malformed` : ''}`);
+    quiet.push(`horizon  ${h.depth}d · edge ${DateTime.fromISO(h.edge.day).toFormat('d LLL')} (${h.edge.n})`);
+    quiet.push(`low-volume  alerts ${a.alerts ? a.alerts.cur : 0} · votes ${a.votes ? a.votes.cur : 0} · invites ${a.user_invitations ? a.user_invitations.cur : 0} · messenger ${a.messenger ? a.messenger.cur : 0}`);
+    blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: quiet.join('   ·   ') }] });
 
     if (dep.length) {
-        blocks.push({ type: 'divider' });
-        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: `*── shipped ──*\n${dep.map(d => '`' + d + '`').join('\n')}` } });
+        blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: `*shipped*  ${dep.map(d => '`' + d + '`').join('  ')}` }] });
     }
-    blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: `report for ${day.toISODate()} · generated ${DateTime.now().setZone(TZ).toFormat('yyyy-LL-dd HH:mm')} Paris` }] });
     return { blocks };
 }
 
@@ -267,12 +303,12 @@ function build(day, a, e, c, h, dep) {
         ? DateTime.fromISO(dateArg, { zone: TZ })
         : DateTime.now().setZone(TZ).minus({ days: 1 });
     const dayStart = target.startOf('day'), dayEnd = target.endOf('day');
-    const prevStart = dayStart.minus({ days: 1 }), prevEnd = dayStart;
 
-    const d1 = [dayStart.toJSDate(), dayEnd.toJSDate()];
-    const d2 = [prevStart.toJSDate(), prevEnd.toJSDate()];
+    const d0 = [dayStart.toJSDate(), dayEnd.toJSDate()];
+    const d1 = [dayStart.minus({ days: 1 }).toJSDate(), dayStart.toJSDate()];
+    const d7 = [dayStart.minus({ days: 7 }).toJSDate(), dayStart.minus({ days: 6 }).toJSDate()];
 
-    const a = await activity(d1, d2);
+    const a = await activity(d0, d1, d7);
     const e = errors(dayStart.toUTC().toISO(), dayEnd.toUTC().toISO());
     const c = crons(dayEnd.toJSDate());
     const h = await horizon();
