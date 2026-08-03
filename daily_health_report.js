@@ -144,15 +144,27 @@ async function horizon() {
     // A single manually-created game far in the future (e.g. one school booking
     // in Québec dated 28 Aug) would otherwise report a healthy horizon while
     // every day before it is empty. Walk forward until the first gap.
+    // Start the walk at the first day that HAS games, not at today. Late in
+    // the evening every game today has already kicked off, so "today" holds no
+    // future published games and a walk anchored there would break immediately
+    // and report a 0-day horizon every night. Only today and tomorrow are
+    // allowed as start points - a gap any wider than that is a real outage.
     const days = Object.keys(byDay).sort();
-    let cursor = now.startOf('day'), last = null;
-    for (;;) {
-        const iso = cursor.toISODate();
-        if (!byDay[iso]) break;
-        last = iso;
-        cursor = cursor.plus({ days: 1 });
+    const today = now.startOf('day');
+    let cursor = null;
+    for (const cand of [today, today.plus({ days: 1 })]) {
+        if (byDay[cand.toISODate()]) { cursor = cand; break; }
     }
-    const depth = last ? Math.round(DateTime.fromISO(last).diff(now.startOf('day'), 'days').days) : 0;
+    let last = null;
+    if (cursor) {
+        for (;;) {
+            const iso = cursor.toISODate();
+            if (!byDay[iso]) break;
+            last = iso;
+            cursor = cursor.plus({ days: 1 });
+        }
+    }
+    const depth = last ? Math.round(DateTime.fromISO(last).diff(today, 'days').days) : 0;
 
     // Inside the window (D+0..D+20) every day should be well populated.
     const inner = days.filter(d => {
@@ -208,26 +220,69 @@ function build(day, a, e, c, h, dep) {
     // Each warning is: severity dot, bold WHAT, then a plain-language SO WHAT
     // on its own indented line. The consequence is the part worth reading and
     // it should not be buried mid-sentence.
+    // Every finding carries a recommendation. An amber dot with no next step
+    // is just anxiety - the reader cannot tell whether to act or ignore it.
     const attention = [];
-    const warn = (dot, what, soWhat) => attention.push(`${dot}  *${what}*\n${' '.repeat(4)}_${soWhat}_`);
+    const warn = (dot, what, soWhat, doWhat) => attention.push({ dot, what, soWhat, doWhat });
 
-    if (c.error) warn('🔴', 'Cron liveness check failed', c.error);
+    if (c.error) warn('🔴', 'Cron liveness check failed', c.error,
+        'the report is blind to stale crons until this is fixed — check gcloud auth');
     c.stale.forEach(s => warn('🔴', `${s.name} has not run in ${Math.round(s.ageH)}h`,
-        `scheduled ${s.schedule} — whatever it does has silently stopped`));
+        `scheduled ${s.schedule} — whatever it does has silently stopped`,
+        'check Cloud Scheduler in the console, then trigger it manually'));
     if (e.indexErrors.length) warn('🔴', `Firestore index missing (${e.indexErrors.length} hits)`,
-        'queries are failing outright — create it from the console URL in the log');
+        'queries are failing outright, so a feature is broken right now',
+        'create it from the console URL in the log — takes one click, builds in minutes');
     if (h.depth < 20) warn('🔴', `Game horizon down to ${h.depth} days`,
-        'target is 21 — players browsing ahead will hit an empty calendar');
+        'target is 21 — players browsing ahead hit an empty calendar',
+        'check scheduleGames ran; if it did, run the backfill in scripts/');
     h.malformed.forEach(m => warn('🟡', `Repeater "${m.centre}" is malformed`,
-        'missing weekday or timezone — it generates no games at all'));
+        'missing weekday or timezone, so it generates no games at all',
+        'infer the weekday from its recent games and set it, or pause the repeater'));
     h.thin.forEach(t => warn('🟡', `${DateTime.fromISO(t.day).toFormat('ccc d LLL')} has only ${t.n} games`,
-        'unusually thin for a day inside the window'));
+        'unusually thin for a day inside the window',
+        'if it stays thin tomorrow, check whether centres paused their repeaters'));
     Object.entries(e.byService).sort((x, y) => y[1] - x[1]).forEach(([svc, n]) => {
-        if (n >= 5) warn('🟡', `${svc} — ${n} errors`, 'not capacity throttling, so something is actually failing');
+        if (n < 5) return;
+        const known = {
+            getplacedetails: ['Google Places API rate limit', 'raise the quota or add caching — place lookups are silently failing for users'],
+            unreservespots: ['Remote Config read quota exceeded', 'behaviour is correct (falls back to the 120h default) — cache the RC read to silence it'],
+        }[svc];
+        warn('🟡', `${svc} — ${n} errors`,
+            known ? known[0] : 'not capacity throttling, so something is genuinely failing',
+            known ? known[1] : 'read the log for this service and decide if it needs a fix');
     });
 
-    const red = attention.some(x => x.startsWith('🔴'));
+    const red = attention.some(x => x.dot === '🔴');
     const light = red ? '🔴' : (attention.length ? '🟡' : '🟢');
+
+    // --- summary: two or three sentences judging the day against D-7 ---
+    // A table cannot say "quiet Sunday, nothing unusual", and on a phone that
+    // sentence is often the only thing actually read.
+    const swing = (c) => (!c || c.error || !c.week) ? 0 : Math.round(((c.cur - c.week) / c.week) * 100);
+    const notable = [
+        ['games created', swing(a.games)], ['games played', swing(a.games_played)],
+        ['signups', swing(a.users)], ['messages', swing(a.messages)],
+        ['availabilities', swing(a.availabilities)], ['payments', swing(a.payments)],
+    ].filter(([, p]) => Math.abs(p) >= 25).sort((x, y) => Math.abs(y[1]) - Math.abs(x[1]));
+
+    const sentences = [];
+    const wd = day.toFormat('cccc');
+    if (!notable.length) {
+        sentences.push(`Activity was in line with last ${wd} across the board.`);
+    } else {
+        const phr = notable.slice(0, 3).map(([k, p]) => `*${k}* ${p > 0 ? 'up' : 'down'} ${Math.abs(p)}%`);
+        sentences.push(`Against last ${wd}: ${phr.join(', ')}.`);
+        if (notable.length > 3) sentences.push(`${notable.length - 3} other metric(s) also moved more than 25%.`);
+    }
+    if (red) {
+        sentences.push(`*Something is broken and needs attention today* — see below.`);
+    } else if (attention.length) {
+        sentences.push(`Nothing is broken; ${attention.length} item${attention.length === 1 ? '' : 's'} worth a decision when convenient.`);
+    } else {
+        sentences.push(`No errors beyond normal capacity throttling, all crons on schedule, game horizon healthy.`);
+    }
+    const summary = sentences.join(' ');
 
     // Readability rules applied here:
     //  1. ONE divider only, between "what's wrong" and "the data". More
@@ -251,44 +306,60 @@ function build(day, a, e, c, h, dep) {
         }]
     });
 
-    // --- what is wrong: the only thing that gets full-width prose ---
+    // --- summary: how the day went, in plain sentences ---
+    blocks.push({ type: 'section', text: { type: 'mrkdwn', text: summary } });
+
+    // --- what is wrong, each with a recommendation ---
     if (attention.length) {
-        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: attention.join('\n\n') } });
+        const order = { '🔴': 0, '🟡': 1, '🟢': 2 };
+        const text = attention.slice().sort((x, y) => order[x.dot] - order[y.dot])
+            .map(f => {
+                let s = `${f.dot}  *${f.what}*`;
+                if (f.soWhat) s += `\n_${f.soWhat}_`;
+                if (f.doWhat) s += `\n→  ${f.doWhat}`;
+                return s;
+            }).join('\n\n');
+        blocks.push({ type: 'section', text: { type: 'mrkdwn', text } });
     }
 
     blocks.push({ type: 'divider' });
 
     // --- the numbers: one monospace table, aligned ---
-    // Column headers carry the actual dates so "D-7" is never ambiguous.
-    // D-7 is the same weekday, which is the only fair comparison here.
-    const head = `${pad('', 16)}${padL('D-7', 8)}${padL('D-1', 9)}${padL('D0', 9)}\n`
-        + `${pad('', 16)}${padL(day.minus({ days: 7 }).toFormat('d LLL'), 8)}${padL(day.minus({ days: 1 }).toFormat('d LLL'), 9)}${padL(day.toFormat('d LLL'), 9)}`;
+    // MOBILE: every line must stay <= 32 chars or Slack's phone code block
+    // wraps and the columns stop lining up. 12 + 3x6 = 30. Labels truncate.
+    const LW = 12, CW = 6;
+    const cell = (v) => padL(v === undefined || v === null ? '—' :
+        (typeof v === 'number' && v >= 10000 ? Math.round(v / 1000) + 'k' : v.toLocaleString()), CW);
+    const trow = (label, c) => pad(label.length > LW - 1 ? label.slice(0, LW - 2) + '…' : label, LW)
+        + (!c || c.error ? cell('—') + cell('—') + cell('—') : cell(c.week) + cell(c.prev) + cell(c.cur));
+
     const table = [
-        head,
-        '',
-        row('games created', a.games),
-        row('games played', a.games_played),
-        row('users', a.users),
-        row('messages', a.messages),
-        row('availabilities', a.availabilities),
-        row('draft games', a.draft_games),
-        row('quiz replies', a.quiz_replies),
-        row('payments', a.payments),
+        pad('', LW) + padL('D-7', CW) + padL('D-1', CW) + padL('D0', CW),
+        trow('games new', a.games),
+        trow('games played', a.games_played),
+        trow('users', a.users),
+        trow('messages', a.messages),
+        trow('availabil.', a.availabilities),
+        trow('drafts', a.draft_games),
+        trow('quiz', a.quiz_replies),
+        trow('payments', a.payments),
     ].join('\n');
     blocks.push({
         type: 'section',
-        text: { type: 'mrkdwn', text: `*Activity*  _D-7 is the same weekday (${day.toFormat('cccc')})_\n\`\`\`\n${table}\n\`\`\`` }
+        text: { type: 'mrkdwn', text: `*Activity*  _D-7 = last ${day.toFormat('cccc')}_\n\`\`\`\n${table}\n\`\`\`` }
     });
 
     // --- everything healthy, compressed into dim one-liners ---
-    const quiet = [];
-    quiet.push(`errors  ${e.total} raw → ${e.real} real  (${e.throttled} throttling)`);
-    quiet.push(`crons  ${c.error ? '⚠️ check failed' : `${c.jobs.length - c.stale.length}/${c.jobs.length} on schedule`}`);
-    quiet.push(`indexes  ${e.indexErrors.length ? `${e.indexErrors.length} missing` : 'all present'}`);
-    quiet.push(`repeaters  ${h.published} published${h.malformed.length ? ` · ${h.malformed.length} malformed` : ''}`);
-    quiet.push(`horizon  ${h.depth}d · edge ${DateTime.fromISO(h.edge.day).toFormat('d LLL')} (${h.edge.n})`);
-    quiet.push(`low-volume  alerts ${a.alerts ? a.alerts.cur : 0} · votes ${a.votes ? a.votes.cur : 0} · invites ${a.user_invitations ? a.user_invitations.cur : 0} · messenger ${a.messenger ? a.messenger.cur : 0}`);
-    blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: quiet.join('   ·   ') }] });
+    // Short phrases: this wraps naturally on a phone instead of forming one
+    // long unreadable line.
+    const quiet = [
+        `${e.real} real errors of ${e.total}`,
+        `crons ${c.error ? '⚠️ check failed' : `${c.jobs.length - c.stale.length}/${c.jobs.length}`}`,
+        `indexes ${e.indexErrors.length ? `${e.indexErrors.length} missing` : 'ok'}`,
+        `horizon ${h.depth}d`,
+        `${h.published} repeaters`,
+    ];
+    blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: quiet.join('  ·  ') }] });
 
     if (dep.length) {
         blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: `*shipped*  ${dep.map(d => '`' + d + '`').join('  ')}` }] });

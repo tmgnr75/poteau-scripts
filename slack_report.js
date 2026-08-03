@@ -30,12 +30,21 @@ const padL = (s, n) => { s = String(s); return ' '.repeat(Math.max(0, n - s.leng
 const num = (v) => (v === undefined || v === null) ? '—' : (typeof v === 'number' ? v.toLocaleString() : String(v));
 
 // ----------------------------------------------------------------- findings
-// A finding is: severity, WHAT (bold, scannable), SO WHAT (italic, indented).
-// The consequence is the part worth reading; it never gets buried mid-sentence.
-const finding = (dot, what, soWhat) => ({ dot, what, soWhat });
-const red = (what, soWhat) => finding('🔴', what, soWhat);
-const amber = (what, soWhat) => finding('🟡', what, soWhat);
-const green = (what, soWhat) => finding('🟢', what, soWhat);
+// A finding is: severity, WHAT, SO WHAT, and DO WHAT.
+//
+// The third part is not optional. "getplacedetails - 56 errors" tells the
+// reader nothing they can act on, and an amber dot with no recommendation is
+// just anxiety. Every non-green finding must end with a concrete next step,
+// including "nothing - this is expected" when that is the honest answer.
+//
+// Severity is defined by ACTION, not by how bad it sounds:
+//   red   - something is broken now; act today
+//   amber - worth a decision, but not today
+//   green - confirmation that an expectation held (used by one-shot monitors)
+const finding = (dot, what, soWhat, doWhat) => ({ dot, what, soWhat, doWhat });
+const red = (what, soWhat, doWhat) => finding('🔴', what, soWhat, doWhat);
+const amber = (what, soWhat, doWhat) => finding('🟡', what, soWhat, doWhat);
+const green = (what, soWhat, doWhat) => finding('🟢', what, soWhat, doWhat);
 
 /**
  * Build a Slack blocks payload.
@@ -48,7 +57,7 @@ const green = (what, soWhat) => finding('🟢', what, soWhat);
  * @param {string}   footer     provenance: what generated this and when
  * @param {string}   verdict    override the auto verdict text
  */
-function build({ title, subtitle, findings = [], table = null, quiet = [], footer = null, verdict = null }) {
+function build({ title, subtitle, summary = null, findings = [], table = null, quiet = [], footer = null, verdict = null }) {
     const hasRed = findings.some(f => f.dot === '🔴');
     const hasAmber = findings.some(f => f.dot === '🟡');
     const light = hasRed ? '🔴' : (hasAmber ? '🟡' : '🟢');
@@ -69,9 +78,15 @@ function build({ title, subtitle, findings = [], table = null, quiet = [], foote
         blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: subtitle }] });
     }
 
-    // 3. FINDINGS - the only full-width prose in the whole message.
-    //    Sorted red-first; green findings are omitted unless they are the
-    //    entire message (a positive confirmation for a one-shot monitor).
+    // 3. SUMMARY - two or three plain sentences: was this normal or not, and
+    //    what stands out. A table cannot say "quiet Sunday, nothing unusual",
+    //    and that sentence is often the only thing read on a phone.
+    if (summary) {
+        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: summary } });
+    }
+
+    // 4. FINDINGS - the only full-width prose besides the summary.
+    //    Sorted red-first. Each carries its recommendation via "→".
     if (findings.length) {
         const order = { '🔴': 0, '🟡': 1, '🟢': 2 };
         const shown = findings.slice().sort((a, b) => order[a.dot] - order[b.dot]);
@@ -79,7 +94,12 @@ function build({ title, subtitle, findings = [], table = null, quiet = [], foote
             type: 'section',
             text: {
                 type: 'mrkdwn',
-                text: shown.map(f => `${f.dot}  *${f.what}*${f.soWhat ? `\n    _${f.soWhat}_` : ''}`).join('\n\n'),
+                text: shown.map(f => {
+                    let s = `${f.dot}  *${f.what}*`;
+                    if (f.soWhat) s += `\n_${f.soWhat}_`;
+                    if (f.doWhat) s += `\n→  ${f.doWhat}`;
+                    return s;
+                }).join('\n\n'),
             },
         });
     }
@@ -88,13 +108,30 @@ function build({ title, subtitle, findings = [], table = null, quiet = [], foote
     if (table) blocks.push({ type: 'divider' });
 
     // 5. TABLE - plain numbers, no deltas or percentages. Let the eye compare.
+    //
+    // MOBILE CONSTRAINT: Slack's mobile code block fits ~32 chars before it
+    // wraps or shrinks the font to unreadable. Keep every line <= 32.
+    // Labels are truncated rather than allowed to push the columns out.
     if (table) {
-        const { columns = [], rows = [], label = 'Data', note = null, labelWidth = 16, colWidth = 9 } = table;
+        const { columns = [], rows = [], label = 'Data', note = null } = table;
+        const nCols = columns.length;
+        // Budget: 32 total. Give the numbers what they need, label takes the rest.
+        const widest = Math.max(
+            ...columns.map(c => String(c).length),
+            ...rows.flatMap(r => r.slice(1).map(v => num(v).length))
+        );
+        const colWidth = Math.max(widest + 1, 5);
+        const labelWidth = Math.max(9, Math.min(16, 32 - colWidth * nCols));
+
+        const trunc = (s) => {
+            s = String(s);
+            return s.length > labelWidth - 1 ? s.slice(0, labelWidth - 2) + '…' : s;
+        };
         const head = pad('', labelWidth) + columns.map(c => padL(c, colWidth)).join('');
-        const body = rows.map(r => pad(r[0], labelWidth) + r.slice(1).map(v => padL(num(v), colWidth)).join(''));
+        const body = rows.map(r => pad(trunc(r[0]), labelWidth) + r.slice(1).map(v => padL(num(v), colWidth)).join(''));
         blocks.push({
             type: 'section',
-            text: { type: 'mrkdwn', text: `*${label}*${note ? `  _${note}_` : ''}\n\`\`\`\n${head}\n\n${body.join('\n')}\n\`\`\`` },
+            text: { type: 'mrkdwn', text: `*${label}*${note ? `  _${note}_` : ''}\n\`\`\`\n${head}\n${body.join('\n')}\n\`\`\`` },
         });
     }
 
