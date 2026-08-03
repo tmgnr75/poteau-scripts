@@ -84,10 +84,21 @@ function errors(startZ, endZ) {
         return raw.split('\n').filter(l => l.trim()).length;
     };
     const total = count(base);
-    const real = count(`${base} AND NOT textPayload:"no available instance"`);
+    // "Real" must use the SAME exclusions as the per-service breakdown below,
+    // or the headline claims N real errors while listing none of them.
+    const realFilter = `${base} AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`;
+    const real = count(realFilter);
 
     // Group the real ones by service so the report can name them.
-    const rawReal = gcloud(['logging', 'read', `${base} AND NOT textPayload:"no available instance"`,
+    //
+    // Exclude requests made by axios: the Flutter apps use Dart's http client,
+    // and no Cloud Function calls these endpoints internally, so an axios user
+    // agent is a human running probes from a laptop - i.e. us, debugging.
+    // On 2026-08-03 an investigation produced a 104-error burst that the report
+    // then presented as a production incident affecting users. Own traffic must
+    // never masquerade as a user-facing failure.
+    const rawReal = gcloud(['logging', 'read',
+        `${base} AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`,
         `--project=${PROJECT}`, '--limit=500',
         '--format=value(resource.labels.service_name,resource.labels.function_name)'], ACCOUNT_LOGS);
     const byService = {};
@@ -96,12 +107,33 @@ function errors(startZ, endZ) {
         byService[name] = (byService[name] || 0) + 1;
     });
 
+    // One concrete sample per offending service, so the finding can say what
+    // actually went wrong instead of telling the reader to go dig.
+    const samples = {};
+    for (const svc of Object.keys(byService)) {
+        if (svc === 'unknown') continue;
+        try {
+            const raw = gcloud(['logging', 'read',
+                `${base} AND resource.labels.service_name="${svc}" AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`,
+                `--project=${PROJECT}`, '--limit=1',
+                '--format=value(textPayload,httpRequest.status,httpRequest.requestUrl)'], ACCOUNT_LOGS).trim();
+            if (!raw) continue;
+            const [txt, status, url] = raw.split('\t');
+            if (txt && txt !== 'null') {
+                samples[svc] = txt.split('\n')[0].slice(0, 140);
+            } else if (status) {
+                const path = (url || '').split('?')[0].split('/').pop();
+                samples[svc] = `HTTP ${status} on ${path || svc}`;
+            }
+        } catch (err) { /* sampling is best-effort */ }
+    }
+
     const indexRaw = gcloud(['logging', 'read',
         `${base} AND (textPayload:"FAILED_PRECONDITION" OR textPayload:"requires an index")`,
         `--project=${PROJECT}`, '--limit=20', '--format=value(textPayload)'], ACCOUNT_LOGS);
     const indexErrors = indexRaw.split('\n').filter(l => l.trim());
 
-    return { total, real, throttled: total - real, byService, indexErrors };
+    return { total, real, throttled: total - real, byService, indexErrors, samples };
 }
 
 // -------------------------------------------------------------- cron health
@@ -248,9 +280,13 @@ function build(day, a, e, c, h, dep) {
             getplacedetails: ['Google Places API rate limit', 'raise the quota or add caching — place lookups are silently failing for users'],
             unreservespots: ['Remote Config read quota exceeded', 'behaviour is correct (falls back to the 120h default) — cache the RC read to silence it'],
         }[svc];
+        // The generic fallback must still say WHAT failed. "Go read the log"
+        // is the vague, unactionable line this report exists to avoid, so pull
+        // one real sample and quote it.
+        const sample = known ? null : e.samples[svc];
         warn('🟡', `${svc} — ${n} errors`,
-            known ? known[0] : 'not capacity throttling, so something is genuinely failing',
-            known ? known[1] : 'read the log for this service and decide if it needs a fix');
+            known ? known[0] : (sample || 'not capacity throttling, so something is genuinely failing'),
+            known ? known[1] : `check whether this affects users — ${n} failures in one day is a real rate`);
     });
 
     const red = attention.some(x => x.dot === '🔴');
