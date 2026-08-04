@@ -139,9 +139,30 @@ function errors(startZ, endZ) {
 // -------------------------------------------------------------- cron health
 
 function crons(asOf) {
-    const raw = gcloud(['scheduler', 'jobs', 'list', `--project=${PROJECT}`,
-        '--location=europe-west1',
-        '--format=value(name.basename(),schedule,lastAttemptTime)'], ACCOUNT_SCHEDULER);
+    // Listing scheduler jobs needs a USER account (the admin SA lacks
+    // cloudscheduler.jobs.list). User OAuth tokens expire and cannot be
+    // refreshed from launchd - there is no browser to prompt. When that
+    // happens, degrade to a warning instead of killing the whole report:
+    // losing one check is bad, losing the entire morning report is worse.
+    let raw;
+    try {
+        raw = gcloud(['scheduler', 'jobs', 'list', `--project=${PROJECT}`,
+            '--location=europe-west1',
+            '--format=value(name.basename(),schedule,lastAttemptTime)'], ACCOUNT_SCHEDULER);
+    } catch (err) {
+        const msg = String(err.stderr || err.message || '');
+        const expired = /Reauthentication failed|auth tokens|gcloud auth login/i.test(msg);
+        return {
+            error: expired
+                ? `gcloud auth for ${ACCOUNT_SCHEDULER} has expired — run \`gcloud auth login\` in a terminal`
+                : msg.split('\n')[0].slice(0, 160),
+            jobs: [], stale: [],
+        };
+    } finally {
+        // Always hand the account back, or every later gcloud call in this
+        // process inherits the broken user account.
+        try { execFileSync('gcloud', ['config', 'set', 'core/account', ACCOUNT_LOGS], { stdio: 'pipe' }); } catch (e) { /* best effort */ }
+    }
     const rows = raw.split('\n').map(l => l.split('\t')).filter(p => p.length >= 3 && p[2]);
 
     // A blind check that reports success is worse than no check. If the
@@ -436,4 +457,26 @@ function build(day, a, e, c, h, dep) {
         '--data', JSON.stringify(payload), url], { encoding: 'utf8' });
     console.log('slack:', res);
     process.exit(0);
-})().catch(e => { console.error('REPORT FAILED:', e); process.exit(1); });
+})().catch(e => {
+    // A silent failure is the worst outcome: the report simply does not
+    // arrive and nobody knows whether production is fine or the monitor is
+    // dead. On 2026-08-04 an expired gcloud token killed the 08:30 run and it
+    // looked identical to "nothing happened". Always post something.
+    console.error('REPORT FAILED:', e);
+    try {
+        const env = fs.readFileSync(WEBHOOK_ENV, 'utf8');
+        const url = (env.match(/SLACK_WEBHOOK_URL="([^"]+)"/) || [])[1];
+        if (url) {
+            const msg = String(e && (e.stderr || e.message) || e).split('\n')[0].slice(0, 300);
+            execFileSync('curl', ['-s', '-X', 'POST', '-H', 'Content-type: application/json',
+                '--data', JSON.stringify({
+                    blocks: [
+                        { type: 'header', text: { type: 'plain_text', text: '⚠️ Poteau — health report failed to run', emoji: true } },
+                        { type: 'section', text: { type: 'mrkdwn', text: `The monitor itself broke, so *production status is unknown this morning*.\n\`\`\`${msg}\`\`\`` } },
+                        { type: 'context', elements: [{ type: 'mrkdwn', text: 'check `~/.poteau/health_report.err` on the Mac' }] },
+                    ]
+                }), url], { encoding: 'utf8' });
+        }
+    } catch (postErr) { console.error('could not post failure notice:', postErr.message); }
+    process.exit(1);
+});
