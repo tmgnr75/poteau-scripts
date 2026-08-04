@@ -23,10 +23,14 @@ const WEBHOOK_ENV = `${process.env.HOME}/.poteau/slack_webhook.env`;
 const PROJECT = 'krank-club';
 const TZ = 'Europe/Paris';
 
-// Two different identities are required. The admin SA can read logs but NOT
-// scheduler jobs; tim@ can read scheduler jobs. Neither can do both.
+// One identity for everything. The admin SA was granted
+// roles/cloudscheduler.viewer on 2026-08-04, so it now reads both logs and
+// scheduler jobs. Before that the cron check needed tim@poteau.team, whose
+// user OAuth token expired and killed the 08:30 run - launchd has no browser
+// to reauthenticate with. Service-account keys do not expire, so this must
+// stay a service account: do NOT point either constant at a user account.
 const ACCOUNT_LOGS = 'firebase-adminsdk-bl4zy@krank-club.iam.gserviceaccount.com';
-const ACCOUNT_SCHEDULER = 'tim@poteau.team';
+const ACCOUNT_SCHEDULER = ACCOUNT_LOGS;
 
 const DRY = process.argv.includes('--dry');
 const dateArg = (process.argv.find(a => a.startsWith('--date=')) || '').split('=')[1];
