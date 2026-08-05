@@ -113,21 +113,43 @@ function errors(startZ, endZ) {
 
     // One concrete sample per offending service, so the finding can say what
     // actually went wrong instead of telling the reader to go dig.
-    const samples = {};
+    const samples = {}, hints = {};
     for (const svc of Object.keys(byService)) {
         if (svc === 'unknown') continue;
         try {
             const raw = gcloud(['logging', 'read',
                 `${base} AND resource.labels.service_name="${svc}" AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`,
                 `--project=${PROJECT}`, '--limit=1',
-                '--format=value(textPayload,httpRequest.status,httpRequest.requestUrl)'], ACCOUNT_LOGS).trim();
-            if (!raw) continue;
-            const [txt, status, url] = raw.split('\t');
+                '--format=value(textPayload,httpRequest.status,httpRequest.latency,httpRequest.userAgent)'], ACCOUNT_LOGS);
+            if (!raw.trim()) continue;
+            // gcloud emits empty fields as empty strings, so a missing
+            // textPayload yields a LEADING tab. Trimming the raw string first
+            // (as .trim() above does) drops it and shifts every field left by
+            // one - status became '' and latency became '504'. Split the
+            // untrimmed line and pad to a fixed width instead.
+            const parts = raw.split('\n')[0].split('\t');
+            while (parts.length < 4) parts.push('');
+            const [txt, status, latency, ua] = parts;
             if (txt && txt !== 'null') {
                 samples[svc] = txt.split('\n')[0].slice(0, 140);
             } else if (status) {
-                const path = (url || '').split('?')[0].split('/').pop();
-                samples[svc] = `HTTP ${status} on ${path || svc}`;
+                // A bare status code tells the reader nothing. Translate it,
+                // and use latency to distinguish a timeout (which looks like a
+                // generic 504) from a genuine upstream failure.
+                const secs = parseFloat(latency) || 0;
+                const caller = /Cloud-Scheduler/i.test(ua || '') ? 'the scheduler' : 'a client';
+                const meaning = {
+                    504: secs >= 55
+                        ? `timed out after ${Math.round(secs)}s — the function needs longer than its timeoutSeconds`
+                        : 'gateway timeout',
+                    500: 'unhandled exception inside the function',
+                    503: 'service unavailable — the instance could not start',
+                    429: 'rate limited',
+                    400: 'bad request — the caller sent invalid parameters',
+                    403: 'permission denied',
+                }[Number(status)] || `HTTP ${status}`;
+                samples[svc] = `${meaning} (called by ${caller})`;
+                if (Number(status) === 504 && secs >= 55) hints[svc] = 'raise timeoutSeconds, or make the job process fewer items per run';
             }
         } catch (err) { /* sampling is best-effort */ }
     }
@@ -137,7 +159,7 @@ function errors(startZ, endZ) {
         `--project=${PROJECT}`, '--limit=20', '--format=value(textPayload)'], ACCOUNT_LOGS);
     const indexErrors = indexRaw.split('\n').filter(l => l.trim());
 
-    return { total, real, throttled: total - real, byService, indexErrors, samples };
+    return { total, real, throttled: total - real, byService, indexErrors, samples, hints };
 }
 
 // -------------------------------------------------------------- cron health
@@ -223,10 +245,19 @@ async function horizon() {
     }
     const depth = last ? Math.round(DateTime.fromISO(last).diff(today, 'days').days) : 0;
 
-    // Inside the window (D+0..D+20) every day should be well populated.
+    // Only flag days that SHOULD already be full: D+0..D+18.
+    //
+    // The last two days of the window are excluded deliberately. This report
+    // runs at 08:30 but scheduleGames fills the horizon at 11:00, so the
+    // newest day has not been topped up yet when we look, and a day only
+    // receives games from repeaters whose weekday happens to land on it -
+    // it arrives with ~20-30 of its eventual ~80 and thickens over following
+    // runs. Flagging the leading edge was a guaranteed daily false positive
+    // (2026-08-04 flagged "25 Aug has only 15 games" two hours before the
+    // cron that fills it).
     const inner = days.filter(d => {
         const n = DateTime.fromISO(d).diff(now.startOf('day'), 'days').days;
-        return n >= 0 && n <= 20;
+        return n >= 0 && n <= 18;
     });
     const thin = inner.filter(d => byDay[d] < 20).map(d => ({ day: d, n: byDay[d] }));
 
@@ -296,9 +327,13 @@ function build(day, a, e, c, h, dep) {
     h.malformed.forEach(m => warn('🟡', `Repeater "${m.centre}" is malformed`,
         'missing weekday or timezone, so it generates no games at all',
         'infer the weekday from its recent games and set it, or pause the repeater'));
+    // NOTE: h.thin already excludes the last 2 days of the window - see
+    // horizon(). The report runs at 08:30 but scheduleGames fills the window
+    // at 11:00, so the newest days are ALWAYS unfilled when this runs and
+    // flagging them is a guaranteed daily false positive.
     h.thin.forEach(t => warn('🟡', `${DateTime.fromISO(t.day).toFormat('ccc d LLL')} has only ${t.n} games`,
-        'unusually thin for a day inside the window',
-        'if it stays thin tomorrow, check whether centres paused their repeaters'));
+        'unusually thin for a day well inside the window, which should be full by now',
+        'check whether centres paused their repeaters for that date'));
     Object.entries(e.byService).sort((x, y) => y[1] - x[1]).forEach(([svc, n]) => {
         if (n < 5) return;
         const known = {
@@ -309,9 +344,10 @@ function build(day, a, e, c, h, dep) {
         // is the vague, unactionable line this report exists to avoid, so pull
         // one real sample and quote it.
         const sample = known ? null : e.samples[svc];
+        const hint = known ? known[1] : e.hints[svc];
         warn('🟡', `${svc} — ${n} errors`,
             known ? known[0] : (sample || 'not capacity throttling, so something is genuinely failing'),
-            known ? known[1] : `check whether this affects users — ${n} failures in one day is a real rate`);
+            hint || `check whether this affects users — ${n} failures in one day is a real rate`);
     });
 
     const red = attention.some(x => x.dot === '🔴');
