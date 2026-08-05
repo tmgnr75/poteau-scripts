@@ -19,11 +19,20 @@
         img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
         a { text-decoration: none; }
 
-        /* Gmail/Apple Mail auto-invert the palette in dark mode. The code block is
-           the one element that must stay legible, so pin its colours explicitly. */
+        /* Dark mode. Clients auto-invert the white card to a dark grey, which
+           left the near-black code block with almost no contrast against it --
+           it read as a flat slab. So dark mode gets a deliberate palette:
+           a lighter card, and a code block that goes BRIGHTER than its
+           surroundings rather than darker. */
         @media (prefers-color-scheme: dark) {
-            .code-cell { background-color: #141414 !important; }
-            .code-digits { color: #ffffff !important; }
+            .bg        { background-color: #0e1113 !important; }
+            .card      { background-color: #1b1f22 !important; }
+            .h1        { color: #ffffff !important; }
+            .sub       { color: #b6c0c8 !important; }
+            .muted     { color: #93a0a9 !important; }
+            .rule      { background-color: #2e353a !important; }
+            .code-cell { background-color: #ffffff !important; }
+            .code-digits { color: #141414 !important; }
         }
 
         @media only screen and (max-width: 600px) {
@@ -45,12 +54,12 @@
         &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847;
     </div>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f2f4f5;">
+    <table role="presentation" class="bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f2f4f5;">
         <tr>
             <td align="center" style="padding:40px 12px;">
 
                 <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
-                <table role="presentation" class="container" cellpadding="0" cellspacing="0" border="0"
+                <table role="presentation" class="container card" cellpadding="0" cellspacing="0" border="0"
                     style="width:100%; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden;">
 
                     <!-- Icon. Sits in its own dark tile so the app icon keeps its
@@ -65,7 +74,7 @@
 
                     <tr>
                         <td class="pad" style="padding:28px 40px 0;">
-                            <h1 style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:24px; line-height:32px; font-weight:700; color:#141414; text-align:center;">
+                            <h1 class="h1" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:24px; line-height:32px; font-weight:700; color:#141414; text-align:center;">
                                 Ton code de connexion
                             </h1>
                         </td>
@@ -73,7 +82,7 @@
 
                     <tr>
                         <td class="pad" style="padding:12px 40px 0;">
-                            <p style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:24px; color:#5c6670; text-align:center;">
+                            <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:24px; color:#5c6670; text-align:center;">
                                 Saisis-le dans l'app pour terminer ton inscription.
                             </p>
                         </td>
@@ -97,14 +106,14 @@
 
                     <tr>
                         <td class="pad" style="padding:28px 40px 0;">
-                            <div style="height:1px; background-color:#e8ebed; font-size:0; line-height:0;">&nbsp;</div>
+                            <div class="rule" style="height:1px; background-color:#e8ebed; font-size:0; line-height:0;">&nbsp;</div>
                         </td>
                     </tr>
 
                     <tr>
                         <td class="pad" style="padding:24px 40px 48px;">
-                            <p style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:22px; color:#8a949e; text-align:center;">
-                                Tu n'as pas demandé ce code ? Ignore cet e-mail, ton compte reste protégé.
+                            <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:22px; color:#8a949e; text-align:center;">
+                                Tu n'as pas demandé ce code ?<br>Ignore cet e-mail, ton compte reste protégé.
                             </p>
                         </td>
                     </tr>
@@ -114,8 +123,8 @@
                 <table role="presentation" class="container" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px;">
                     <tr>
                         <td align="center" style="padding:24px 40px 0;">
-                            <p style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:20px; color:#98a2ab;">
-                                Poteau &middot; L'app pour jouer au foot
+                            <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:20px; color:#98a2ab;">
+                                Poteau &middot; L'app pour jouer au foot ou au padel
                             </p>
                         </td>
                     </tr>
