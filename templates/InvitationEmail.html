@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="{{language}}">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <title>{{title}}</title>
+    <!--[if mso]>
+    <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+    <![endif]-->
+    <style>
+        /* Client resets. Inline styles below carry the real design -- these only
+           patch clients that strip or misread the inline attributes.
+
+           Deliberately NOT used anywhere here: display:flex (Outlook ignores it,
+           which is what pushed the organiser photos out of place in the old
+           design), box-shadow (produced a heavy halo), and the Google Fonts
+           @import (blocked by most clients, so it never applied). */
+        body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
+        a { text-decoration: none; }
+
+        /* Dark mode. Clients auto-invert the white card to a dark grey; without
+           this the game rows (a pale blue) turn muddy and the CTA loses contrast.
+           So dark mode gets a deliberate palette rather than an accidental one. */
+        @media (prefers-color-scheme: dark) {
+            .bg      { background-color: #0e1113 !important; }
+            .card    { background-color: #1b1f22 !important; }
+            .h1      { color: #ffffff !important; }
+            .sub     { color: #b6c0c8 !important; }
+            .muted   { color: #93a0a9 !important; }
+            .row     { background-color: #23282c !important; }
+            .row-date  { color: #ffffff !important; }
+            .row-venue { color: #b6c0c8 !important; }
+            .row-cta   { color: #4ade80 !important; }
+            .unsub a { color: #7d8890 !important; }
+            /* The CTA is near-black on a light card; on a dark card that
+               disappears. Invert it to white-on-dark-text so it stays the most
+               prominent element in both schemes. */
+            .cta-cell { background-color: #ffffff !important; }
+            .cta-link { color: #141414 !important; }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .pad { padding-left: 20px !important; padding-right: 20px !important; }
+            .h1 { font-size: 22px !important; line-height: 30px !important; }
+            /* Thumbnails are decorative; drop them so the date and venue keep
+               the full width on a phone. */
+            .thumb { display: none !important; }
+        }
+    </style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f2f4f5;">
+
+    <!-- Preheader: the inbox preview line. Kept distinct from the body copy so
+         the two do not read as a stutter in the message list. -->
+    <div style="display:none; font-size:1px; color:#f2f4f5; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+        {{{main_body_text}}}
+        &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847;
+    </div>
+
+    <table role="presentation" class="bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f2f4f5;">
+        <tr>
+            <td align="center" style="padding:40px 12px;">
+
+                <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+                <table role="presentation" class="container card" cellpadding="0" cellspacing="0" border="0"
+                    style="width:100%; max-width:600px; background-color:#ffffff; border-radius:16px; overflow:hidden;">
+
+                    <tr>
+                        <td align="center" class="pad" style="padding:40px 40px 0;">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fpoteau-icon-2026.png?alt=media&token=5ab223ce-c7ac-44c5-bbb4-0471082c8919"
+                                width="56" height="56" alt="Poteau"
+                                style="width:56px; height:56px; border-radius:14px; display:block;">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="pad" style="padding:24px 40px 0;">
+                            <h1 class="h1" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:26px; line-height:34px; font-weight:700; color:#141414; text-align:center;">
+                                {{{heading_text}}}
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="pad" style="padding:12px 40px 0;">
+                            <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:24px; color:#5c6670; text-align:center;">
+                                {{{main_body_text}}}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Game rows. Each is its own table so Outlook keeps the
+                         thumbnail beside the text instead of below it. -->
+                    {{#each games}}
+                    <tr>
+                        <td class="pad" style="padding:16px 40px 0;">
+                            <table role="presentation" class="row" width="100%" cellpadding="0" cellspacing="0" border="0"
+                                style="background-color:#f5f7f8; border-radius:12px;">
+                                <tr>
+                                    <td style="padding:18px 20px;" valign="middle">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td valign="middle" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+                                                    <div class="row-date" style="font-size:17px; line-height:24px; font-weight:700; color:#141414;">{{this.game_date}}</div>
+                                                    <div class="row-venue" style="font-size:15px; line-height:22px; color:#5c6670; padding-top:2px;">{{this.centre}}</div>
+                                                    <div style="padding-top:10px;">
+                                                        <a href="{{this.cta_link_url}}" class="row-cta" style="font-size:15px; line-height:20px; font-weight:700; color:#0a8f2e; text-decoration:none;">{{this.cta_link_text}} &rarr;</a>
+                                                    </div>
+                                                </td>
+                                                {{#if this.organizer_picture}}
+                                                <td class="thumb" width="56" valign="middle" style="width:56px; padding-left:16px;">
+                                                    <img src="{{this.organizer_picture}}" width="56" height="56" alt=""
+                                                        style="width:56px; height:56px; border-radius:12px; display:block; object-fit:cover;">
+                                                </td>
+                                                {{/if}}
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                    <tr>
+                        <td align="center" class="pad" style="padding:32px 40px 0;">
+                            <!-- Bulletproof button: the MSO fallback keeps the fill
+                                 and radius in Outlook, which drops CSS radius. -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td class="cta-cell" align="center" bgcolor="#141414" style="background-color:#141414; border-radius:12px;">
+                                        <a href="{{{global_cta_link}}}" class="cta-link"
+                                            style="display:inline-block; padding:15px 34px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:20px; font-weight:700; color:#ffffff; text-decoration:none;">
+                                            {{{global_cta_text}}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="pad" style="padding:32px 40px 40px;">
+                            <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:22px; color:#8a949e; text-align:center;">
+                                {{{footer_text}}}
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <table role="presentation" class="container" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px;">
+                    <tr>
+                        <td align="center" class="unsub" style="padding:24px 40px 0;">
+                            <a href="{{unsubscribe_url}}" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:20px; color:#98a2ab; text-decoration:underline;">{{{unsubscribe_text}}}</a>
+                        </td>
+                    </tr>
+                </table>
+                <!--[if mso]></td></tr></table><![endif]-->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>
