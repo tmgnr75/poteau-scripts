@@ -107,9 +107,27 @@ function countOccurrences(haystack, needle) {
         process.exit(0);
     }
 
-    const url = process.env.SLACK_WEBHOOK_URL;
+    // Read the webhook from the env file directly rather than trusting the
+    // caller's shell. `~/.poteau/slack_webhook.env` assigns without `export`,
+    // so `source`-ing it makes the value visible to the shell but NOT to a
+    // child process -- the script saw nothing and skipped the post while the
+    // caller's own `echo $SLACK_WEBHOOK_URL` looked fine.
+    let url = process.env.SLACK_WEBHOOK_URL;
     if (!url) {
-        console.error('SLACK_WEBHOOK_URL not set; source ~/.poteau/slack_webhook.env first');
+        try {
+            const fs = require('fs');
+            const os = require('os');
+            const path = require('path');
+            const envFile = fs.readFileSync(
+                path.join(os.homedir(), '.poteau', 'slack_webhook.env'), 'utf8');
+            const m = envFile.match(/^\s*(?:export\s+)?SLACK_WEBHOOK_URL\s*=\s*["']?([^"'\r\n]+)/m);
+            if (m) url = m[1].trim();
+        } catch (err) {
+            console.error(`Could not read ~/.poteau/slack_webhook.env: ${err.message}`);
+        }
+    }
+    if (!url) {
+        console.error('SLACK_WEBHOOK_URL not found in the environment or ~/.poteau/slack_webhook.env');
         process.exit(1);
     }
     const res = await fetch(url, {
