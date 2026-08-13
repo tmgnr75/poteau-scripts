@@ -231,6 +231,50 @@ const RELEASES = [
             'E tante correzioni per rendere tutto più fluido.',
         ].join('\n'),
     },
+    {
+        build: 520,
+        // Placeholder ship date: this release is staged, not out. Correct it
+        // and re-run before flipping published to true.
+        date: new Date('2026-09-01T12:00:00Z'),
+        // STAGED. Nothing is visible to anyone until this is true, so the entry
+        // can be appended to as 5.2.0 is built.
+        published: false,
+        title_fr: 'Poteau Live et des signalements plus justes 🔴',
+        title_en: 'Poteau Live, and fairer reporting 🔴',
+        title_es: 'Poteau Live y reportes más justos 🔴',
+        title_it: 'Poteau Live e segnalazioni più giuste 🔴',
+        // Only the reporting change is written up here. Poteau Live is named in
+        // the title because it is the headline of 5.2.0, but its own section
+        // gets written when the feature lands rather than guessed at now.
+        body_fr: [
+            '🚩 Signaler quelqu\'un, avec le contexte',
+            'Quand tu signales un joueur, tu peux expliquer ce qui s\'est passé. C\'est obligatoire si tu choisis "Autre", parce que sans explication on ne peut rien en faire. Plus tu nous en dis, plus la décision est juste.',
+            '',
+            '⚖️ Les cartons fonctionnent vraiment',
+            'Une désinscription à la dernière minute sur un match presque complet compte désormais comme prévu. Ça marchait mal jusqu\'ici, c\'est corrigé.',
+        ].join('\n'),
+        body_en: [
+            '🚩 Reporting someone, with the context',
+            'When you report a player, you can explain what happened. It is required if you pick "Other", because without an explanation there is nothing we can act on. The more you tell us, the fairer the decision.',
+            '',
+            '⚖️ Cards actually work now',
+            'Dropping out at the last minute from an almost full game now counts, the way it was meant to. It was not working properly until now. Fixed.',
+        ].join('\n'),
+        body_es: [
+            '🚩 Reportar a alguien, con contexto',
+            'Cuando reportas a un jugador, puedes explicar qué pasó. Es obligatorio si eliges "Otro", porque sin explicación no podemos hacer nada. Cuanto más nos cuentes, más justa es la decisión.',
+            '',
+            '⚖️ Las tarjetas funcionan de verdad',
+            'Darse de baja a última hora en un partido casi completo ya cuenta, como estaba previsto. Hasta ahora no funcionaba bien. Corregido.',
+        ].join('\n'),
+        body_it: [
+            '🚩 Segnalare qualcuno, con il contesto',
+            'Quando segnali un giocatore, puoi spiegare cosa è successo. È obbligatorio se scegli "Altro", perché senza spiegazione non possiamo farci nulla. Più ci racconti, più la decisione è giusta.',
+            '',
+            '⚖️ I cartellini funzionano davvero',
+            'Disdire all\'ultimo minuto una partita quasi completa ora conta, come previsto. Finora non funzionava bene. Corretto.',
+        ].join('\n'),
+    },
 ];
 
 async function seedReleases() {
