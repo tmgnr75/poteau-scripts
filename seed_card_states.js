@@ -154,8 +154,13 @@ const STATES = [
         proposed_at: Timestamp.now(),
         agreed_by: [TIM, MARCO],
       }],
+      // `winning_side`, NOT `result` — see the note in
+      // seed_live_test_matrix.js. `result:` is a key no reader understands, so
+      // the game counts as scored but NOT resulted, breaking the denominator
+      // nesting and firing a spurious drift alert. Match the app's shape
+      // (ResultProposalStruct), never invent one.
       result_proposals: [{
-        result: "team_a", proposed_by: TIM,
+        winning_side: "team_a", is_draw: false, proposed_by: TIM,
         proposed_at: Timestamp.now(), agreed_by: [TIM, MARCO],
       }],
     } },

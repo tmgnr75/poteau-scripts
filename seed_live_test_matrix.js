@@ -222,9 +222,31 @@ async function clearMatrix() {
     if (m.played) doc.status = "played";
 
     // A result with NO score: exactly the shape the common card must render.
+    //
+    // THE KEY IS `winning_side`, NOT `result`. Both this file and
+    // seed_card_states.js wrote `result:` until 2026-08-13, which is a key that
+    // exists in neither ResultProposalStruct nor recomputeUserStats. The
+    // derivation read `winning_side`/`is_draw`, found neither, took the
+    // malformed branch and counted the game as having NO result — while the
+    // score still counted — producing `games_with_score=1 > games_with_result=0`
+    // and a [DENOMINATOR_VIOLATION] on every seeded user.
+    //
+    // It also cost a morning: the stale blocks showed up as a `games_with_score
+    // 1->0` drift alert that looked like a production bug and was not.
+    //
+    // Seeds must write the shape the APP writes. A seed that invents its own
+    // shape tests nothing and actively misleads — see
+    // poteau-app/lib/backend/schema/structs/result_proposal_struct.dart.
+    // `is_draw` is explicit so a proposed draw is never an unset result.
     if (m.resultOnly) {
       doc.result_proposals = [
-        { result: "team_a", proposed_by: TIM, proposed_at: Timestamp.now(), agreed_by: [TIM] },
+        {
+          winning_side: "team_a",
+          is_draw: false,
+          proposed_by: TIM,
+          proposed_at: Timestamp.now(),
+          agreed_by: [TIM],
+        },
       ];
     }
 
@@ -239,7 +261,13 @@ async function clearMatrix() {
         },
       ];
       doc.result_proposals = [
-        { result: "team_a", proposed_by: TIM, proposed_at: Timestamp.now(), agreed_by: [TIM, MARCO] },
+        {
+          winning_side: "team_a",
+          is_draw: false,
+          proposed_by: TIM,
+          proposed_at: Timestamp.now(),
+          agreed_by: [TIM, MARCO],
+        },
       ];
     }
 
