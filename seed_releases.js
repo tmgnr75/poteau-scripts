@@ -236,9 +236,19 @@ const RELEASES = [
         // Placeholder ship date: this release is staged, not out. Correct it
         // and re-run before flipping published to true.
         date: new Date('2026-09-01T12:00:00Z'),
-        // STAGED. Nothing is visible to anyone until this is true, so the entry
-        // can be appended to as 5.2.0 is built.
-        published: false,
+        // Published ahead of the build shipping. This is safe because
+        // fetchChangelogs caps entries at the RUNNING version: nobody on 5.1
+        // can see this, and the Home banner only ever fires for the build the
+        // user is actually on, so seeding it early notifies no one.
+        //
+        // It relies on that filter holding. changelog_data.dart now fails
+        // closed when the running version cannot be read (it used to treat an
+        // unknown version as "show everything", which would have leaked this
+        // entry to anyone whose PackageInfo lookup failed).
+        //
+        // Still editable after this point: re-running the script overwrites
+        // the same doc, and 5.2.0 users only appear once the build ships.
+        published: true,
         title_fr: 'Poteau Live et des signalements plus justes 🔴',
         title_en: 'Poteau Live, and fairer reporting 🔴',
         title_es: 'Poteau Live y reportes más justos 🔴',
