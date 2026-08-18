@@ -34,7 +34,6 @@
 const { execFileSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 function dep(name) {
     try { return require(name); }
@@ -583,7 +582,10 @@ function splitTeaser(raw) {
     let lead = '', act = '';
     for (const l of block.split('\n').map(x => x.trim()).filter(Boolean)) {
         if (/^ACT:/i.test(l)) act = l.replace(/^ACT:\s*/i, '');
-        else if (l.startsWith('- ')) lines.push(l.slice(2));
+        // Strip "STORY 3: " style prefixes. They are the writer numbering its own
+        // output, which is noise in a teaser: the reader wants the venue and the
+        // thing that happened, not an index.
+        else if (l.startsWith('- ')) lines.push(l.slice(2).replace(/^STORY\s*\d*\s*[:.]\s*/i, ''));
         else if (!lead) lead = l;
     }
     return { teaser: { lead, lines, act }, brief };
@@ -774,7 +776,10 @@ function post(payload) {
  * the artifact step failed would be the worse outcome.
  */
 function publishArtifact(html, dayKey, description) {
-    const file = path.join(os.tmpdir(), `poteau_daily_${dayKey}.html`);
+    // NOT os.tmpdir(): on macOS that is the per-user /var/folders/... dir, which
+    // is outside the directories a headless claude -p may read, so the publish
+    // is refused with "reading the file was denied". /tmp is allowed.
+    const file = path.join('/tmp', `poteau_daily_${dayKey}.html`);
     fs.writeFileSync(file, html, 'utf8');
     try {
         const res = spawnSync('claude', [
