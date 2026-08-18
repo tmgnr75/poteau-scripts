@@ -137,6 +137,7 @@ async function fetchDay() {
 
     const human = [];
     const logs = {};          // roster events, counted
+    const roster = {};        // per-game movement over the day
     let teamMessages = 0;
     const gameIds = new Set();
     const authorIds = new Set();
@@ -151,6 +152,27 @@ async function fetchDay() {
             // kinds collapse into countable buckets.
             const kind = text.replace(/^\S+(\s\S+)?\s+(?=a\s)/, '').slice(0, 48) || '(empty)';
             logs[kind] = (logs[kind] || 0) + 1;
+
+            // Keep the per-game movement too. A roster that climbed to 13 and
+            // fell to 9 at 20:29 is the story of the evening, and it is
+            // invisible in the chat text: players discuss the collapse without
+            // ever stating the numbers.
+            const gid = m.game_id && m.game_id.id;
+            if (gid && m.created) {
+                let delta = 0;
+                const withFriends = text.match(/rejoint le match avec (\d+) ami/);
+                const added = text.match(/a ajouté (?:(\d+)|un) ami/);
+                const removed = text.match(/a retiré (\d+) ami/);
+                if (withFriends) delta = 1 + Number(withFriends[1]);
+                else if (/a rejoint le match/.test(text)) delta = 1;
+                else if (/a quitté le match/.test(text)) delta = -1;
+                else if (added) delta = added[1] ? Number(added[1]) : 1;
+                else if (removed) delta = -Number(removed[1]);
+                if (delta) (roster[gid] = roster[gid] || []).push({ at: m.created.toDate(), delta });
+                if (/a annulé le match/.test(text)) {
+                    (roster[gid] = roster[gid] || []).push({ at: m.created.toDate(), cancelled: true });
+                }
+            }
             return;
         }
         if (type === 'poteau_team_message') { teamMessages++; return; }
@@ -169,7 +191,7 @@ async function fetchDay() {
         });
     });
 
-    return { human, logs, teamMessages, gameIds, authorIds, total: snap.size };
+    return { human, logs, roster, teamMessages, gameIds, authorIds, total: snap.size };
 }
 
 /** Batch-resolve refs. getAll takes a few hundred at a time comfortably. */
@@ -195,6 +217,7 @@ async function resolveAll(collection, ids, pick) {
  * one, so they are included rather than dropped.
  */
 function buildCorpus(data, names, games) {
+    const rosterByGame = data.roster || {};
     const byGame = {};
     for (const m of data.human) {
         if (!m.gid) continue;
@@ -237,7 +260,40 @@ function buildCorpus(data, names, games) {
         const g = games[t.gid] || {};
         const when = g.date ? DateTime.fromJSDate(g.date).setZone(TZ).toFormat('HH:mm') : '?';
         L.push('');
-        L.push(`--- ${g.centre || 'unknown venue'} · kickoff ${when} · ${g.sport || '?'} · ${g.status || '?'} · ${g.players || 0}/${g.max || '?'} players · ${t.msgs.length} messages`);
+        L.push(`--- ${g.centre || 'unknown venue'} · kickoff ${when} · ${g.sport || '?'} · ${t.msgs.length} messages`);
+
+        // THE ENDING, stated as fact. Without this the writer can only report
+        // that players argued; it cannot say whether they played, which is the
+        // question a reader actually has.
+        const ended = g.status === 'played' ? 'PLAYED'
+            : (g.status === 'canceled' || g.status === 'hidden') ? 'CANCELLED'
+            : g.status === 'published' ? 'still open at the end of the day' : (g.status || 'unknown');
+        L.push(`    HOW IT ENDED: ${ended}. ${g.spots || 0} of ${g.max || '?'} spots taken by ${g.players || 0} distinct people`
+            + (g.spots > g.players
+                ? ` (${g.spots - g.players} of those ${g.spots - g.players === 1 ? 'spots is a +1 guest' : 'spots are +1 guests'})`
+                : '')
+            + `.`);
+        const after = [];
+        if (g.noShows) after.push(`${g.noShows} reported as no-show`);
+        if (g.lates) after.push(`${g.lates} reported late`);
+        if (g.praised) after.push(`${g.praised} praised by teammates`);
+        if (g.rude) after.push(`${g.rude} reported for behaviour`);
+        L.push(`    AFTERWARDS: ${after.length ? after.join(', ') : 'no feedback left by anyone'}.`);
+
+        // The roster trajectory: how the day moved, in numbers the chat never says.
+        const moves = (rosterByGame[t.gid] || []).sort((a, b) => a.at - b.at);
+        if (moves.length) {
+            let n = 0;
+            const marks = [];
+            for (const mv of moves) {
+                if (mv.cancelled) { marks.push(`${DateTime.fromJSDate(mv.at).setZone(TZ).toFormat('HH:mm')} CANCELLED`); continue; }
+                n += mv.delta;
+                marks.push(`${DateTime.fromJSDate(mv.at).setZone(TZ).toFormat('HH:mm')} ${mv.delta > 0 ? '+' : ''}${mv.delta} (${n})`);
+            }
+            const peak = Math.max(...marks.map((_, i) => i), 0);
+            L.push(`    ROSTER MOVED: ${marks.join('  ')}`);
+            L.push(`    (that count is signups over the day and drifts from the final figure above, which is the truth)`);
+        }
         for (const m of t.msgs) {
             const who = m.fromCentre
                 ? `${g.centre || 'the centre'} [CENTRE STAFF]`
@@ -302,19 +358,52 @@ Poteau context you need to read this correctly:
 - Centre staff messages are marked [CENTRE STAFF] — they speak for the venue,
   so what they say carries more weight than one player's opinion.
 - Messages marked (routine) are mechanical coordination. Never quote them.
+- Each conversation carries HOW IT ENDED, AFTERWARDS and ROSTER MOVED lines.
+  These are FACTS from the database, not chat. They are how you know whether a
+  game was played, how full it got, and who was reported afterwards. The chat
+  itself never states these. Use them, and never contradict them.
+- "10 of 10 spots taken by 6 distinct people" means the game LOOKED full while
+  only six humans were coming: the rest are +1 guests. That gap is often the
+  story.
 
 WRITE THIS STRUCTURE:
 
 1. A one-paragraph LEAD. What actually characterised yesterday? Not "players
    coordinated games" — that is always true and says nothing. Find the real
-   theme of the day.
+   theme of the day, and ground it in the numbers you were given.
 
-2. 3 to 5 STORIES, each with a short headline. A story is a specific thing that
-   happened in a specific game: a negotiation, a conflict, a venue problem, an
-   act of generosity, a confusion the app caused. For each one, say what
-   happened and quote the messages that show it. Attribute every quote to the
-   person by name and the venue. Quote in the original French; add a short
-   English gloss in brackets only when the meaning is not obvious.
+   Then a short paragraph headed HOW THE DAY RAN, tracing the shape of it in
+   time: when the first games were being filled, when the pressure peaked, what
+   the evening looked like. Use the clock times and the roster movements.
+
+2. 3 to 5 STORIES, in CHRONOLOGICAL order of when the game kicked off, earliest
+   first, so the brief reads as the day unfolding.
+
+   HEADLINES ARE INFORMATIVE, NOT MYSTERIOUS. This is an investigative rundown,
+   not clickbait. A reader skimming only the headlines must come away knowing
+   what happened. Name the venue, the time, and the outcome.
+     BAD:  "The night the roster melted"
+     BAD:  "A card for someone else's mistake"
+     GOOD: "LE FIVE Marville, 21:30: roster hit 13, collapsed to 9, played 10/10"
+     GOOD: "Foot POWER 5: Nash carded after the organiser's own misclick"
+
+   For each story, write it as a reporter would:
+   - open with what happened and how it ended, not with a tease
+   - then walk the exchange in TIME ORDER with the clock times, so the reader
+     sees the conversation, not two quotes floating without context. When
+     someone replies to someone else, give enough of the exchange that the reply
+     makes sense: who said what, at what time, and what came back.
+   - name every speaker and the venue. Quote in the original French; add a short
+     English gloss in brackets only when the meaning is not obvious.
+   - EVERY indented quote line must end with its speaker and the time, in this
+     exact shape, or the reader cannot tell who is talking:
+       "Tout le monde peut confirmé svp ?" (Mohamed, 12:16)
+     Two spaces of indent, the quote in double quotes, then the name and clock
+     time in round brackets. Never an indented quote without that attribution.
+   - CLOSE EVERY STORY with a line starting "HOW IT ENDED:" stating the outcome
+     from the HOW IT ENDED and AFTERWARDS facts given to you. Never leave a
+     story hanging on "we do not know if they played". You DO know. Use it.
+     If a story has no ending in the data, say exactly that instead of guessing.
 
 3. FRICTION — anything a player struggled with that is Poteau's fault, not the
    players'. Confusions about how the app works, missing features they asked
@@ -518,6 +607,38 @@ const PAGE_HEAD = `<title>The Poteau Daily</title>
   }
   #friction h2, #reply h2 { color:var(--whistle); }
   #friction blockquote, #reply blockquote { border-left-color:var(--whistle); }
+  /* ---- a quote is a person speaking, so it carries their face ------ */
+  figure.quote {
+    display:grid; grid-template-columns:auto 1fr; grid-template-areas:"face quote" "face cite";
+    gap:0 0.9rem; margin:1.5rem 0 1.6rem; align-items:start;
+  }
+  figure.quote blockquote { grid-area:quote; margin:0; padding:0 0 0 1.1rem; }
+  figure.quote figcaption {
+    grid-area:cite; padding-left:1.1rem; margin-top:0.35rem;
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.6875rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);
+  }
+  figure.quote figcaption .t { color:var(--pitch); margin-left:0.4rem; }
+  .face {
+    grid-area:face; width:40px; height:40px; border-radius:50%; object-fit:cover;
+    margin-top:0.25rem; border:1px solid var(--rule); background:var(--paper-sunk);
+  }
+  .face-blank {
+    display:grid; place-items:center; font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.9rem; color:var(--muted);
+  }
+  /* ---- the answer the reader came for ----------------------------- */
+  p.verdict {
+    background:var(--paper-sunk); border-left:2px solid var(--pitch);
+    padding:0.85rem 1.1rem; margin:1.5rem 0 2rem; font-size:1rem;
+  }
+  p.verdict span {
+    display:block; font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.625rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--pitch); margin-bottom:0.25rem;
+  }
+  #friction p.verdict, #reply p.verdict { border-left-color:var(--whistle); }
+  #friction p.verdict span, #reply p.verdict span { color:var(--whistle); }
   .overview { margin:2.25rem 0 0; padding:1.5rem 0 0; }
   .overview h2 { margin-top:0; }
   .takeaway {
@@ -559,6 +680,7 @@ const PAGE_HEAD = `<title>The Poteau Daily</title>
     .stats { gap:0 1.5rem; }
     .stat b { font-size:1.25rem; }
     .contents li { grid-template-columns:3.4rem 1fr; }
+    .face { width:32px; height:32px; }
   }
   @media (prefers-reduced-motion:reduce) { *{animation:none!important;transition:none!important;} }
 </style>`;
@@ -591,6 +713,16 @@ function splitTeaser(raw) {
     return { teaser: { lead, lines, act }, brief };
 }
 
+/** A quote with the speaker's face, name and the time they said it. */
+function quoteWithFace(quote, who, time, avatars) {
+    const src = avatars[who];
+    const face = src
+        ? `<img class="face" src="${src}" alt="" loading="lazy">`
+        : `<span class="face face-blank" aria-hidden="true">${esc((who || '?').trim().charAt(0).toUpperCase())}</span>`;
+    return `<figure class="quote">${face}<blockquote>${esc(quote.trim())}</blockquote>`
+        + `<figcaption>${esc(who)}${time ? ` <span class="t">${esc(time)}</span>` : ''}</figcaption></figure>`;
+}
+
 const esc = (t) => String(t)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -604,10 +736,10 @@ const esc = (t) => String(t)
  * turned half the paragraphs into headings, so the margin below the measured
  * wrap width is the actual signal.
  */
-function buildPage(brief, meta, teaser) {
-    const SECTIONS = new Set(['LEAD', 'STORIES', 'FRICTION', 'THE MOOD', 'WORTH A REPLY']);
+function buildPage(brief, meta, teaser, avatars = {}) {
+    const SECTIONS = new Set(['LEAD', 'HOW THE DAY RAN', 'STORIES', 'FRICTION', 'THE MOOD', 'WORTH A REPLY']);
     const SEC_ID = {
-        LEAD: 'lead', STORIES: 'stories', FRICTION: 'friction',
+        LEAD: 'lead', 'HOW THE DAY RAN': 'dayrun', STORIES: 'stories', FRICTION: 'friction',
         'THE MOOD': 'mood', 'WORTH A REPLY': 'reply',
     };
 
@@ -657,13 +789,20 @@ function buildPage(brief, meta, teaser) {
             }
             if (c.length) chunks.push(c.join(' ').trim());
             for (const ch of chunks) {
-                if (ch.startsWith('"')) out.push(`<blockquote>${esc(ch)}</blockquote>`);
-                else {
-                    const i = ch.indexOf(':');
-                    if (i > 0 && i < 40) {
-                        out.push(`<p class="dlg"><span class="who">${esc(ch.slice(0, i))}</span> ${esc(ch.slice(i + 1).trim())}</p>`);
-                    } else out.push(`<blockquote>${esc(ch)}</blockquote>`);
+                // "…quote…" (Name, 20:59) is the writer's own attribution form.
+                // Pulling the speaker out lets the quote carry their face, which
+                // is the difference between a wall of French and a conversation.
+                const attr = ch.match(/^"([\s\S]+)"\s*[(\[]([^,\])]+?)(?:,\s*(\d{1,2}[:h]\d{2}))?[)\]]\s*$/);
+                if (attr) {
+                    out.push(quoteWithFace(attr[1], attr[2].trim(), attr[3] || '', avatars));
+                    continue;
                 }
+                if (ch.startsWith('"')) { out.push(`<blockquote>${esc(ch)}</blockquote>`); continue; }
+                const i = ch.indexOf(':');
+                if (i > 0 && i < 40) {
+                    const who = ch.slice(0, i).trim();
+                    out.push(quoteWithFace(ch.slice(i + 1).trim().replace(/^"|"$/g, ''), who, '', avatars));
+                } else out.push(`<blockquote>${esc(ch)}</blockquote>`);
             }
             continue;
         }
@@ -671,8 +810,16 @@ function buildPage(brief, meta, teaser) {
         // a short line and sometimes writes one, but it also likes explicit
         // "STORY ONE: ..." banners in capitals. Both are headlines; a wrapped
         // body line is neither, which is what the wrap-width margin separates.
-        const isBanner = /^(STORY\b|[A-Z][A-Z0-9 ,'’:.-]{12,}$)/.test(first)
-            && first === first.toUpperCase() && first.length <= 110;
+        // An informative headline is now LONGER than the old teasing kind
+        // ("LE FIVE MARVILLE, 21:30: ROSTER HIT 13, COLLAPSED, PLAYED 10/10"),
+        // so length cannot be the test. What identifies it is that the writer
+        // sets it in full capitals on its own line. Allow accents and digits,
+        // and allow it to run past the wrap width.
+        const letters = first.replace(/[^A-Za-zÀ-ÿ]/g, '');
+        const isBanner = letters.length > 8
+            && first === first.toUpperCase()
+            && first.length <= 160
+            && !first.startsWith('"');
         const isShortLine = blk.length > 1 && first.length <= headMax
             && !/[.?!:,"]$/.test(first) && !first.includes('"');
 
@@ -691,7 +838,16 @@ function buildPage(brief, meta, teaser) {
             start = 1;
         }
         const text = blk.slice(start).map(x => x.trim()).join(' ');
-        if (text) out.push(`<p>${esc(text)}</p>`);
+        if (!text) continue;
+        // The writer closes each story with "HOW IT ENDED: ...". That is the
+        // answer the reader came for, so it gets a box rather than a paragraph
+        // buried at the foot of the column.
+        const endMatch = text.match(/^HOW IT ENDED\s*[:.]\s*([\s\S]+)$/i);
+        if (endMatch) {
+            out.push(`<p class="verdict"><span>How it ended</span>${esc(endMatch[1])}</p>`);
+            continue;
+        }
+        out.push(`<p>${esc(text)}</p>`);
     }
     if (openSec) out.push('</section>');
 
@@ -761,6 +917,49 @@ function slackWebhookUrl() {
 function post(payload) {
     execFileSync('curl', ['-s', '-X', 'POST', '-H', 'Content-type: application/json',
         '--data', JSON.stringify(payload), slackWebhookUrl()], { encoding: 'utf8' });
+}
+
+/**
+ * Fetch the quoted players' profile photos and inline them as data URIs.
+ *
+ * WHY DATA URIs. The artifact CSP blocks external hosts, so a remote
+ * firebasestorage.googleapis.com URL renders as a broken image. The bytes have
+ * to travel inside the page.
+ *
+ * Downscaled with sips first: the originals are ~20KB each and a page with
+ * twenty of them would carry half a megabyte of avatar for no visual gain at
+ * 40px. sips ships with macOS, and if it is missing the original is used rather
+ * than failing.
+ *
+ * Only players the brief actually QUOTES are fetched, not all 346 authors.
+ */
+function fetchAvatars(names, photoUrls, wanted) {
+    const out = {};
+    const dir = fs.mkdtempSync('/tmp/poteau_av_');
+    for (const name of wanted) {
+        const uid = Object.keys(names).find(k => names[k] === name);
+        const url = uid && photoUrls[uid];
+        if (!url) continue;
+        try {
+            const raw = path.join(dir, `${uid}.jpg`);
+            // curl rather than fetch(): this runs on Node 20 where fetch exists,
+            // but curl gives a hard timeout and no unhandled-rejection surface.
+            execFileSync('curl', ['-sS', '-m', '15', '-o', raw, url], { stdio: 'pipe' });
+            if (!fs.existsSync(raw) || fs.statSync(raw).size === 0) continue;
+            let file = raw;
+            const small = path.join(dir, `${uid}_s.jpg`);
+            try {
+                execFileSync('sips', ['-Z', '96', raw, '--out', small], { stdio: 'pipe' });
+                if (fs.existsSync(small) && fs.statSync(small).size > 0) file = small;
+            } catch (_) { /* sips missing or refused the file; use the original */ }
+            const b64 = fs.readFileSync(file).toString('base64');
+            // A pathological original would bloat the page; skip rather than ship it.
+            if (b64.length > 400 * 1024) continue;
+            out[name] = `data:image/jpeg;base64,${b64}`;
+        } catch (_) { /* one missing face must never cost the edition */ }
+    }
+    try { fs.rmSync(dir, { recursive: true, force: true }); } catch (_) { /* best effort */ }
+    return out;
 }
 
 /**
@@ -938,15 +1137,28 @@ async function runOneDay(targetDay) {
         return false;
     }
 
-    const [names, gameDocs] = await Promise.all([
+    const [names, photoUrls, gameDocs] = await Promise.all([
         resolveAll('users', data.authorIds, u => (u.display_name || '').trim() || 'unknown'),
-        resolveAll('games', data.gameIds, g => ({
-            centre: g.centre, sport: g.sport, status: g.status, max: g.max_players,
-            date: g.date ? g.date.toDate() : null,
-            // Dedupe: a +1 is the same user ref repeated, so raw length lies.
-            players: new Set((g.attendees || [])
-                .filter(r => r && r.parent && r.parent.id === 'users').map(r => r.id)).size,
-        })),
+        resolveAll('users', data.authorIds, u => (u.photo_url || '').trim()),
+        resolveAll('games', data.gameIds, g => {
+            // Dedupe: a +1 is the same user ref repeated, so the raw length is
+            // the SPOTS taken while the deduped set is the PEOPLE present. Both
+            // matter: "10 of 10 spots, 6 actual people" is the real story of a
+            // game that looks full.
+            const refs = (g.attendees || []).filter(r => r && r.parent && r.parent.id === 'users');
+            return {
+                centre: g.centre, sport: g.sport, status: g.status, max: g.max_players,
+                date: g.date ? g.date.toDate() : null,
+                price: g.price, duration: g.duration,
+                spots: refs.length,
+                players: new Set(refs.map(r => r.id)).size,
+                // The ending, which chat alone can never tell you.
+                noShows: (g.no_show_players || []).length,
+                lates: (g.late_players || []).length,
+                praised: (g.good_players || []).length,
+                rude: (g.rude_players || []).length,
+            };
+        }),
     ]);
 
     const { corpus, threads, routineTotal } = buildCorpus(data, names, gameDocs);
@@ -982,7 +1194,17 @@ async function runOneDay(targetDay) {
     }
 
     if (SLACK) {
-        const html = buildPage(brief, meta, teaser);
+        // Only the people the brief quotes, not all 346 authors: the page needs
+        // twenty faces, not a directory.
+        // Harvest speakers from the attributed form "…" (Name, 20:59) wherever it
+        // appears, plus the "Name at 14:18:" form the writer also uses inline.
+        const quoted = [...new Set([
+            ...[...brief.matchAll(/"[^"\n]{3,}"\s*\(([^,)]{2,40}?)\s*,\s*\d{1,2}[:h]\d{2}\)/g)].map(m => m[1]),
+            ...[...brief.matchAll(/^([A-Z][^\n:]{1,38}?)\s+(?:at|à)\s+\d{1,2}[:h]\d{2}\s*:/gm)].map(m => m[1]),
+        ].map(x => x.trim()))].filter(n => n.length > 1 && n.length < 40).slice(0, 30);
+        const avatars = quoted.length ? fetchAvatars(names, photoUrls, quoted) : {};
+        console.error(`[chat_brief] ${dayKey}: ${Object.keys(avatars).length}/${quoted.length} avatars`);
+        const html = buildPage(brief, meta, teaser, avatars);
         const url = publishArtifact(html, dayKey, teaser.lead || `The Poteau Daily for ${meta.dayLabel}`);
         postBrief({ teaser, meta, url });
         // Mark ONLY after a successful post. If Slack throws, the day stays
