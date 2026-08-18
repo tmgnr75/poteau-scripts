@@ -23,6 +23,7 @@
  *   node whats_going_on.js               # last 48h
  *   node whats_going_on.js --hours=6     # any window
  *   node whats_going_on.js --slack       # also post to #health-reports
+ *   node whats_going_on.js --slack --dry # print the Slack payload, post nothing
  *   node whats_going_on.js --no-logs     # skip Cloud Logging (fast, Firestore only)
  */
 
@@ -51,6 +52,7 @@ const arg = (k, d) => {
 const HOURS = Number(arg('hours', 48));
 const SLACK = process.argv.includes('--slack');
 const NO_LOGS = process.argv.includes('--no-logs');
+const DRY = process.argv.includes('--dry');   // build the Slack payload, post nothing
 
 if (!admin.apps.length) {
     admin.initializeApp({ credential: admin.credential.cert(require(SA_PATH)), projectId: PROJECT });
@@ -326,12 +328,122 @@ function render(d) {
     return L.join('\n');
 }
 
-function postSlack(text) {
-    if (!fs.existsSync(WEBHOOK_ENV)) { console.error('no webhook env, skipping Slack'); return; }
-    const url = (fs.readFileSync(WEBHOOK_ENV, 'utf8').match(/https:\/\/hooks\.slack\.com\/\S+/) || [])[0];
-    if (!url) { console.error('no webhook URL found'); return; }
-    execFileSync('curl', ['-sS', '-X', 'POST', '-H', 'Content-type: application/json',
-        '--data', JSON.stringify({ text: '```\n' + text + '\n```' }), url], { stdio: 'pipe' });
+/**
+ * The webhook is bound to #health-reports (app "Claude", added 2026-08-03).
+ * The channel is a property of the webhook, not of the payload, so there is
+ * nothing to route here — but read the key the same way every other report
+ * does, so one env file keeps working for all of them.
+ */
+function slackWebhookUrl() {
+    const env = fs.readFileSync(WEBHOOK_ENV, 'utf8');
+    const url = (env.match(/SLACK_WEBHOOK_URL=["']?([^"'\n]+)/) || [])[1];
+    if (!url) throw new Error('SLACK_WEBHOOK_URL not found in ' + WEBHOOK_ENV);
+    return url;
+}
+
+function post(payload) {
+    // curl, matching daily_health_report.js: that path has posted unattended
+    // from launchd since 2026-08-03 and there is no reason to re-prove another.
+    execFileSync('curl', ['-s', '-X', 'POST', '-H', 'Content-type: application/json',
+        '--data', JSON.stringify(payload), slackWebhookUrl()], { encoding: 'utf8' });
+}
+
+/**
+ * Build the Slack message.
+ *
+ * Not the same layout as the terminal. On a phone, a 60-column table wraps and
+ * becomes unreadable, so the headline numbers go in a narrow code block (the
+ * <=32 char rule the daily report established) and everything a human should
+ * ACT on is lifted out above it as prose. A reader who opens this on their
+ * phone should learn whether anything needs them without scrolling.
+ */
+function slackPayload(d) {
+    const w = `${HOURS}h`;
+    const v = d.vol, g = d.games, p = d.pay;
+
+    // What needs a human. Order matters: a blocked user beats a slow endpoint.
+    const attention = [];
+    if (d.push && d.push.crashes) {
+        attention.push(`🔴  *${d.push.crashes} JS error${d.push.crashes === 1 ? '' : 's'} in the push path* — players are not being told about their games`);
+    }
+    if (d.err) {
+        for (const [svc, n] of Object.entries(d.err.bySvc).sort((a, b) => b[1] - a[1]).slice(0, 4)) {
+            const sample = (d.err.samples[svc] || '').replace(/`/g, "'").slice(0, 120);
+            attention.push(`🟠  *${svc}* — ${n} error${n === 1 ? '' : 's'}${sample ? `\n_${sample}_` : ''}`);
+        }
+    }
+    const emptyPct = g.total ? Math.round((g.empty / g.total) * 100) : 0;
+    if (emptyPct >= 40) {
+        attention.push(`🟡  *${emptyPct}% of new games have no players yet* (${g.empty} of ${g.total}) — normal for Poteau, watch the trend not the number`);
+    }
+
+    const blocks = [{
+        type: 'header',
+        text: { type: 'plain_text', text: `Production · last ${w}`, emoji: true },
+    }, {
+        type: 'context',
+        elements: [{
+            type: 'mrkdwn',
+            text: `${N(g.total)} games  ·  ${N((v.users || {}).cur || 0)} new users  ·  ${N((d.msg.byType || {}).message || 0)} messages  ·  ${d.err ? `${N(d.err.real)} real error${d.err.real === 1 ? '' : 's'}` : 'errors not checked'}`,
+        }],
+    }];
+
+    if (attention.length) {
+        blocks.push({ type: 'divider' });
+        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: attention.join('\n\n') } });
+    }
+
+    blocks.push({ type: 'divider' });
+
+    // Narrow table: 14 + 8 + 8 = 30 chars, under Slack's mobile wrap point.
+    const LW = 14, CW = 8;
+    // Abbreviate hard: the invitation fanout runs into the millions and
+    // "1164k" is harder to read than "1.2M" at a glance.
+    const abbrev = (n) => {
+        if (typeof n !== 'number') return N(n);
+        if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (n >= 10e3) return Math.round(n / 1e3) + 'k';
+        return N(n);
+    };
+    const cell = (n) => padL(abbrev(n), CW);
+    const trow = (label, key) => {
+        const c = v[key];
+        if (!c || c.error) return pad(label, LW) + cell('—') + cell('—');
+        return pad(label, LW) + cell(c.cur) + padL(delta(c.cur, c.prev), CW);
+    };
+    const table = [
+        pad('', LW) + padL('now', CW) + padL('vs prev', CW),
+        trow('games', 'games'),
+        trow('new users', 'users'),
+        trow('messages', 'messages'),
+        trow('availabil.', 'availabilities'),
+        trow('quiz', 'quiz_replies'),
+        trow('payments', 'payments'),
+        trow('invitations', 'game_invitations'),
+    ].join('\n');
+    blocks.push({
+        type: 'section',
+        text: { type: 'mrkdwn', text: `*Activity*\n\`\`\`\n${table}\n\`\`\`` },
+    });
+
+    // Detail that is useful but never urgent.
+    const quiet = [
+        `${g.withPlayers}/${g.total} games got a player`,
+        `${Object.entries(g.bySport).map(([k, n]) => `${k} ${n}`).join(' · ')}`,
+        `${g.cancelled} cancelled`,
+        `${N(d.msg.activeGames)} games with chat`,
+        p.total ? `${p.total} payment attempt${p.total === 1 ? '' : 's'}` : 'no payments',
+        d.err ? `${N(d.err.throttle)} throttling (benign)` : null,
+    ].filter(Boolean);
+    blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: quiet.join('  ·  ') }] });
+
+    if (g.topCentres.length) {
+        blocks.push({
+            type: 'context',
+            elements: [{ type: 'mrkdwn', text: `*busiest*  ${g.topCentres.slice(0, 4).map(([k, n]) => `${k} (${n})`).join('  ')}` }],
+        });
+    }
+    return { blocks };
 }
 
 (async () => {
@@ -345,6 +457,27 @@ function postSlack(text) {
     }
     const text = render(d);
     console.log(text);
-    if (SLACK) postSlack(text);
+    if (SLACK) {
+        const payload = slackPayload(d);
+        if (DRY) console.log('\n--- slack payload (dry) ---\n' + JSON.stringify(payload, null, 1));
+        else post(payload);
+    }
     process.exit(0);
-})().catch(e => { console.error('FATAL', e.message); process.exit(1); });
+})().catch(e => {
+    // A silent failure is the worst outcome: nobody can tell "production is
+    // fine" from "the monitor is dead". If we were asked to post, post the
+    // failure too. Same rule as daily_health_report.js.
+    console.error('FATAL', e && e.message);
+    if (SLACK && !DRY) {
+        try {
+            post({
+                blocks: [
+                    { type: 'header', text: { type: 'plain_text', text: '⚠️ Production check failed to run', emoji: true } },
+                    { type: 'section', text: { type: 'mrkdwn', text: `The check itself broke, so *production status is unknown*.\n\`\`\`${String(e && (e.stderr || e.message) || e).split('\n')[0].slice(0, 300)}\`\`\`` } },
+                    { type: 'context', elements: [{ type: 'mrkdwn', text: 'run `node scripts/whats_going_on.js` on the Mac to see the full error' }] },
+                ],
+            });
+        } catch (_) { /* nothing left to try */ }
+    }
+    process.exit(1);
+});
