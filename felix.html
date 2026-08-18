@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devine le Son : Tennis ou Actrice X ?</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a2e; color: #eee; text-align: center; padding: 20px; }
+        h1 { color: #ff4081; }
+        .container { max-width: 700px; margin: 0 auto; }
+        .sound-container { margin: 20px auto; padding: 30px; background: #16213e; border-radius: 15px; box-shadow: 0 4px 20px rgba(255,64,129,0.3); }
+        button { padding: 12px 25px; margin: 10px; font-size: 18px; cursor: pointer; border: none; border-radius: 8px; transition: all 0.2s; }
+        .play-btn { background: #00bfff; color: white; }
+        .guess-btn { background: #28a745; color: white; }
+        .guess-btn:hover { transform: scale(1.05); }
+        audio { width: 90%; max-width: 500px; margin: 15px 0; }
+        .reveal { margin: 25px 0; font-size: 22px; font-weight: bold; min-height: 60px; }
+        .score { font-size: 24px; margin: 15px; color: #ffd700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎾 Devine : Tennis ou Actrice X ? 🔥</h1>
+        <p>Écoute attentivement et choisis ! (Les vrais grognements de tennis sont parfois très proches...)</p>
+        
+        <div class="score">Score : <span id="score">0</span> / <span id="total">0</span></div>
+        
+        <div id="game" class="sound-container">
+            <h2 id="round-title">Round 1</h2>
+            <audio id="sound" controls></audio>
+            <br>
+            <button class="play-btn" onclick="playSound()">▶️ Jouer le son</button><br><br>
+            <button class="guess-btn" onclick="guess('tennis')">🎾 C'est du Tennis !</button>
+            <button class="guess-btn" onclick="guess('porn')">🔥 C'est une Actrice X !</button>
+        </div>
+        
+        <div id="result" class="reveal"></div>
+        
+        <button onclick="nextRound()" style="background:#ff4081; color:white; padding:12px 30px; font-size:18px;">Prochain Round →</button>
+        
+        <div style="margin-top:40px; font-size:14px; opacity:0.8;">
+            <strong>Conseil :</strong> Remplace les URLs dans le code JS par de vrais sons (ex. freesound.org, gfxsounds, ou tes propres fichiers).
+        </div>
+    </div>
+
+    <script>
+        let currentRound = 1;
+        let score = 0;
+        let currentType = '';
+        let currentName = '';
+        
+        // Remplace ces URLs par de vrais sons (MP3 directs)
+        const sounds = [
+            { url: 'https://gfxsounds.com/wp-content/uploads/2024/06/Adult-female-moan-in-pain.mp3', type: 'porn', name: 'Moan intense - Exemple Actrice X' },
+            { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', type: 'tennis', name: 'Grunt tennis (remplace par vrai)' },
+            { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', type: 'porn', name: 'Autre moan' },
+            { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', type: 'tennis', name: 'Sharapova-style grunt (remplace)' },
+            // Ajoute autant que tu veux !
+        ];
+        
+        let currentIndex = 0;
+
+        function loadSound() {
+            const sound = sounds[currentIndex % sounds.length];
+            const audio = document.getElementById('sound');
+            audio.src = sound.url;
+            currentType = sound.type;
+            currentName = sound.name;
+            document.getElementById('round-title').textContent = `Round ${currentRound}`;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('total').textContent = Math.min(currentRound, sounds.length);
+        }
+
+        function playSound() {
+            document.getElementById('sound').play().catch(e => alert("Impossible de lire le son (vérifie l'URL)"));
+        }
+function playSound() {
+            document.getElementById('sound').play().catch(e => alert("Impossible de lire le son (vérifie l'URL)"));
+        }
+
+        function guess(choice) {
+            const resultDiv = document.getElementById('result');
+            const correct = choice === currentType;
+            
+            if (correct) {
+                score++;
+                document.getElementById('score').textContent = score;
+                resultDiv.innerHTML = `✅ Correct ! C'était <strong>${currentName}</strong>`;
+                resultDiv.style.color = '#28a745';
+            } else {
+                resultDiv.innerHTML = `❌ C'était <strong>${currentName}</strong>`;
+                resultDiv.style.color = '#ff4081';
+            }
+            resultDiv.style.display = 'block';
+        }
+
+        function nextRound() {
+            currentRound++;
+            currentIndex++;
+            loadSound();
+        }
+
+        // Démarrage
+        loadSound();
+    </script>
+</body>
+</html>

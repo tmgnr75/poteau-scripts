@@ -1,0 +1,398 @@
+[
+    {
+        "firebase_id": "22kdpZzK5X91LBHq1ZRc",
+        "field": "question_fr",
+        "old": "Quand tu parles de ton niveau, tu plutôt…",
+        "new": "Quand tu parles de ton niveau, tu es plutôt…"
+    },
+    {
+        "firebase_id": "AUOKkmdouWKS0IavxLlb",
+        "field": "question_fr",
+        "old": "Quand tu parles de ton niveau, tu plutôt…",
+        "new": "Quand tu parles de ton niveau, tu es plutôt…"
+    },
+    {
+        "firebase_id": "TtfKU3zN11nzSWOH8JhO",
+        "field": "question_fr",
+        "old": "Quand tu parles de ton niveau, tu plutôt…",
+        "new": "Quand tu parles de ton niveau, tu es plutôt…"
+    },
+    {
+        "firebase_id": "ovnfwFC3rdgmtFfcuBZu",
+        "field": "question_fr",
+        "old": "Quand tu parles de ton niveau, tu plutôt…",
+        "new": "Quand tu parles de ton niveau, tu es plutôt…"
+    },
+    {
+        "firebase_id": "IonzAKyHYIrIvWWac6ao",
+        "field": "question_es",
+        "old": "¿Juegas seguido al fútbol?",
+        "new": "¿Juegas al fútbol con frecuencia?"
+    },
+    {
+        "firebase_id": "P3VtSJBe28O32ULCq4XB",
+        "field": "question_es",
+        "old": "¿Juegas seguido al fútbol?",
+        "new": "¿Juegas al fútbol con frecuencia?"
+    },
+    {
+        "firebase_id": "VYzXHRr7QKTOvpyyjBNI",
+        "field": "question_es",
+        "old": "¿Juegas seguido al fútbol?",
+        "new": "¿Juegas al fútbol con frecuencia?"
+    },
+    {
+        "firebase_id": "raszB8rjPqeW4h0nhInX",
+        "field": "question_es",
+        "old": "¿Juegas seguido al fútbol?",
+        "new": "¿Juegas al fútbol con frecuencia?"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "question_es",
+        "old": "¿En qué tipo de partidas juegas más seguido?",
+        "new": "¿En qué tipo de partidos juegas más a menudo?"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "answer_1_text_es",
+        "old": "Partidas improvisadas",
+        "new": "Partidos improvisados"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "answer_2_text_es",
+        "old": "Partidas tranquilas",
+        "new": "Partidos tranquilos"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "answer_3_text_es",
+        "old": "Un five entre amigos",
+        "new": "Un fútbol 5 entre amigos"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "answer_4_text_es",
+        "old": "Buenas partidas organizadas",
+        "new": "Buenos partidos organizados"
+    },
+    {
+        "firebase_id": "Bfe1yo0JpwftNFizMNQX",
+        "field": "answer_6_text_es",
+        "old": "Partidas muy serias",
+        "new": "Partidos muy serios"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "question_es",
+        "old": "¿En qué tipo de partidas juegas más seguido?",
+        "new": "¿En qué tipo de partidos juegas más a menudo?"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "answer_1_text_es",
+        "old": "Partidas improvisadas",
+        "new": "Partidos improvisados"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "answer_2_text_es",
+        "old": "Partidas tranquilas",
+        "new": "Partidos tranquilos"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "answer_3_text_es",
+        "old": "Un five entre amigos",
+        "new": "Un fútbol 5 entre amigos"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "answer_4_text_es",
+        "old": "Buenas partidas organizadas",
+        "new": "Buenos partidos organizados"
+    },
+    {
+        "firebase_id": "RUh3B4WRCZSrxDDl0dIX",
+        "field": "answer_6_text_es",
+        "old": "Partidas muy serias",
+        "new": "Partidos muy serios"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "question_es",
+        "old": "¿En qué tipo de partidas juegas más seguido?",
+        "new": "¿En qué tipo de partidos juegas más a menudo?"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "answer_1_text_es",
+        "old": "Partidas improvisadas",
+        "new": "Partidos improvisados"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "answer_2_text_es",
+        "old": "Partidas tranquilas",
+        "new": "Partidos tranquilos"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "answer_3_text_es",
+        "old": "Un five entre amigos",
+        "new": "Un fútbol 5 entre amigos"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "answer_4_text_es",
+        "old": "Buenas partidas organizadas",
+        "new": "Buenos partidos organizados"
+    },
+    {
+        "firebase_id": "u36Eyc5VcCJIVjiQ2bol",
+        "field": "answer_6_text_es",
+        "old": "Partidas muy serias",
+        "new": "Partidos muy serios"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "question_es",
+        "old": "¿En qué tipo de partidas juegas más seguido?",
+        "new": "¿En qué tipo de partidos juegas más a menudo?"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "answer_1_text_es",
+        "old": "Partidas improvisadas",
+        "new": "Partidos improvisados"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "answer_2_text_es",
+        "old": "Partidas tranquilas",
+        "new": "Partidos tranquilos"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "answer_3_text_es",
+        "old": "Un five entre amigos",
+        "new": "Un fútbol 5 entre amigos"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "answer_4_text_es",
+        "old": "Buenas partidas organizadas",
+        "new": "Buenos partidos organizados"
+    },
+    {
+        "firebase_id": "zjMvK7qMxSkboYEe90nu",
+        "field": "answer_6_text_es",
+        "old": "Partidas muy serias",
+        "new": "Partidos muy serios"
+    },
+    {
+        "firebase_id": "9k37qIQBs5N9SpawOrbK",
+        "field": "answer_3_text_es",
+        "old": "Presiono sin creerlo",
+        "new": "Presiono sin convicción"
+    },
+    {
+        "firebase_id": "9k37qIQBs5N9SpawOrbK",
+        "field": "answer_4_text_es",
+        "old": "Dificulto la relanza",
+        "new": "Entorpezco el contraataque"
+    },
+    {
+        "firebase_id": "9k37qIQBs5N9SpawOrbK",
+        "field": "answer_3_text_it",
+        "old": "Pressare senza crederci",
+        "new": "Pressare senza convinzione"
+    },
+    {
+        "firebase_id": "J1lw4RIxho2XPdk40GFL",
+        "field": "answer_3_text_es",
+        "old": "Combino pero muy lento",
+        "new": "Combino pero muy lentamente"
+    },
+    {
+        "firebase_id": "J1lw4RIxho2XPdk40GFL",
+        "field": "answer_4_text_es",
+        "old": "La doy y arranco tímido",
+        "new": "La doy y arranco tímidamente"
+    },
+    {
+        "firebase_id": "J1lw4RIxho2XPdk40GFL",
+        "field": "answer_5_text_es",
+        "old": "Juego rápido y me relanzo",
+        "new": "Juego rápido y vuelvo a arrancar"
+    },
+    {
+        "firebase_id": "Z0Ii5AaMpDBs9mMdAH4B",
+        "field": "answer_6_text_es",
+        "old": "Mantengo la calma y relanzo limpio",
+        "new": "Mantengo la calma y reinicio la jugada limpiamente"
+    },
+    {
+        "firebase_id": "Z0Ii5AaMpDBs9mMdAH4B",
+        "field": "answer_6_text_it",
+        "old": "Mantengo la calma e rilancio pulito",
+        "new": "Mantengo la calma e riparto in modo pulito"
+    },
+    {
+        "firebase_id": "bRjWeAC8s2Vp6YgGWQVW",
+        "field": "answer_6_text_es",
+        "old": "Me doy la vuelta y relanzo limpiamente",
+        "new": "Me doy la vuelta y reinicio la jugada limpiamente"
+    },
+    {
+        "firebase_id": "bRjWeAC8s2Vp6YgGWQVW",
+        "field": "answer_6_text_it",
+        "old": "Mi giro e rilancio pulito",
+        "new": "Mi giro e riparto in modo pulito"
+    },
+    {
+        "firebase_id": "crJ6y8hioVCn63DQpq0w",
+        "field": "answer_6_text_es",
+        "old": "Lo elimino y relanzo limpiamente",
+        "new": "Lo supero y reinicio la jugada limpiamente"
+    },
+    {
+        "firebase_id": "crJ6y8hioVCn63DQpq0w",
+        "field": "answer_6_text_it",
+        "old": "Lo supero e rilancio pulito",
+        "new": "Lo supero e riparto in modo pulito"
+    },
+    {
+        "firebase_id": "o1N3lps9Eos3O7APn4dM",
+        "field": "answer_6_text_es",
+        "old": "Le impido totalmente relanzar",
+        "new": "Le impido totalmente contraatacar"
+    },
+    {
+        "firebase_id": "5CraGs8mlCJlHKS9kiSf",
+        "field": "answer_6_text_it",
+        "old": "Lo fisso e me la cavo pulitamente",
+        "new": "Lo affronto e ne esco in modo pulito"
+    },
+    {
+        "firebase_id": "ShYICGWt8ln9kFCnszWs",
+        "field": "answer_2_text_it",
+        "old": "Provo un dribbling e vengo preso",
+        "new": "Provo un dribbling e vengo fermato"
+    },
+    {
+        "firebase_id": "ShYICGWt8ln9kFCnszWs",
+        "field": "answer_4_text_it",
+        "old": "Lo elimino per un pelo",
+        "new": "Lo supero per un pelo"
+    },
+    {
+        "firebase_id": "ShYICGWt8ln9kFCnszWs",
+        "field": "answer_6_text_it",
+        "old": "Lo fisso e concateno perfettamente",
+        "new": "Lo affronto e continuo perfettamente"
+    },
+    {
+        "firebase_id": "ShYICGWt8ln9kFCnszWs",
+        "field": "answer_4_text_es",
+        "old": "Lo elimino por poco",
+        "new": "Lo supero por poco"
+    },
+    {
+        "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+        "field": "answer_5_text_it",
+        "old": "Lo elimino e proseguo",
+        "new": "Lo supero e vado avanti"
+    },
+    {
+        "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+        "field": "answer_5_text_es",
+        "old": "Lo elimino y progreso",
+        "new": "Lo supero y progreso"
+    },
+    {
+        "firebase_id": "QYk9NLhkfnXljTxMd89c",
+        "field": "answer_6_text_it",
+        "old": "La fermo pulitamente",
+        "new": "La fermo in modo pulito"
+    },
+    {
+        "firebase_id": "6st0SXsEHSFrk2HobMVu",
+        "field": "answer_1_text_it",
+        "old": "Quello che si sceglie per ultimo",
+        "new": "Quello scelto per ultimo"
+    },
+    {
+        "firebase_id": "6st0SXsEHSFrk2HobMVu",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "6st0SXsEHSFrk2HobMVu",
+        "field": "answer_5_text_it",
+        "old": "Uno dei buoni",
+        "new": "Uno dei bravi"
+    },
+    {
+        "firebase_id": "J0ykRg7QpTtGKDLuv883",
+        "field": "answer_1_text_it",
+        "old": "Quello che si sceglie per ultimo",
+        "new": "Quello scelto per ultimo"
+    },
+    {
+        "firebase_id": "J0ykRg7QpTtGKDLuv883",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "J0ykRg7QpTtGKDLuv883",
+        "field": "answer_5_text_it",
+        "old": "Uno dei buoni",
+        "new": "Uno dei bravi"
+    },
+    {
+        "firebase_id": "bgqQuS9fujW8FZy718TP",
+        "field": "answer_1_text_it",
+        "old": "Quello che si sceglie per ultimo",
+        "new": "Quello scelto per ultimo"
+    },
+    {
+        "firebase_id": "bgqQuS9fujW8FZy718TP",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "bgqQuS9fujW8FZy718TP",
+        "field": "answer_5_text_it",
+        "old": "Uno dei buoni",
+        "new": "Uno dei bravi"
+    },
+    {
+        "firebase_id": "n5eka3nG30SNQtyow1ad",
+        "field": "answer_1_text_it",
+        "old": "Quello che si sceglie per ultimo",
+        "new": "Quello scelto per ultimo"
+    },
+    {
+        "firebase_id": "n5eka3nG30SNQtyow1ad",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "n5eka3nG30SNQtyow1ad",
+        "field": "answer_5_text_it",
+        "old": "Uno dei buoni",
+        "new": "Uno dei bravi"
+    },
+    {
+        "firebase_id": "amPIKfprE2U5gvJtpdeG",
+        "field": "answer_4_text_es",
+        "old": "Molesto lo suficiente para ralentizar",
+        "new": "Molesto lo suficiente para frenarlo"
+    }
+]

@@ -15,8 +15,20 @@
 
 const { execFileSync } = require('child_process');
 const fs = require('fs');
-const admin = require('/Users/tmgnr/poteau-workspace/cloud-functions/functions/node_modules/firebase-admin');
-const { DateTime } = require('/Users/tmgnr/poteau-workspace/cloud-functions/functions/node_modules/luxon');
+// Resolved rather than hardcoded, because this same file is vendored into the
+// Cloud Functions bundle (scripts/sync_health_report.sh) where the Mac's
+// absolute paths do not exist. In the cloud both modules are ordinary
+// dependencies and resolve normally; on the Mac the scripts repo has no
+// node_modules of its own, so fall back to the functions repo's copy.
+function dep(name) {
+    try {
+        return require(name);
+    } catch (e) {
+        return require(`/Users/tmgnr/poteau-workspace/cloud-functions/functions/node_modules/${name}`);
+    }
+}
+const admin = dep('firebase-admin');
+const { DateTime } = dep('luxon');
 
 const SA_PATH = '/Users/tmgnr/poteau-workspace/scripts/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json';
 const WEBHOOK_ENV = `${process.env.HOME}/.poteau/slack_webhook.env`;
@@ -35,8 +47,28 @@ const ACCOUNT_SCHEDULER = ACCOUNT_LOGS;
 const DRY = process.argv.includes('--dry');
 const dateArg = (process.argv.find(a => a.startsWith('--date=')) || '').split('=')[1];
 
-admin.initializeApp({ credential: admin.credential.cert(require(SA_PATH)), projectId: PROJECT });
+// Only initialise when nothing has already. Required as a module by the Cloud
+// Function the app usually exists, and a second initializeApp throws.
+//
+// The key file is the MAC's credential and does not exist in the cloud, where
+// the function already runs as a service account with ambient credentials. Try
+// the key, fall back to the default — never let a missing local file be the
+// reason the cloud report dies.
+if (!admin.apps.length) {
+    try {
+        admin.initializeApp({ credential: admin.credential.cert(require(SA_PATH)), projectId: PROJECT });
+    } catch (e) {
+        admin.initializeApp({ projectId: PROJECT });
+    }
+}
 const db = admin.firestore();
+
+// The host supplies the four things that differ between the Mac and the cloud
+// (log reads, scheduler listing, git deploys, Slack posting). Defaults to the
+// Mac host so the launchd path and `node daily_health_report.js` are unchanged;
+// the Cloud Function calls setHost() with its own before building.
+let HOST = require('./health_report_host.js');
+function setHost(h) { HOST = h; }
 
 function gcloud(args, account) {
     if (account) execFileSync('gcloud', ['config', 'set', 'core/account', account], { stdio: 'pipe' });
@@ -80,18 +112,14 @@ async function activity(d0, d1, d7) {
 
 // ------------------------------------------------------------------ errors
 
-function errors(startZ, endZ) {
+async function errors(startZ, endZ) {
     const base = `severity>=ERROR AND timestamp>="${startZ}" AND timestamp<"${endZ}"`;
-    const count = (filter) => {
-        const raw = gcloud(['logging', 'read', filter, `--project=${PROJECT}`,
-            '--limit=1000', '--format=value(resource.labels.service_name,resource.labels.function_name)'], ACCOUNT_LOGS);
-        return raw.split('\n').filter(l => l.trim()).length;
-    };
-    const total = count(base);
+    const count = async (filter) => (await HOST.readLogs(filter, { limit: 1000 })).length;
+    const total = await count(base);
     // "Real" must use the SAME exclusions as the per-service breakdown below,
     // or the headline claims N real errors while listing none of them.
     const realFilter = `${base} AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`;
-    const real = count(realFilter);
+    const real = await count(realFilter);
 
     // Group the real ones by service so the report can name them.
     //
@@ -101,35 +129,80 @@ function errors(startZ, endZ) {
     // On 2026-08-03 an investigation produced a 104-error burst that the report
     // then presented as a production incident affecting users. Own traffic must
     // never masquerade as a user-facing failure.
-    const rawReal = gcloud(['logging', 'read',
-        `${base} AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`,
-        `--project=${PROJECT}`, '--limit=500',
-        '--format=value(resource.labels.service_name,resource.labels.function_name)'], ACCOUNT_LOGS);
+    // withDetail so textPayload comes back: the cold-start split and the
+    // per-service samples below both read it, and without it every entry looks
+    // like an empty message — cold starts get counted as code errors and every
+    // finding falls back to "something is genuinely failing".
+    const realEntries = await HOST.readLogs(realFilter, { limit: 500, withDetail: true });
+
+    // COLD STARTS ARE NOT BUGS, and they are not the same thing as capacity
+    // throttling ("no available instance") already filtered above.
+    //
+    // A container that fails its startup probe once, or a 503 from a readiness
+    // check, is Cloud Run scaling from zero — the request is retried and the
+    // user is served. Counting these as production failures is what made
+    // 2026-08-14 look like 7 errors when only 3 were code: 4 were instances
+    // starting up. They are surfaced as their own dim line rather than hidden,
+    // because a SPIKE in them is a real signal (a function whose cold start
+    // got slower), even though a handful a day is normal.
+    const COLD_START = /STARTUP TCP probe failed|failed the readiness check|Connection failed with status DEADLINE_EXCEEDED/i;
+    const isColdStart = (e) => COLD_START.test(e.textPayload || '');
+
+    const coldStarts = realEntries.filter(isColdStart);
+    const codeErrors = realEntries.filter((e) => !isColdStart(e));
+
     const byService = {};
-    rawReal.split('\n').filter(l => l.trim()).forEach(l => {
-        const name = l.split('\t').filter(Boolean)[0] || 'unknown';
+    codeErrors.forEach((e) => {
+        const name = e.service || 'unknown';
         byService[name] = (byService[name] || 0) + 1;
+    });
+
+    const coldByService = {};
+    coldStarts.forEach((e) => {
+        const name = e.service || 'unknown';
+        coldByService[name] = (coldByService[name] || 0) + 1;
     });
 
     // One concrete sample per offending service, so the finding can say what
     // actually went wrong instead of telling the reader to go dig.
+    // Taken from the entries ALREADY fetched, not re-queried per service.
+    // One extra log read per failing service was affordable while the n<5 gate
+    // meant almost nothing was ever reported; now that every service is named
+    // it would be one query each, every morning, for data already in hand. It
+    // also guarantees the sample comes from the same set the count came from —
+    // a re-query could return a cold-start entry as the sample for a service
+    // whose counted errors were all code.
+    // INSTANCE CONCENTRATION. If every error from a service came from one
+    // container while that service also served requests from others, the fault
+    // is that container, not the dependency it appears to be blaming.
+    //
+    // On 2026-08-17 all 14 letsPay errors read "You did not provide an API key"
+    // and came from a single instance, while other instances served 200s the
+    // same day -- including 5 minutes after the last failure. Read as a rate
+    // ("14 failures is real") it looks like Stripe is down. Read per instance
+    // it is one bad container, which is a different investigation and, in that
+    // case, exposed a secret that had never been bound at all.
+    const instancesByService = {};
+    codeErrors.forEach((e) => {
+        const svc = e.service || 'unknown';
+        if (!e.instanceId) return;
+        (instancesByService[svc] = instancesByService[svc] || new Set()).add(e.instanceId);
+    });
+    const singleInstance = {};
+    for (const [svc, set] of Object.entries(instancesByService)) {
+        if (set.size === 1 && (byService[svc] || 0) >= 3) singleInstance[svc] = [...set][0];
+    }
+
     const samples = {}, hints = {};
     for (const svc of Object.keys(byService)) {
         if (svc === 'unknown') continue;
         try {
-            const raw = gcloud(['logging', 'read',
-                `${base} AND resource.labels.service_name="${svc}" AND NOT textPayload:"no available instance" AND NOT httpRequest.userAgent:"axios"`,
-                `--project=${PROJECT}`, '--limit=1',
-                '--format=value(textPayload,httpRequest.status,httpRequest.latency,httpRequest.userAgent)'], ACCOUNT_LOGS);
-            if (!raw.trim()) continue;
-            // gcloud emits empty fields as empty strings, so a missing
-            // textPayload yields a LEADING tab. Trimming the raw string first
-            // (as .trim() above does) drops it and shifts every field left by
-            // one - status became '' and latency became '504'. Split the
-            // untrimmed line and pad to a fixed width instead.
-            const parts = raw.split('\n')[0].split('\t');
-            while (parts.length < 4) parts.push('');
-            const [txt, status, latency, ua] = parts;
+            const found = codeErrors.filter((x) => x.service === svc);
+            if (!found.length) continue;
+            // Prefer an entry that actually carries a message: a 503 with no
+            // textPayload says far less than a stack trace from the same service.
+            const pick = found.find((x) => x.textPayload && x.textPayload.trim()) || found[0];
+            const { textPayload: txt, status, latency, userAgent: ua } = pick;
             if (txt && txt !== 'null') {
                 samples[svc] = txt.split('\n')[0].slice(0, 140);
             } else if (status) {
@@ -154,52 +227,64 @@ function errors(startZ, endZ) {
         } catch (err) { /* sampling is best-effort */ }
     }
 
-    const indexRaw = gcloud(['logging', 'read',
+    const indexErrors = (await HOST.readLogs(
         `${base} AND (textPayload:"FAILED_PRECONDITION" OR textPayload:"requires an index")`,
-        `--project=${PROJECT}`, '--limit=20', '--format=value(textPayload)'], ACCOUNT_LOGS);
-    const indexErrors = indexRaw.split('\n').filter(l => l.trim());
+        { limit: 20, withDetail: true }
+    )).map((e) => e.textPayload).filter((t) => t && t.trim());
 
-    return { total, real, throttled: total - real, byService, indexErrors, samples, hints };
+    // `real` is now CODE errors only. The headline number a human reacts to
+    // must be the number of things that are actually wrong, and cold starts
+    // are reported separately rather than folded in — otherwise a morning with
+    // three genuine bugs and four container restarts reads as "7 errors", and
+    // the reader cannot tell which half matters.
+    return {
+        total,
+        real: codeErrors.length,
+        throttled: total - real,
+        coldStarts: coldStarts.length,
+        coldByService,
+        byService,
+        indexErrors,
+        samples,
+        hints,
+        singleInstance,
+    };
 }
 
 // -------------------------------------------------------------- cron health
 
-function crons(asOf) {
-    // Listing scheduler jobs needs a USER account (the admin SA lacks
-    // cloudscheduler.jobs.list). User OAuth tokens expire and cannot be
-    // refreshed from launchd - there is no browser to prompt. When that
-    // happens, degrade to a warning instead of killing the whole report:
-    // losing one check is bad, losing the entire morning report is worse.
-    let raw;
+async function crons(asOf) {
+    // Degrade to a warning rather than killing the whole report: losing one
+    // check is bad, losing the entire morning report is worse. On the Mac the
+    // classic failure was an expired user OAuth token (launchd has no browser
+    // to reauthenticate with), which is why both hosts use a service account.
+    let rows;
     try {
-        raw = gcloud(['scheduler', 'jobs', 'list', `--project=${PROJECT}`,
-            '--location=europe-west1',
-            '--format=value(name.basename(),schedule,lastAttemptTime)'], ACCOUNT_SCHEDULER);
+        rows = await HOST.listCronJobs();
     } catch (err) {
         const msg = String(err.stderr || err.message || '');
+        // Log it: this path degrades to a warning inside the report, so without
+        // this the actual cause (a permission, a wrong location, an expired
+        // token) never appears anywhere and the report just says "check failed".
+        console.error('[healthReport] cron listing failed:', msg.split('\n')[0]);
         const expired = /Reauthentication failed|auth tokens|gcloud auth login/i.test(msg);
         return {
             error: expired
-                ? `gcloud auth for ${ACCOUNT_SCHEDULER} has expired — run \`gcloud auth login\` in a terminal`
+                ? 'gcloud auth has expired — run `gcloud auth login` in a terminal'
                 : msg.split('\n')[0].slice(0, 160),
             jobs: [], stale: [],
         };
-    } finally {
-        // Always hand the account back, or every later gcloud call in this
-        // process inherits the broken user account.
-        try { execFileSync('gcloud', ['config', 'set', 'core/account', ACCOUNT_LOGS], { stdio: 'pipe' }); } catch (e) { /* best effort */ }
     }
-    const rows = raw.split('\n').map(l => l.split('\t')).filter(p => p.length >= 3 && p[2]);
 
     // A blind check that reports success is worse than no check. If the
-    // permission ever regresses, gcloud prints nothing and we would silently
+    // permission ever regresses the API returns nothing, and we would silently
     // claim every cron is healthy.
     if (rows.length === 0) {
         return { error: 'scheduler returned 0 jobs — permission regression? Expected ~12.', jobs: [], stale: [] };
     }
 
     const stale = [];
-    for (const [name, schedule, last] of rows) {
+    for (const { name, schedule, lastAttempt: last } of rows) {
         const ageH = (asOf - new Date(last)) / 3.6e6;
         // Daily-or-slower jobs get a 26h grace; frequent jobs 2h.
         const limit = /every day|^\d+ \d+ \* \* \*/.test(schedule) ? 26 : (/\* \* \*/.test(schedule) ? 2 : 26 * 7);
@@ -273,17 +358,11 @@ async function horizon() {
 
 // ------------------------------------------------------------------ deploys
 
+// Delegated to the host: the Mac reads the local checkouts, the cloud has none
+// and returns [] so the section is omitted rather than falsely claiming that
+// nothing shipped.
 function deploys(sinceISO, untilISO) {
-    const repos = ['cloud-functions', 'scripts', 'poteau-app', 'poteau-max'];
-    const out = [];
-    for (const r of repos) {
-        try {
-            const log = execFileSync('git', ['-C', `/Users/tmgnr/poteau-workspace/${r}`, 'log',
-                `--since=${sinceISO}`, `--until=${untilISO}`, '--oneline'], { encoding: 'utf8' });
-            log.split('\n').filter(Boolean).forEach(line => out.push(`${r}: ${line}`));
-        } catch (e) { /* not a git repo or no commits */ }
-    }
-    return out;
+    return HOST.recentDeploys(sinceISO, untilISO);
 }
 
 // ------------------------------------------------------------------- render
@@ -334,8 +413,24 @@ function build(day, a, e, c, h, dep) {
     h.thin.forEach(t => warn('🟡', `${DateTime.fromISO(t.day).toFormat('ccc d LLL')} has only ${t.n} games`,
         'unusually thin for a day well inside the window, which should be full by now',
         'check whether centres paused their repeaters for that date'));
+    // EVERY failing service is named. No threshold.
+    //
+    // This used to skip any service with fewer than 5 errors in a day, which
+    // sounds like sensible noise control and was not: real errors here arrive
+    // 1-9 a day spread thinly across five or six services, so the gate hid
+    // ALL of them, every day, while the header still counted them. The report
+    // said "🟢 all clear · 7 real errors" — a green light above a non-zero
+    // error count, which is the report contradicting itself in its own
+    // headline. Measured 2026-08-09..15: not one service ever reached 5, so
+    // the branch below was dead code for the entire life of the report.
+    //
+    // Two of the things it hid were genuine bugs: a `price: undefined` crash
+    // in scheduleGames/createGamesFromRepeater (5 hits) and editGamesFromRepeater
+    // updating deleted repeaters (5 hits).
+    //
+    // Volume now sets SEVERITY rather than visibility, and cold starts are
+    // classified separately below, which is what actually removes the noise.
     Object.entries(e.byService).sort((x, y) => y[1] - x[1]).forEach(([svc, n]) => {
-        if (n < 5) return;
         const known = {
             getplacedetails: ['Google Places API rate limit', 'raise the quota or add caching — place lookups are silently failing for users'],
             unreservespots: ['Remote Config read quota exceeded', 'behaviour is correct (falls back to the 120h default) — cache the RC read to silence it'],
@@ -344,11 +439,77 @@ function build(day, a, e, c, h, dep) {
         // is the vague, unactionable line this report exists to avoid, so pull
         // one real sample and quote it.
         const sample = known ? null : e.samples[svc];
-        const hint = known ? known[1] : e.hints[svc];
-        warn('🟡', `${svc} — ${n} errors`,
-            known ? known[0] : (sample || 'not capacity throttling, so something is genuinely failing'),
-            hint || `check whether this affects users — ${n} failures in one day is a real rate`);
+        let hint = known ? known[1] : e.hints[svc];
+        let soWhat = known ? known[0] : (sample || 'not capacity throttling, so something is genuinely failing');
+
+        // CLASSIFY BY CAUSE, not just by volume. Some failures are a config
+        // gap rather than a flaky dependency, and saying so turns a morning of
+        // log-reading into a one-line fix. These patterns are matched against
+        // the sample, which is why reading jsonPayload matters -- see the
+        // hosts' extractText.
+        const CAUSES = [
+            [/did not provide an API key|No API key provided|Invalid API Key|api[_ ]key/i,
+                'a credential is missing or wrong — this is configuration, not a flaky dependency',
+                'check the secret is DECLARED on the function (secrets: [...]) and that the env var name matches what the code reads'],
+            [/PERMISSION_DENIED|IAM|insufficient permission|caller does not have permission/i,
+                'the function lacks an IAM permission',
+                'grant the role to the function\'s service account'],
+            [/Memory limit of .* exceeded/i,
+                'the container ran out of memory and was killed mid-request',
+                'raise the memory setting, or process fewer items per run'],
+            [/ECONNREFUSED|ETIMEDOUT|ENOTFOUND|socket hang up/i,
+                'a network call to an upstream service failed',
+                'check the upstream\'s status before changing our code'],
+            [/quota|rate[- ]?limit|RESOURCE_EXHAUSTED|OVER_QUERY_LIMIT|429/i,
+                'an upstream quota or rate limit was hit',
+                'raise the quota or add caching'],
+        ];
+        const matched = sample && CAUSES.find(([re]) => re.test(sample));
+        if (matched && !known) { soWhat = matched[1]; hint = hint || matched[2]; }
+
+        // Volume sets severity now that it no longer sets visibility. A single
+        // failure is worth naming but is not an incident; a sustained rate is.
+        // A credential/config fault is red at ANY volume: it does not heal, and
+        // it usually means a whole code path is dead rather than flaky.
+        const isConfigFault = Boolean(matched) && matched === CAUSES[0];
+        const dot = (n >= 5 || isConfigFault) ? '🔴' : '🟡';
+
+        // A fault confined to one container while others served fine is a bad
+        // instance, and saying "14 failures is a real rate" actively misleads.
+        const pinned = e.singleInstance && e.singleInstance[svc];
+        if (pinned) {
+            soWhat += ` — all ${n} from ONE container (${pinned.slice(0, 12)}…), so this is an instance fault, not a service-wide outage`;
+            hint = hint || 'check whether the container booted without a secret or config it reads only at startup';
+        }
+
+        // A single occurrence still gets a next step. "Low volume, but genuine"
+        // told the reader nothing they could act on, and it was the line under
+        // three separate `price: undefined` crashes that recurred daily for a
+        // week -- each looking like a one-off because each day showed one hit.
+        const genericLow = sample
+            ? `${n === 1 ? 'One occurrence' : `${n} occurrences`} — reproduce it from the quoted error before assuming it is transient`
+            : 'low volume, but it is a genuine failure rather than throttling';
+
+        warn(dot, `${svc} — ${n} error${n === 1 ? '' : 's'}`, soWhat,
+            hint || (n >= 5
+                ? `${n} failures in one day is a real rate — check whether users are affected`
+                : genericLow));
     });
+
+    // Cold starts get ONE dim line, never one per service. They are normal at
+    // a handful a day; the reason to show them at all is that a jump is a real
+    // signal about a function's startup time. Above 20 in a day that stops
+    // being background and becomes something to look at.
+    if (e.coldStarts > 0) {
+        const worst = Object.entries(e.coldByService || {})
+            .sort((x, y) => y[1] - x[1]).slice(0, 3)
+            .map(([s, n]) => `${s} ×${n}`).join(', ');
+        if (e.coldStarts >= 20) {
+            warn('🟡', `${e.coldStarts} cold-start failures`,
+                `containers failing their startup probe (${worst}) — well above the usual handful`,
+                'check whether a recent deploy slowed a function\'s boot, or set minInstances on the busiest one');
+        }
+    }
 
     const red = attention.some(x => x.dot === '🔴');
     const light = red ? '🔴' : (attention.length ? '🟡' : '🟢');
@@ -377,7 +538,13 @@ function build(day, a, e, c, h, dep) {
     } else if (attention.length) {
         sentences.push(`Nothing is broken; ${attention.length} item${attention.length === 1 ? '' : 's'} worth a decision when convenient.`);
     } else {
-        sentences.push(`No errors beyond normal capacity throttling, all crons on schedule, game horizon healthy.`);
+        // Only claim a clean bill of health when the error count is actually
+        // zero. This sentence used to run whenever nothing crossed a warning
+        // threshold, so it asserted "no errors beyond normal capacity
+        // throttling" on a day with 7 real ones.
+        sentences.push(e.real === 0
+            ? 'No errors beyond normal capacity throttling, all crons on schedule, game horizon healthy.'
+            : `All crons on schedule and the game horizon is healthy. ${e.real} error${e.real === 1 ? '' : 's'} listed above.`);
     }
     const summary = sentences.join(' ');
 
@@ -450,7 +617,8 @@ function build(day, a, e, c, h, dep) {
     // Short phrases: this wraps naturally on a phone instead of forming one
     // long unreadable line.
     const quiet = [
-        `${e.real} real errors of ${e.total}`,
+        `${e.real} code error${e.real === 1 ? '' : 's'} of ${e.total} log errors`,
+        `${e.coldStarts || 0} cold start${e.coldStarts === 1 ? '' : 's'}`,
         `crons ${c.error ? '⚠️ check failed' : `${c.jobs.length - c.stale.length}/${c.jobs.length}`}`,
         `indexes ${e.indexErrors.length ? `${e.indexErrors.length} missing` : 'ok'}`,
         `horizon ${h.depth}d`,
@@ -466,10 +634,17 @@ function build(day, a, e, c, h, dep) {
 
 // --------------------------------------------------------------------- main
 
-(async () => {
-    const target = dateArg
+/**
+ * Compute the report for one day and return the Slack payload.
+ *
+ * Exported so the Cloud Function can run the IDENTICAL logic with its own host
+ * — see health_report_host.js for why there is one report and not two. Posts
+ * nothing: the caller decides, so a dry run and the real run share this path.
+ */
+async function buildReport(targetDate) {
+    const target = targetDate || (dateArg
         ? DateTime.fromISO(dateArg, { zone: TZ })
-        : DateTime.now().setZone(TZ).minus({ days: 1 });
+        : DateTime.now().setZone(TZ).minus({ days: 1 }));
     const dayStart = target.startOf('day'), dayEnd = target.endOf('day');
 
     const d0 = [dayStart.toJSDate(), dayEnd.toJSDate()];
@@ -477,12 +652,21 @@ function build(day, a, e, c, h, dep) {
     const d7 = [dayStart.minus({ days: 7 }).toJSDate(), dayStart.minus({ days: 6 }).toJSDate()];
 
     const a = await activity(d0, d1, d7);
-    const e = errors(dayStart.toUTC().toISO(), dayEnd.toUTC().toISO());
-    const c = crons(dayEnd.toJSDate());
+    const e = await errors(dayStart.toUTC().toISO(), dayEnd.toUTC().toISO());
+    const c = await crons(dayEnd.toJSDate());
     const h = await horizon();
-    const dep = deploys(dayStart.toISODate(), dayEnd.toISODate());
+    const dep = await deploys(dayStart.toISODate(), dayEnd.toISODate());
 
-    const payload = build(target, a, e, c, h, dep);
+    return build(target, a, e, c, h, dep);
+}
+
+module.exports = { buildReport, setHost };
+
+// Run as a script (the Mac/launchd path). When the Cloud Function requires
+// this module instead, `require.main` is not this module and nothing below
+// executes — it just imports buildReport and drives it with the cloud host.
+if (require.main === module) (async () => {
+    const payload = await buildReport();
 
     if (DRY) {
         console.log(JSON.stringify(payload, null, 1));

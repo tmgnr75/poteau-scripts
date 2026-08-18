@@ -1,0 +1,93 @@
+{
+    "id": "2026-new-year-padel",
+    "created_at": "2026-01-14",
+    "status": "draft",
+
+    "subject": {
+        "fr": "On se met au padel 🎾",
+        "en": "Padel has arrived 🎾",
+        "es": "Llega el pádel 🎾",
+        "it": "Arriva il padel 🎾"
+    },
+
+    "preview_text": {
+        "fr": "Bonne année ! Le padel débarque sur Poteau...",
+        "en": "Happy New Year! Padel is now on Poteau...",
+        "es": "¡Feliz año nuevo! El pádel llega a Poteau...",
+        "it": "Buon anno! Il padel arriva su Poteau..."
+    },
+
+    "greeting": {
+        "fr": "Bonne année {{display_name}} 🎉",
+        "en": "Happy New Year {{display_name}} 🎉",
+        "es": "Feliz año {{display_name}} 🎉",
+        "it": "Buon anno {{display_name}} 🎉"
+    },
+
+    "headline_1": {
+        "fr": "Nouvelle année, mêmes résolutions 😅",
+        "en": "New year, same resolutions 😅",
+        "es": "Año nuevo, mismas resoluciones 😅",
+        "it": "Anno nuovo, stessi buoni propositi 😅"
+    },
+
+    "body_text_1": {
+        "fr": "On connaît tous la suite. Cette année, on te propose un truc beaucoup plus simple pour tenir tes engagements : un sport que tu aimes (ou un nouveau à tester ?). Et justement, le padel débarque sur Poteau !",
+        "en": "We all know how it ends. This year, we've got something way simpler to help you stick to your goals: a sport you love (or a new one to try?). And guess what, padel just landed on Poteau!",
+        "es": "Todos sabemos cómo termina. Este año, te proponemos algo mucho más simple para cumplir tus metas: un deporte que te gusta (¿o uno nuevo por probar?). Y justo ahora, ¡el pádel llega a Poteau!",
+        "it": "Sappiamo tutti come va a finire. Quest'anno ti proponiamo qualcosa di molto più semplice per mantenere i tuoi impegni: uno sport che ami (o uno nuovo da provare?). E proprio ora, il padel arriva su Poteau!"
+    },
+
+    "headline_2": {
+        "fr": "Les premiers matchs ont déjà eu lieu 🎾",
+        "en": "The first games have already been played 🎾",
+        "es": "Los primeros partidos ya se han jugado 🎾",
+        "it": "Le prime partite sono già state giocate 🎾"
+    },
+
+    "body_text_2": {
+        "fr": "Comme pour le foot, tu peux obtenir ton niveau de 1 à 10 pour des matchs équilibrés. On compte sur toi pour faire passer le mot à tes potes qui jouent au padel, ou à ceux qui veulent s'y mettre avec toi !",
+        "en": "Like soccer, you can get your level from 1 to 10 for balanced games. We're counting on you to spread the word to your friends who play padel, or those who want to try it with you!",
+        "es": "Como en el fútbol, puedes obtener tu nivel del 1 al 10 para partidos equilibrados. ¡Contamos contigo para correr la voz entre tus amigos que juegan al pádel, o los que quieran probarlo contigo!",
+        "it": "Come per il calcio, puoi ottenere il tuo livello da 1 a 10 per partite equilibrate. Contiamo su di te per spargere la voce ai tuoi amici che giocano a padel, o a chi vuole provarlo con te!"
+    },
+
+    "image_url": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fnewsletter-pic-comp.png?alt=media&token=9c44db6c-9a2a-4f28-b62d-fd711d9b7bca",
+
+    "headline_3": {
+        "fr": "Et ce n'est que le début 👀",
+        "en": "And this is just the beginning 👀",
+        "es": "Y esto es solo el comienzo 👀",
+        "it": "E questo è solo l'inizio 👀"
+    },
+
+    "body_text_3": {
+        "fr": "2026 s'annonce chargée, avec des nouveautés que vous nous demandez depuis longtemps (et aussi un tout nouveau logo). On se reparle très vite.",
+        "en": "2026 is going to be packed with features you've been asking for (and a brand new logo too). Talk soon.",
+        "es": "2026 viene cargado de novedades que nos pedís desde hace tiempo (y también un nuevo logo). Hablamos pronto.",
+        "it": "Il 2026 sarà pieno di novità che ci chiedete da tempo (e anche un nuovo logo). Ci sentiamo presto."
+    },
+
+    "cta_text": {
+        "fr": "Ouvrir Poteau",
+        "en": "Open Poteau",
+        "es": "Abrir Poteau",
+        "it": "Apri Poteau"
+    },
+
+    "cta_url": "https://poteau.app/home?utm_source=newsletter-padel",
+
+    "signature": {
+        "fr": "L'équipe Poteau",
+        "en": "The Poteau Team",
+        "es": "El equipo Poteau",
+        "it": "Il team Poteau"
+    },
+
+    "unsubscribe_text": {
+        "fr": "Se désabonner",
+        "en": "Unsubscribe",
+        "es": "Cancelar suscripción",
+        "it": "Annulla iscrizione"
+    }
+}

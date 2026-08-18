@@ -3,8 +3,8 @@
 <!--config
 persona: FRESH
 model: sonnet
-max_steps: 30
-timeout_min: 15
+max_steps: 45
+timeout_min: 18
 -->
 
 ## Persona
@@ -23,8 +23,11 @@ what the app does — does it trap the user, lose them silently, or leave a reco
 ## Expected happy path (this journey's version)
 1. Welcome → "Continue with email" → enter `SIGNUP_EMAIL` + `SIGNUP_PASSWORD` → submit.
 2. Type the 4 DIGITS from the LIVE HINT on the 4-digit screen (not the literal "LOGIN_CODE").
-3. Proceed through the first two onboarding steps: **name/nickname** (a_nickname), then **photo**
-   (b_photo). (Verified order: nickname → photo → phone.)
+3. Proceed through the first two onboarding steps: **name/nickname** (a_nickname — fill the name AND
+   pick a He/She gender card, ~y=325 in points, before Confirm enables), then **photo** (b_photo).
+   Photo permission is pre-granted for this run: tap "Choose my photo", pick the first thumbnail in
+   the picker, and continue. If the native picker sheet won't respond to taps (a test-tool limit),
+   note it as `info` and move on. (Verified order: nickname → photo → phone.)
 4. **Reach the phone-number step (c_phone) and STOP.** Do not enter a valid phone. Try to:
    - back out / navigate away, and/or
    - see whether the app lets you reach any further screen without a phone.

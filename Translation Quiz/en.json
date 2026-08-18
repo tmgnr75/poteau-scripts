@@ -1,0 +1,492 @@
+{
+  "soccer": {
+    "forward": {
+      "defence": {
+        "question1": {
+          "answer1": "I stay complaining",
+          "answer2": "I pretend to press",
+          "answer3": "I press without conviction",
+          "answer4": "I disrupt the counterattack",
+          "answer5": "I force an error",
+          "answer6": "I recover or push the opponent back",
+          "question": "You lose a high ball, the opponent launches a counter..."
+        },
+        "question2": {
+          "answer1": "I don't defend",
+          "answer2": "I'm too far to intervene",
+          "answer3": "I approach but too late",
+          "answer4": "I force a pass backward",
+          "answer5": "I block his passing option",
+          "answer6": "I completely prevent him from counterattacking",
+          "question": "You're defending against an opponent setting up from deep..."
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "I get caught without dribbling",
+          "answer2": "I attempt a slow feint",
+          "answer3": "I get past him but lose the ball afterward",
+          "answer4": "I overpower him",
+          "answer5": "I dribble and shoot immediately",
+          "answer6": "I get past him cleanly and score",
+          "question": "You're facing a defender 1v1 in the last 10 yards..."
+        },
+        "question2": {
+          "answer1": "I lose the ball immediately",
+          "answer2": "I keep it for a moment then lose it",
+          "answer3": "I turn around but it's risky",
+          "answer4": "I protect myself and play it back",
+          "answer5": "I manage under pressure",
+          "answer6": "I turn around and move forward with the ball at my feet",
+          "question": "You receive the ball under pressure, you need to get out of it..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "I start too late",
+          "answer2": "I start but get caught",
+          "answer3": "I get ahead but receive a poor pass",
+          "answer4": "I'm well set up but slow down",
+          "answer5": "I take the space and get the ball",
+          "answer6": "I'm already ahead and head for the goal",
+          "question": "You're making a deep run on a fast break..."
+        },
+        "question2": {
+          "answer1": "I stay static",
+          "answer2": "I start but I'm off tempo",
+          "answer3": "I run down the middle without conviction",
+          "answer4": "I make an average run",
+          "answer5": "I make a sharp run",
+          "answer6": "I start at the right time and get found",
+          "question": "Your teammate starts a counter, you want the ball..."
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "I don't even see him",
+          "answer2": "I see him but keep the ball",
+          "answer3": "I attempt the pass too late",
+          "answer4": "I pass it a bit behind him",
+          "answer5": "I serve him well for a shot",
+          "answer6": "I assist him perfectly at the right moment",
+          "question": "A teammate is open to your left during a heated play..."
+        },
+        "question2": {
+          "answer1": "I'm slow to pass",
+          "answer2": "I miss the support pass",
+          "answer3": "I combine but too slowly",
+          "answer4": "I pass and move off timidly",
+          "answer5": "I play quickly and get back into position",
+          "answer6": "I make a clear and quick combination",
+          "question": "You pull off a one-two in the attacking zone..."
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "I lose the duel on impact",
+          "answer2": "I jump too early or not at all",
+          "answer3": "I hinder but lose the ball",
+          "answer4": "I gain position without the ball",
+          "answer5": "I control despite the contact",
+          "answer6": "I win the duel and keep possession",
+          "question": "You need to battle with a defender for a long ball..."
+        },
+        "question2": {
+          "answer1": "I get pushed and fall",
+          "answer2": "I lose the ball while pivoting",
+          "answer3": "I hold it a bit then lose it",
+          "answer4": "I hold with my back to the goal then pass it off",
+          "answer5": "I turn and make a play",
+          "answer6": "I hold perfectly and create a play",
+          "question": "You're playing as a pivot with a defender on your back..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "I panic and shoot wide",
+          "answer2": "I shoot straight at the goalkeeper",
+          "answer3": "I strike too softly",
+          "answer4": "I aim on target but don't deceive him",
+          "answer5": "I take a good shot, the goalkeeper is beaten",
+          "answer6": "I score calmly",
+          "question": "You get a pass down the middle, one-on-one with the goalkeeper..."
+        },
+        "question2": {
+          "answer1": "I miss my control",
+          "answer2": "I turn too slowly",
+          "answer3": "I shoot off balance",
+          "answer4": "I turn and shoot on target",
+          "answer5": "I turn quickly and shoot well",
+          "answer6": "I turn smoothly and score",
+          "question": "You're back to goal, you turn to shoot..."
+        }
+      }
+    },
+    "defender": {
+      "defence": {
+        "question1": {
+          "answer1": "I leave too much space",
+          "answer2": "I back off without intervening",
+          "answer3": "I slow him down but he gets through",
+          "answer4": "I push him to play on the side",
+          "answer5": "I block the shooting angle",
+          "answer6": "I cut off his run cleanly",
+          "question": "A player dribbles into your zone..."
+        },
+        "question2": {
+          "answer1": "I get passed without reacting",
+          "answer2": "I tackle too late and commit a foul",
+          "answer3": "I slow him down a bit but he gets through",
+          "answer4": "I stay on my feet and block him well",
+          "answer5": "I prevent him from shooting",
+          "answer6": "I recover cleanly without fouling",
+          "question": "A forward tries to get past you one-on-one..."
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "I slow down, I don't know what to do",
+          "answer2": "I try a dribble and get caught",
+          "answer3": "I stop and lose the ball",
+          "answer4": "I barely get past him",
+          "answer5": "I dribble past him then pass",
+          "answer6": "I take him on and follow through perfectly",
+          "question": "You take the ball upfield, an opponent's in your face..."
+        },
+        "question2": {
+          "answer1": "I lose the ball on the first contact",
+          "answer2": "I clear it into the wall",
+          "answer3": "I get out of it with a lucky bounce",
+          "answer4": "I hold onto the ball gritting my teeth",
+          "answer5": "I barely dribble past him",
+          "answer6": "I take him on and get out cleanly",
+          "question": "A forward is pressing hard, you need to get out of the duel..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "I hardly move",
+          "answer2": "I take a few steps without conviction",
+          "answer3": "I get back but too late",
+          "answer4": "I get back just in time to disrupt",
+          "answer5": "I'm present in the duel in the box",
+          "answer6": "I got back before him and intercept",
+          "question": "The opponent's counter-attacking, you gotta get back fast…"
+        },
+        "question2": {
+          "answer1": "I get left behind without being able to react",
+          "answer2": "I run but he gets too far ahead",
+          "answer3": "I follow him with difficulty to the box",
+          "answer4": "I get back in time but can't intervene",
+          "answer5": "I get back and force him to shoot quickly",
+          "answer6": "I catch up and cut off the play",
+          "question": "A forward beats you to the ball on a through pass…"
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "I panic and give the ball away",
+          "answer2": "I kick it without aiming",
+          "answer3": "I hold onto the ball without options",
+          "answer4": "I manage with a sideways pass",
+          "answer5": "I turn around and find a good option",
+          "answer6": "I keep my cool and restart cleanly",
+          "question": "Under pressure, you gotta find a quick solution…"
+        },
+        "question2": {
+          "answer1": "I hesitate and lose the ball",
+          "answer2": "I make a short pass, the opponent intercepts",
+          "answer3": "I play to feet under pressure",
+          "answer4": "I find a teammate for support",
+          "answer5": "I break a line with the pass",
+          "answer6": "I send a teammate into space",
+          "question": "You make a clean exit with the ball, a player gets open…"
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "I can't run anymore",
+          "answer2": "I stay behind the play",
+          "answer3": "I jog back",
+          "answer4": "I come back slowly but surely",
+          "answer5": "I'm in the duel despite the fatigue",
+          "answer6": "I sprint and intercept the play",
+          "question": "At the end of the game, the opposing team launches a counterattack..."
+        },
+        "question2": {
+          "answer1": "I get moved easily",
+          "answer2": "I fall on contact",
+          "answer3": "I hold my ground but he gets past anyway",
+          "answer4": "I keep him off balance",
+          "answer5": "I win the physical duel",
+          "answer6": "I shut him down physically without fouling",
+          "question": "You need to hold back a forward who's pushing you from behind..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "I completely miss my shot",
+          "answer2": "I rush it and shoot over the bar",
+          "answer3": "I shoot without control and it's weak",
+          "answer4": "I hit it well but it's saved",
+          "answer5": "I aim well but it's blocked",
+          "answer6": "I strike hard and it's a goal",
+          "question": "The ball's hanging around at the edge of the opponent's box..."
+        },
+        "question2": {
+          "answer1": "I don't try anything",
+          "answer2": "I shoot without momentum, far from the goal",
+          "answer3": "I shoot too close to the goalkeeper",
+          "answer4": "I get off a decent shot",
+          "answer5": "I hit the target and the goalkeeper has to make a save",
+          "answer6": "I score with a clean strike",
+          "question": "You win the ball high up with some space in front of you..."
+        }
+      }
+    },
+    "goalkeeper": {
+      "1-on-1": {
+        "question1": {
+          "answer1": "I get beaten straight away",
+          "answer2": "I dive too late",
+          "answer3": "I lunge but miss everything",
+          "answer4": "I just do enough to slow him down",
+          "answer5": "I win the ball with a slide",
+          "answer6": "I take the ball cleanly",
+          "question": "In your box, a ground duel..."
+        },
+        "question2": {
+          "answer1": "I stay on my line and take the hit",
+          "answer2": "I hesitate to come out",
+          "answer3": "I cover the angle poorly",
+          "answer4": "I force him to shoot quickly",
+          "answer5": "I get just enough of a touch to deflect it",
+          "answer6": "I win the duel without contact",
+          "question": "A forward is coming at you..."
+        }
+      },
+      "communication": {
+        "question1": {
+          "answer1": "I let it be",
+          "answer2": "I complain once it's too late",
+          "answer3": "I talk to no one",
+          "answer4": "I warn them without much conviction",
+          "answer5": "I ask them to reposition",
+          "answer6": "I reposition them and they react immediately",
+          "question": "Two defenders get in each other's way in the box..."
+        },
+        "question2": {
+          "answer1": "I say nothing, I watch",
+          "answer2": "I warn too late",
+          "answer3": "The defender doesn't listen to me",
+          "answer4": "The defender hears me but doesn't react",
+          "answer5": "My defender understands but takes time to adapt",
+          "answer6": "I signal it loud and clear, he takes charge",
+          "question": "An opposing player is lurking alone behind your defender..."
+        }
+      },
+      "footwork": {
+        "question1": {
+          "answer1": "Directly to an opponent's feet",
+          "answer2": "Too slowly, they have time to come back",
+          "answer3": "In the air, but it's imprecise",
+          "answer4": "Long, towards a teammate in a duel",
+          "answer5": "On the ground into open space",
+          "answer6": "Quick and accurate, into a teammate's run",
+          "question": "After a play, the opposing defenders pushed up. You restart..."
+        },
+        "question2": {
+          "answer1": "I panic and miss my control",
+          "answer2": "I clear it randomly",
+          "answer3": "I give the ball to the opponent",
+          "answer4": "I control but waste time",
+          "answer5": "I play it simple to a teammate",
+          "answer6": "I beat him and restart cleanly",
+          "question": "Your defender makes a pass to you, but the forward is pressuring you..."
+        }
+      },
+      "positioning": {
+        "question1": {
+          "answer1": "I freeze, it's a goal",
+          "answer2": "I dive late",
+          "answer3": "I try to follow the ball during the combination",
+          "answer4": "I touch it but don't clear it",
+          "answer5": "I reflexively parry",
+          "answer6": "I stop it cleanly",
+          "question": "After a quick one-two in front of the goal, the striker shoots…"
+        },
+        "question2": {
+          "answer1": "I leave a gap and it's in",
+          "answer2": "I'm poorly positioned and react late",
+          "answer3": "I try to close but it's too tight",
+          "answer4": "I deflect it with the tip of my foot",
+          "answer5": "I close well and parry it",
+          "answer6": "I'm on the trajectory and catch it",
+          "question": "The striker is a bit off-center, shoots for the near post..."
+        }
+      },
+      "reflexes": {
+        "question1": {
+          "answer1": "I don't move",
+          "answer2": "I go the wrong way",
+          "answer3": "I react but too late",
+          "answer4": "I dive late but touch it",
+          "answer5": "I deflect it with a late reflex",
+          "answer6": "I stop it cleanly",
+          "question": "A shot gets deflected right in front of you..."
+        },
+        "question2": {
+          "answer1": "I stay in place",
+          "answer2": "I react too late",
+          "answer3": "I raise my arm too slowly",
+          "answer4": "I dive at the last moment",
+          "answer5": "I just manage to deflect it with my foot",
+          "answer6": "I stop it without thinking",
+          "question": "The forward shoots from close range..."
+        }
+      },
+      "shot-stopping": {
+        "question1": {
+          "answer1": "I'm on my heels, I don't move",
+          "answer2": "I go down too slowly",
+          "answer3": "I stretch my foot but deflect it poorly",
+          "answer4": "I slow it down without really stopping it",
+          "answer5": "I go down well and push it away",
+          "answer6": "I block the shot on the ground without a bounce",
+          "question": "When a powerful, low-driven shot is taken..."
+        },
+        "question2": {
+          "answer1": "I don't have time to move",
+          "answer3": "I barely touch it without stopping it",
+          "answer4": "I deflect it with my fingertips",
+          "answer5": "I push it away well",
+          "answer6": "I catch it without a bounce",
+          "answer2": "I dive too late",
+          "question": "A huge shot is taken from a distance..."
+        }
+      }
+    },
+    "midfielder": {
+      "defence": {
+        "question1": {
+          "answer1": "I let it pass without moving",
+          "answer4": "I stay in front of him and block him",
+          "answer5": "I prevent him from advancing",
+          "answer6": "I stop him cleanly and recover",
+          "answer2": "I back off without intervening",
+          "answer3": "I slow him down a bit but he gets through",
+          "question": "An opponent tries to advance through your center..."
+        },
+        "question2": {
+          "answer1": "I let the play go",
+          "answer2": "I run but can't catch up",
+          "answer3": "I come back too late",
+          "answer4": "I catch up to him and slow him down",
+          "answer5": "I recover with a last-ditch tackle",
+          "answer6": "I recover the ball immediately",
+          "question": "You lose the ball and need to get it back quickly…"
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "I get caught immediately",
+          "answer2": "I lose the ball trying too much",
+          "answer3": "I keep the ball without advancing",
+          "answer4": "I shield well and play it simple",
+          "answer5": "I get out of it with a quick dribble",
+          "answer6": "I turn around and restart cleanly",
+          "question": "In the midfield, you're under pressure, you gotta get out of it..."
+        },
+        "question2": {
+          "answer1": "I get passed easily",
+          "answer2": "I try a move and lose the ball",
+          "answer3": "I block the play without really advancing",
+          "answer4": "I fixate him and narrowly eliminate him",
+          "answer5": "I take him on and move forward",
+          "answer6": "I dribble past him and start a play",
+          "question": "An opponent's waiting for you in a 1v1 in midfield..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "I just walk back",
+          "answer2": "I jog back slowly",
+          "answer3": "I follow the play from a distance",
+          "answer4": "I get back late but disrupt the play",
+          "answer5": "I'm in the box",
+          "answer6": "I sprint back and stop the play",
+          "question": "The opponent's counter-attacking, you need to get back on defense..."
+        },
+        "question2": {
+          "answer1": "I don't even start",
+          "answer3": "I follow but drop off quickly",
+          "answer4": "I support but I'm late",
+          "answer5": "I'm available at the edge of the box",
+          "answer6": "I overtake and offer an option",
+          "answer2": "I start too late",
+          "question": "Your winger's making a deep run, you want to back them up..."
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "I don't see him",
+          "answer2": "I see him too late",
+          "answer3": "I attempt a risky pass",
+          "answer4": "I find him at his feet",
+          "answer5": "I break the line with a great pass",
+          "answer6": "I send him perfectly into space",
+          "question": "A teammate gets open between the lines..."
+        },
+        "question2": {
+          "answer1": "I lose the ball without seeing the solution",
+          "answer3": "I panic and pass backwards",
+          "answer4": "I find a safe short pass",
+          "answer5": "I turn around and play it right",
+          "answer6": "I keep my cool and play at the right tempo",
+          "answer2": "I turn too slowly",
+          "question": "You're pressed back to the play, a solution appears..."
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "I get moved off the ball on contact",
+          "answer2": "I lose my balance quickly",
+          "answer3": "I resist a bit then lose the ball",
+          "answer4": "I shield the ball for a few seconds",
+          "answer5": "I hold my ground despite the pressure",
+          "answer6": "I keep the ball with complete calm",
+          "question": "You gotta shield the ball with your back to goal under pressure..."
+        },
+        "question2": {
+          "answer1": "I walk, I'm done",
+          "answer2": "I come back slowly",
+          "answer3": "I make the effort but I'm late",
+          "answer4": "I keep up the pace but I'm exhausted",
+          "answer5": "I stay clear-headed and defensive",
+          "answer6": "I keep up the action without dropping intensity",
+          "question": "You need to keep up the effort during an intense phase..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "I completely miss the ball",
+          "answer2": "I shoot without control and it goes out",
+          "answer3": "I shoot but it's too weak",
+          "answer4": "I hit the target but it's not dangerous",
+          "answer5": "I shoot hard, the goalkeeper pushes it away",
+          "answer6": "I score with a well-placed shot",
+          "question": "You get a back pass right in front of the box..."
+        },
+        "question2": {
+          "answer1": "I rush and miss the ball",
+          "answer2": "I shoot off-balance",
+          "answer3": "I shoot quickly but without power",
+          "answer4": "I aim despite the pressure",
+          "answer5": "I strike well, the goalkeeper has to intervene",
+          "answer6": "I unleash a quick and effective shot",
+          "question": "You win the ball back with a press and can shoot quickly..."
+        }
+      }
+    }
+  }
+}

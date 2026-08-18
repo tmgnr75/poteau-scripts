@@ -1,0 +1,807 @@
+[
+  {
+    "name": "Boca Juniors",
+    "league": "Argentina",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-144.png?alt=media&token=df371b51-9319-4c8d-8b5a-68c603c0dc3a"
+  },
+  {
+    "name": "Newell's Old Boys",
+    "league": "Argentina",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-146.png?alt=media&token=10adcc1e-8786-46eb-b95e-15da70edbd4c"
+  },
+  {
+    "name": "River Plate",
+    "league": "Argentina",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-145.png?alt=media&token=db81be0b-9590-4af2-b876-35d622781a51"
+  },
+  {
+    "name": "Rosario Central",
+    "league": "Argentina",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-147.png?alt=media&token=8d499dfa-eed7-4e80-82a5-353de94f567c"
+  },
+  {
+    "name": "Anderlecht",
+    "league": "Belgium",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(14).png?alt=media&token=ec3e2863-ccc1-4706-8e51-a90e35a787f5"
+  },
+  {
+    "name": "Club Brugge",
+    "league": "Belgium",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(13).png?alt=media&token=16dede28-3a3b-4d7d-a306-3760ba112f9e"
+  },
+  {
+    "name": "Gent",
+    "league": "Belgium",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(15).png?alt=media&token=31ee07c2-5702-4393-b207-f001a098c01e"
+  },
+  {
+    "name": "Atlético Mineiro",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-148.png?alt=media&token=388b3ff4-fea8-4336-ade2-12b4153628f4"
+  },
+  {
+    "name": "Corinthians",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-150.png?alt=media&token=fb60433c-629d-45a9-a4c6-4b7bc5fd22e9"
+  },
+  {
+    "name": "Cruzeiro",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-157.png?alt=media&token=5f4ef285-298f-4eda-b891-6caecc65ce87"
+  },
+  {
+    "name": "Flamengo",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-149.png?alt=media&token=d5745e51-f0a4-42a0-bcf1-816461476391"
+  },
+  {
+    "name": "Grêmio",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-156.png?alt=media&token=dbda87e8-e256-42eb-95a8-9e49d097aa37"
+  },
+  {
+    "name": "Internacional",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-155.png?alt=media&token=f8ced6f6-ae23-4ee9-8381-7f9eb7027599"
+  },
+  {
+    "name": "Palmeiras",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-151.png?alt=media&token=e4da1732-6510-429a-862f-b3cf682482dc"
+  },
+  {
+    "name": "Santos",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-152.png?alt=media&token=457d7907-944e-4111-9837-e84219555c1e"
+  },
+  {
+    "name": "São Paulo",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-153.png?alt=media&token=868bfe4e-01e5-42eb-8efe-57608ad276e5"
+  },
+  {
+    "name": "Vasco da Gama",
+    "league": "Brazil",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-154.png?alt=media&token=a3fd839e-ce1e-41e8-95f4-b5aafb380238"
+  },
+  {
+    "name": "Ludogorets",
+    "league": "Bulgary",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(16).png?alt=media&token=2786c89f-2213-4822-b52f-81873570e822"
+  },
+  {
+    "name": "Dinamo Zagreb",
+    "league": "Croatia",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(21).png?alt=media&token=36950113-e9d0-4717-9dda-a558aa1c4f41"
+  },
+  {
+    "name": "Midtjylland",
+    "league": "Denmark",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(19).png?alt=media&token=06af432e-a3fe-4463-b3be-55db4478c3d2"
+  },
+  {
+    "name": "Arsenal",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-27.png?alt=media&token=d2364204-af8e-4729-b6a7-a9cde79739dc"
+  },
+  {
+    "name": "Aston Villa",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-28.png?alt=media&token=ef6b53ba-87a6-4b45-82b9-358d14263784"
+  },
+  {
+    "name": "Bournemouth",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-29.png?alt=media&token=53c5f87a-d9f5-4cc9-93b1-e2f2e3fa851e"
+  },
+  {
+    "name": "Brentford",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-30.png?alt=media&token=56a15d61-2c4c-415a-b1d6-73e3024dc05e"
+  },
+  {
+    "name": "Brighton & Hove Albion",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-31.png?alt=media&token=d0645639-2e68-4f0d-b4e5-6bcdc3a1f2e2"
+  },
+  {
+    "name": "Chelsea",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-32.png?alt=media&token=004624ea-29b7-4494-a763-d7f94fdaff19"
+  },
+  {
+    "name": "Crystal Palace",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-33.png?alt=media&token=c6e0275f-8a1a-457f-8a96-1a0cce041d2c"
+  },
+  {
+    "name": "Everton",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-34.png?alt=media&token=afe30737-0885-4bd3-a1cb-1b484329c307"
+  },
+  {
+    "name": "Fulham FC",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-35.png?alt=media&token=dfc62558-5eb2-49c0-9148-f6bd5b62ba9e"
+  },
+  {
+    "name": "Leeds United",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-36.png?alt=media&token=2e269a93-c771-4a28-9c02-0be7ca311993"
+  },
+  {
+    "name": "Leicester City",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-37.png?alt=media&token=b5067973-8c2f-475b-bd5f-8eecc5f810cd"
+  },
+  {
+    "name": "Liverpool",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-38.png?alt=media&token=f1784adc-8f24-4742-9b40-1482e03c72e2"
+  },
+  {
+    "name": "Manchester City",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-39.png?alt=media&token=9bce1d67-c462-41f4-929f-133703e5d85d"
+  },
+  {
+    "name": "Manchester United",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-40.png?alt=media&token=a8b4c075-31b0-490a-912e-d577da6f6b06"
+  },
+  {
+    "name": "Newcastle United",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-41.png?alt=media&token=ad2a938f-a06a-4671-b9b3-a3b6912ba5da"
+  },
+  {
+    "name": "Norwich City",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-123.png?alt=media&token=90e01a4a-1310-4330-ac75-409acf349e12"
+  },
+  {
+    "name": "Nottingham Forest",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-42.png?alt=media&token=d2b3497f-cb9b-4556-99e0-02a1847e5fde"
+  },
+  {
+    "name": "Southampton",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-43.png?alt=media&token=b5d1e54b-5e5e-40ff-bbf1-7d4315e97557"
+  },
+  {
+    "name": "Tottenham Hotspur",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-44.png?alt=media&token=f35630d9-0007-470d-a3aa-9412c054fd1c"
+  },
+  {
+    "name": "Watford",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-124.png?alt=media&token=89b2c6dd-5272-48a0-af53-3de5e7e6f8b1"
+  },
+  {
+    "name": "West Ham United",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-45.png?alt=media&token=ca4b7c40-4d1d-4cff-80e3-b7750c511f4d"
+  },
+  {
+    "name": "Wolverhampton ''Wolves''",
+    "league": "England",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-46.png?alt=media&token=61a94058-b2e3-4044-b100-3eb5f0e2e326"
+  },
+  {
+    "name": "AC Ajaccio",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-1.png?alt=media&token=b436e535-da2e-4ab5-a7fa-e662de97db42"
+  },
+  {
+    "name": "AJ Auxerre",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-3.png?alt=media&token=3e999075-f134-4a94-95a3-67167053f1f0"
+  },
+  {
+    "name": "Amiens",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(5).png?alt=media&token=a4b94a5d-35bc-4245-9a70-8e1dba7c5d19"
+  },
+  {
+    "name": "Angers SCO",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-2.png?alt=media&token=34f4161d-903d-415c-ae4d-46cefcbc047e"
+  },
+  {
+    "name": "AS Monaco",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-11.png?alt=media&token=8aa93c82-994f-410d-b6c8-35198d4f5080"
+  },
+  {
+    "name": "AS Saint-Étienne",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-22.png?alt=media&token=86a4845d-88b8-49e3-adac-b3d554ddc3cf"
+  },
+  {
+    "name": "Caen",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(4).png?alt=media&token=3015184c-9d62-4090-a177-053e4b5cd102"
+  },
+  {
+    "name": "Clermont Foot 63",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-5.png?alt=media&token=1fbf2ef6-747a-462e-9f2f-730372ce780e"
+  },
+  {
+    "name": "Dijon",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(6).png?alt=media&token=df97ac78-9cee-4149-9397-ad6b307ad54b"
+  },
+  {
+    "name": "En-Avant-Guingamp",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-25.png?alt=media&token=b8f9a0bb-17fa-4697-85e9-6f56bffbfba0"
+  },
+  {
+    "name": "ESTAC Troyes",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-20.png?alt=media&token=5ff5a33b-ef8b-47e5-be9e-1a1d72dcef93"
+  },
+  {
+    "name": "FC Metz",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-24.png?alt=media&token=fb21d5e1-8745-4e62-9e81-d4a424e99cc2"
+  },
+  {
+    "name": "FC Sochaux",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(3).png?alt=media&token=f399e309-6125-4128-9476-5fba71dde1cf"
+  },
+  {
+    "name": "Girondins de Bordeaux",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-21.png?alt=media&token=530a887e-243e-4455-be64-fba4b941a535"
+  },
+  {
+    "name": "Le Havre",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(26).png?alt=media&token=12b6a88e-0e9e-4c56-83d0-6aa0389571d8"
+  },
+  {
+    "name": "Lorient",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-8.png?alt=media&token=d15fd9c0-a6d4-41ec-a0c9-d51d4a9c0ecf"
+  },
+  {
+    "name": "LOSC Lille",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-7.png?alt=media&token=37ce0102-7e32-4350-b460-7f65ef12f438"
+  },
+  {
+    "name": "Montpellier HSC",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-12.png?alt=media&token=003f07aa-b4c7-44a2-b76c-6c0941283a2e"
+  },
+  {
+    "name": "Nantes",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-13.png?alt=media&token=f4eea53e-8491-4896-a27f-2cb2980a5206"
+  },
+  {
+    "name": "OGC Nice",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-14.png?alt=media&token=1cfcd7cd-295a-45ad-ac93-d6b3a36ad4fe"
+  },
+  {
+    "name": "Olympique de Marseille",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-10.png?alt=media&token=35764a43-11cd-448c-bad6-08583f992a37"
+  },
+  {
+    "name": "Olympique Lyonnais",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-9.png?alt=media&token=37ea587b-4b0b-4d70-b1eb-06155f4431d1"
+  },
+  {
+    "name": "Paris Saint-Germain",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-16.png?alt=media&token=e70d2d73-fc57-40f2-97e0-a985359b0a67"
+  },
+  {
+    "name": "RC Lens",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-6.png?alt=media&token=79bd7ba6-404b-4530-b06f-22286baf69ba"
+  },
+  {
+    "name": "SC Bastia",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-26.png?alt=media&token=7818bc58-69b0-4bb0-8b69-39111f3213f0"
+  },
+  {
+    "name": "Stade Brestois 29",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-4.png?alt=media&token=9edcbcad-8a78-44e4-8cf9-6a31f629e838"
+  },
+  {
+    "name": "Stade de Reims",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-17.png?alt=media&token=0c7ec346-3273-4cf5-b19f-a3642a6a6a33"
+  },
+  {
+    "name": "Stade Rennais",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-15.png?alt=media&token=c559a013-a44d-448a-b6cd-992c179d2af1"
+  },
+  {
+    "name": "Strasbourg",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-18.png?alt=media&token=24e39f45-3458-472a-8666-e740e516f66a"
+  },
+  {
+    "name": "Toulouse",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-19.png?alt=media&token=01a83577-a34a-4246-a860-c22e989c520d"
+  },
+  {
+    "name": "Valenciennes FC",
+    "league": "France",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-23.png?alt=media&token=0ebab366-fe4c-400f-a831-1cd5390a4253"
+  },
+  {
+    "name": "1. FSV Mainz 05",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-96.png?alt=media&token=97f18b8a-7e2c-41f6-ac9e-26d913afb2cd"
+  },
+  {
+    "name": "1. Union Berlin",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-99.png?alt=media&token=915ba47f-565f-4aa7-bd99-0095b64f007a"
+  },
+  {
+    "name": "Augsburg",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-135.png?alt=media&token=4f19e1c9-daa6-495f-89a9-6ec6fd48e492"
+  },
+  {
+    "name": "Bayer Leverkusen",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-86.png?alt=media&token=166a45c4-68f3-4454-bd5a-6ba6a630625f"
+  },
+  {
+    "name": "Bayern Munich",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-87.png?alt=media&token=593f3390-32bb-4f7f-b101-2df4ea56c2a4"
+  },
+  {
+    "name": "Borussia Dortmund",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-89.png?alt=media&token=b0432a2b-3f8e-4dd3-a063-2e10d6cdea44"
+  },
+  {
+    "name": "Borussia M√∂nchengladbach",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-90.png?alt=media&token=a565caf6-526a-40f0-9df9-2c1d318b1ee2"
+  },
+  {
+    "name": "Eintracht Frankfurt",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-134.png?alt=media&token=c4577291-115e-47f2-94fb-5e03ac1c902d"
+  },
+  {
+    "name": "FC Köln",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-92.png?alt=media&token=62c86e7c-77b8-4e2c-a024-b5eb039405c6"
+  },
+  {
+    "name": "FC Salzburg",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(22).png?alt=media&token=29d726ab-4b09-4cbf-aef7-54589e1f2b90"
+  },
+  {
+    "name": "FC Schalke 04",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-98.png?alt=media&token=a3fd3da3-f1b3-4679-a8cf-c277753bd603"
+  },
+  {
+    "name": "Hambourg",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(7).png?alt=media&token=68ed970e-4c6c-40a3-973e-031860a6a692"
+  },
+  {
+    "name": "Hanovre 96",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(8).png?alt=media&token=183e41d3-e77e-49a9-b9b7-3ec3dfdd3956"
+  },
+  {
+    "name": "Hertha BSC",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-94.png?alt=media&token=f21e759a-0056-423a-98f0-f6ec68de24cd"
+  },
+  {
+    "name": "RB Leipzig",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-97.png?alt=media&token=2ceae792-d052-4e2d-8167-96bacd45c2b3"
+  },
+  {
+    "name": "SC Freiburg",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-136.png?alt=media&token=0fa468e9-40a3-471b-94a4-2c1d16fc85ee"
+  },
+  {
+    "name": "TSG 1899 Hoffenheim",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-95.png?alt=media&token=28dda2c2-74f8-4f28-a852-1ee6be4cab91"
+  },
+  {
+    "name": "VfB Stuttgart",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-100.png?alt=media&token=c46d9a2e-82b9-4143-9bd4-e6191f7acc82"
+  },
+  {
+    "name": "VfL Wolfsburg",
+    "league": "Germany",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-102.png?alt=media&token=d6c1d340-cd75-4fb1-b9e3-e2c29f309da5"
+  },
+  {
+    "name": "Olympiakos",
+    "league": "Greece",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-159.png?alt=media&token=6c6db94d-95e5-43a2-9c66-9e7baa474198"
+  },
+  {
+    "name": "AC Milan",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-65.png?alt=media&token=355edb74-d730-41bf-af0f-8cbc006985e3"
+  },
+  {
+    "name": "AC Monza",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-78.png?alt=media&token=94d78fa0-354d-44e6-ae1f-04105d547cc8"
+  },
+  {
+    "name": "ACF Fiorentina",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-71.png?alt=media&token=c1049e5d-1e28-4f15-b1d6-fee8b3195969"
+  },
+  {
+    "name": "AS Roma",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-66.png?alt=media&token=d3288e60-a4d9-4a40-be34-3ed91e56bd59"
+  },
+  {
+    "name": "Atalanta BC",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-67.png?alt=media&token=a02d535c-55db-4bdb-9f30-e44ef1c0dd7a"
+  },
+  {
+    "name": "Bologna 1909",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-68.png?alt=media&token=3f6d0f7d-037b-4667-a32e-4384857358fb"
+  },
+  {
+    "name": "Cagliari",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-130.png?alt=media&token=202c80c9-5240-4411-84c7-e2a74b680d47"
+  },
+  {
+    "name": "Empoli",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-70.png?alt=media&token=047b3ec4-5afd-4933-a761-7064fe79e8d9"
+  },
+  {
+    "name": "Genoa CFC",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-131.png?alt=media&token=f87d47c3-198c-4b75-aee6-1b0ee6606a19"
+  },
+  {
+    "name": "Hellas Verona",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(24).png?alt=media&token=9c9bd086-eae1-465c-b6ed-cedf5c341ea5"
+  },
+  {
+    "name": "Inter Milan",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-73.png?alt=media&token=4103fa40-e972-4cfb-b2b6-f0dd0f4a6c09"
+  },
+  {
+    "name": "Juventus",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-74.png?alt=media&token=b8214b81-2d62-401e-a66f-085a09036920"
+  },
+  {
+    "name": "Palermo",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(1).png?alt=media&token=846f1a91-6398-4dfa-9fba-9a84caa85b6d"
+  },
+  {
+    "name": "Spezia",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-75.png?alt=media&token=6fab15c1-efe6-4eea-aad9-9b76d7150861"
+  },
+  {
+    "name": "SS Lazio",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-76.png?alt=media&token=687629a2-ffb4-4fa0-a4ab-2fd7768396e6"
+  },
+  {
+    "name": "SSC Napoli",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-79.png?alt=media&token=4a63deec-0730-454c-b932-33303e4ba455"
+  },
+  {
+    "name": "Torino",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-83.png?alt=media&token=82e00ea4-154e-463f-b2e6-d9a505669cc9"
+  },
+  {
+    "name": "UC Sampdoria",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-132.png?alt=media&token=2b78b35c-ff09-451c-9125-fc2964247b5e"
+  },
+  {
+    "name": "Udinese",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-84.png?alt=media&token=883994b2-eb59-4081-a117-a52756ba54de"
+  },
+  {
+    "name": "US Lecce",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-77.png?alt=media&token=792b217d-2ba5-440c-a347-e8ee315e2584"
+  },
+  {
+    "name": "US Salernitana",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120.png?alt=media&token=71bc6b98-2f60-4095-bcd5-70b95c93ed38"
+  },
+  {
+    "name": "US Sassuolo",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-82.png?alt=media&token=32ca0f39-c281-4d9f-9542-305931b18421"
+  },
+  {
+    "name": "Venezia",
+    "league": "Italy",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-133.png?alt=media&token=bf12954d-b0da-40d2-ac93-5031efff6622"
+  },
+  {
+    "name": "Sheriff Tiraspol",
+    "league": "Moldova",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(18).png?alt=media&token=4744cf5e-a335-4d5d-94c9-16682bb9cd3d"
+  },
+  {
+    "name": "Ajax",
+    "league": "Netherlands",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-137.png?alt=media&token=3d135642-a40f-4dc0-a4c6-772485a2fdff"
+  },
+  {
+    "name": "Alkmaar",
+    "league": "Netherlands",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(9).png?alt=media&token=776a2bcc-fa7e-4869-936c-9d26666d951b"
+  },
+  {
+    "name": "Feyenoord Rotterdam",
+    "league": "Netherlands",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-138.png?alt=media&token=ee0850ec-4839-4191-b865-8c9732e6f202"
+  },
+  {
+    "name": "PSV Eindhoven",
+    "league": "Netherlands",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-139.png?alt=media&token=64d162b2-c92c-4ce0-aa5b-c620f56d3738"
+  },
+  {
+    "name": "Porto",
+    "league": "Portugal",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-142.png?alt=media&token=e5903cd6-a6bb-47c6-8a60-1d1ac0918771"
+  },
+  {
+    "name": "SC Braga",
+    "league": "Portugal",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-143.png?alt=media&token=fa046256-08e1-4136-b0fd-061d204de8e0"
+  },
+  {
+    "name": "SL Benfica",
+    "league": "Portugal",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-141.png?alt=media&token=4b546398-2f7e-4ba0-b30d-99f282e14942"
+  },
+  {
+    "name": "Sporting CP",
+    "league": "Portugal",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-140.png?alt=media&token=a43f8deb-ea7f-48bc-9910-cb255da7ea90"
+  },
+  {
+    "name": "Celtic Glasgow",
+    "league": "Scotland",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-161.png?alt=media&token=7a82f113-fcf4-42ac-be98-726e299fb256"
+  },
+  {
+    "name": "Glasgow Rangers",
+    "league": "Scotland",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-160.png?alt=media&token=b7c2318d-a1e0-4552-95c3-10d127af88eb"
+  },
+  {
+    "name": "Étoile rouge de Belgrade",
+    "league": "Serbia",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(2).png?alt=media&token=08006d07-3041-467a-b0f4-aad539a1b770"
+  },
+  {
+    "name": "Almeria",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-103.png?alt=media&token=c6926e35-2c97-4864-8135-703de26fae91"
+  },
+  {
+    "name": "Athletic Club Bilbao",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-104.png?alt=media&token=162fc674-a4d7-4fb8-a353-51b5a834ccfb"
+  },
+  {
+    "name": "Atlético Madrid",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-105.png?alt=media&token=1f4cc8b6-f845-496a-8909-bac595d14aa8"
+  },
+  {
+    "name": "CA Osasuna",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-115.png?alt=media&token=9f379d0b-fa4c-4c0f-8ed3-d2a1c574ed8b"
+  },
+  {
+    "name": "Cádiz CF",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-107.png?alt=media&token=fb41bbe6-0b8a-40e1-8c5b-cc5f010495b5"
+  },
+  {
+    "name": "Eibar",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(2).png?alt=media&token=08006d07-3041-467a-b0f4-aad539a1b770"
+  },
+  {
+    "name": "Elche CF",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-109.png?alt=media&token=332b7767-67ee-4d88-9dea-4245fe489065"
+  },
+  {
+    "name": "FC Barcelona",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-111.png?alt=media&token=de31c783-bb3c-4f53-98a0-51d774324012"
+  },
+  {
+    "name": "Getafe CF",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-113.png?alt=media&token=68949469-e865-4999-a420-bb268cea80a5"
+  },
+  {
+    "name": "Girona",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(25).png?alt=media&token=fbb30502-2ddc-4dfd-b7f3-73390959f921"
+  },
+  {
+    "name": "Granada CF",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-126.png?alt=media&token=ad9926f6-3a10-4d8d-b8c3-da2e1b045421"
+  },
+  {
+    "name": "Levante UD",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-127.png?alt=media&token=410c8114-1c9e-4808-ba4d-440a1a75d727"
+  },
+  {
+    "name": "Málaga CF",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-128.png?alt=media&token=94403aee-dfa5-4da6-b3f7-42f212497c62"
+  },
+  {
+    "name": "Rayo Vallecano",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-116.png?alt=media&token=9092cf8a-8f09-46b2-80d7-14bcb84962c1"
+  },
+  {
+    "name": "RC Celta Vigo",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-125.png?alt=media&token=57d1691d-3196-4b85-9578-d43fd3d13ffe"
+  },
+  {
+    "name": "RCD Espanyol",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-110.png?alt=media&token=503bcdd9-dc99-4cfa-9420-91a24d662f5f"
+  },
+  {
+    "name": "RCD Mallorca",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-129.png?alt=media&token=8f141b5a-0838-4d05-9845-6fab2c4115dd"
+  },
+  {
+    "name": "Real Betis",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-106.png?alt=media&token=3f50dd69-92df-4558-9611-2c304fa694c1"
+  },
+  {
+    "name": "Real Madrid",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-117.png?alt=media&token=658a46ae-1012-49af-be00-4dbae5d6a371"
+  },
+  {
+    "name": "Real Sociedad",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-118.png?alt=media&token=e5fe1d42-250b-4dc7-a1ca-1807e6eddca5"
+  },
+  {
+    "name": "Real Valladolid",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-121.png?alt=media&token=37b1f277-20dc-4380-b7da-9ebddd828b6e"
+  },
+  {
+    "name": "Sevilla",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-119.png?alt=media&token=85e6b086-4cb3-4769-aa76-a707d28d3ab4"
+  },
+  {
+    "name": "Valencia",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-120.png?alt=media&token=ae66995f-5fc8-49a8-82a2-16826b8a77f2"
+  },
+  {
+    "name": "Villarreal",
+    "league": "Spain",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-122.png?alt=media&token=ca527c77-c888-48ad-804f-596c6ba10dd9"
+  },
+  {
+    "name": "Malmö FF",
+    "league": "Sweden",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(17).png?alt=media&token=caefb6a8-f132-4d87-b87a-f7bd9e3cf73e"
+  },
+  {
+    "name": "FC Zurich",
+    "league": "Switerzland",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(12).png?alt=media&token=97f5b685-75ef-434f-bf95-798dc752082f"
+  },
+  {
+    "name": "Young Boys",
+    "league": "Switerzland",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(11).png?alt=media&token=57c4c3c2-4cc8-47c5-8fc0-2564b74595b1"
+  },
+  {
+    "name": "Beşiktaş",
+    "league": "Turkey",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-158.png?alt=media&token=e2c36b4f-844f-4044-8797-f092ec2351b5"
+  },
+  {
+    "name": "Fenerbahçe SK",
+    "league": "Turkey",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(10).png?alt=media&token=5a760d7d-96bf-4cad-ae63-27f094c14c53"
+  },
+  {
+    "name": "Galatasaray SK",
+    "league": "Turkey",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-162.png?alt=media&token=c2ee1182-b9ee-4de9-9226-338eaa3f37c0"
+  },
+  {
+    "name": "Trabzonspor",
+    "league": "Turkey",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(20).png?alt=media&token=081e479b-51dc-4c88-97c4-8a38cf226547"
+  },
+  {
+    "name": "Dynamo Kyiv",
+    "league": "Ukraine",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120-2022-2023-163.png?alt=media&token=728ba522-693f-4aa4-a1aa-199487dcbc06"
+  },
+  {
+    "name": "Shakhtar Donetsk",
+    "league": "Ukraine",
+    "logo": "https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/clubs%2F120%20(23).png?alt=media&token=2383aa3a-40a9-4872-9ef5-07d965b9e91d"
+  }
+]

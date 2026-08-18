@@ -1,0 +1,7771 @@
+[
+ {
+  "app": "poteau-app",
+  "event": "Click on Remote Banner",
+  "file": "poteau-app/lib/components/remote_banner/remote_banner_widget.dart",
+  "line": 227,
+  "props": [
+   "title",
+   "id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Close Remote Banner",
+  "file": "poteau-app/lib/components/remote_banner/remote_banner_widget.dart",
+  "line": 307,
+  "props": [
+   "title",
+   "id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Show all past games",
+  "file": "poteau-app/lib/components/own_profile/played/played_widget.dart",
+  "line": 96,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Show played games only",
+  "file": "poteau-app/lib/components/own_profile/played/played_widget.dart",
+  "line": 96,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "See itinerary",
+  "file": "poteau-app/lib/components/upcoming_game_card_home/upcoming_game_card_home_widget.dart",
+  "line": 305,
+  "props": [
+   "game"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Remove me from canceled game",
+  "file": "poteau-app/lib/components/upcoming_game_card_home/upcoming_game_card_home_widget.dart",
+  "line": 551,
+  "props": [
+   "game"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share Game",
+  "file": "poteau-app/lib/components/upcoming_game_card_home/upcoming_game_card_home_widget.dart",
+  "line": 796,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "free_spots",
+   "fill_rate",
+   "game_status",
+   "game_id",
+   "button",
+   "localized"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Game List",
+  "file": "poteau-app/lib/components/game_list/game_list_widget.dart",
+  "line": 50,
+  "props": [
+   "gold_status",
+   "city",
+   "games_count",
+   "centres_filter",
+   "padel_activated",
+   "sport",
+   "day"
+  ],
+  "risky": [
+   "city",
+   "sport",
+   "day"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Friendship",
+  "file": "poteau-app/lib/components/search_friend_result/search_friend_result_widget.dart",
+  "line": 254,
+  "props": [
+   "user_id",
+   "user_name",
+   "from"
+  ],
+  "risky": [
+   "user_name"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add as Friend",
+  "file": "poteau-app/lib/components/search_friend_result/search_friend_result_widget.dart",
+  "line": 298,
+  "props": [
+   "user_id",
+   "user_name",
+   "from"
+  ],
+  "risky": [
+   "user_name"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Remove uploaded chat picture",
+  "file": "poteau-app/lib/components/send_message/send_message_widget.dart",
+  "line": 202,
+  "props": [
+   "gold_status"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Upload a Chat Picture",
+  "file": "poteau-app/lib/components/send_message/send_message_widget.dart",
+  "line": 282,
+  "props": [
+   "gold_status"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Chat Picture Uploaded",
+  "file": "poteau-app/lib/components/send_message/send_message_widget.dart",
+  "line": 385,
+  "props": [
+   "gold_status"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Message sent",
+  "file": "poteau-app/lib/components/send_message/send_message_widget.dart",
+  "line": 678,
+  "props": [
+   "hours_before_game",
+   "game_id",
+   "message",
+   "free_spots",
+   "pictures",
+   "gold_status"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Message sent",
+  "file": "poteau-app/lib/components/send_message/send_message_widget.dart",
+  "line": 759,
+  "props": [
+   "hours_before_game",
+   "game_id",
+   "message",
+   "free_spots",
+   "poteau_team"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Watch Game",
+  "file": "poteau-app/lib/components/game_invitation_card_home/game_invitation_card_home_widget.dart",
+  "line": 376,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Centre Selected",
+  "file": "poteau-app/lib/components/centre_item/centre_item_widget.dart",
+  "line": 146,
+  "props": [
+   "step",
+   "text_input",
+   "selected_centre"
+  ],
+  "risky": [
+   "selected_centre"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Friendship",
+  "file": "poteau-app/lib/components/add_to_team_button/add_to_team_button_widget.dart",
+  "line": 164,
+  "props": [
+   "user_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add as Friend",
+  "file": "poteau-app/lib/components/add_to_team_button/add_to_team_button_widget.dart",
+  "line": 418,
+  "props": [
+   "user_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add centre as favorite",
+  "file": "poteau-app/lib/components/search_centre_item/search_centre_item_widget.dart",
+  "line": 128,
+  "props": [
+   "centre",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Centre Selected",
+  "file": "poteau-app/lib/components/centre_searched_item/centre_searched_item_widget.dart",
+  "line": 151,
+  "props": [
+   "step",
+   "text_input",
+   "selected_centre",
+   "city"
+  ],
+  "risky": [
+   "city"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "See my profile",
+  "file": "poteau-app/lib/components/message_item/message_item_widget.dart",
+  "line": 189,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "free_spots",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visit Profile",
+  "file": "poteau-app/lib/components/message_item/message_item_widget.dart",
+  "line": 213,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "free_slots",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visit My Profile",
+  "file": "poteau-app/lib/components/message_item/message_item_widget.dart",
+  "line": 519,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visit Profile",
+  "file": "poteau-app/lib/components/message_item/message_item_widget.dart",
+  "line": 543,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Tapped on Poteau Team",
+  "file": "poteau-app/lib/components/message_item/message_item_widget.dart",
+  "line": 1018,
+  "props": [
+   "game_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Waiver Signed",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_waiver/b_s_waiver_widget.dart",
+  "line": 948,
+  "props": [
+   "signature"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Copy text from chat message",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_reactions/b_s_reactions_widget.dart",
+  "line": 483,
+  "props": [
+   "game_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms cancelation",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_repeaters/b_s_repeaters_widget.dart",
+  "line": 727,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "button_position",
+   "game_id",
+   "payment_type"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Game Canceled",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_repeaters/b_s_repeaters_widget.dart",
+  "line": 748,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "source"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t cancel the game",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_repeaters/b_s_repeaters_widget.dart",
+  "line": 759,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "source"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 365,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 465,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 563,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 662,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 760,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Updated skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 859,
+  "props": [
+   "initial_skin_color",
+   "new_skin_color"
+  ],
+  "risky": [
+   "initial_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to update skin color",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_emojis/b_s_emojis_widget.dart",
+  "line": 969,
+  "props": [
+   "current_skin_color"
+  ],
+  "risky": [
+   "current_skin_color"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Remove",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 745,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms removal",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 876,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Remove player from game",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 921,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Leave",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1082,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms leave",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1230,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Game Left",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1263,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Leave",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1413,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms cancelation",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1532,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Game Canceled",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1565,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t cancel the game",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 1584,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "error_code",
+   "error_message"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to confirm reserved spots",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2069,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "role",
+   "double_check",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment success",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2168,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Paid for the game",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2181,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "role",
+   "double_check",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment error",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2247,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirmed attendance",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2292,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t confirm attendance",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2306,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Remove",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2502,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms removal",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2633,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Remove player from game",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2678,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Leave",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 2835,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirms leave",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 3092,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role",
+   "double_check"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Game Left",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 3129,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "role"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Call user",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 3500,
+  "props": [
+   "user",
+   "user_id",
+   "phone",
+   "hours_before_game",
+   "user_role"
+  ],
+  "risky": [
+   "user",
+   "hours_before_game",
+   "user_role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Text user",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 3638,
+  "props": [
+   "user",
+   "user_id",
+   "phone",
+   "hours_before_game",
+   "user_role"
+  ],
+  "risky": [
+   "user",
+   "hours_before_game",
+   "user_role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Remove player as Gold captain",
+  "file": "poteau-app/lib/components/bottom_sheets/b_s_player_options/b_s_player_options_widget.dart",
+  "line": 3851,
+  "props": [
+   "user",
+   "user_id",
+   "phone",
+   "hours_before_game",
+   "user_role"
+  ],
+  "risky": [
+   "user",
+   "hours_before_game",
+   "user_role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "<DYNAMIC>",
+  "file": "poteau-app/lib/components/amplitude_tracker/amplitude_tracker_widget.dart",
+  "line": 43,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "is_web",
+   "logged_in",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": "widget.eventName",
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Invite a Friend",
+  "file": "poteau-app/lib/components/invite_friend_item/invite_friend_item_widget.dart",
+  "line": 314,
+  "props": [
+   "auth_contacts",
+   "button_type",
+   "type",
+   "user"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Friendship",
+  "file": "poteau-app/lib/components/ranking_team/pending_friends/pending_friends_widget.dart",
+  "line": 310,
+  "props": [
+   "user_id",
+   "user_name"
+  ],
+  "risky": [
+   "user_name"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 237,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 427,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 622,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 817,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 1012,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 1204,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update rated",
+  "file": "poteau-app/lib/components/rate_update/rate_update_widget.dart",
+  "line": 1459,
+  "props": [
+   "rating"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Follow on Instagram",
+  "file": "poteau-app/lib/components/notification_item/notification_item_widget.dart",
+  "line": 124,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Play",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1531,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to confirm reserved spots",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1593,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment success",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1655,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Paid for the game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1669,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Joined the game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1729,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t join the game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1743,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment error",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1758,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Joined the game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1867,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t join the game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 1881,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "discounted_game",
+   "sport",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Skipped game",
+  "file": "poteau-app/lib/components/game_in_stack/game_in_stack_widget.dart",
+  "line": 2069,
+  "props": [
+   "reason",
+   "game",
+   "centre",
+   "hours_before_game",
+   "free_spots",
+   "sport",
+   "price",
+   "fill_rate"
+  ],
+  "risky": [
+   "reason",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Landing",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 60,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "1-click Connect",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1052,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signup",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1086,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signin",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1107,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "1-click Connect",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1257,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signup",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1290,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signin",
+  "file": "poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+  "line": 1311,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Landing",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 54,
+  "props": [
+   "type",
+   "from_user"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Open in App",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 318,
+  "props": [
+   "type",
+   "from_user",
+   "ios",
+   "android"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Continue with",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 965,
+  "props": [
+   "connector",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signup",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 1040,
+  "props": [
+   "connector",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Continue with",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 1397,
+  "props": [
+   "connector",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signup",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 1467,
+  "props": [
+   "connector",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Continue with",
+  "file": "poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+  "line": 1825,
+  "props": [
+   "connector",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Rate the app",
+  "file": "poteau-app/lib/pages/7_admin/settings/settings_widget.dart",
+  "line": 2180,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Follow on Instagram",
+  "file": "poteau-app/lib/pages/7_admin/settings/settings_widget.dart",
+  "line": 2363,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Follow on TikTok",
+  "file": "poteau-app/lib/pages/7_admin/settings/settings_widget.dart",
+  "line": 2466,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Logout",
+  "file": "poteau-app/lib/pages/7_admin/settings/settings_widget.dart",
+  "line": 3800,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Edit My Profile",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 68,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 99,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 130,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 161,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 186,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 213,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Wants to upload photo",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 593,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Event - Photo uploaded",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 740,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Turn Padel ON",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 3789,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Turn Padel OFF",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 3819,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Profile Info",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+  "line": 4038,
+  "props": [
+   "first_name",
+   "last_name",
+   "email",
+   "mood",
+   "birthday",
+   "gender",
+   "phone"
+  ],
+  "risky": [
+   "mood",
+   "birthday"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Edit My Phone",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_phone/edit_my_phone_widget.dart",
+  "line": 53,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Phone",
+  "file": "poteau-app/lib/pages/7_admin/edit_my_phone/edit_my_phone_widget.dart",
+  "line": 693,
+  "props": [
+   "phone",
+   "country_code"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "You\\'re banned",
+  "file": "poteau-app/lib/pages/7_admin/ban/ban_widget.dart",
+  "line": 33,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Notifications",
+  "file": "poteau-app/lib/pages/7_admin/notifications/notifications_widget.dart",
+  "line": 90,
+  "props": [
+   "count_today_notif"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "First Name",
+  "file": "poteau-app/lib/pages/3_onboarding/a_nickname/a_nickname_widget.dart",
+  "line": 61,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirm Identity",
+  "file": "poteau-app/lib/pages/3_onboarding/a_nickname/a_nickname_widget.dart",
+  "line": 1002,
+  "props": [
+   "first_name",
+   "gender"
+  ],
+  "risky": [
+   "gender"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select area",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 53,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Get my location",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 230,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Location Not Detected",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 252,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Enter City",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 274,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Location Detected",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 357,
+  "props": [
+   "city",
+   "location",
+   "source",
+   "country"
+  ],
+  "risky": [
+   "location"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Enter City",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 541,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Location Not Detected",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 624,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Enter City",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 635,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Enter City",
+  "file": "poteau-app/lib/pages/3_onboarding/e_area/e_area_widget.dart",
+  "line": 838,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Phone",
+  "file": "poteau-app/lib/pages/3_onboarding/c_phone/c_phone_widget.dart",
+  "line": 60,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Wants to confirm phone",
+  "file": "poteau-app/lib/pages/3_onboarding/c_phone/c_phone_widget.dart",
+  "line": 783,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "from",
+   "country_code"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Phone confirmed",
+  "file": "poteau-app/lib/pages/3_onboarding/c_phone/c_phone_widget.dart",
+  "line": 805,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone_input",
+   "phone_database",
+   "phone_input_valid",
+   "phone_database_valid",
+   "from",
+   "country_code"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Profile Picture",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 63,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Settings from Profile Picture Selection",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 341,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Wants to upload photo",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 440,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Refused Library Access",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 469,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Event - Photo uploaded",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 570,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Event - No photo uploaded",
+  "file": "poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+  "line": 592,
+  "props": [
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Pick a sport",
+  "file": "poteau-app/lib/pages/3_onboarding/d_sports/d_sports_widget.dart",
+  "line": 61,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sports selected",
+  "file": "poteau-app/lib/pages/3_onboarding/d_sports/d_sports_widget.dart",
+  "line": 507,
+  "props": [
+   "soccer",
+   "padel"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share first invites",
+  "file": "poteau-app/lib/pages/3_onboarding/h_share/h_share_widget.dart",
+  "line": 62,
+  "props": [
+   "from"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share my team invite",
+  "file": "poteau-app/lib/pages/3_onboarding/h_share/h_share_widget.dart",
+  "line": 478,
+  "props": [
+   "from",
+   "button"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share my team invite",
+  "file": "poteau-app/lib/pages/3_onboarding/h_share/h_share_widget.dart",
+  "line": 580,
+  "props": [
+   "from",
+   "button"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Don\\'t want to share team invite",
+  "file": "poteau-app/lib/pages/3_onboarding/h_share/h_share_widget.dart",
+  "line": 706,
+  "props": [
+   "from",
+   "compatible_games"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add first players",
+  "file": "poteau-app/lib/pages/3_onboarding/g_players/g_players_widget.dart",
+  "line": 58,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Display suggested players",
+  "file": "poteau-app/lib/pages/3_onboarding/g_players/g_players_widget.dart",
+  "line": 90,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Failure to display players",
+  "file": "poteau-app/lib/pages/3_onboarding/g_players/g_players_widget.dart",
+  "line": 115,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select timeslots",
+  "file": "poteau-app/lib/pages/3_onboarding/f_timeslots/f_timeslots_widget.dart",
+  "line": 50,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Join first games",
+  "file": "poteau-app/lib/pages/3_onboarding/i_games/i_games_widget.dart",
+  "line": 59,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Display suggested games",
+  "file": "poteau-app/lib/pages/3_onboarding/i_games/i_games_widget.dart",
+  "line": 95,
+  "props": [
+   "compatible_games",
+   "first_one"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Failure to display games",
+  "file": "poteau-app/lib/pages/3_onboarding/i_games/i_games_widget.dart",
+  "line": 109,
+  "props": [
+   "compatible_games"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "View - Build my Team",
+  "file": "poteau-app/lib/pages/8_people/build_my_team/build_my_team_widget.dart",
+  "line": 50,
+  "props": [
+   "access_to_add_from_contacts"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share my team invite",
+  "file": "poteau-app/lib/pages/8_people/build_my_team/build_my_team_widget.dart",
+  "line": 590,
+  "props": [
+   "from",
+   "localized"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Invite by WhatsApp",
+  "file": "poteau-app/lib/pages/8_people/build_my_team/build_my_team_widget.dart",
+  "line": 705,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Contacts Screen",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 64,
+  "props": [
+   "auth_contacts",
+   "from",
+   "contacts_to_add",
+   "contacts_onboarding"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Give contacts access",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 90,
+  "props": [
+   "auth_contacts",
+   "from",
+   "contacts_to_add",
+   "contacts_onboarding"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Refuse contacts access",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 112,
+  "props": [
+   "auth_contacts",
+   "from",
+   "contacts_to_add",
+   "contacts_onboarding"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Give contacts access",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 136,
+  "props": [
+   "auth_contacts"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Refuse contacts access",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 158,
+  "props": [
+   "auth_contacts"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Contacts loaded",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 185,
+  "props": [
+   "auth_contacts",
+   "contacts_nb",
+   "output"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t load contacts",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 208,
+  "props": [
+   "auth_contacts",
+   "contacts_nb"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to app settings",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 646,
+  "props": [
+   "auth_contacts",
+   "reason"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to app settings",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 815,
+  "props": [
+   "auth_contacts",
+   "reason"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Vote for Contacts",
+  "file": "poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+  "line": 953,
+  "props": [
+   "auth_contacts",
+   "contacts_nb",
+   "contacts_selected_nb",
+   "contacts_selected",
+   "magical_contacts"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Connect Email",
+  "file": "poteau-app/lib/pages/2_authentication/email_login/email_login_widget.dart",
+  "line": 43,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Try to Signin",
+  "file": "poteau-app/lib/pages/2_authentication/email_login/email_login_widget.dart",
+  "line": 626,
+  "props": [
+   "email"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signin",
+  "file": "poteau-app/lib/pages/2_authentication/email_login/email_login_widget.dart",
+  "line": 656,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Connect Email",
+  "file": "poteau-app/lib/pages/2_authentication/email_validation/email_validation_widget.dart",
+  "line": 49,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Email verified",
+  "file": "poteau-app/lib/pages/2_authentication/email_validation/email_validation_widget.dart",
+  "line": 505,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wrong passcode for email",
+  "file": "poteau-app/lib/pages/2_authentication/email_validation/email_validation_widget.dart",
+  "line": 619,
+  "props": [
+   "email",
+   "real_code",
+   "code_attempt"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Connect Email",
+  "file": "poteau-app/lib/pages/2_authentication/email_signup/email_signup_widget.dart",
+  "line": 46,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Try to Signup",
+  "file": "poteau-app/lib/pages/2_authentication/email_signup/email_signup_widget.dart",
+  "line": 1058,
+  "props": [
+   "email"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Signup",
+  "file": "poteau-app/lib/pages/2_authentication/email_signup/email_signup_widget.dart",
+  "line": 1134,
+  "props": [
+   "connector"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select Date & Time",
+  "file": "poteau-app/lib/pages/5_games/create_games/c_date_and_time/c_date_and_time_widget.dart",
+  "line": 61,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Chose date and time",
+  "file": "poteau-app/lib/pages/5_games/create_games/c_date_and_time/c_date_and_time_widget.dart",
+  "line": 1545,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Search for Centre",
+  "file": "poteau-app/lib/pages/5_games/create_games/b_location/b_location_widget.dart",
+  "line": 73,
+  "props": [
+   "text_input",
+   "city"
+  ],
+  "risky": [
+   "city"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select Location",
+  "file": "poteau-app/lib/pages/5_games/create_games/b_location/b_location_widget.dart",
+  "line": 85,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Search for Centre",
+  "file": "poteau-app/lib/pages/5_games/create_games/b_location/b_location_widget.dart",
+  "line": 254,
+  "props": [
+   "text_input",
+   "city"
+  ],
+  "risky": [
+   "city"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select Price & Discount",
+  "file": "poteau-app/lib/pages/5_games/create_games/f_price/f_price_widget.dart",
+  "line": 61,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Chose visibility and format",
+  "file": "poteau-app/lib/pages/5_games/create_games/f_price/f_price_widget.dart",
+  "line": 1640,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select Type & Visibility",
+  "file": "poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+  "line": 61,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Format selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+  "line": 392,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "max_players"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visibility selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+  "line": 619,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "visibility"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visibility selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+  "line": 798,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "visibility"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Chose visibility and format",
+  "file": "poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+  "line": 1247,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "visibility",
+   "max_players"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Select Level & Mood",
+  "file": "poteau-app/lib/pages/5_games/create_games/e_level_mood/e_level_mood_widget.dart",
+  "line": 59,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Chose level & mood",
+  "file": "poteau-app/lib/pages/5_games/create_games/e_level_mood/e_level_mood_widget.dart",
+  "line": 1001,
+  "props": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Create Game",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 84,
+  "props": [
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 433,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 543,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 673,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 776,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 902,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Sport selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1007,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Field booked",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1305,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Field not booked",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1402,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Field booked",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1520,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Field booked",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1711,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Field not booked",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 1804,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Select Game Location",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 2088,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Select Game Location",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 2279,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "See centres around me",
+  "file": "poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+  "line": 2429,
+  "props": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Recap",
+  "file": "poteau-app/lib/pages/5_games/create_games/g_summary_repeat/g_summary_repeat_widget.dart",
+  "line": 70,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Repeat selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/g_summary_repeat/g_summary_repeat_widget.dart",
+  "line": 1326,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "repeat"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Repeat selected",
+  "file": "poteau-app/lib/pages/5_games/create_games/g_summary_repeat/g_summary_repeat_widget.dart",
+  "line": 1439,
+  "props": [
+   "step",
+   "location",
+   "city",
+   "date",
+   "sport",
+   "repeat"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Published the game",
+  "file": "poteau-app/lib/pages/5_games/create_games/g_summary_repeat/g_summary_repeat_widget.dart",
+  "line": 1996,
+  "props": [
+   "game_id",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "View - Invite Friends",
+  "file": "poteau-app/lib/pages/5_games/invite_friends/invite_friends_widget.dart",
+  "line": 63,
+  "props": [
+   "auth_contacts",
+   "button_type"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Close - Share invitation",
+  "file": "poteau-app/lib/pages/5_games/invite_friends/invite_friends_widget.dart",
+  "line": 294,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Share invitation",
+  "file": "poteau-app/lib/pages/5_games/invite_friends/invite_friends_widget.dart",
+  "line": 523,
+  "props": [
+   "source",
+   "type",
+   "localized"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Edit My Profile",
+  "file": "poteau-app/lib/pages/5_games/edit_my_game/edit_my_game_widget.dart",
+  "line": 66,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Edit Game",
+  "file": "poteau-app/lib/pages/5_games/edit_my_game/edit_my_game_widget.dart",
+  "line": 2694,
+  "props": [
+   "game_id",
+   "centre",
+   "hours_until_game"
+  ],
+  "risky": [
+   "hours_until_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add favorite centre screen",
+  "file": "poteau-app/lib/pages/5_games/filter_centres/filter_centres_widget.dart",
+  "line": 54,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Add centre as favorite",
+  "file": "poteau-app/lib/pages/5_games/filter_centres/filter_centres_widget.dart",
+  "line": 456,
+  "props": [
+   "centre",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Location Not Detected",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 244,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location updated",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 371,
+  "props": [
+   "availability_id",
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location created",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 554,
+  "props": [
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location created",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 681,
+  "props": [
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location updated",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 1123,
+  "props": [
+   "availability_id",
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location created",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 1324,
+  "props": [
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Availability \u2022 Location created",
+  "file": "poteau-app/lib/pages/5_games/address_picker/address_picker_widget.dart",
+  "line": 1455,
+  "props": [
+   "from",
+   "type"
+  ],
+  "risky": [
+   "from"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "See post-game feedback",
+  "file": "poteau-app/lib/pages/5_games/post_game_feedback/give_feedback/give_feedback_widget.dart",
+  "line": 52,
+  "props": [
+   "gameId"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Replied to post-game feedback",
+  "file": "poteau-app/lib/pages/5_games/post_game_feedback/give_feedback/give_feedback_widget.dart",
+  "line": 1208,
+  "props": [
+   "late",
+   "no_show",
+   "rude",
+   "positive"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Feedback posted",
+  "file": "poteau-app/lib/pages/5_games/post_game_feedback/feedback_saved/feedback_saved_widget.dart",
+  "line": 53,
+  "props": [
+   "feedback"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Become Gold",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 61,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "game_id",
+   "weekly_offer",
+   "yearly_offer"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 1333,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 1540,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 1717,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 1900,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 2068,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 2313,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 2495,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 2674,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Switch selected Gold period",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 2843,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "initial_selection",
+   "new_selection"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Subscribe",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 3280,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "plan",
+   "price"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source",
+   "plan"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Subscribed to Gold",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 3412,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "source",
+   "plan",
+   "price"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "source",
+   "plan"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t subscribe to Gold",
+  "file": "poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+  "line": 3492,
+  "props": [
+   "location",
+   "city",
+   "user_gold_status",
+   "plan",
+   "price"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "plan"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Filters",
+  "file": "poteau-app/lib/pages/5_games/filter/filter_widget.dart",
+  "line": 42,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Banned",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 127,
+  "props": [
+   "auth_contacts",
+   "button_type",
+   "game_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Blocked until email validated",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 165,
+  "props": [
+   "auth_contacts",
+   "button_type",
+   "game_id"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Copy Game Link",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 1349,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "button",
+   "localized",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Copy Game Link",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 1441,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "button",
+   "localized",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share Game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 1545,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "button",
+   "localized",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to confirm reserved spots",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2125,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment success",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2153,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Paid for the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2163,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment error",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2198,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Confirmed attendance",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2221,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t confirm attendance",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2232,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Ungold this game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2885,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Ungold",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 2917,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Watch Game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3011,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "See My Profile",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3099,
+  "props": [
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visit Profile",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3122,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Stop Watching",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3246,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Invite Friends",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3507,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "button_wording"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "See My Profile",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3660,
+  "props": [
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Visit Profile",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 3683,
+  "props": [
+   "user",
+   "from",
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Know More About Gold",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 4493,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Make game private",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 5131,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Make game public",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 5335,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Ungold this game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 5694,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Ungold",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 5784,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Reserve to Gold members",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 6011,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open payment link",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 6486,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Leave",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 6998,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "paying_late_unapply",
+   "type"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "paying_late_unapply"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Cancel",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7290,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7596,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7623,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7650,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Expand location picture",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7755,
+  "props": [
+   "picture_number",
+   "location",
+   "place_id"
+  ],
+  "risky": [
+   "location",
+   "place_id"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Download the App",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 7997,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "is_web",
+   "logged_in",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Download the App",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 8570,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "is_web",
+   "logged_in",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 8884,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 8911,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Open Map",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 8938,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Expand location picture",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 9043,
+  "props": [
+   "picture_number",
+   "location",
+   "place_id"
+  ],
+  "risky": [
+   "location",
+   "place_id"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to Poteau website",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 9443,
+  "props": [
+   "auth_contacts",
+   "button_type",
+   "game_id",
+   "is_web",
+   "logged_in"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Open the App",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 9607,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "is_web",
+   "logged_in"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Download the App",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 9644,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "is_web",
+   "logged_in",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Play",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 10831,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to confirm reserved spots",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 10944,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment success",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 10990,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Paid for the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11000,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment error",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11011,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Joined the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11099,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t join the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11110,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "message"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Play",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11192,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "already_attendee"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to take more spots",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11356,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Needs to pay directly",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11373,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment success",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11427,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Paid for the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11437,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "button_position",
+   "game_id",
+   "payment_type",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Payment error",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11448,
+  "props": [
+   "payment_code",
+   "payment_message",
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Joined the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11551,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Couldn\\'t join the game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11563,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_spots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "payment_type",
+   "currency",
+   "type",
+   "visibility",
+   "fff_game",
+   "discounted_game",
+   "message",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Share Game",
+  "file": "poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+  "line": 11709,
+  "props": [
+   "location",
+   "city",
+   "active_date",
+   "centre",
+   "game_date",
+   "hours_before_game",
+   "user_gold_status",
+   "game_gold_exclusive",
+   "level",
+   "free_slots",
+   "max_players",
+   "fill_rate",
+   "price",
+   "duration",
+   "game_status",
+   "interested",
+   "game_id",
+   "button",
+   "sport"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "active_date",
+   "game_date",
+   "hours_before_game",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Home",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 91,
+  "props": [
+   "alerts",
+   "pending_feedback",
+   "pending_friends",
+   "padel_activated"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update forced",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 149,
+  "props": [
+   "currentAppVersion",
+   "productionVersion",
+   "forcedUpdate"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update needed",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 163,
+  "props": [
+   "currentAppVersion",
+   "productionVersion"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 252,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 283,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 314,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 339,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 366,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 397,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Update Poteau",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 1205,
+  "props": [
+   "currentAppVersion",
+   "productionVersion"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to Create",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 1428,
+  "props": [
+   "button"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Build Team",
+  "file": "poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+  "line": 2159,
+  "props": [
+   "source"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "View - My Profile",
+  "file": "poteau-app/lib/pages/4_super_bar/my_profile/my_profile_widget.dart",
+  "line": 93,
+  "props": [
+   "friends",
+   "pending_friends",
+   "alerts",
+   "footbar_offer"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Wants to upload photo",
+  "file": "poteau-app/lib/pages/4_super_bar/my_profile/my_profile_widget.dart",
+  "line": 2131,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Event - Photo uploaded",
+  "file": "poteau-app/lib/pages/4_super_bar/my_profile/my_profile_widget.dart",
+  "line": 2273,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Share my profile",
+  "file": "poteau-app/lib/pages/4_super_bar/my_profile/my_profile_widget.dart",
+  "line": 2353,
+  "props": [
+   "friends",
+   "pending_friends",
+   "alerts"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 133,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 164,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 195,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 220,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Redirected to Onboarding",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 247,
+  "props": [
+   "photo_url",
+   "display_name",
+   "phone",
+   "phone_valid",
+   "first_name",
+   "last_name",
+   "from",
+   "to"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Profile is incomplete",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 271,
+  "props": [
+   "phone",
+   "display_name",
+   "photo",
+   "isUserComplete"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update forced",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 344,
+  "props": [
+   "currentAppVersion",
+   "productionVersion"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Update needed",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 365,
+  "props": [
+   "currentAppVersion",
+   "productionVersion"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Edit City",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 626,
+  "props": [
+   "location",
+   "city",
+   "date"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to Create",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 1033,
+  "props": [
+   "location",
+   "city",
+   "date",
+   "button"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Click - Update Poteau",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 1545,
+  "props": [
+   "currentAppVersion",
+   "productionVersion"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Go to Create Game",
+  "file": "poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+  "line": 1979,
+  "props": [
+   "location",
+   "city",
+   "date",
+   "from"
+  ],
+  "risky": [
+   "location",
+   "city",
+   "date"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - See self-score screen",
+  "file": "poteau-app/lib/pages/6_level/level_self_score/level_self_score_widget.dart",
+  "line": 59,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply_id"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Self-score selected",
+  "file": "poteau-app/lib/pages/6_level/level_self_score/level_self_score_widget.dart",
+  "line": 975,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply_id",
+   "self_score"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Tempo Users",
+  "file": "poteau-app/lib/pages/6_level/level_tempo_users/level_tempo_users_widget.dart",
+  "line": 60,
+  "props": [
+   "city"
+  ],
+  "risky": [
+   "city"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - See tempo users screen",
+  "file": "poteau-app/lib/pages/6_level/level_tempo_users/level_tempo_users_widget.dart",
+  "line": 940,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply_id",
+   "phone",
+   "clean_phone"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Select Role",
+  "file": "poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+  "line": 63,
+  "props": [
+   "source",
+   "sport"
+  ],
+  "risky": [
+   "source",
+   "sport"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Picked a role",
+  "file": "poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+  "line": 534,
+  "props": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "risky": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Picked a role",
+  "file": "poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+  "line": 755,
+  "props": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "risky": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Picked a role",
+  "file": "poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+  "line": 968,
+  "props": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "risky": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Picked a role",
+  "file": "poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+  "line": 1182,
+  "props": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "risky": [
+   "sport",
+   "role",
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Reveal score",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 71,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply_id",
+   "score"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Wants to Share Score",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 1569,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText",
+   "platform"
+  ],
+  "risky": [
+   "sport",
+   "role",
+   "platform"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "BS - Score Social Share",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 1738,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Go to My Profile",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 1980,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Want to Remove from Profile",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 2114,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Remove from My Profile",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 2260,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Didn\\'t Remove from Profile",
+  "file": "poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+  "line": 2282,
+  "props": [
+   "sport",
+   "role",
+   "quiz_reply",
+   "quiz_score",
+   "score",
+   "self_score",
+   "gap",
+   "comment",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - See question",
+  "file": "poteau-app/lib/pages/6_level/level_question/level_question_widget.dart",
+  "line": 63,
+  "props": [
+   "sport",
+   "role",
+   "question_number",
+   "quiz_reply_id"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-app",
+  "event": "Level - Reply to question",
+  "file": "poteau-app/lib/pages/6_level/level_question/level_question_widget.dart",
+  "line": 1041,
+  "props": [
+   "sport",
+   "role",
+   "question_number",
+   "quiz_reply_id",
+   "reply_number",
+   "reply_score",
+   "text_question",
+   "enText",
+   "esText",
+   "itText",
+   "text_reply",
+   "enText",
+   "esText",
+   "itText"
+  ],
+  "risky": [
+   "sport",
+   "role"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Landing",
+  "file": "poteau-max/lib/landing/landing/landing_widget.dart",
+  "line": 56,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Introducing Poteau Pro",
+  "file": "poteau-max/lib/admin/poteau_pro_steps/poteau_pro_steps_widget.dart",
+  "line": 46,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Wants to activate account",
+  "file": "poteau-max/lib/admin/poteau_pro_steps/poteau_pro_steps_widget.dart",
+  "line": 1691,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "step"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "See Update page",
+  "file": "poteau-max/lib/admin/update/update_widget.dart",
+  "line": 44,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "os"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "See Update page",
+  "file": "poteau-max/lib/admin/update/update_widget.dart",
+  "line": 69,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "os"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "See Update page",
+  "file": "poteau-max/lib/admin/update/update_widget.dart",
+  "line": 93,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "os"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "View - Share Link",
+  "file": "poteau-max/lib/admin/share_link/share_link_widget.dart",
+  "line": 58,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Open my Poteau Website",
+  "file": "poteau-max/lib/admin/share_link/share_link_widget.dart",
+  "line": 605,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Copy my Poteau Website Link",
+  "file": "poteau-max/lib/admin/share_link/share_link_widget.dart",
+  "line": 740,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Copy my Poteau Website Link",
+  "file": "poteau-max/lib/admin/share_link/share_link_widget.dart",
+  "line": 796,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "from",
+   "website"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Messenger",
+  "file": "poteau-max/lib/admin/messenger/messenger_widget.dart",
+  "line": 79,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "No access to photo library",
+  "file": "poteau-max/lib/admin/messenger/messenger_widget.dart",
+  "line": 1121,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Send picture to Poteau",
+  "file": "poteau-max/lib/admin/messenger/messenger_widget.dart",
+  "line": 1284,
+  "props": [
+   "picture"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "No uploaded picture",
+  "file": "poteau-max/lib/admin/messenger/messenger_widget.dart",
+  "line": 1299,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Send message to Poteau",
+  "file": "poteau-max/lib/admin/messenger/messenger_widget.dart",
+  "line": 1571,
+  "props": [
+   "message"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Unblock",
+  "file": "poteau-max/lib/components/banned_blocked_list/banned_blocked_list_widget.dart",
+  "line": 422,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Unban",
+  "file": "poteau-max/lib/components/banned_blocked_list/banned_blocked_list_widget.dart",
+  "line": 604,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click on Add repeater",
+  "file": "poteau-max/lib/components/empty_repeater_weekday/empty_repeater_weekday_widget.dart",
+  "line": 55,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "More options",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 619,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "See Outsiders",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 1324,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "See Attendee",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 1367,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url",
+   "user_profile",
+   "user_name",
+   "user_phone"
+  ],
+  "risky": [
+   "centre_plan_next_renew",
+   "user_name"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Switch Game Card view",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 2112,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "switch_to"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Switch Game Card view",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 2172,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "switch_to"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click on # of alerted players",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 2297,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Share game",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 2535,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Add Outsider",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 2692,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Message sent",
+  "file": "poteau-max/lib/components/mobile_game_card/mobile_game_card_widget.dart",
+  "line": 3410,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_url",
+   "message"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Open Player",
+  "file": "poteau-max/lib/components/message_item/message_item_widget.dart",
+  "line": 174,
+  "props": [
+   "player",
+   "player_id"
+  ],
+  "risky": [
+   "player"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Open Player",
+  "file": "poteau-max/lib/components/message_item/message_item_widget.dart",
+  "line": 508,
+  "props": [
+   "player",
+   "player_id"
+  ],
+  "risky": [
+   "player"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Copy iFrame Code",
+  "file": "poteau-max/lib/components/share_link_comp/d_insert_code/d_insert_code_widget.dart",
+  "line": 273,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Share by Message",
+  "file": "poteau-max/lib/components/share_link_comp/b_send_message/b_send_message_widget.dart",
+  "line": 189,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Print Poster",
+  "file": "poteau-max/lib/components/share_link_comp/a_print_poster/a_print_poster_widget.dart",
+  "line": 175,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click - Copy Email Template",
+  "file": "poteau-max/lib/components/share_link_comp/c_send_email/c_send_email_widget.dart",
+  "line": 299,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Suggestion clicked",
+  "file": "poteau-max/lib/components/game_suggestion/game_suggestion_widget.dart",
+  "line": 270,
+  "props": [
+   "time",
+   "source"
+  ],
+  "risky": [
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Suggestion clicked",
+  "file": "poteau-max/lib/components/game_suggestion/game_suggestion_widget.dart",
+  "line": 671,
+  "props": [
+   "time",
+   "source"
+  ],
+  "risky": [
+   "source"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Settings",
+  "file": "poteau-max/lib/bar/settings/settings_widget.dart",
+  "line": 63,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Games",
+  "file": "poteau-max/lib/bar/home/home_widget.dart",
+  "line": 100,
+  "props": [
+   "centre_plan_status",
+   "unread_message"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Notifications",
+  "file": "poteau-max/lib/bar/notifications/notifications_widget.dart",
+  "line": 69,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Logged out (Not a Pro user)",
+  "file": "poteau-max/lib/bar/notifications/notifications_widget.dart",
+  "line": 93,
+  "props": [
+   "type"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Details of a game",
+  "file": "poteau-max/lib/games/game_details/game_details_widget.dart",
+  "line": 60,
+  "props": [
+   "centre_plan_status",
+   "centre_plan_next_renew",
+   "game_id"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Repeaters",
+  "file": "poteau-max/lib/games/repeaters/repeaters_widget.dart",
+  "line": 61,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Logged out (Not a Pro user)",
+  "file": "poteau-max/lib/games/repeaters/repeaters_widget.dart",
+  "line": 85,
+  "props": [
+   "type"
+  ],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Click on Add repeater",
+  "file": "poteau-max/lib/games/repeaters/repeaters_widget.dart",
+  "line": 435,
+  "props": [
+   "players",
+   "followers",
+   "played_since_1st",
+   "organized_since_1st",
+   "revenue_since_1st",
+   "centre_plan_status",
+   "centre_plan_next_renew"
+  ],
+  "risky": [
+   "centre_plan_next_renew"
+  ],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "History",
+  "file": "poteau-max/lib/games/history/history_widget.dart",
+  "line": 48,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Game created",
+  "file": "poteau-max/lib/games/create/create_widget.dart",
+  "line": 3909,
+  "props": [
+   "recurring",
+   "weekday",
+   "locale",
+   "time",
+   "locale",
+   "has_discount"
+  ],
+  "risky": [
+   "weekday",
+   "time"
+  ],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Authentication Page",
+  "file": "poteau-max/lib/authentication/authenticate/authenticate_widget.dart",
+  "line": 53,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": false
+ },
+ {
+  "app": "poteau-max",
+  "event": "Redirecting from URL",
+  "file": "poteau-max/lib/authentication/redirect/redirect_widget.dart",
+  "line": 61,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ },
+ {
+  "app": "poteau-max",
+  "event": "Signin successful",
+  "file": "poteau-max/lib/authentication/redirect/redirect_widget.dart",
+  "line": 86,
+  "props": [],
+  "risky": [],
+  "dynamic": null,
+  "user_props": true
+ }
+]

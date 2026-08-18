@@ -1,0 +1,3 @@
+#!/bin/bash
+# Audit Poteau Max (B2B) before release
+cd /Users/tmgnr/poteau-workspace/scripts/pre-release-audit && node index.js poteau-max

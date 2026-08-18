@@ -1,0 +1,994 @@
+[
+  {
+    "id": "0Hf380XosSni3f2Augmx",
+    "name_fr": "Eswatini"
+  },
+  {
+    "id": "0PNsNDk0oUO32r8vU1If",
+    "name_fr": "Tonga"
+  },
+  {
+    "id": "0PjBLQB0JqGKek5mawxJ",
+    "name_fr": "Corée du Sud"
+  },
+  {
+    "id": "0VXmSDSjqePmsPGMt3AC",
+    "name_fr": "Saint-Barthélemy"
+  },
+  {
+    "id": "0XQ7B6EuIKZJsdkxn8zb",
+    "name_fr": "Jordanie"
+  },
+  {
+    "id": "0q23qPPLR3NGA3Y8AcCh",
+    "name_fr": "Samoa américaines"
+  },
+  {
+    "id": "1Gi8y3VhIBlY9a1YXAmt",
+    "name_fr": "Guinée équatoriale"
+  },
+  {
+    "id": "1IrDLQCbyiNDcUTpGZfj",
+    "name_fr": "Guyane française"
+  },
+  {
+    "id": "1UyIlbsLn6lCp1GgbzwT",
+    "name_fr": "Réunion"
+  },
+  {
+    "id": "1oEn6qFGSrEzLNhuWVWX",
+    "name_fr": "Barbade"
+  },
+  {
+    "id": "23PHaYGZkJwY0oZUb0Uc",
+    "name_fr": "Tchad"
+  },
+  {
+    "id": "2NaKwnSB6AuKhzt2DI6o",
+    "name_fr": "Viêt Nam"
+  },
+  {
+    "id": "2alV1a9kcm6Lam5GtpzT",
+    "name_fr": "Svalbard et Jan Mayen"
+  },
+  {
+    "id": "3MgKmg7IwFAi9rbhggEa",
+    "name_fr": "Bulgarie"
+  },
+  {
+    "id": "3OZ736uTgSZaF35912M5",
+    "name_fr": "Serbie"
+  },
+  {
+    "id": "3U79m5l4tQo4kLlBeEDO",
+    "name_fr": "Royaume-Uni"
+  },
+  {
+    "id": "3YfOY0RSyYERjh0JuOyf",
+    "name_fr": "Afghanistan"
+  },
+  {
+    "id": "3aGsytzzCgvCML23IbvG",
+    "name_fr": "Micronésie"
+  },
+  {
+    "id": "3jf5Zjl5MkKwNewsyXXb",
+    "name_fr": "Ghana"
+  },
+  {
+    "id": "3uOkzz26xFRsDrceqRwI",
+    "name_fr": "Colombie"
+  },
+  {
+    "id": "3vtgl5BljY8xJtYukvmA",
+    "name_fr": "Saint-Pierre-et-Miquelon"
+  },
+  {
+    "id": "3wzfQL13fQz4cJJz378F",
+    "name_fr": "Antarctique"
+  },
+  {
+    "id": "46QFIZsNI2yDJwAjcYJY",
+    "name_fr": "Mauritanie"
+  },
+  {
+    "id": "4VsHWfrP53VuFw2k23e2",
+    "name_fr": "Corée du Nord"
+  },
+  {
+    "id": "4nc0fb6n3qlVAcC7JgmK",
+    "name_fr": "Panama"
+  },
+  {
+    "id": "4pOvuqyHLG1C9QSA56LS",
+    "name_fr": "Bahamas"
+  },
+  {
+    "id": "50Ye7UkGIjga6f1qleOu",
+    "name_fr": "Nigéria"
+  },
+  {
+    "id": "54OUUpTWqtY9dYbkfuyX",
+    "name_fr": "Norvège"
+  },
+  {
+    "id": "5NWGtQq8MmTGSUrLEB6O",
+    "name_fr": "Arménie"
+  },
+  {
+    "id": "5SPOypnQFDF9hyCMSaot",
+    "name_fr": "Indonésie"
+  },
+  {
+    "id": "5pmWCggJEl8Ask7AE77U",
+    "name_fr": "Sénégal"
+  },
+  {
+    "id": "5qmODeOz52rXNn6ZCBek",
+    "name_fr": "Érythrée"
+  },
+  {
+    "id": "5tZUEBYVdWlmaz5On05N",
+    "name_fr": "Zimbabwe"
+  },
+  {
+    "id": "5ye8UiIBXXO1iafSwepA",
+    "name_fr": "Togo"
+  },
+  {
+    "id": "5yt2MwF0OUpPFPFGATzs",
+    "name_fr": "Émirats Arabes Unis"
+  },
+  {
+    "id": "65lwp5sttewaOU5qA86h",
+    "name_fr": "Cameroun"
+  },
+  {
+    "id": "74DuW4WlkDNlxwy4mm55",
+    "name_fr": "Groenland"
+  },
+  {
+    "id": "75pauq4YScYnWECG4PZT",
+    "name_fr": "Îles Heard-et-MacDonald"
+  },
+  {
+    "id": "7FgFdxg43rG6rTBWXBHy",
+    "name_fr": "Niger"
+  },
+  {
+    "id": "7YAhutIMPaeGos2mXr7v",
+    "name_fr": "Dominique"
+  },
+  {
+    "id": "7hZqp33yZupdP2rQHHas",
+    "name_fr": "Zambie"
+  },
+  {
+    "id": "88eed9Ws4kYlxqZdzaxv",
+    "name_fr": "Irak"
+  },
+  {
+    "id": "8BRyQRgw2nFlHMW93C0N",
+    "name_fr": "Sint Maarten"
+  },
+  {
+    "id": "8J25JyVkKTm6UH8dko1q",
+    "name_fr": "Bénin"
+  },
+  {
+    "id": "8ORWbQAxVFNLEDQxTp2G",
+    "name_fr": "Sierra Leone"
+  },
+  {
+    "id": "8OVkWdwYem5ky7Mmx3DK",
+    "name_fr": "Territoire britannique de l'océan Indien"
+  },
+  {
+    "id": "8QvQnicDy9BTJBOeLHtG",
+    "name_fr": "Papouasie-Nouvelle-Guinée"
+  },
+  {
+    "id": "8U0ZzGbZk9OfgP1zoZmG",
+    "name_fr": "Îles Marshall"
+  },
+  {
+    "id": "8Ve9yctdpeKrK1jupgc0",
+    "name_fr": "Namibie"
+  },
+  {
+    "id": "8jPLUsc66ojtgsq8XM5w",
+    "name_fr": "Lettonie"
+  },
+  {
+    "id": "8x74o8PI1Exz5smbRzBn",
+    "name_fr": "Sao Tomé-et-Principe"
+  },
+  {
+    "id": "9HPrVnKSDY8h08vMvqpH",
+    "name_fr": "Venezuela"
+  },
+  {
+    "id": "9PZS8k4znkVwzrNpIe6c",
+    "name_fr": "Malawi"
+  },
+  {
+    "id": "9URlac9aFL7FLJiVPtKJ",
+    "name_fr": "Australie"
+  },
+  {
+    "id": "9ox7XUUP3FJUW6ouHJ7h",
+    "name_fr": "Maldives"
+  },
+  {
+    "id": "AIDaGjkcjAcfd3bDyJRc",
+    "name_fr": "Libye"
+  },
+  {
+    "id": "ASzrNpvkfKsdaFMN1Sg9",
+    "name_fr": "Canada"
+  },
+  {
+    "id": "BLWBfK2u6x5ek5LcLP11",
+    "name_fr": "Saint-Kitts-et-Nevis"
+  },
+  {
+    "id": "BRjFyUaf6zG2DjXNLGrp",
+    "name_fr": "Libéria"
+  },
+  {
+    "id": "CX6CcmhaQYvdzS942VJs",
+    "name_fr": "Bolivie"
+  },
+  {
+    "id": "CnfgCzNnJvXyTLnH1pTK",
+    "name_fr": "Mars"
+  },
+  {
+    "id": "CrOGeogF62hAz3YphU1K",
+    "name_fr": "Île Bouvet"
+  },
+  {
+    "id": "D0NbeMHqMvHDgT6gu3ou",
+    "name_fr": "Iran"
+  },
+  {
+    "id": "D3gTjswz3Tn5GbEuanB6",
+    "name_fr": "Malaisie"
+  },
+  {
+    "id": "DTyf8Totg4TTedyUc2r9",
+    "name_fr": "Hong Kong"
+  },
+  {
+    "id": "DkeXAalUSoe1wm9A8IkS",
+    "name_fr": "Union soviétique"
+  },
+  {
+    "id": "Dx9D1kii4zT1iZPJy0kI",
+    "name_fr": "France"
+  },
+  {
+    "id": "DzwhfxpBUFLp8NUifaf9",
+    "name_fr": "Maurice"
+  },
+  {
+    "id": "ELqNa5BA5aGq3w2CyV8K",
+    "name_fr": "Guam"
+  },
+  {
+    "id": "ErU7RjHB09RwhJlmqABY",
+    "name_fr": "Oman"
+  },
+  {
+    "id": "F4SMf1Ep7nbXSO5uNItI",
+    "name_fr": "Îles Cook"
+  },
+  {
+    "id": "FNGBgQllc49WJHJslX5Y",
+    "name_fr": "Îles Pitcairn"
+  },
+  {
+    "id": "FYPP7fDmd3NiWoDx8ylB",
+    "name_fr": "Comores"
+  },
+  {
+    "id": "FZsdXN6oDR5vXaoW785I",
+    "name_fr": "Espagne"
+  },
+  {
+    "id": "FchQ0pf9AUIdGB979M6J",
+    "name_fr": "Polynésie française"
+  },
+  {
+    "id": "G9txTVMxZi8dGYMAd70g",
+    "name_fr": "Burundi"
+  },
+  {
+    "id": "GHGEyCZqEHIgDokEVeYl",
+    "name_fr": "Ouzbékistan"
+  },
+  {
+    "id": "GJUDA3uegMnWv5AhoaCk",
+    "name_fr": "Macédoine du Nord"
+  },
+  {
+    "id": "GLsSYAesFR1qrZXDayzz",
+    "name_fr": "Madagascar"
+  },
+  {
+    "id": "Gnz5B28KmY2jUU0IKqYL",
+    "name_fr": "Suriname"
+  },
+  {
+    "id": "Gsc8ktX5IhGtVc12obvO",
+    "name_fr": "Ukraine"
+  },
+  {
+    "id": "H3HWkZS8pGVOEjv2k9CZ",
+    "name_fr": "Inde"
+  },
+  {
+    "id": "HcAldU1dz54W8f2sgPOW",
+    "name_fr": "Yémen"
+  },
+  {
+    "id": "HobNkITe9YhpZhNIcMwF",
+    "name_fr": "Vanuatu"
+  },
+  {
+    "id": "IIVjQJW3MqmsEHODlnGW",
+    "name_fr": "Paraguay"
+  },
+  {
+    "id": "IODEQ0ec85gQUbGgMU3a",
+    "name_fr": "Costa Rica"
+  },
+  {
+    "id": "IlPB7094NRklmTKteTzw",
+    "name_fr": "Gibraltar"
+  },
+  {
+    "id": "IpyyfDAkNQmI672L9ibq",
+    "name_fr": "Turkménistan"
+  },
+  {
+    "id": "ItTN6smVX58vsyWoRZEe",
+    "name_fr": "Népal"
+  },
+  {
+    "id": "JrUUsarejyFoqKasTtCY",
+    "name_fr": "Sri Lanka"
+  },
+  {
+    "id": "Jy0LlosVuJxhDpfTfsbu",
+    "name_fr": "Biélorussie"
+  },
+  {
+    "id": "KJHVwYQGmuv5LBGsDqgp",
+    "name_fr": "Îles Turques-et-Caïques"
+  },
+  {
+    "id": "KPFmyTXR5dUxkIHv02J3",
+    "name_fr": "Tchéquie"
+  },
+  {
+    "id": "KVVJ9arXh1UTtDeHV2hJ",
+    "name_fr": "Afrique du Sud"
+  },
+  {
+    "id": "M3TSkK7sfIzpJOUw0fMk",
+    "name_fr": "Grenade"
+  },
+  {
+    "id": "MCT7yECt6Lwi55ROx9iB",
+    "name_fr": "Danemark"
+  },
+  {
+    "id": "MKpZu9OVkQHphFzOV50G",
+    "name_fr": "Albanie"
+  },
+  {
+    "id": "MXJTfycSDm7BCCV1CtxB",
+    "name_fr": "Liban"
+  },
+  {
+    "id": "Ma8msNs5oH5e7lngZtw0",
+    "name_fr": "Éthiopie"
+  },
+  {
+    "id": "MljoSvagUZzlFW8rEmLK",
+    "name_fr": "Algérie"
+  },
+  {
+    "id": "N99LyDm2lgmk5UrkriTg",
+    "name_fr": "Fidji"
+  },
+  {
+    "id": "ND1t4LZLPblLuGve7Z90",
+    "name_fr": "Soudan du Sud"
+  },
+  {
+    "id": "NodGccy9yy1D0mCgN7vd",
+    "name_fr": "Koweït"
+  },
+  {
+    "id": "ONmjRthuSy6DUrbZoIOj",
+    "name_fr": "Liechtenstein"
+  },
+  {
+    "id": "OexJ4uduANDhHzgOhkug",
+    "name_fr": "Île Norfolk"
+  },
+  {
+    "id": "OroEkNq2kRqdwzBgRpBC",
+    "name_fr": "Gabon"
+  },
+  {
+    "id": "OwjGBu9f58CKkKpwQ92D",
+    "name_fr": "Botswana"
+  },
+  {
+    "id": "P8OcX27jyaURt3gWHwaA",
+    "name_fr": "Belgique"
+  },
+  {
+    "id": "PNNBbPz5K6jDRbEIDtXi",
+    "name_fr": "Terres australes et antarctiques françaises"
+  },
+  {
+    "id": "PXOYtFgzDA3oXa8BHBt9",
+    "name_fr": "Chypre"
+  },
+  {
+    "id": "QKb6n7NH5afTcfo1SNDM",
+    "name_fr": "Israël"
+  },
+  {
+    "id": "QR0HVRXWDiIZCSuWPgeM",
+    "name_fr": "Antigua-et-Barbuda"
+  },
+  {
+    "id": "QVQnXANlTIQsOYegZKd6",
+    "name_fr": "Mali"
+  },
+  {
+    "id": "QaG8baDmBJdArIRTdwkr",
+    "name_fr": "Roumanie"
+  },
+  {
+    "id": "Qn8QQSFJ0WD2gkA1ERpR",
+    "name_fr": "Guadeloupe"
+  },
+  {
+    "id": "Qz692FJaG3Sx05eDMJXO",
+    "name_fr": "Finlande"
+  },
+  {
+    "id": "QzlLAb2dxEKRS8fJoxi0",
+    "name_fr": "Kazakhstan"
+  },
+  {
+    "id": "RmmKcgz27oJaCWugxN9n",
+    "name_fr": "Saint-Marin"
+  },
+  {
+    "id": "S2S1qYzew31TLAfADq1U",
+    "name_fr": "Nicaragua"
+  },
+  {
+    "id": "STCTX4t6bcemZCDiqjnC",
+    "name_fr": "Hongrie"
+  },
+  {
+    "id": "Sb6Urquw8Vw13ikKnAAp",
+    "name_fr": "Luxembourg"
+  },
+  {
+    "id": "SiBLqblSwPRb5J3z6E2d",
+    "name_fr": "Slovénie"
+  },
+  {
+    "id": "SltWN1XyhjHU8r7iS1wa",
+    "name_fr": "Mexique"
+  },
+  {
+    "id": "TI9wGb5CHWWwqKGd5RM7",
+    "name_fr": "Saint-Martin"
+  },
+  {
+    "id": "U4DXtDLTLE5gLuxVzBSG",
+    "name_fr": "Monténégro"
+  },
+  {
+    "id": "UFoOVfcqcN1AtpeWtqjH",
+    "name_fr": "Pakistan"
+  },
+  {
+    "id": "UYKJEa7lNRDJdXpnFWn2",
+    "name_fr": "Cuba"
+  },
+  {
+    "id": "UgqingLOHdJymn5pg8on",
+    "name_fr": "Guernesey"
+  },
+  {
+    "id": "UqWhTP7vsFZBuHctkfji",
+    "name_fr": "République centrafricaine"
+  },
+  {
+    "id": "UzxUO2yqDUY7yzvJ3JoQ",
+    "name_fr": "Trinité-et-Tobago"
+  },
+  {
+    "id": "V0J1e3AcsOQviXQp34h1",
+    "name_fr": "Azerbaïdjan"
+  },
+  {
+    "id": "V5ArSY1AtZKYerkSi6Qd",
+    "name_fr": "Estonie"
+  },
+  {
+    "id": "VQGjB5yjdbuD9ADOsM04",
+    "name_fr": "Congo"
+  },
+  {
+    "id": "VswI1GNeMxphjgV3tSsK",
+    "name_fr": "Îles Mariannes du Nord"
+  },
+  {
+    "id": "VxSA5NpKC43nGzvA4VJG",
+    "name_fr": "Curaçao"
+  },
+  {
+    "id": "W2ndvagZCBNAXJLgjAJk",
+    "name_fr": "Qatar"
+  },
+  {
+    "id": "WgZqmD0biEuVxsdBo7hS",
+    "name_fr": "Somalie"
+  },
+  {
+    "id": "Wzz8NVBE5vYzfOjap5Sv",
+    "name_fr": "Montserrat"
+  },
+  {
+    "id": "XBqoOM0Wf7HNP6llJsHu",
+    "name_fr": "Portugal"
+  },
+  {
+    "id": "XGScNpGJlLrKiNThkZ4K",
+    "name_fr": "Niue"
+  },
+  {
+    "id": "XOzbBv1grE64JR7TFDV5",
+    "name_fr": "Géorgie du Sud-et-les îles Sandwich du Sud"
+  },
+  {
+    "id": "XP91Xh5mxPReRIEwi8DY",
+    "name_fr": "Guyana"
+  },
+  {
+    "id": "YQTKo3wrdZHSCLsxeoWJ",
+    "name_fr": "Cambodge"
+  },
+  {
+    "id": "YRujPeBrATedEcbfPJUr",
+    "name_fr": "Géorgie"
+  },
+  {
+    "id": "YmKZmKnBcTMgJnNwzIF1",
+    "name_fr": "Rwanda"
+  },
+  {
+    "id": "Z3tUbwF0M7ptkh7V0Ymh",
+    "name_fr": "Guatemala"
+  },
+  {
+    "id": "ZLIqVM8TxYdvgrw9PqOB",
+    "name_fr": "Nouvelle-Calédonie"
+  },
+  {
+    "id": "Zijvz2hbUkyjz8mLEjIO",
+    "name_fr": "Gambie"
+  },
+  {
+    "id": "ZipFNYFvcqHdkBubx7Wg",
+    "name_fr": "Tanzanie"
+  },
+  {
+    "id": "a6cJZMx2MIjjaPg5q7C0",
+    "name_fr": "Bosnie-Herzégovine"
+  },
+  {
+    "id": "aHIsmHBteHhHVwGuEk0R",
+    "name_fr": "Jamaïque"
+  },
+  {
+    "id": "aHRMW9T5iD62XJg54x24",
+    "name_fr": "Andorre"
+  },
+  {
+    "id": "aaNdXkBv6ONVyQdtgk9B",
+    "name_fr": "Syrie"
+  },
+  {
+    "id": "bHMJcYwjvnfnyW9XtVv9",
+    "name_fr": "Bangladesh"
+  },
+  {
+    "id": "c49xp5aPl1JmKJSeVmwP",
+    "name_fr": "Myanmar"
+  },
+  {
+    "id": "cRBeLeUKv0eoIL1AaxJC",
+    "name_fr": "Égypte"
+  },
+  {
+    "id": "cy9eRNXWWMWYjG9ucHLM",
+    "name_fr": "Moldavie"
+  },
+  {
+    "id": "d4Lykc0Z8lkmKe6WCdco",
+    "name_fr": "Pays-Bas"
+  },
+  {
+    "id": "dGLwiHpEVx4mwIl3sdk4",
+    "name_fr": "Chine"
+  },
+  {
+    "id": "di6WbGP3GqJaAqw5BFLP",
+    "name_fr": "Bermudes"
+  },
+  {
+    "id": "dr1IjF9bHO9Ionul8ygl",
+    "name_fr": "Djibouti"
+  },
+  {
+    "id": "eYew4gVSvAs9pxLooze5",
+    "name_fr": "Tokelau"
+  },
+  {
+    "id": "fHWhmv6e9BhDrXwVCKov",
+    "name_fr": "Arabie saoudite"
+  },
+  {
+    "id": "fHxYpW9zwPi1rdKhj9dl",
+    "name_fr": "Palaos"
+  },
+  {
+    "id": "fMoPqAOcrIwE12qf3Rod",
+    "name_fr": "Singapour"
+  },
+  {
+    "id": "gAykOI1YXal9mOdaSaVV",
+    "name_fr": "Turquie"
+  },
+  {
+    "id": "gJ019kTnFzkhd6v2oX3E",
+    "name_fr": "Uruguay"
+  },
+  {
+    "id": "gfHSlSL5sAQ42jakniS5",
+    "name_fr": "Ouganda"
+  },
+  {
+    "id": "hBRO5GJwDmmV3jUKwjFL",
+    "name_fr": "Lituanie"
+  },
+  {
+    "id": "hEHUN6WTfyUORS5LCEQA",
+    "name_fr": "Île de Man"
+  },
+  {
+    "id": "hUxia0HLFWh3DvH5DOuz",
+    "name_fr": "Suède"
+  },
+  {
+    "id": "hwVt4hJ66gKL0VzNSTuR",
+    "name_fr": "Tuvalu"
+  },
+  {
+    "id": "iT14qS4pm4Qfnfeifp6u",
+    "name_fr": "Congo, République démocratique du"
+  },
+  {
+    "id": "id3RqlsNuKenMTWfHvfp",
+    "name_fr": "Sercq"
+  },
+  {
+    "id": "ij15Xvn9GCSiJvWUpdpM",
+    "name_fr": "Martinique"
+  },
+  {
+    "id": "im0qj5v5oesYADPqHIz2",
+    "name_fr": "Brésil"
+  },
+  {
+    "id": "imtBOhVzTILEtHrLccbi",
+    "name_fr": "Îles Féroé"
+  },
+  {
+    "id": "irXzbE4Wf5XQRDrCF6Z6",
+    "name_fr": "Antilles néerlandaises"
+  },
+  {
+    "id": "isCALFD4vW3AWLyVoMVg",
+    "name_fr": "Angola"
+  },
+  {
+    "id": "jQ2BaUt4qAXda4WTFibc",
+    "name_fr": "Yougoslavie"
+  },
+  {
+    "id": "jcDfWOWCOaXcrLra4022",
+    "name_fr": "Kirghizistan"
+  },
+  {
+    "id": "jjdHtuJZhrQLQdvdkOw1",
+    "name_fr": "Tunisie"
+  },
+  {
+    "id": "jzuhHfvJ7II5W8Lhm6Xy",
+    "name_fr": "Croatie"
+  },
+  {
+    "id": "kH6lodJyDIdIls5NjLD7",
+    "name_fr": "Timor oriental"
+  },
+  {
+    "id": "kMvTgfQCppzmDLGYlzpX",
+    "name_fr": "Mongolie"
+  },
+  {
+    "id": "kXplhhBiunaF6AM2xkqp",
+    "name_fr": "Malte"
+  },
+  {
+    "id": "kZcIMkLLyGFG3wlyhDVE",
+    "name_fr": "Ceuta"
+  },
+  {
+    "id": "ki8Jm72Ur8wCnBzF4Orx",
+    "name_fr": "Cap-Vert"
+  },
+  {
+    "id": "lUbPmFuQSX0JftqdXbap",
+    "name_fr": "Wallis-et-Futuna"
+  },
+  {
+    "id": "lWoyok57XoK8u84eXubz",
+    "name_fr": "Pérou"
+  },
+  {
+    "id": "m5E4KJLLt407ePfTjWNZ",
+    "name_fr": "Jersey"
+  },
+  {
+    "id": "mBu95YaZtbLeuWjKzL1c",
+    "name_fr": "Îles Åland"
+  },
+  {
+    "id": "nGjmWR83gTtx9hVN1Qd7",
+    "name_fr": "Kosovo"
+  },
+  {
+    "id": "nHSUjAJi2LqkpXU1VTWJ",
+    "name_fr": "Belize"
+  },
+  {
+    "id": "nNgVcSPW09D6zMo3gSKa",
+    "name_fr": "Islande"
+  },
+  {
+    "id": "nUPA76HuBfWfl7r1VINM",
+    "name_fr": "Argentine"
+  },
+  {
+    "id": "nopqOEp3sSU8HN0EYMwp",
+    "name_fr": "Irlande"
+  },
+  {
+    "id": "o8r41rVva23yQV1B2pqC",
+    "name_fr": "Mozambique"
+  },
+  {
+    "id": "of7LYfhAJaKFdKfg3hET",
+    "name_fr": "Japon"
+  },
+  {
+    "id": "okueXcjmhveflHZaw2yK",
+    "name_fr": "Kenya"
+  },
+  {
+    "id": "omGioGm7qSZOSAGT71Hf",
+    "name_fr": "États-Unis"
+  },
+  {
+    "id": "oymdfi4XthVhjOXEwpj4",
+    "name_fr": "Maroc"
+  },
+  {
+    "id": "ozzQT3i6WHGpvzpRF8wk",
+    "name_fr": "Guinée"
+  },
+  {
+    "id": "p3NxZrfCxnp8pMUVkASN",
+    "name_fr": "Mayotte"
+  },
+  {
+    "id": "pNkfOrGwsqpzFqqoL0vu",
+    "name_fr": "Burkina Faso"
+  },
+  {
+    "id": "q2bdjik3WBwqFNPfwv5q",
+    "name_fr": "Taïwan"
+  },
+  {
+    "id": "qE1TfS7pTD0PDJ0hfA4V",
+    "name_fr": "Îles Caïmans"
+  },
+  {
+    "id": "qLzi3BRUM2fEQzq9o22H",
+    "name_fr": "Kiribati"
+  },
+  {
+    "id": "qTNlmqGJDms2APhL9ETE",
+    "name_fr": "Macao"
+  },
+  {
+    "id": "qf6GLL659BT4Q2aI9tob",
+    "name_fr": "Palestine"
+  },
+  {
+    "id": "qkazdaNm7bTDqV0O1BkN",
+    "name_fr": "Autriche"
+  },
+  {
+    "id": "rC0gCRwa362limgrM22T",
+    "name_fr": "Nouvelle-Zélande"
+  },
+  {
+    "id": "rK3W3aB8SdLgzYyHrxrj",
+    "name_fr": "Brunéi"
+  },
+  {
+    "id": "rs9ADuTESjZP6NqBCJng",
+    "name_fr": "Anguilla"
+  },
+  {
+    "id": "s6dRMUncoKdEjYAWhJnl",
+    "name_fr": "Allemagne"
+  },
+  {
+    "id": "sW4cZjg31JYjvaMrJgyV",
+    "name_fr": "Suisse"
+  },
+  {
+    "id": "sZ5uxamJvZMjATyUkr4W",
+    "name_fr": "Lesotho"
+  },
+  {
+    "id": "swwGXBZ4fkL7DQPNYha7",
+    "name_fr": "Côte d'Ivoire"
+  },
+  {
+    "id": "t0k63b1pHgzhN8hxfRgi",
+    "name_fr": "Îles Salomon"
+  },
+  {
+    "id": "tQT9c6EtC9Hsce0fuT37",
+    "name_fr": "Porto Rico"
+  },
+  {
+    "id": "tjml0PhGWVCwOuiL1ohn",
+    "name_fr": "Pologne"
+  },
+  {
+    "id": "tlrlSYEWw0V3phVv99KZ",
+    "name_fr": "Grèce"
+  },
+  {
+    "id": "twEhGeENC5eyCFJHL1AQ",
+    "name_fr": "Équateur"
+  },
+  {
+    "id": "utYhstVBx5PihD4wtdDG",
+    "name_fr": "Monaco"
+  },
+  {
+    "id": "uz1IOF5V5SJG9bEfhTg3",
+    "name_fr": "Salvador"
+  },
+  {
+    "id": "vH3m5reJOlCiBDaiUyVX",
+    "name_fr": "Tadjikistan"
+  },
+  {
+    "id": "vUQbUWu3F4W5fDS93meN",
+    "name_fr": "Soudan"
+  },
+  {
+    "id": "vW4IcP0mSexGf3be8SY8",
+    "name_fr": "Île Christmas"
+  },
+  {
+    "id": "vb28TSxPbq3c9ZDNqgTL",
+    "name_fr": "Aruba"
+  },
+  {
+    "id": "vbc1FPFDvT6xqicQtl20",
+    "name_fr": "Thaïlande"
+  },
+  {
+    "id": "vjgznMuc58ZvM7XzL8vv",
+    "name_fr": "Philippines"
+  },
+  {
+    "id": "vzTvqEYJdCLY2ZRWD8lA",
+    "name_fr": "Nauru"
+  },
+  {
+    "id": "wDsls4E0o0ykVN1nFfyA",
+    "name_fr": "Guinée-Bissau"
+  },
+  {
+    "id": "wgRD9kNhPNCUIbjxonpa",
+    "name_fr": "Saint-Vincent-et-les-Grenadines"
+  },
+  {
+    "id": "wlr4GkBx3N8QrjTAYebh",
+    "name_fr": "Bhoutan"
+  },
+  {
+    "id": "xEAROPB6oFwSHf8UaUY4",
+    "name_fr": "Honduras"
+  },
+  {
+    "id": "xQKazMXasPDl5dZuYNOu",
+    "name_fr": "Sainte-Lucie"
+  },
+  {
+    "id": "xTidIBuLZlXoWQvUepIa",
+    "name_fr": "Chili"
+  },
+  {
+    "id": "xWZiItd1xse1cB6YSpaR",
+    "name_fr": "Seychelles"
+  },
+  {
+    "id": "xt0B0VD0HrTTKplegtap",
+    "name_fr": "Slovaquie"
+  },
+  {
+    "id": "y2ucpd9UGA2HPAaB68OI",
+    "name_fr": "Bahreïn"
+  },
+  {
+    "id": "yZwdJBBocKEzbjWY5lc5",
+    "name_fr": "Laos"
+  },
+  {
+    "id": "yijWdyfKCsirUyVfjv6O",
+    "name_fr": "Samoa"
+  },
+  {
+    "id": "yn6FSmgRWdUvWPQ4ZDEb",
+    "name_fr": "Italie"
+  },
+  {
+    "id": "ywymXe7rMn8rGICuHOYo",
+    "name_fr": "République dominicaine"
+  },
+  {
+    "id": "zFqeqx6Nh9Nn9Gf0Ugcg",
+    "name_fr": "Haïti"
+  },
+  {
+    "id": "zLWKjsKkVhqF5Ce747gJ",
+    "name_fr": "Sahara occidental"
+  },
+  {
+    "id": "zwH47XvRd2iBVH7aSdou",
+    "name_fr": "Russie"
+  }
+]

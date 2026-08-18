@@ -1,0 +1,788 @@
+{
+  "soccer": {
+    "forward": {
+      "defence": {
+        "question9": {
+          "answer1": "Me quedo quejándome",
+          "answer2": "Finjo presionar",
+          "answer3": "Presiono sin creerlo",
+          "answer4": "Dificulto la relanza",
+          "answer5": "Provoco el error",
+          "answer6": "Recupero o hago retroceder al adversario",
+          "question": "Pierdes un balón alto, el rival lanza un contraataque..."
+        },
+        "question10": {
+          "answer1": "No defiendo",
+          "answer2": "Estoy demasiado lejos para intervenir",
+          "answer3": "Me acerco pero demasiado tarde",
+          "answer4": "Fuerzo un pase hacia atrás",
+          "answer5": "Corto su opción de pase",
+          "answer6": "Le impido totalmente relanzar",
+          "question": "Estás defendiendo a un rival que se está armando desde el fondo..."
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "answer1": "Me atrapan sin driblar",
+          "answer2": "Intento un regate lento",
+          "answer3": "Lo paso pero pierdo el balón después",
+          "answer4": "Lo elimino con fuerza",
+          "answer5": "Driblo y disparo de inmediato",
+          "answer6": "Lo paso limpiamente y marco",
+          "question": "Te enfrentas a un defensor 1 a 1 en los últimos 10 metros..."
+        },
+        "question8": {
+          "answer1": "Pierdo el balón directo",
+          "answer2": "Lo mantengo un instante y luego lo pierdo",
+          "answer3": "Me doy la vuelta pero es arriesgado",
+          "answer4": "Me protejo y juego hacia atrás",
+          "answer5": "Me las arreglo bajo presión",
+          "answer6": "Me doy la vuelta y avanzo con el balón",
+          "question": "Recibes el balón presionado, debes salir de ahí..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Salgo tarde",
+          "answer2": "Salgo pero me alcanzan",
+          "answer3": "Tomo ventaja pero me pasan mal el balón",
+          "answer4": "Estoy bien lanzado pero disminuyo la velocidad",
+          "answer5": "Tomo el espacio y me pasan el balón",
+          "answer6": "Ya estoy adelante y me dirijo al gol",
+          "question": "Estás haciendo una carrera en profundidad en un contraataque rápido..."
+        },
+        "question2": {
+          "answer1": "Me quedo estático",
+          "answer2": "Salgo pero estoy fuera de tiempo",
+          "answer3": "Corro por el centro sin convicción",
+          "answer4": "Hago un pase medio",
+          "answer5": "Inicio un pase decisivo",
+          "answer6": "Salgo en el momento justo y me encuentran",
+          "question": "Tu compañero inicia un contraataque, quieres el balón..."
+        }
+      },
+      "passing": {
+        "question5": {
+          "answer1": "Ni siquiera lo veo",
+          "answer2": "Lo veo pero mantengo el balón",
+          "answer3": "Intento el pase demasiado tarde",
+          "answer4": "Se la paso un poco detrás de él",
+          "answer5": "Lo asisto bien para un tiro",
+          "answer6": "Lo asisto perfectamente en el momento adecuado",
+          "question": "Un compañero está libre a tu izquierda durante una jugada intensa..."
+        },
+        "question6": {
+          "answer1": "Tardo en pasar",
+          "answer2": "Fallo el pase de apoyo",
+          "answer3": "Combino pero muy lento",
+          "answer4": "La doy y arranco tímido",
+          "answer5": "Juego rápido y me relanzo",
+          "answer6": "Hago una combinación clara y rápida",
+          "question": "Haces un uno-dos en la zona de ataque..."
+        }
+      },
+      "physicality": {
+        "question11": {
+          "answer1": "Pierdo el duelo en el impacto",
+          "answer2": "Salto demasiado pronto o no salto",
+          "answer3": "Lo incomodo pero pierdo el balón",
+          "answer4": "Gano la posición sin el balón",
+          "answer5": "Controlo a pesar del contacto",
+          "answer6": "Gano el duelo y conservo",
+          "question": "Necesitas luchar con un defensor por un balón largo…"
+        },
+        "question12": {
+          "answer1": "Me mueven y caigo",
+          "answer2": "Pierdo el balón en el pivote",
+          "answer3": "Lo mantengo un poco y luego lo pierdo",
+          "answer4": "Mantengo de espaldas al arco y luego abro",
+          "answer5": "Me doy vuelta y hago jugar",
+          "answer6": "Aguanto perfectamente y creo juego",
+          "question": "Estás jugando de pívot con un defensor detrás de ti..."
+        }
+      },
+      "shooting": {
+        "question3": {
+          "answer1": "Entro en pánico y tiro afuera",
+          "answer2": "Tiro directo al portero",
+          "answer3": "Disparo demasiado suave",
+          "answer4": "Apunto sin engañarlo",
+          "answer5": "Hago un buen tiro, el portero está vencido",
+          "answer6": "Marco con tranquilidad",
+          "question": "Recibes un pase por el centro, cara a cara con el portero..."
+        },
+        "question4": {
+          "answer1": "Fallo mi control",
+          "answer2": "Me doy la vuelta demasiado lento",
+          "answer3": "Disparo sin equilibrio",
+          "answer4": "Me doy la vuelta y tiro al arco",
+          "answer5": "Me doy la vuelta rápido y golpeo bien",
+          "answer6": "Me doy la vuelta fluido y marco",
+          "question": "Estás de espaldas al arco, te das la vuelta para disparar..."
+        }
+      },
+      "meta": {
+        "question13": {
+          "answer1": "Muy raramente, casi nunca",
+          "answer2": "Una vez cada 2-3 meses",
+          "answer3": "Aproximadamente una vez al mes",
+          "answer4": "Aproximadamente 2 veces al mes",
+          "answer5": "Casi todas las semanas",
+          "answer6": "Todas las semanas, incluso más",
+          "question": "¿Juegas seguido al fútbol?"
+        },
+        "question14": {
+          "answer1": "Ser aplastado cada vez",
+          "answer2": "Perder a menudo",
+          "answer3": "Perder/ganar, depende",
+          "answer4": "Ganar un poco más de lo que pierde",
+          "answer5": "Ganar a menudo",
+          "answer6": "Ganar casi todo el tiempo",
+          "question": "Cuando juegas, tu equipo suele..."
+        },
+        "question15": {
+          "answer1": "Partidas improvisadas",
+          "answer2": "Partidas tranquilas",
+          "answer3": "Un five entre amigos",
+          "answer4": "Buenas partidas organizadas",
+          "answer5": "En torneo o liga",
+          "answer6": "Partidas muy serias",
+          "question": "¿En qué tipo de partidas juegas más seguido?"
+        },
+        "question16": {
+          "answer1": "El que eligen de último",
+          "answer2": "A menudo en apuros",
+          "answer3": "Correcto sin más",
+          "answer4": "Bastante confiable",
+          "answer5": "Uno de los buenos",
+          "answer6": "Uno de los mejores",
+          "question": "En tu equipo, eres más bien..."
+        },
+        "question17": {
+          "answer1": "Claramente me sobrevaloro",
+          "answer2": "Presumo un poco",
+          "answer3": "Veo a menudo el lado bueno",
+          "answer4": "Intento ser honesto",
+          "answer5": "Soy bastante objetivo",
+          "answer6": "Soy súper lúcido (incluso sobre mis defectos)",
+          "question": "Cuando hablas de tu nivel, eres más bien..."
+        },
+        "question18": {
+          "answer1": "Estoy en el fondo del barril",
+          "answer2": "No soy muy bueno",
+          "answer3": "Me las arreglo",
+          "answer4": "Estoy en la media alta",
+          "answer5": "A menudo estoy entre los mejores",
+          "answer6": "Estoy por encima del promedio",
+          "question": "Entre tus amigos que también juegan, ¿en qué nivel estás?"
+        },
+        "question19": {
+          "answer1": "Siempre en otro lado",
+          "answer2": "Me desconcentro a menudo",
+          "answer3": "Depende del momento",
+          "answer4": "Más bien concentrado",
+          "answer5": "Casi todo el partido enfocado",
+          "answer6": "Nada me desconcentra",
+          "question": "En cuanto a concentración, en el campo, eres..."
+        },
+        "question20": {
+          "answer1": "Reír, no tomarme en serio",
+          "answer2": "Desahogarme un poco",
+          "answer3": "Pasar un buen rato entre amigos",
+          "answer4": "Ser útil para el equipo",
+          "answer5": "Ganar si es posible",
+          "answer6": "Ganar, sin importar cómo",
+          "question": "Lo más importante para ti es..."
+        }
+      }
+    },
+    "defender": {
+      "defence": {
+        "question9": {
+          "answer1": "Dejo demasiado espacio",
+          "answer2": "Retrocedo sin intervenir",
+          "answer3": "Lo ralentizo pero pasa",
+          "answer4": "Lo empujo a jugar por el lado",
+          "answer5": "Bloqueo el ángulo de tiro",
+          "answer6": "Corto su carrera limpiamente",
+          "question": "Un jugador entra en tu zona manejando el balón..."
+        },
+        "question10": {
+          "answer1": "Me pasa sin que reaccione",
+          "answer2": "Entré tarde y cometí falta",
+          "answer3": "Lo freno un poco pero pasa",
+          "answer4": "Me mantengo de pie y lo incomodo bien",
+          "answer5": "Le impido disparar",
+          "answer6": "Recupero limpiamente sin falta",
+          "question": "Un delantero intenta pasarte en un uno contra uno..."
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "answer1": "Me detengo, no sé qué hacer",
+          "answer2": "Intento un regate y me quitan el balón",
+          "answer3": "Me detengo y pierdo el balón",
+          "answer4": "Lo elimino por poco",
+          "answer5": "Lo regateo y luego paso",
+          "answer6": "Lo fijo y encadeno perfectamente",
+          "question": "Llevas el balón al campo rival, un oponente te enfrenta..."
+        },
+        "question8": {
+          "answer1": "Pierdo el balón en el primer contacto",
+          "answer2": "Despejo contra el muro",
+          "answer3": "Me las arreglo con un contra favorable",
+          "answer4": "Mantengo la pelota apretando los dientes",
+          "answer5": "Lo regateo por poco",
+          "answer6": "Lo fijo y salgo limpio",
+          "question": "Un delantero te está presionando fuerte, debes salir del duelo..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Casi no me muevo",
+          "answer2": "Doy unos pasos sin convicción",
+          "answer3": "Regreso pero demasiado tarde",
+          "answer4": "Regreso justo a tiempo para molestar",
+          "answer5": "Estoy presente en el duelo en el área",
+          "answer6": "Regresé antes que él e intercepto",
+          "question": "El rival contraataca, tienes que regresar rápido…"
+        },
+        "question2": {
+          "answer1": "Me dejan atrás sin poder reaccionar",
+          "answer2": "Corro pero toma mucha ventaja",
+          "answer3": "Lo sigo con dificultad hasta el área",
+          "answer4": "Regreso a tiempo pero sin poder intervenir",
+          "answer5": "Regreso y lo empujo a disparar rápido",
+          "answer6": "Lo alcanzo y corto la acción",
+          "question": "Un delantero te gana en velocidad con un pase en profundidad…"
+        }
+      },
+      "passing": {
+        "question5": {
+          "answer1": "Entro en pánico y pierdo la pelota",
+          "answer2": "Lanzo sin apuntar",
+          "answer3": "Mantengo el balón sin solución",
+          "answer4": "Me las arreglo con un pase lateral",
+          "answer5": "Me doy la vuelta y encuentro una buena opción",
+          "answer6": "Mantengo la calma y relanzo limpio",
+          "question": "Bajo presión, tienes que encontrar una solución rápida…"
+        },
+        "question6": {
+          "answer1": "Tardo y pierdo la pelota",
+          "answer2": "Paso corto, el adversario intercepta",
+          "answer3": "Juego al pie bajo presión",
+          "answer4": "Encuentro un compañero de apoyo",
+          "answer5": "Rompo una línea con el pase",
+          "answer6": "Lanzo a un compañero al espacio",
+          "question": "Sales limpio con el balón, un jugador se desmarca…"
+        }
+      },
+      "physicality": {
+        "question11": {
+          "answer1": "Ya no puedo correr",
+          "answer2": "Me quedo detrás de la acción",
+          "answer3": "Regreso al trote",
+          "answer4": "Regreso lento pero seguro",
+          "answer5": "Estoy en el duelo a pesar del cansancio",
+          "answer6": "Sprinto e intercepto la acción",
+          "question": "Al final del partido, el equipo contrario lanza un contraataque..."
+        },
+        "question12": {
+          "answer1": "Me mueven fácilmente",
+          "answer2": "Caigo al contacto",
+          "answer3": "Resisto pero él pasa igual",
+          "answer4": "Lo mantengo en desequilibrio",
+          "answer5": "Gano el duelo cuerpo a cuerpo",
+          "answer6": "Lo apago físicamente sin falta",
+          "question": "Tienes que contener a un delantero que te empuja por detrás..."
+        }
+      },
+      "shooting": {
+        "question3": {
+          "answer1": "Fallo completamente mi tiro",
+          "answer2": "Le pego por encima en la precipitación",
+          "answer3": "Tiro sin control y es flojo",
+          "answer4": "Le pego bien pero es detenida",
+          "answer5": "Apunto bien pero es bloqueada",
+          "answer6": "Le pego fuerte y es gol",
+          "question": "El balón anda rondando el borde del área rival..."
+        },
+        "question4": {
+          "answer1": "No intento nada",
+          "answer2": "Tiro sin impulso, lejos del arco",
+          "answer3": "Tiro demasiado al portero",
+          "answer4": "Disparo correcto",
+          "answer5": "Apunto y el portero tiene que intervenir",
+          "answer6": "Marco con un tiro limpio",
+          "question": "Recuperas el balón arriba con algo de espacio delante de ti..."
+        }
+      },
+      "meta": {
+        "question13": {
+          "answer1": "Muy raramente, casi nunca",
+          "answer2": "Una vez cada 2-3 meses",
+          "answer3": "Aproximadamente una vez al mes",
+          "answer4": "Aproximadamente 2 veces al mes",
+          "answer5": "Casi todas las semanas",
+          "answer6": "Todas las semanas, incluso más",
+          "question": "¿Juegas seguido al fútbol?"
+        },
+        "question14": {
+          "answer1": "Ser aplastado cada vez",
+          "answer2": "Perder a menudo",
+          "answer3": "Perder/ganar, depende",
+          "answer4": "Ganar un poco más de lo que pierde",
+          "answer5": "Ganar a menudo",
+          "answer6": "Ganar casi todo el tiempo",
+          "question": "Cuando juegas, tu equipo suele..."
+        },
+        "question15": {
+          "answer1": "Partidas improvisadas",
+          "answer2": "Partidas tranquilas",
+          "answer3": "Un five entre amigos",
+          "answer4": "Buenas partidas organizadas",
+          "answer5": "En torneo o liga",
+          "answer6": "Partidas muy serias",
+          "question": "¿En qué tipo de partidas juegas más seguido?"
+        },
+        "question16": {
+          "answer1": "El que eligen de último",
+          "answer2": "A menudo en apuros",
+          "answer3": "Correcto sin más",
+          "answer4": "Bastante confiable",
+          "answer5": "Uno de los buenos",
+          "answer6": "Uno de los mejores",
+          "question": "En tu equipo, eres más bien..."
+        },
+        "question17": {
+          "answer1": "Claramente me sobrevaloro",
+          "answer2": "Presumo un poco",
+          "answer3": "Veo a menudo el lado bueno",
+          "answer4": "Intento ser honesto",
+          "answer5": "Soy bastante objetivo",
+          "answer6": "Soy súper lúcido (incluso sobre mis defectos)",
+          "question": "Cuando hablas de tu nivel, eres más bien..."
+        },
+        "question18": {
+          "answer1": "Estoy en el fondo del barril",
+          "answer2": "No soy muy bueno",
+          "answer3": "Me las arreglo",
+          "answer4": "Estoy en la media alta",
+          "answer5": "A menudo estoy entre los mejores",
+          "answer6": "Estoy por encima del promedio",
+          "question": "Entre tus amigos que también juegan, ¿en qué nivel estás?"
+        },
+        "question19": {
+          "answer1": "Siempre en otro lado",
+          "answer2": "Me desconcentro a menudo",
+          "answer3": "Depende del momento",
+          "answer4": "Más bien concentrado",
+          "answer5": "Casi todo el partido enfocado",
+          "answer6": "Nada me desconcentra",
+          "question": "En cuanto a concentración, en el campo, eres..."
+        },
+        "question20": {
+          "answer1": "Reír, no tomarme en serio",
+          "answer2": "Desahogarme un poco",
+          "answer3": "Pasar un buen rato entre amigos",
+          "answer4": "Ser útil para el equipo",
+          "answer5": "Ganar si es posible",
+          "answer6": "Ganar, sin importar cómo",
+          "question": "Lo más importante para ti es..."
+        }
+      }
+    },
+    "goalkeeper": {
+      "1-on-1": {
+        "question5": {
+          "answer1": "Me eliminan directo",
+          "answer2": "Me lanzo demasiado tarde",
+          "answer3": "Me tiro pero no toco nada",
+          "answer4": "Molesto lo suficiente para ralentizar",
+          "answer5": "Recupero el balón deslizándome",
+          "answer6": "Tomo el balón limpiamente",
+          "question": "En tu área, un duelo en el suelo..."
+        },
+        "question6": {
+          "answer1": "Me quedo en mi línea y lo sufro",
+          "answer2": "Dudo en salir",
+          "answer3": "Cubro mal el ángulo",
+          "answer4": "Lo empujo a tirar rápido",
+          "answer5": "La toco lo justo para evitarlo",
+          "answer6": "Gano el duelo sin contacto",
+          "question": "Un delantero viene hacia ti..."
+        }
+      },
+      "communication": {
+        "question11": {
+          "answer1": "Dejo que pase",
+          "answer2": "Me quejo cuando ya es tarde",
+          "answer3": "Hablo al aire",
+          "answer4": "Les advierto sin mucha convicción",
+          "answer5": "Les pido que se reubiquen",
+          "answer6": "Los reubico y reaccionan de inmediato",
+          "question": "Dos defensores se estorban en el área..."
+        },
+        "question12": {
+          "answer1": "No digo nada, solo miro",
+          "answer2": "Aviso demasiado tarde",
+          "answer3": "El defensor no me escucha",
+          "answer4": "El defensor me oye pero no reacciona",
+          "answer5": "Mi defensor entiende y tarda en adaptarse",
+          "answer6": "Lo señalo fuerte y claro, él se encarga",
+          "question": "Un jugador contrario está merodeando solo detrás de tu defensor..."
+        }
+      },
+      "footwork": {
+        "question9": {
+          "answer1": "Directo a los pies de un rival",
+          "answer2": "Demasiado lento, tienen tiempo de volver",
+          "answer3": "En alto, pero es impreciso",
+          "answer4": "Largo, hacia un compañero en duelo",
+          "answer5": "A ras de suelo en el espacio libre",
+          "answer6": "Rápido y preciso, en la carrera de un compañero",
+          "question": "Después de una jugada, los defensores rivales subieron. Tú reinicias..."
+        },
+        "question10": {
+          "answer1": "Entro en pánico y fallo mi control",
+          "answer2": "Despejo de cualquier manera",
+          "answer3": "Devuelvo la pelota al adversario",
+          "answer4": "Controlo pero pierdo tiempo",
+          "answer5": "Juego simple hacia un compañero",
+          "answer6": "Lo elimino y relanzo limpiamente",
+          "question": "Tu defensor te pasa el balón, pero el delantero te está presionando..."
+        }
+      },
+      "positioning": {
+        "question7": {
+          "answer1": "Me quedo inmóvil, es gol",
+          "answer2": "Me lanzo tarde",
+          "answer3": "Intento seguir el balón durante la combinación",
+          "answer4": "La toco sin sacarla",
+          "answer5": "Rechazo por reflejo",
+          "answer6": "La detengo limpiamente",
+          "question": "Después de una pared rápida frente al arco, el delantero dispara…"
+        },
+        "question8": {
+          "answer1": "Dejo un hueco y entra",
+          "answer2": "Estoy mal posicionado y reacciono tarde",
+          "answer3": "Intento cerrar pero es demasiado justo",
+          "answer4": "Desvío con la punta del pie",
+          "answer5": "Cierro bien y la rechazo",
+          "answer6": "Estoy en la trayectoria y la capturo",
+          "question": "El delantero está un poco desviado, dispara al primer palo..."
+        }
+      },
+      "reflexes": {
+        "question1": {
+          "answer1": "No me muevo",
+          "answer2": "Me voy para el lado equivocado",
+          "answer3": "Reacciono pero demasiado tarde",
+          "answer4": "Me lanzo tarde pero la toco",
+          "answer5": "La desvío con un reflejo tardío",
+          "answer6": "La detengo limpiamente",
+          "question": "Un disparo se desvía justo frente a ti..."
+        },
+        "question2": {
+          "answer1": "Me quedo en el sitio",
+          "answer2": "Reacciono demasiado tarde",
+          "answer3": "Levanto el brazo demasiado lento",
+          "answer4": "Me lanzo en el último momento",
+          "answer5": "La desvío con el pie por poco",
+          "answer6": "La detengo sin pensar",
+          "question": "El delantero dispara desde cerca..."
+        }
+      },
+      "shot-stopping": {
+        "question3": {
+          "answer1": "Estoy sobre los talones, no me muevo",
+          "answer2": "Me acuesto demasiado lento",
+          "answer3": "Extiendo el pie pero la desvío mal",
+          "answer4": "La freno sin realmente detenerla",
+          "answer5": "Me acuesto bien y la rechazo",
+          "answer6": "Bloqueo el disparo al suelo sin rebote",
+          "question": "Cuando se lanza un tiro potente y rasante..."
+        },
+        "question4": {
+          "answer1": "No tengo tiempo de moverme",
+          "answer3": "La rozo sin detenerla",
+          "answer4": "La desvío con la punta de los dedos",
+          "answer5": "La rechazo bien",
+          "answer6": "La atrapo sin que rebote",
+          "answer2": "Me lanzo demasiado tarde",
+          "question": "Un disparo enorme se lanza desde lejos..."
+        }
+      },
+      "meta": {
+        "question13": {
+          "answer1": "Muy raramente, casi nunca",
+          "answer2": "Una vez cada 2-3 meses",
+          "answer3": "Aproximadamente una vez al mes",
+          "answer4": "Aproximadamente 2 veces al mes",
+          "answer5": "Casi todas las semanas",
+          "answer6": "Todas las semanas, incluso más",
+          "question": "¿Juegas seguido al fútbol?"
+        },
+        "question14": {
+          "answer1": "Ser aplastado cada vez",
+          "answer2": "Perder a menudo",
+          "answer3": "Perder/ganar, depende",
+          "answer4": "Ganar un poco más de lo que pierde",
+          "answer5": "Ganar a menudo",
+          "answer6": "Ganar casi todo el tiempo",
+          "question": "Cuando juegas, tu equipo suele..."
+        },
+        "question15": {
+          "answer1": "Partidas improvisadas",
+          "answer2": "Partidas tranquilas",
+          "answer3": "Un five entre amigos",
+          "answer4": "Buenas partidas organizadas",
+          "answer5": "En torneo o liga",
+          "answer6": "Partidas muy serias",
+          "question": "¿En qué tipo de partidas juegas más seguido?"
+        },
+        "question16": {
+          "answer1": "El que eligen de último",
+          "answer2": "A menudo en apuros",
+          "answer3": "Correcto sin más",
+          "answer4": "Bastante confiable",
+          "answer5": "Uno de los buenos",
+          "answer6": "Uno de los mejores",
+          "question": "En tu equipo, eres más bien..."
+        },
+        "question17": {
+          "answer1": "Claramente me sobrevaloro",
+          "answer2": "Presumo un poco",
+          "answer3": "Veo a menudo el lado bueno",
+          "answer4": "Intento ser honesto",
+          "answer5": "Soy bastante objetivo",
+          "answer6": "Soy súper lúcido (incluso sobre mis defectos)",
+          "question": "Cuando hablas de tu nivel, eres más bien..."
+        },
+        "question18": {
+          "answer1": "Estoy en el fondo del barril",
+          "answer2": "No soy muy bueno",
+          "answer3": "Me las arreglo",
+          "answer4": "Estoy en la media alta",
+          "answer5": "A menudo estoy entre los mejores",
+          "answer6": "Estoy por encima del promedio",
+          "question": "Entre tus amigos que también juegan, ¿en qué nivel estás?"
+        },
+        "question19": {
+          "answer1": "Siempre en otro lado",
+          "answer2": "Me desconcentro a menudo",
+          "answer3": "Depende del momento",
+          "answer4": "Más bien concentrado",
+          "answer5": "Casi todo el partido enfocado",
+          "answer6": "Nada me desconcentra",
+          "question": "En cuanto a concentración, en el campo, eres..."
+        },
+        "question20": {
+          "answer1": "Reír, no tomarme en serio",
+          "answer2": "Desahogarme un poco",
+          "answer3": "Pasar un buen rato entre amigos",
+          "answer4": "Ser útil para el equipo",
+          "answer5": "Ganar si es posible",
+          "answer6": "Ganar, sin importar cómo",
+          "question": "Lo más importante para ti es..."
+        }
+      }
+    },
+    "midfielder": {
+      "defence": {
+        "question9": {
+          "answer1": "Dejo pasar sin moverme",
+          "answer4": "Me quedo delante de él y lo incomodo",
+          "answer5": "Le impido avanzar",
+          "answer6": "Lo detengo limpiamente y recupero",
+          "answer2": "Retrocedo sin intervenir",
+          "answer3": "Lo freno un poco pero pasa",
+          "question": "Un rival intenta avanzar por tu centro..."
+        },
+        "question10": {
+          "answer1": "Dejo que la jugada siga",
+          "answer2": "Corro sin lograr alcanzarlo",
+          "answer3": "Llego tarde",
+          "answer4": "Lo alcanzo y lo ralentizo",
+          "answer5": "Recupero con una barrida justo a tiempo",
+          "answer6": "Recupero el balón inmediatamente",
+          "question": "Pierdes el balón y tienes que recuperarlo rápido…"
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "answer1": "Me atrapan de inmediato",
+          "answer2": "Pierdo el balón intentando demasiado",
+          "answer3": "Mantengo la pelota sin avanzar",
+          "answer4": "Protejo bien y juego simple",
+          "answer5": "Me las arreglo con un pequeño regate",
+          "answer6": "Me doy la vuelta y relanzo limpiamente",
+          "question": "En el medio, estás bajo presión, hay que salir de ahí..."
+        },
+        "question8": {
+          "answer1": "Me pasan fácilmente",
+          "answer2": "Intento un movimiento y pierdo el balón",
+          "answer3": "Bloqueo la jugada sin realmente avanzar",
+          "answer4": "Lo fijo y lo elimino por poco",
+          "answer5": "Lo elimino y progreso",
+          "answer6": "Lo driblo y luego lanzo una acción",
+          "question": "Un rival te espera en un 1v1 en el centro del campo..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Me quedo caminando",
+          "answer2": "Regreso al trote",
+          "answer3": "Sigo la acción de lejos",
+          "answer4": "Regreso tarde pero molesto",
+          "answer5": "Estoy presente en el área",
+          "answer6": "Regreso a fondo y corto la acción",
+          "question": "El rival está contraatacando, ¡necesitas volver a defender!"
+        },
+        "question2": {
+          "answer1": "Ni siquiera salgo",
+          "answer3": "Lo sigo pero me descuelgo rápido",
+          "answer4": "Estoy en apoyo pero tarde",
+          "answer5": "Estoy disponible en la entrada del área",
+          "answer6": "Lo supero y propongo una solución",
+          "answer2": "Salgo tarde",
+          "question": "Tu extremo se va en una carrera profunda, quieres apoyarlo..."
+        }
+      },
+      "passing": {
+        "question5": {
+          "answer1": "No lo veo",
+          "answer2": "Lo veo demasiado tarde",
+          "answer3": "Intento un pase aproximado",
+          "answer4": "Lo encuentro en los pies",
+          "answer5": "Rompo la línea con un buen pase",
+          "answer6": "Lo lanzo perfectamente al espacio",
+          "question": "Un compañero se desmarca entre líneas..."
+        },
+        "question6": {
+          "answer1": "Pierdo la pelota sin ver la solución",
+          "answer3": "Paso en pánico hacia atrás",
+          "answer4": "Encuentro un pase corto seguro",
+          "answer5": "Me doy la vuelta y juego justo",
+          "answer6": "Mantengo la calma y juego en el ritmo correcto",
+          "answer2": "Me doy la vuelta demasiado lento",
+          "question": "Te presionan de espaldas al juego, aparece una solución..."
+        }
+      },
+      "physicality": {
+        "question11": {
+          "answer1": "Me mueven al primer contacto",
+          "answer2": "Pierdo el equilibrio rápidamente",
+          "answer3": "Resisto un poco y luego pierdo el balón",
+          "answer4": "Protejo el balón unos segundos",
+          "answer5": "Mantengo bien a pesar de la presión",
+          "answer6": "Mantengo la pelota con total serenidad",
+          "question": "Tienes que proteger el balón de espaldas al arco bajo presión..."
+        },
+        "question12": {
+          "answer1": "Camino, estoy agotado",
+          "answer2": "Regreso lentamente",
+          "answer3": "Hago los esfuerzos pero llego tarde",
+          "answer4": "Mantengo el ritmo pero estoy al límite",
+          "answer5": "Me mantengo lúcido y defensivo",
+          "answer6": "Sigo la acción sin bajar la intensidad",
+          "question": "Necesitas mantener el esfuerzo durante una fase intensa..."
+        }
+      },
+      "shooting": {
+        "question3": {
+          "answer1": "Fallo completamente el balón",
+          "answer2": "Disparo sin control y se va fuera",
+          "answer3": "Tiro pero es muy suave",
+          "answer4": "Apunto sin peligro",
+          "answer5": "Disparo fuerte, el portero rechaza",
+          "answer6": "Marco con un tiro colocado",
+          "question": "Te llega un pase atrás justo frente al área..."
+        },
+        "question4": {
+          "answer1": "Me apresuro y fallo el balón",
+          "answer2": "Golpeo desequilibrado",
+          "answer3": "Tiro rápido pero sin potencia",
+          "answer4": "Apunto a pesar de la presión",
+          "answer5": "Golpeo bien, el portero debe intervenir",
+          "answer6": "Lanzo un tiro rápido y eficaz",
+          "question": "Ganas el balón presionando y puedes disparar rápido..."
+        }
+      },
+      "meta": {
+        "question13": {
+          "answer1": "Muy raramente, casi nunca",
+          "answer2": "Una vez cada 2-3 meses",
+          "answer3": "Aproximadamente una vez al mes",
+          "answer4": "Aproximadamente 2 veces al mes",
+          "answer5": "Casi todas las semanas",
+          "answer6": "Todas las semanas, incluso más",
+          "question": "¿Juegas seguido al fútbol?"
+        },
+        "question14": {
+          "answer1": "Ser aplastado cada vez",
+          "answer2": "Perder a menudo",
+          "answer3": "Perder/ganar, depende",
+          "answer4": "Ganar un poco más de lo que pierde",
+          "answer5": "Ganar a menudo",
+          "answer6": "Ganar casi todo el tiempo",
+          "question": "Cuando juegas, tu equipo suele..."
+        },
+        "question15": {
+          "answer1": "Partidas improvisadas",
+          "answer2": "Partidas tranquilas",
+          "answer3": "Un five entre amigos",
+          "answer4": "Buenas partidas organizadas",
+          "answer5": "En torneo o liga",
+          "answer6": "Partidas muy serias",
+          "question": "¿En qué tipo de partidas juegas más seguido?"
+        },
+        "question16": {
+          "answer1": "El que eligen de último",
+          "answer2": "A menudo en apuros",
+          "answer3": "Correcto sin más",
+          "answer4": "Bastante confiable",
+          "answer5": "Uno de los buenos",
+          "answer6": "Uno de los mejores",
+          "question": "En tu equipo, eres más bien..."
+        },
+        "question17": {
+          "answer1": "Claramente me sobrevaloro",
+          "answer2": "Presumo un poco",
+          "answer3": "Veo a menudo el lado bueno",
+          "answer4": "Intento ser honesto",
+          "answer5": "Soy bastante objetivo",
+          "answer6": "Soy súper lúcido (incluso sobre mis defectos)",
+          "question": "Cuando hablas de tu nivel, eres más bien..."
+        },
+        "question18": {
+          "answer1": "Estoy en el fondo del barril",
+          "answer2": "No soy muy bueno",
+          "answer3": "Me las arreglo",
+          "answer4": "Estoy en la media alta",
+          "answer5": "A menudo estoy entre los mejores",
+          "answer6": "Estoy por encima del promedio",
+          "question": "Entre tus amigos que también juegan, ¿en qué nivel estás?"
+        },
+        "question19": {
+          "answer1": "Siempre en otro lado",
+          "answer2": "Me desconcentro a menudo",
+          "answer3": "Depende del momento",
+          "answer4": "Más bien concentrado",
+          "answer5": "Casi todo el partido enfocado",
+          "answer6": "Nada me desconcentra",
+          "question": "En cuanto a concentración, en el campo, eres..."
+        },
+        "question20": {
+          "answer1": "Reír, no tomarme en serio",
+          "answer2": "Desahogarme un poco",
+          "answer3": "Pasar un buen rato entre amigos",
+          "answer4": "Ser útil para el equipo",
+          "answer5": "Ganar si es posible",
+          "answer6": "Ganar, sin importar cómo",
+          "question": "Lo más importante para ti es..."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1814 @@
+{
+  "meta": {
+    "app": "Poteau App (B2C)",
+    "timestamp": "2025-12-13T11-18",
+    "toolVersion": "1.0.0"
+  },
+  "summary": {
+    "totalKeys": 938,
+    "completeKeys": 900,
+    "partialKeys": 1,
+    "emptyKeys": 37,
+    "byLanguage": {
+      "fr": {
+        "filled": 901,
+        "empty": 37
+      },
+      "en": {
+        "filled": 900,
+        "empty": 38
+      },
+      "es": {
+        "filled": 900,
+        "empty": 38
+      },
+      "it": {
+        "filled": 900,
+        "empty": 38
+      }
+    }
+  },
+  "issues": {
+    "emptyTranslations": [
+      {
+        "keyId": "mbzjn5pj",
+        "emptyLangs": [
+          "en",
+          "es",
+          "it"
+        ],
+        "filledLangs": [
+          "fr"
+        ],
+        "sampleText": ", tu peux jouer pour ",
+        "frText": ", tu peux jouer pour "
+      }
+    ],
+    "allEmpty": [
+      {
+        "keyId": "vmgduifj",
+        "comment": null
+      },
+      {
+        "keyId": "1ddd2aqn",
+        "comment": null
+      },
+      {
+        "keyId": "vmyqa3a3",
+        "comment": null
+      },
+      {
+        "keyId": "atjwm5lk",
+        "comment": null
+      },
+      {
+        "keyId": "j61wzlwb",
+        "comment": null
+      },
+      {
+        "keyId": "oa3puvke",
+        "comment": null
+      },
+      {
+        "keyId": "1dfx6u08",
+        "comment": null
+      },
+      {
+        "keyId": "qodjbkpb",
+        "comment": null
+      },
+      {
+        "keyId": "7e4jl6es",
+        "comment": null
+      },
+      {
+        "keyId": "enp3wp35",
+        "comment": null
+      },
+      {
+        "keyId": "7o9ca2a8",
+        "comment": null
+      },
+      {
+        "keyId": "npaocxsh",
+        "comment": null
+      },
+      {
+        "keyId": "9eizpjrv",
+        "comment": null
+      },
+      {
+        "keyId": "ykiz4qzz",
+        "comment": null
+      },
+      {
+        "keyId": "80so86i3",
+        "comment": null
+      },
+      {
+        "keyId": "enotnqgk",
+        "comment": null
+      },
+      {
+        "keyId": "k8g35m4c",
+        "comment": null
+      },
+      {
+        "keyId": "kd339ar1",
+        "comment": null
+      },
+      {
+        "keyId": "rdavhwb6",
+        "comment": null
+      },
+      {
+        "keyId": "y7lq2x4f",
+        "comment": null
+      },
+      {
+        "keyId": "ch7nh007",
+        "comment": null
+      },
+      {
+        "keyId": "o7jli8n4",
+        "comment": null
+      },
+      {
+        "keyId": "n0ys7guk",
+        "comment": null
+      },
+      {
+        "keyId": "qoso5k7a",
+        "comment": null
+      },
+      {
+        "keyId": "x00rt2fi",
+        "comment": null
+      },
+      {
+        "keyId": "204aov6n",
+        "comment": null
+      },
+      {
+        "keyId": "ee3gbkux",
+        "comment": null
+      },
+      {
+        "keyId": "tbzqy174",
+        "comment": null
+      },
+      {
+        "keyId": "jpnf2vwy",
+        "comment": null
+      },
+      {
+        "keyId": "long739x",
+        "comment": null
+      },
+      {
+        "keyId": "wonxt7dd",
+        "comment": null
+      },
+      {
+        "keyId": "9jx7mqej",
+        "comment": null
+      },
+      {
+        "keyId": "mef7lpxe",
+        "comment": null
+      },
+      {
+        "keyId": "e0lm0vss",
+        "comment": null
+      },
+      {
+        "keyId": "q5r3bybx",
+        "comment": null
+      },
+      {
+        "keyId": "9saoaw76",
+        "comment": null
+      },
+      {
+        "keyId": "ciniyp2s",
+        "comment": null
+      }
+    ],
+    "duplicateAcrossLanguages": [
+      {
+        "keyId": "nqsm1jl1",
+        "text": "Home"
+      },
+      {
+        "keyId": "kd5sbvpt",
+        "text": "Home"
+      },
+      {
+        "keyId": "7wdyhpn4",
+        "text": "Home"
+      },
+      {
+        "keyId": "ah8wfu5c",
+        "text": "Home"
+      },
+      {
+        "keyId": "hh6k4gp3",
+        "text": "Pablo da Fonseca"
+      },
+      {
+        "keyId": "8xd713uj",
+        "text": "poteau-app.com"
+      },
+      {
+        "keyId": "4jjqku3h",
+        "text": "Push"
+      },
+      {
+        "keyId": "v5zqiu0z",
+        "text": "Push"
+      },
+      {
+        "keyId": "02lsuzf1",
+        "text": "🦸‍♂️"
+      },
+      {
+        "keyId": "ukxl0w0k",
+        "text": "Poteau"
+      },
+      {
+        "keyId": "niar68zc",
+        "text": "PADEL"
+      },
+      {
+        "keyId": "qvnea64s",
+        "text": "Home"
+      },
+      {
+        "keyId": "uk4wiz4k",
+        "text": "Home"
+      },
+      {
+        "keyId": "5pcn8413",
+        "text": "Home"
+      },
+      {
+        "keyId": "5yzuppjb",
+        "text": "Home"
+      },
+      {
+        "keyId": "5618031b",
+        "text": "PADEL"
+      },
+      {
+        "keyId": "jokud392",
+        "text": "PADEL"
+      },
+      {
+        "keyId": "3gb450zm",
+        "text": "PADEL"
+      },
+      {
+        "keyId": "s5l57qp3",
+        "text": "PADEL"
+      },
+      {
+        "keyId": "jrak23tq",
+        "text": "poteau.app/quiz"
+      },
+      {
+        "keyId": "0mldst42",
+        "text": "poteau.app/quiz"
+      }
+    ],
+    "suspiciousDuplicates": [
+      {
+        "keyId": "gdsxpwkr",
+        "issue": "ES same as FR",
+        "text": "Karim Boudebouz"
+      },
+      {
+        "keyId": "hh6k4gp3",
+        "issue": "ES same as FR",
+        "text": "Pablo da Fonseca"
+      },
+      {
+        "keyId": "hh6k4gp3",
+        "issue": "IT same as FR",
+        "text": "Pablo da Fonseca"
+      },
+      {
+        "keyId": "phjdz1wh",
+        "issue": "ES same as FR",
+        "text": "Sadio Mané"
+      },
+      {
+        "keyId": "139ueuu0",
+        "issue": "ES same as FR",
+        "text": "Sadio Mané"
+      },
+      {
+        "keyId": "8xd713uj",
+        "issue": "ES same as FR",
+        "text": "poteau-app.com"
+      },
+      {
+        "keyId": "8xd713uj",
+        "issue": "IT same as FR",
+        "text": "poteau-app.com"
+      },
+      {
+        "keyId": "o1v3iu4a",
+        "issue": "ES same as FR",
+        "text": "Valider"
+      },
+      {
+        "keyId": "ukxl0w0k",
+        "issue": "ES same as FR",
+        "text": "Poteau"
+      },
+      {
+        "keyId": "ukxl0w0k",
+        "issue": "IT same as FR",
+        "text": "Poteau"
+      },
+      {
+        "keyId": "jrak23tq",
+        "issue": "ES same as FR",
+        "text": "poteau.app/quiz"
+      },
+      {
+        "keyId": "jrak23tq",
+        "issue": "IT same as FR",
+        "text": "poteau.app/quiz"
+      },
+      {
+        "keyId": "0mldst42",
+        "issue": "ES same as FR",
+        "text": "poteau.app/quiz"
+      },
+      {
+        "keyId": "0mldst42",
+        "issue": "IT same as FR",
+        "text": "poteau.app/quiz"
+      }
+    ]
+  },
+  "screens": [
+    {
+      "name": "GameSheet",
+      "path": "/game/:gameId",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/game_sheet/game_sheet_widget.dart",
+      "translations": {
+        "total": 112,
+        "complete": 110,
+        "incomplete": 2,
+        "missing": 0,
+        "details": [
+          {
+            "keyId": "1ddd2aqn",
+            "frText": " ",
+            "emptyLangs": [
+              "fr",
+              "en",
+              "es",
+              "it"
+            ],
+            "allTexts": {
+              "fr": " ",
+              "en": " ",
+              "es": " ",
+              "it": " "
+            }
+          },
+          {
+            "keyId": "mbzjn5pj",
+            "frText": ", tu peux jouer pour ",
+            "emptyLangs": [
+              "en",
+              "es",
+              "it"
+            ],
+            "allTexts": {
+              "fr": ", tu peux jouer pour ",
+              "en": "",
+              "es": "",
+              "it": ""
+            }
+          }
+        ]
+      },
+      "navigatesTo": [
+        "Ban",
+        "ValidateEmail",
+        "BecomeGold",
+        "MyProfile",
+        "Profile",
+        "InviteFriends",
+        "EditMyGame",
+        "Home"
+      ],
+      "buttons": 35,
+      "issues": [
+        {
+          "severity": "warning",
+          "message": "Missing translations for: fr, en, es, it",
+          "keyId": "1ddd2aqn",
+          "frText": " "
+        },
+        {
+          "severity": "warning",
+          "message": "Missing translations for: en, es, it",
+          "keyId": "mbzjn5pj",
+          "frText": ", tu peux jouer pour "
+        }
+      ]
+    },
+    {
+      "name": "Features",
+      "path": "/features",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/features/features_widget.dart",
+      "translations": {
+        "total": 4,
+        "complete": 3,
+        "incomplete": 1,
+        "missing": 0,
+        "details": [
+          {
+            "keyId": "1dfx6u08",
+            "frText": " ",
+            "emptyLangs": [
+              "fr",
+              "en",
+              "es",
+              "it"
+            ],
+            "allTexts": {
+              "fr": " ",
+              "en": " ",
+              "es": " ",
+              "it": " "
+            }
+          }
+        ]
+      },
+      "navigatesTo": [],
+      "buttons": 3,
+      "issues": [
+        {
+          "severity": "warning",
+          "message": "Missing translations for: fr, en, es, it",
+          "keyId": "1dfx6u08",
+          "frText": " "
+        }
+      ]
+    },
+    {
+      "name": "Landing",
+      "path": "/welcome",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/1_landing/landing/landing_widget.dart",
+      "translations": {
+        "total": 8,
+        "complete": 8,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "CreateAccount"
+      ],
+      "buttons": 7,
+      "issues": []
+    },
+    {
+      "name": "LandingInvite",
+      "path": "/invite",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/1_landing/landing_invite/landing_invite_widget.dart",
+      "translations": {
+        "total": 8,
+        "complete": 8,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 5,
+      "issues": []
+    },
+    {
+      "name": "CreateAccount",
+      "path": "/signup",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/2_authentication/create_account/create_account_widget.dart",
+      "translations": {
+        "total": 9,
+        "complete": 9,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "LogIn"
+      ],
+      "buttons": 4,
+      "issues": []
+    },
+    {
+      "name": "LogIn",
+      "path": "/connect",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/2_authentication/log_in/log_in_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "ValidateEmail",
+      "path": "/emailvalidation",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/2_authentication/validate_email/validate_email_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Ban"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "a_Nickname",
+      "path": "/onboarding/firstname",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/a_nickname/a_nickname_widget.dart",
+      "translations": {
+        "total": 4,
+        "complete": 4,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "BPhoto"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "b_Photo",
+      "path": "/onboarding/picture",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/b_photo/b_photo_widget.dart",
+      "translations": {
+        "total": 8,
+        "complete": 8,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "CPhone"
+      ],
+      "buttons": 0,
+      "issues": []
+    },
+    {
+      "name": "c_Phone",
+      "path": "/onboarding/phone",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/c_phone/c_phone_widget.dart",
+      "translations": {
+        "total": 7,
+        "complete": 7,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "DCity"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "d_City",
+      "path": "/onboarding/city",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/d_city/d_city_widget.dart",
+      "translations": {
+        "total": 4,
+        "complete": 4,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "CitySelector"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "e_Sports",
+      "path": "/onboarding/sport",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/e_sports/e_sports_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "FAlert"
+      ],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "f_Alert",
+      "path": "/onboarding/alert",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/f_alert/f_alert_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "FTeam",
+        "Home"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "f_Team",
+      "path": "/team",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/3_onboarding/f_team/f_team_widget.dart",
+      "translations": {
+        "total": 7,
+        "complete": 7,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Home"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "Games",
+      "path": "/games",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/4_super_bar/games/games_widget.dart",
+      "translations": {
+        "total": 1,
+        "complete": 1,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Ban",
+        "CitySelector",
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "EditMyProfile",
+        "ConfigureAlert"
+      ],
+      "buttons": 8,
+      "issues": []
+    },
+    {
+      "name": "Home",
+      "path": "/home",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/4_super_bar/home/home_widget.dart",
+      "translations": {
+        "total": 7,
+        "complete": 7,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Ban",
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "ESports",
+        "EditMyProfile",
+        "ACreate",
+        "FTeam"
+      ],
+      "buttons": 8,
+      "issues": []
+    },
+    {
+      "name": "MyProfile",
+      "path": "/me",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/4_super_bar/my_profile/my_profile_widget.dart",
+      "translations": {
+        "total": 16,
+        "complete": 16,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Ban",
+        "Settings",
+        "LevelReveal",
+        "LevelPickRole",
+        "FavoriteClub",
+        "FavoriteSelection"
+      ],
+      "buttons": 14,
+      "issues": []
+    },
+    {
+      "name": "BecomeGold",
+      "path": "/gold",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/become_gold/become_gold_widget.dart",
+      "translations": {
+        "total": 39,
+        "complete": 39,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "MyProfile",
+        "GameSheet"
+      ],
+      "buttons": 12,
+      "issues": []
+    },
+    {
+      "name": "CitySelector",
+      "path": "/city",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/city_selector/city_selector_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "FAlert",
+        "Home",
+        "Games"
+      ],
+      "buttons": 5,
+      "issues": []
+    },
+    {
+      "name": "ConfigureAlert",
+      "path": "/configurealert",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/configure_alert/configure_alert_widget.dart",
+      "translations": {
+        "total": 0,
+        "complete": 0,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "ManageAlerts",
+        "Home"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "a_Create",
+      "path": "/new/sport",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/a_create/a_create_widget.dart",
+      "translations": {
+        "total": 21,
+        "complete": 21,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Ban",
+        "Home",
+        "Games"
+      ],
+      "buttons": 7,
+      "issues": []
+    },
+    {
+      "name": "b_Location",
+      "path": "/new/center",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/b_location/b_location_widget.dart",
+      "translations": {
+        "total": 1,
+        "complete": 1,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "ACreate",
+        "CitySelector"
+      ],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "c_DateAndTime",
+      "path": "/new/date",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/c_date_and_time/c_date_and_time_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "DTypeVisibility"
+      ],
+      "buttons": 4,
+      "issues": []
+    },
+    {
+      "name": "d_TypeVisibility",
+      "path": "/new/type",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/d_type_visibility/d_type_visibility_widget.dart",
+      "translations": {
+        "total": 13,
+        "complete": 13,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "ELevelMood"
+      ],
+      "buttons": 6,
+      "issues": []
+    },
+    {
+      "name": "e_LevelMood",
+      "path": "/new/level",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/e_level_mood/e_level_mood_widget.dart",
+      "translations": {
+        "total": 10,
+        "complete": 10,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "FPrice"
+      ],
+      "buttons": 7,
+      "issues": []
+    },
+    {
+      "name": "f_Price",
+      "path": "/new/price",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/f_price/f_price_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "GSummaryRepeat"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "g_SummaryRepeat",
+      "path": "/new/recap",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/create_games/g_summary_repeat/g_summary_repeat_widget.dart",
+      "translations": {
+        "total": 12,
+        "complete": 12,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "InviteFriends"
+      ],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "EditMyGame",
+      "path": "/game/:gameId/edit",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/edit_my_game/edit_my_game_widget.dart",
+      "translations": {
+        "total": 88,
+        "complete": 88,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "GameSheet"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "Filter",
+      "path": "/centres",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/filter/filter_widget.dart",
+      "translations": {
+        "total": 2,
+        "complete": 2,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Filter"
+      ],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "FilterCentres",
+      "path": "/addcentre",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/filter_centres/filter_centres_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "InviteFriends",
+      "path": "/game/:gameId/invite",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/invite_friends/invite_friends_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "GameSheet"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "ManageAlerts",
+      "path": "/managealerts",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/manage_alerts/manage_alerts_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "ConfigureAlert"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "FeedbackSaved",
+      "path": "/feedback/done",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/post_game_feedback/feedback_saved/feedback_saved_widget.dart",
+      "translations": {
+        "total": 9,
+        "complete": 9,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Home"
+      ],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "GiveFeedback",
+      "path": "/feedback",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/5_games/post_game_feedback/give_feedback/give_feedback_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "FeedbackSaved"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "LevelPickRole",
+      "path": "/level/role",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_pick_role/level_pick_role_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 6,
+      "issues": []
+    },
+    {
+      "name": "LevelQuestion",
+      "path": "/level/question",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_question/level_question_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "LevelReveal",
+      "path": "/level/reveal",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_reveal/level_reveal_widget.dart",
+      "translations": {
+        "total": 16,
+        "complete": 16,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 6,
+      "issues": []
+    },
+    {
+      "name": "LevelSelfScore",
+      "path": "/level/selfscore",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_self_score/level_self_score_widget.dart",
+      "translations": {
+        "total": 8,
+        "complete": 8,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "LevelStart",
+      "path": "/level/start",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_start/level_start_widget.dart",
+      "translations": {
+        "total": 0,
+        "complete": 0,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "LevelQuestion"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "LevelTempoUsers",
+      "path": "/level/phone",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/6_level/level_tempo_users/level_tempo_users_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "Ban",
+      "path": "/out",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/ban/ban_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 0,
+      "issues": []
+    },
+    {
+      "name": "Credits",
+      "path": "/credits",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/credits/credits_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Home"
+      ],
+      "buttons": 0,
+      "issues": []
+    },
+    {
+      "name": "EditMyPhone",
+      "path": "/edit/phone",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/edit_my_phone/edit_my_phone_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "EditMyProfile"
+      ],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "EditMyProfile",
+      "path": "/edit",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/edit_my_profile/edit_my_profile_widget.dart",
+      "translations": {
+        "total": 35,
+        "complete": 35,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "MyProfile",
+        "Home"
+      ],
+      "buttons": 10,
+      "issues": []
+    },
+    {
+      "name": "FavoriteClub",
+      "path": "/favoriteclub",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/favorite_club/favorite_club_widget.dart",
+      "translations": {
+        "total": 5,
+        "complete": 5,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "MyProfile"
+      ],
+      "buttons": 3,
+      "issues": []
+    },
+    {
+      "name": "FavoriteSelection",
+      "path": "/favoriteselection",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/favorite_selection/favorite_selection_widget.dart",
+      "translations": {
+        "total": 3,
+        "complete": 3,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "Invoices",
+      "path": "/invoices",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/invoices/invoices_widget.dart",
+      "translations": {
+        "total": 4,
+        "complete": 4,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 2,
+      "issues": []
+    },
+    {
+      "name": "Notifications",
+      "path": "/notifications",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/notifications/notifications_widget.dart",
+      "translations": {
+        "total": 2,
+        "complete": 2,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Home"
+      ],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "Settings",
+      "path": "/settings",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/7_admin/settings/settings_widget.dart",
+      "translations": {
+        "total": 48,
+        "complete": 48,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "BecomeGold",
+        "EditMyProfile",
+        "ManageAlerts",
+        "Invoices",
+        "Credits",
+        "Features"
+      ],
+      "buttons": 25,
+      "issues": []
+    },
+    {
+      "name": "BuildMyTeam",
+      "path": "/buildmyteam",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/8_people/build_my_team/build_my_team_widget.dart",
+      "translations": {
+        "total": 11,
+        "complete": 11,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [],
+      "buttons": 1,
+      "issues": []
+    },
+    {
+      "name": "Contacts",
+      "path": "/contacts",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/8_people/contacts/contacts_widget.dart",
+      "translations": {
+        "total": 6,
+        "complete": 6,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "Home",
+        "FTeam"
+      ],
+      "buttons": 4,
+      "issues": []
+    },
+    {
+      "name": "Profile",
+      "path": "/user/:thisUser",
+      "file": "/Users/tmgnr/poteau-workspace/poteau-app/lib/pages/8_people/profile/profile_widget.dart",
+      "translations": {
+        "total": 12,
+        "complete": 12,
+        "incomplete": 0,
+        "missing": 0,
+        "details": []
+      },
+      "navigatesTo": [
+        "MyProfile",
+        "Games"
+      ],
+      "buttons": 5,
+      "issues": []
+    }
+  ],
+  "navigation": {
+    "Landing": {
+      "path": "/welcome",
+      "navigatesTo": [
+        "CreateAccount"
+      ],
+      "navigatesFrom": []
+    },
+    "LandingInvite": {
+      "path": "/invite",
+      "navigatesTo": [],
+      "navigatesFrom": []
+    },
+    "CreateAccount": {
+      "path": "/signup",
+      "navigatesTo": [
+        "LogIn"
+      ],
+      "navigatesFrom": [
+        "Landing"
+      ]
+    },
+    "LogIn": {
+      "path": "/connect",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "CreateAccount"
+      ]
+    },
+    "ValidateEmail": {
+      "path": "/emailvalidation",
+      "navigatesTo": [
+        "Ban"
+      ],
+      "navigatesFrom": [
+        "Games",
+        "Home",
+        "GameSheet",
+        "EditMyProfile"
+      ]
+    },
+    "a_Nickname": {
+      "path": "/onboarding/firstname",
+      "navigatesTo": [
+        "BPhoto"
+      ],
+      "navigatesFrom": []
+    },
+    "b_Photo": {
+      "path": "/onboarding/picture",
+      "navigatesTo": [
+        "CPhone"
+      ],
+      "navigatesFrom": []
+    },
+    "c_Phone": {
+      "path": "/onboarding/phone",
+      "navigatesTo": [
+        "DCity"
+      ],
+      "navigatesFrom": []
+    },
+    "d_City": {
+      "path": "/onboarding/city",
+      "navigatesTo": [
+        "CitySelector"
+      ],
+      "navigatesFrom": []
+    },
+    "e_Sports": {
+      "path": "/onboarding/sport",
+      "navigatesTo": [
+        "FAlert"
+      ],
+      "navigatesFrom": []
+    },
+    "f_Alert": {
+      "path": "/onboarding/alert",
+      "navigatesTo": [
+        "FTeam",
+        "Home"
+      ],
+      "navigatesFrom": []
+    },
+    "f_Team": {
+      "path": "/team",
+      "navigatesTo": [
+        "Home"
+      ],
+      "navigatesFrom": []
+    },
+    "Games": {
+      "path": "/games",
+      "navigatesTo": [
+        "Ban",
+        "CitySelector",
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "EditMyProfile",
+        "ConfigureAlert"
+      ],
+      "navigatesFrom": [
+        "CitySelector",
+        "a_Create",
+        "Profile"
+      ]
+    },
+    "Home": {
+      "path": "/home",
+      "navigatesTo": [
+        "Ban",
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "ESports",
+        "EditMyProfile",
+        "ACreate",
+        "FTeam"
+      ],
+      "navigatesFrom": [
+        "f_Alert",
+        "f_Team",
+        "CitySelector",
+        "ConfigureAlert",
+        "a_Create",
+        "GameSheet",
+        "FeedbackSaved",
+        "Credits",
+        "EditMyProfile",
+        "Notifications",
+        "Contacts"
+      ]
+    },
+    "MyProfile": {
+      "path": "/me",
+      "navigatesTo": [
+        "Ban",
+        "Settings",
+        "LevelReveal",
+        "LevelPickRole",
+        "FavoriteClub",
+        "FavoriteSelection"
+      ],
+      "navigatesFrom": [
+        "BecomeGold",
+        "GameSheet",
+        "EditMyProfile",
+        "FavoriteClub",
+        "Profile"
+      ]
+    },
+    "BecomeGold": {
+      "path": "/gold",
+      "navigatesTo": [
+        "MyProfile",
+        "GameSheet"
+      ],
+      "navigatesFrom": [
+        "GameSheet",
+        "Settings"
+      ]
+    },
+    "CitySelector": {
+      "path": "/city",
+      "navigatesTo": [
+        "FAlert",
+        "Home",
+        "Games"
+      ],
+      "navigatesFrom": [
+        "d_City",
+        "Games",
+        "b_Location"
+      ]
+    },
+    "ConfigureAlert": {
+      "path": "/configurealert",
+      "navigatesTo": [
+        "ManageAlerts",
+        "Home"
+      ],
+      "navigatesFrom": [
+        "Games",
+        "ManageAlerts"
+      ]
+    },
+    "a_Create": {
+      "path": "/new/sport",
+      "navigatesTo": [
+        "Ban",
+        "Home",
+        "Games"
+      ],
+      "navigatesFrom": []
+    },
+    "b_Location": {
+      "path": "/new/center",
+      "navigatesTo": [
+        "ACreate",
+        "CitySelector"
+      ],
+      "navigatesFrom": []
+    },
+    "c_DateAndTime": {
+      "path": "/new/date",
+      "navigatesTo": [
+        "DTypeVisibility"
+      ],
+      "navigatesFrom": []
+    },
+    "d_TypeVisibility": {
+      "path": "/new/type",
+      "navigatesTo": [
+        "ELevelMood"
+      ],
+      "navigatesFrom": []
+    },
+    "e_LevelMood": {
+      "path": "/new/level",
+      "navigatesTo": [
+        "FPrice"
+      ],
+      "navigatesFrom": []
+    },
+    "f_Price": {
+      "path": "/new/price",
+      "navigatesTo": [
+        "GSummaryRepeat"
+      ],
+      "navigatesFrom": []
+    },
+    "g_SummaryRepeat": {
+      "path": "/new/recap",
+      "navigatesTo": [
+        "InviteFriends"
+      ],
+      "navigatesFrom": []
+    },
+    "EditMyGame": {
+      "path": "/game/:gameId/edit",
+      "navigatesTo": [
+        "GameSheet"
+      ],
+      "navigatesFrom": [
+        "GameSheet"
+      ]
+    },
+    "Filter": {
+      "path": "/centres",
+      "navigatesTo": [
+        "Filter"
+      ],
+      "navigatesFrom": [
+        "Filter"
+      ]
+    },
+    "FilterCentres": {
+      "path": "/addcentre",
+      "navigatesTo": [],
+      "navigatesFrom": []
+    },
+    "GameSheet": {
+      "path": "/game/:gameId",
+      "navigatesTo": [
+        "Ban",
+        "ValidateEmail",
+        "BecomeGold",
+        "MyProfile",
+        "Profile",
+        "InviteFriends",
+        "EditMyGame",
+        "Home"
+      ],
+      "navigatesFrom": [
+        "BecomeGold",
+        "EditMyGame",
+        "InviteFriends"
+      ]
+    },
+    "InviteFriends": {
+      "path": "/game/:gameId/invite",
+      "navigatesTo": [
+        "GameSheet"
+      ],
+      "navigatesFrom": [
+        "g_SummaryRepeat",
+        "GameSheet"
+      ]
+    },
+    "ManageAlerts": {
+      "path": "/managealerts",
+      "navigatesTo": [
+        "ConfigureAlert"
+      ],
+      "navigatesFrom": [
+        "ConfigureAlert",
+        "Settings"
+      ]
+    },
+    "FeedbackSaved": {
+      "path": "/feedback/done",
+      "navigatesTo": [
+        "Home"
+      ],
+      "navigatesFrom": [
+        "GiveFeedback"
+      ]
+    },
+    "GiveFeedback": {
+      "path": "/feedback",
+      "navigatesTo": [
+        "FeedbackSaved"
+      ],
+      "navigatesFrom": []
+    },
+    "LevelPickRole": {
+      "path": "/level/role",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "MyProfile"
+      ]
+    },
+    "LevelQuestion": {
+      "path": "/level/question",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "LevelStart"
+      ]
+    },
+    "LevelReveal": {
+      "path": "/level/reveal",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "MyProfile"
+      ]
+    },
+    "LevelSelfScore": {
+      "path": "/level/selfscore",
+      "navigatesTo": [],
+      "navigatesFrom": []
+    },
+    "LevelStart": {
+      "path": "/level/start",
+      "navigatesTo": [
+        "LevelQuestion"
+      ],
+      "navigatesFrom": []
+    },
+    "LevelTempoUsers": {
+      "path": "/level/phone",
+      "navigatesTo": [],
+      "navigatesFrom": []
+    },
+    "Ban": {
+      "path": "/out",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "ValidateEmail",
+        "Games",
+        "Home",
+        "MyProfile",
+        "a_Create",
+        "GameSheet"
+      ]
+    },
+    "Credits": {
+      "path": "/credits",
+      "navigatesTo": [
+        "Home"
+      ],
+      "navigatesFrom": [
+        "Settings"
+      ]
+    },
+    "EditMyPhone": {
+      "path": "/edit/phone",
+      "navigatesTo": [
+        "EditMyProfile"
+      ],
+      "navigatesFrom": []
+    },
+    "EditMyProfile": {
+      "path": "/edit",
+      "navigatesTo": [
+        "ValidateEmail",
+        "BPhoto",
+        "CPhone",
+        "DCity",
+        "ANickname",
+        "MyProfile",
+        "Home"
+      ],
+      "navigatesFrom": [
+        "Games",
+        "Home",
+        "EditMyPhone",
+        "Settings"
+      ]
+    },
+    "FavoriteClub": {
+      "path": "/favoriteclub",
+      "navigatesTo": [
+        "MyProfile"
+      ],
+      "navigatesFrom": [
+        "MyProfile"
+      ]
+    },
+    "FavoriteSelection": {
+      "path": "/favoriteselection",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "MyProfile"
+      ]
+    },
+    "Features": {
+      "path": "/features",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "Settings"
+      ]
+    },
+    "Invoices": {
+      "path": "/invoices",
+      "navigatesTo": [],
+      "navigatesFrom": [
+        "Settings"
+      ]
+    },
+    "Notifications": {
+      "path": "/notifications",
+      "navigatesTo": [
+        "Home"
+      ],
+      "navigatesFrom": []
+    },
+    "Settings": {
+      "path": "/settings",
+      "navigatesTo": [
+        "BecomeGold",
+        "EditMyProfile",
+        "ManageAlerts",
+        "Invoices",
+        "Credits",
+        "Features"
+      ],
+      "navigatesFrom": [
+        "MyProfile"
+      ]
+    },
+    "BuildMyTeam": {
+      "path": "/buildmyteam",
+      "navigatesTo": [],
+      "navigatesFrom": []
+    },
+    "Contacts": {
+      "path": "/contacts",
+      "navigatesTo": [
+        "Home",
+        "FTeam"
+      ],
+      "navigatesFrom": []
+    },
+    "Profile": {
+      "path": "/user/:thisUser",
+      "navigatesTo": [
+        "MyProfile",
+        "Games"
+      ],
+      "navigatesFrom": [
+        "GameSheet"
+      ]
+    }
+  }
+}

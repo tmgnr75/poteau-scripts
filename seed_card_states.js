@@ -42,10 +42,16 @@ const NOAH = "9si5imsCVUUQ48LF5sc9XFLFtEj1";
 const LIAM = "Go2YXYj9FFW6xG28HZNBcrDkIJV2";
 const SOPHIE = "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2";
 const TODD = "xz7cm07tVlZkt71QsLdmeTSCPYI3";
-const ZAMUEL = "fQCEL4nvfxQ6N7na61ARPt4wDCl1";
 
+// NEVER PUT A REAL ACCOUNT IN A SEEDED GAME.
+//
+// This pool used to end with Zamuel's REAL uid (fQCEL4nvfxQ6N7na61ARPt4wDCl1,
+// zamu.puertas@gmail.com, is_test_account: false) -- a real ambassador who
+// appeared in Tim's test games on 2026-08-14. Every uid here must be an account
+// whose `is_test_account` is true; the assertion below enforces it at run time
+// rather than trusting this comment.
 const MIN = 60 * 1000;
-const POOL = [TIM, GINA, MARCO, LUCIA, NOAH, LIAM, SOPHIE, TODD, ZAMUEL];
+const POOL = [TIM, GINA, MARCO, LUCIA, NOAH, LIAM, SOPHIE, TODD];
 
 /// Builds `teams` with `filled` occupied spots out of `maxPlayers`.
 ///
@@ -55,11 +61,23 @@ function roster(filled, maxPlayers) {
   const spots = [];
   for (let i = 0; i < maxPlayers; i++) {
     const side = i < Math.ceil(maxPlayers / 2) ? "team_a" : "team_b";
+    // Beyond the pool, spots are filled as PLUS-ONES rather than by wrapping
+    // round the pool again.
+    //
+    // `POOL[i % POOL.length]` put Tim on the pitch twice (2026-08-14): the same
+    // person in two spots is a visible bug. But leaving them open was wrong the
+    // other way -- a "full" 10-a-side state stopped being full, so the FULL
+    // band never rendered on it.
+    //
+    // A plus-one IS the same user ref repeated, by design: it is a spot, not a
+    // person (see the attendees/plus_one trap in FIRESTORE_ANALYTICS_GUIDE.md).
+    // So this is the real data shape, not a workaround.
     if (i < filled) {
+      const beyondPool = i >= POOL.length;
       spots.push({
         team_side: side,
-        user_id: POOL[i % POOL.length],
-        plus_one: false,
+        user_id: beyondPool ? POOL[i % POOL.length] : POOL[i],
+        plus_one: beyondPool,
         status: "confirmed",
         spot_number: i + 1,
       });
@@ -77,7 +95,7 @@ function roster(filled, maxPlayers) {
   return spots;
 }
 
-function game({ label, offsetMin, filled, maxPlayers = 10, duration = 60, extra = {} }) {
+function game({ label, offsetMin, filled, maxPlayers = 10, duration = 60, sport = "soccer", extra = {} }) {
   const kickoff = new Date(Date.now() + offsetMin * MIN);
   const teams = roster(filled, maxPlayers);
   const attendees = teams
@@ -103,7 +121,7 @@ function game({ label, offsetMin, filled, maxPlayers = 10, duration = 60, extra 
       currency: "EUR",
       visibility: "private",
       players_to_find: maxPlayers - filled,
-      sport: "soccer",
+      sport,
       payment_type: "on-site",
       time_zone: "Europe/Paris",
       country_code: "FR",
@@ -167,7 +185,65 @@ const STATES = [
   { label: "I · Annulé", offsetMin: 2280, filled: 4,
     note: "Red band, no roster row, 'Retirer ce match'.",
     extra: { status: "canceled" } },
+
+  // PADEL. The 4-player roster is the case the card has to get right at least
+  // as much as 10-a-side -- a 22-player game is the rare edge, padel is not.
+  //
+  // These carry poteau_live: true like everything else (Tim, 2026-08-14). They
+  // were seeded false on the reasoning that Live is soccer-only, which made a
+  // full padel game render a band with nothing on its right-hand side and look
+  // broken. EVERY SEEDED GAME IS LIVE: from 5.2.0 the flag stops being a
+  // per-game pilot switch, so a fixture that is not Live is not a real fixture.
+  { label: "P1 · Padel vide", offsetMin: 2160, filled: 0, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "0/4. Pure offer: no roster row at all." },
+  { label: "P2 · Padel 1 joueur", offsetMin: 2040, filled: 1, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "1/4. One face, three open spots. The narrowest real roster." },
+  { label: "P3 · Padel 2 joueurs", offsetMin: 1920, filled: 2, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "2/4. Half full -- the survival cliff for a padel game." },
+  { label: "P4 · Padel 3 joueurs", offsetMin: 1800, filled: 3, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "3/4. One spot left, the highest-intent state." },
+  { label: "P5 · Padel complet", offsetMin: 1680, filled: 4, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "4/4. Full: band says COMPLET, no count under the roster." },
+  { label: "P6 · Padel joué", offsetMin: -320, filled: 4, maxPlayers: 4,
+    sport: "padel", duration: 90,
+    note: "Played padel, no score. Dashes + 'Ajouter le score'.",
+    extra: { status: "played" } },
 ];
+
+/// Refuses to seed if ANY pool member is not a test account.
+///
+/// A comment saying "test accounts only" did not stop a real ambassador ending
+/// up in Tim's games. This reads the actual user docs and aborts before writing
+/// anything, so the only way to reintroduce a real person is to also delete
+/// this check.
+async function assertPoolIsAllTestAccounts() {
+  const bad = [];
+  for (const uid of new Set(POOL)) {
+    const snap = await db.collection("users").doc(uid).get();
+    if (!snap.exists) {
+      bad.push(`${uid} (no such user)`);
+      continue;
+    }
+    const u = snap.data();
+    // Tim is the one intentional exception: these are HIS games and he has to
+    // appear on them to see them on his own Home.
+    if (uid === TIM) continue;
+    if (u.is_test_account !== true) {
+      bad.push(`${uid} (${u.email || "no email"} — ${u.display_name || "?"})`);
+    }
+  }
+  if (bad.length) {
+    console.error("REFUSING TO SEED — real accounts in the pool:");
+    bad.forEach((b) => console.error(`  ${b}`));
+    console.error("\nEvery pool uid must have is_test_account: true.");
+    process.exit(1);
+  }
+}
 
 async function clear() {
   const snap = await db.collection("games").where(TAG, "==", true).get();
@@ -197,6 +273,8 @@ async function clear() {
     console.log("dry run. re-run with --write to replace and create.");
     process.exit(0);
   }
+
+  await assertPoolIsAllTestAccounts();
 
   const removed = await clear();
   if (removed) console.log(`cleared ${removed} from the previous run\n`);

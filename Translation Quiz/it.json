@@ -1,0 +1,492 @@
+{
+  "soccer": {
+    "forward": {
+      "defence": {
+        "question1": {
+          "answer1": "Resto a lamentarmi",
+          "answer2": "Fingo di pressare",
+          "answer3": "Pressare senza crederci",
+          "answer4": "Metto in difficoltà la ripartenza",
+          "answer5": "Spingo all'errore",
+          "answer6": "Recupero o faccio arretrare l'avversario",
+          "question": "Perdi un pallone alto, l'avversario lancia un contropiede..."
+        },
+        "question2": {
+          "answer1": "Non difendo",
+          "answer2": "Sono troppo lontano per intervenire",
+          "answer3": "Mi avvicino ma troppo tardi",
+          "answer4": "Forzo un passaggio all'indietro",
+          "answer5": "Taglio la sua opzione di passaggio",
+          "answer6": "Gli impedisco totalmente di rilanciare",
+          "question": "Stai difendendo contro un avversario che imposta il gioco dal basso..."
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "Mi faccio prendere senza dribblare",
+          "answer2": "Provo un dribbling lento",
+          "answer3": "Lo supero ma perdo la palla dopo",
+          "answer4": "Lo elimino con forza",
+          "answer5": "Dribblo e tiro subito dopo",
+          "answer6": "Lo supero pulito e segno",
+          "question": "Sei di fronte a un difensore in un 1 contro 1 negli ultimi 10 metri..."
+        },
+        "question2": {
+          "answer1": "Perdo subito la palla",
+          "answer2": "La tengo un attimo poi la perdo",
+          "answer3": "Mi giro ma è rischioso",
+          "answer4": "Mi proteggo e gioco all'indietro",
+          "answer5": "Me la cavo sotto pressione",
+          "answer6": "Mi giro e avanzo palla al piede",
+          "question": "Ricevi la palla sotto pressione, devi uscirne..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Parto troppo tardi",
+          "answer2": "Parto ma vengo ripreso",
+          "answer3": "Prendo vantaggio ma sono servito male",
+          "answer4": "Sono ben lanciato ma rallento",
+          "answer5": "Prendo lo spazio e sono servito",
+          "answer6": "Sono già davanti e parto verso la porta",
+          "question": "Stai partendo in profondità su un contropiede veloce..."
+        },
+        "question2": {
+          "answer1": "Rimango statico",
+          "answer2": "Parto ma sono fuori tempo",
+          "answer3": "Corro nell'asse senza convinzione",
+          "answer4": "Propongo un movimento medio",
+          "answer5": "Avvio un movimento deciso",
+          "answer6": "Parto al momento giusto e vengo trovato",
+          "question": "Il tuo compagno avvia un contropiede, vuoi la palla..."
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "Non lo vedo nemmeno",
+          "answer2": "Lo vedo ma tengo la palla",
+          "answer3": "Provo il passaggio troppo tardi",
+          "answer4": "La passo un po' dietro di lui",
+          "answer5": "Lo servo bene per un tiro",
+          "answer6": "Lo assisto perfettamente al momento giusto",
+          "question": "Un compagno è libero alla tua sinistra durante un'azione intensa..."
+        },
+        "question2": {
+          "answer1": "Ritardo a passare",
+          "answer2": "Sbaglio il passaggio di appoggio",
+          "answer3": "Combino ma troppo lentamente",
+          "answer4": "La do e riparto timido",
+          "answer5": "Gioco veloce e sono rilanciato",
+          "answer6": "Faccio una combinazione netta e rapida",
+          "question": "Fai un uno-due in zona d'attacco..."
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "Perdo il duello all'impatto",
+          "answer2": "Salto troppo presto o per niente",
+          "answer3": "Lo ostacolo ma perdo la palla",
+          "answer4": "Guadagno la posizione senza la palla",
+          "answer5": "Controllo nonostante il contatto",
+          "answer6": "Vinco il duello e conservo",
+          "question": "Devi lottare con un difensore per un pallone lungo..."
+        },
+        "question2": {
+          "answer1": "Mi faccio spostare e cado",
+          "answer2": "Perdo il pallone in sponda",
+          "answer3": "Tengo un po' poi lo perdo",
+          "answer4": "Tengo spalle alla porta poi la sposto",
+          "answer5": "Mi giro e faccio giocare",
+          "answer6": "Tengo perfettamente e creo gioco",
+          "question": "Stai giocando come pivot con un difensore alle spalle..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "Mi faccio prendere dal panico e tiro fuori",
+          "answer2": "Tiro dritto sul portiere",
+          "answer3": "Tiro troppo piano",
+          "answer4": "Inquadro senza ingannarlo",
+          "answer5": "Faccio un buon tiro, il portiere è battuto",
+          "answer6": "Segno con calma",
+          "question": "Ricevi un passaggio centrale, uno contro uno col portiere..."
+        },
+        "question2": {
+          "answer1": "Sbaglio il controllo",
+          "answer2": "Mi giro troppo lentamente",
+          "answer3": "Tiro senza equilibrio",
+          "answer4": "Mi giro e tiro in porta",
+          "answer5": "Mi giro veloce e colpisco bene",
+          "answer6": "Mi giro fluido e segno",
+          "question": "Sei con le spalle alla porta, ti giri per tirare..."
+        }
+      }
+    },
+    "defender": {
+      "defence": {
+        "question1": {
+          "answer1": "Lascio troppo spazio",
+          "answer2": "Arretro senza intervenire",
+          "answer3": "Lo rallento ma passa",
+          "answer4": "Lo costringo a giocare sul lato",
+          "answer5": "Blocco l'angolo di tiro",
+          "answer6": "Interrompo la sua corsa pulito",
+          "question": "Un giocatore entra nella tua zona palla al piede..."
+        },
+        "question2": {
+          "answer1": "Mi supera senza reagire",
+          "answer2": "Tacklo troppo tardi e faccio fallo",
+          "answer3": "Lo freno un po' ma passa",
+          "answer4": "Rimango in piedi e lo ostacolo bene",
+          "answer5": "Gli impedisco di tirare",
+          "answer6": "Recupero pulito senza fallo",
+          "question": "Un attaccante cerca di superarti in un uno contro uno..."
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "Rallento, non so cosa fare",
+          "answer2": "Provo un dribbling e vengo preso",
+          "answer3": "Mi fermo e perdo la palla",
+          "answer4": "Lo elimino per un pelo",
+          "answer5": "Lo dribblo e poi passo",
+          "answer6": "Lo fisso e concateno perfettamente",
+          "question": "Porti il pallone in avanti, un avversario ti si para davanti..."
+        },
+        "question2": {
+          "answer1": "Perdo la palla al primo contatto",
+          "answer2": "Sgombro nel muro",
+          "answer3": "Me la cavo con un rimpallo favorevole",
+          "answer4": "Tengo la palla stringendo i denti",
+          "answer5": "Lo dribblo per un pelo",
+          "answer6": "Lo fisso e me la cavo pulitamente",
+          "question": "Un attaccante ti sta pressando forte, devi uscire dal duello..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Non mi muovo quasi",
+          "answer2": "Faccio qualche passo senza convinzione",
+          "answer3": "Torno ma troppo tardi",
+          "answer4": "Torno giusto in tempo per disturbare",
+          "answer5": "Sono presente nel duello in area",
+          "answer6": "Sono tornato prima di lui e intercetto",
+          "question": "L'avversario sta contrattaccando, devi tornare subito..."
+        },
+        "question2": {
+          "answer1": "Mi faccio superare senza poter reagire",
+          "answer2": "Corro ma prende troppo vantaggio",
+          "answer3": "Lo seguo a fatica fino all'area",
+          "answer4": "Torno in tempo ma senza poter intervenire",
+          "answer5": "Torno e lo costringo a tirare velocemente",
+          "answer6": "Lo raggiungo e interrompo l'azione",
+          "question": "Un attaccante ti anticipa su un passaggio filtrante…"
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "Mi agito e perdo la palla",
+          "answer2": "La butto via senza mirare",
+          "answer3": "Tengo il pallone senza soluzione",
+          "answer4": "Me la cavo con un passaggio laterale",
+          "answer5": "Mi giro e trovo una buona opzione",
+          "answer6": "Mantengo la calma e rilancio pulito",
+          "question": "Sotto pressione, devi trovare una soluzione rapida…"
+        },
+        "question2": {
+          "answer1": "Ritardo e perdo la palla",
+          "answer2": "Passo corto, l'avversario intercetta",
+          "answer3": "Gioco nei piedi sotto pressione",
+          "answer4": "Trovo un compagno di appoggio",
+          "answer5": "Riesco a superare una linea col passaggio",
+          "answer6": "Lancio un compagno nello spazio",
+          "question": "Esci pulito col pallone, un giocatore si smarca…"
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "Non riesco più a correre",
+          "answer2": "Resto dietro l'azione",
+          "answer3": "Torno indietro al trotto",
+          "answer4": "Torno indietro lentamente ma sicuramente",
+          "answer5": "Sono al duello nonostante la fatica",
+          "answer6": "Scatto e intercetto l'azione",
+          "question": "Alla fine della partita, la squadra avversaria parte con un contropiede..."
+        },
+        "question2": {
+          "answer1": "Mi faccio spostare facilmente",
+          "answer2": "Cado al contatto",
+          "answer3": "Resisto ma passa comunque",
+          "answer4": "Lo tengo in equilibrio precario",
+          "answer5": "Vinco il duello corpo a corpo",
+          "answer6": "Lo spengo fisicamente senza fallo",
+          "question": "Devi contenere un attaccante che ti spinge da dietro..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "Sbaglio completamente il tiro",
+          "answer2": "Tiro sopra nella fretta",
+          "answer3": "Tiro senza controllo ed è debole",
+          "answer4": "La prendo bene ma viene fermata",
+          "answer5": "Miro bene ma viene deviata",
+          "answer6": "Tiro forte ed è gol",
+          "question": "La palla è lì al limite dell'area avversaria..."
+        },
+        "question2": {
+          "answer1": "Non provo nulla",
+          "answer2": "Tiro senza slancio, lontano dalla porta",
+          "answer3": "Tiro troppo sul portiere",
+          "answer4": "Faccio un tiro corretto",
+          "answer5": "Tiro in porta e il portiere deve intervenire",
+          "answer6": "Segno con un tiro pulito",
+          "question": "Hai recuperato il pallone in alto con un po' di spazio davanti a te..."
+        }
+      }
+    },
+    "goalkeeper": {
+      "1-on-1": {
+        "question1": {
+          "answer1": "Vengo eliminato subito",
+          "answer2": "Mi tuffo troppo tardi",
+          "answer3": "Mi lancio ma non tocco nulla",
+          "answer4": "Disturbo abbastanza da rallentare",
+          "answer5": "Recupero la palla scivolando",
+          "answer6": "Prendo la palla pulita",
+          "question": "Nella tua area, un duello a terra..."
+        },
+        "question2": {
+          "answer1": "Rimango sulla mia linea e subisco",
+          "answer2": "Esito a uscire",
+          "answer3": "Copre male l'angolo",
+          "answer4": "Lo spingo a tirare in fretta",
+          "answer5": "La tocco quel tanto che basta per evitarla",
+          "answer6": "Vinci il duello senza contatto",
+          "question": "Un attaccante si sta dirigendo verso di te..."
+        }
+      },
+      "communication": {
+        "question1": {
+          "answer1": "Lascio fare",
+          "answer2": "Mi lamento quando è troppo tardi",
+          "answer3": "Parlo al vento",
+          "answer4": "Li avverto senza troppa convinzione",
+          "answer5": "Chiedo loro di riposizionarsi",
+          "answer6": "Li riposiziono e reagiscono subito",
+          "question": "Due difensori si intralciano in area..."
+        },
+        "question2": {
+          "answer1": "Non dico niente, guardo",
+          "answer2": "Avverto troppo tardi",
+          "answer3": "Il difensore non mi ascolta",
+          "answer4": "Il difensore mi sente ma non reagisce",
+          "answer5": "Il mio difensore capisce e ci mette tempo ad adattarsi",
+          "answer6": "Lo segnalo forte e chiaro, lui se ne occupa",
+          "question": "Un giocatore avversario si aggira da solo dietro il tuo difensore..."
+        }
+      },
+      "footwork": {
+        "question1": {
+          "answer1": "Diretto nei piedi di un avversario",
+          "answer2": "Troppo lentamente, hanno il tempo di tornare",
+          "answer3": "In alto, ma è impreciso",
+          "answer4": "Lungo, verso un compagno in duello",
+          "answer5": "Rasoterra nello spazio libero",
+          "answer6": "Veloce e preciso, nella corsa di un compagno",
+          "question": "Dopo un'azione, i difensori avversari sono saliti. Tu riparti..."
+        },
+        "question2": {
+          "answer1": "Mi agito e sbaglio il controllo",
+          "answer2": "Sgombro alla cieca",
+          "answer3": "Riconsegno la palla all'avversario",
+          "answer4": "Controllo ma perdo tempo",
+          "answer5": "Gioco semplice verso un compagno",
+          "answer6": "Lo supero e rilancio pulito",
+          "question": "Il tuo difensore ti passa la palla, ma l'attaccante ti sta pressando..."
+        }
+      },
+      "positioning": {
+        "question1": {
+          "answer1": "Rimango fermo, è gol",
+          "answer2": "Mi tuffo in ritardo",
+          "answer3": "Cerco di seguire la palla durante la combinazione",
+          "answer4": "La tocco senza mandarla fuori",
+          "answer5": "Respingo d'istinto",
+          "answer6": "La fermo pulito",
+          "question": "Dopo un veloce uno-due davanti alla porta, l'attaccante tira…"
+        },
+        "question2": {
+          "answer1": "Lascio un buco ed è dentro",
+          "answer2": "Sono mal posizionato e reagisco tardi",
+          "answer3": "Provo a chiudere ma è troppo tardi",
+          "answer4": "Devio con la punta del piede",
+          "answer5": "Chiudo bene e la respingo",
+          "answer6": "Sono sulla traiettoria e la prendo",
+          "question": "L'attaccante è un po' fuori posizione, tira al primo palo..."
+        }
+      },
+      "reflexes": {
+        "question1": {
+          "answer1": "Non mi muovo",
+          "answer2": "Parto dal lato sbagliato",
+          "answer3": "Reagisco ma troppo tardi",
+          "answer4": "Mi lancio in ritardo ma la tocco",
+          "answer5": "La devio con un riflesso tardivo",
+          "answer6": "La fermo pulitamente",
+          "question": "Un tiro viene deviato proprio davanti a te..."
+        },
+        "question2": {
+          "answer1": "Rimango fermo",
+          "answer2": "Reagisco troppo tardi",
+          "answer3": "Alzo il braccio troppo lentamente",
+          "answer4": "Mi lancio all'ultimo momento",
+          "answer5": "La devio col piede per un pelo",
+          "answer6": "La fermo senza pensarci",
+          "question": "L'attaccante tira da distanza ravvicinata..."
+        }
+      },
+      "shot-stopping": {
+        "question1": {
+          "answer1": "Sono sui talloni, non mi muovo",
+          "answer2": "Mi sdraio troppo lentamente",
+          "answer3": "Tendo il piede ma la devio male",
+          "answer4": "La freno senza davvero fermarla",
+          "answer5": "Mi sdraio bene e la respingo",
+          "answer6": "Blocco il tiro a terra senza rimbalzo",
+          "question": "Quando viene tirato un tiro potente e rasoterra..."
+        },
+        "question2": {
+          "answer1": "Non ho il tempo di muovermi",
+          "answer3": "La sfioro senza fermarla",
+          "answer4": "La devio con la punta delle dita",
+          "answer5": "La respingo bene",
+          "answer6": "La prendo senza rimbalzo",
+          "answer2": "Mi tuffo troppo tardi",
+          "question": "Un tiro enorme viene scagliato da lontano..."
+        }
+      }
+    },
+    "midfielder": {
+      "defence": {
+        "question1": {
+          "answer1": "Lascio passare senza muovermi",
+          "answer4": "Resto davanti a lui e lo ostacolo",
+          "answer5": "Gli impedisco di avanzare",
+          "answer6": "Lo fermo pulito e recupero",
+          "answer2": "Arretro senza intervenire",
+          "answer3": "Lo freno un po' ma passa",
+          "question": "Un avversario cerca di avanzare nel tuo centro..."
+        },
+        "question2": {
+          "answer1": "Lascio scorrere l'azione",
+          "answer2": "Corro senza riuscire a tornare",
+          "answer3": "Torno troppo tardi",
+          "answer4": "Lo raggiungo e lo rallento",
+          "answer5": "Recupero con un tackle all'ultimo momento",
+          "answer6": "Recupero subito il pallone",
+          "question": "Perdi la palla e devi recuperarla in fretta..."
+        }
+      },
+      "dribbling": {
+        "question1": {
+          "answer1": "Mi faccio prendere subito",
+          "answer2": "Perdo il pallone tentando troppo",
+          "answer3": "Tengo la palla senza avanzare",
+          "answer4": "Proteggo bene e gioco semplice",
+          "answer5": "Me la cavo con un piccolo dribbling",
+          "answer6": "Mi giro e rilancio pulito",
+          "question": "Centrocampo, sei sotto pressione, devi uscirne..."
+        },
+        "question2": {
+          "answer1": "Mi faccio passare facilmente",
+          "answer2": "Provo un gesto e perdo il pallone",
+          "answer3": "Blocco l'azione senza davvero avanzare",
+          "answer4": "Lo fisso e lo elimino per un pelo",
+          "answer5": "Lo elimino e proseguo",
+          "answer6": "Lo dribblo e poi avvio un'azione",
+          "question": "Un avversario ti aspetta in un 1v1 a centrocampo..."
+        }
+      },
+      "pace": {
+        "question1": {
+          "answer1": "Resto camminando",
+          "answer2": "Torno al piccolo trotto",
+          "answer3": "Seguo l'azione da lontano",
+          "answer4": "Torno tardi ma disturbo",
+          "answer5": "Sono presente nell'area",
+          "answer6": "Torno a tutta e interrompo l'azione",
+          "question": "L'avversario sta contrattaccando, devi tornare in difesa!"
+        },
+        "question2": {
+          "answer1": "Non parto nemmeno",
+          "answer3": "Seguo ma mi stacco subito",
+          "answer4": "Sono in supporto ma in ritardo",
+          "answer5": "Sono disponibile all'ingresso dell'area",
+          "answer6": "Lo supero e propongo una soluzione",
+          "answer2": "Parto troppo tardi",
+          "question": "Il tuo esterno sta facendo una corsa profonda, vuoi sostenerlo..."
+        }
+      },
+      "passing": {
+        "question1": {
+          "answer1": "Non lo vedo",
+          "answer2": "Lo vedo troppo tardi",
+          "answer3": "Provo un passaggio approssimativo",
+          "answer4": "Lo trovo nei piedi",
+          "answer5": "Rompo la linea con un bel passaggio",
+          "answer6": "Lo lancio perfettamente nello spazio",
+          "question": "Un compagno si smarca tra le linee..."
+        },
+        "question2": {
+          "answer1": "Perdo la palla senza vedere la soluzione",
+          "answer3": "Passo nel panico all'indietro",
+          "answer4": "Trovo un passaggio corto sicuro",
+          "answer5": "Mi giro e gioco semplice",
+          "answer6": "Mantengo la calma e gioco al giusto ritmo",
+          "answer2": "Mi giro troppo lentamente",
+          "question": "Sei sotto pressione con le spalle al gioco, una soluzione si presenta..."
+        }
+      },
+      "physicality": {
+        "question1": {
+          "answer1": "Vengo spostato al primo contatto",
+          "answer2": "Perdo l'equilibrio rapidamente",
+          "answer3": "Resisto un po' poi perdo la palla",
+          "answer4": "Proteggo la palla per qualche secondo",
+          "answer5": "Tengo bene nonostante la pressione",
+          "answer6": "Mantengo la palla con serenità",
+          "question": "Devi proteggere il pallone con la schiena verso la porta sotto pressione..."
+        },
+        "question2": {
+          "answer1": "Cammino, sono cotto",
+          "answer2": "Rientro lentamente",
+          "answer3": "Faccio gli sforzi ma sono in ritardo",
+          "answer4": "Tengo il ritmo ma sono allo stremo",
+          "answer5": "Rimango lucido e difensivo",
+          "answer6": "Proseguo l'azione senza calare d'intensità",
+          "question": "Devi mantenere lo sforzo durante una fase intensa..."
+        }
+      },
+      "shooting": {
+        "question1": {
+          "answer1": "Manco completamente la palla",
+          "answer2": "Tiro senza controllo e va fuori",
+          "answer3": "Tiro ma è troppo debole",
+          "answer4": "Inquadro senza pericolo",
+          "answer5": "Tiro forte, il portiere respinge",
+          "answer6": "Segno con un tiro piazzato",
+          "question": "Ricevi un passaggio indietro proprio davanti all'area..."
+        },
+        "question2": {
+          "answer1": "Mi precipito e manco il pallone",
+          "answer2": "Colpisco in modo sbilanciato",
+          "answer3": "Tiro veloce ma senza potenza",
+          "answer4": "Inquadro nonostante la pressione",
+          "answer5": "Colpisco bene, il portiere deve intervenire",
+          "answer6": "Scateno un tiro rapido ed efficace",
+          "question": "Recuperi palla con il pressing e puoi tirare veloce..."
+        }
+      }
+    }
+  }
+}

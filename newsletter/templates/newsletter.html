@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="{{language}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <title>{{subject}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bakbak+One&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet" type="text/css">
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #afc4cd;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .responsive-padding {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #afc4cd;">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+        .greeting-text {
+            font-family: 'Bakbak One', 'Arial Black', Gadget, sans-serif !important;
+            letter-spacing: -0.9px !important;
+        }
+        .body-text {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        }
+    </style>
+    <div style="display: none; max-height: 0; overflow: hidden;">
+        {{preview_text}}
+    </div>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #afc4cd;">
+        <tr>
+            <td style="padding: 20px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden;">
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 40px 56px 24px 56px;" class="responsive-padding">
+                            <h1 class="greeting-text" style="font-family: 'Bakbak One', 'Arial Black', sans-serif; font-weight: 400; font-size: 22px; line-height: 1.3; letter-spacing: -0.9px; color: #141414; margin: 0; text-align: left;">
+                                {{greeting}}
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <!-- Section 1 -->
+                    {{#headline_1}}
+                    <tr>
+                        <td style="padding: 0 56px 8px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{headline_1}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/headline_1}}
+                    <tr>
+                        <td style="padding: 0 56px 28px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{body_text_1}}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Section 2 -->
+                    {{#headline_2}}
+                    <tr>
+                        <td style="padding: 0 56px 8px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{headline_2}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/headline_2}}
+                    <tr>
+                        <td style="padding: 0 56px 32px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{body_text_2}}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Optional Image -->
+                    {{#image_url}}
+                    <tr>
+                        <td style="padding: 0 56px 32px 56px;" class="responsive-padding">
+                            <a href="{{cta_url}}" style="display: block;">
+                                <img src="{{image_url}}" alt="" width="488" style="display: block; width: 100%; max-width: 488px; height: auto; border-radius: 8px;">
+                            </a>
+                        </td>
+                    </tr>
+                    {{/image_url}}
+
+                    <!-- Section 3 (optional) -->
+                    {{#body_text_3}}
+                    {{#headline_3}}
+                    <tr>
+                        <td style="padding: 0 56px 8px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{headline_3}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/headline_3}}
+                    <tr>
+                        <td style="padding: 0 56px 32px 56px;" class="responsive-padding">
+                            <p class="body-text" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; line-height: 1.6; color: #141414; margin: 0; text-align: left;">
+                                {{body_text_3}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/body_text_3}}
+
+                    <!-- CTA Button -->
+                    <tr>
+                        <td style="padding: 0 56px 44px 56px;" class="responsive-padding">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td style="border-radius: 8px; background-color: #00204a;">
+                                        <a href="{{cta_url}}"
+                                           style="display: inline-block; background-color: #00204a; color: #ffffff; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 15px; text-decoration: none; padding: 14px 28px; border-radius: 8px;">
+                                            {{cta_text}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 56px;" class="responsive-padding">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td style="border-top: 1px solid #e0e0e0;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 24px 56px 12px 56px;" class="responsive-padding">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td style="text-align: center; line-height: 18px;">
+                                        <span style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 13px; color: #141414; vertical-align: middle;">{{signature}}</span>
+                                        <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2FPoteau%20Logo%202023.png?alt=media&token=de5677a9-1fb3-4625-a6c7-eb4d588e9da0"
+                                             alt=""
+                                             width="16"
+                                             height="16"
+                                             style="display: inline-block; vertical-align: middle; margin-left: 4px; margin-bottom: 2px; width: 16px; height: 16px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Unsubscribe -->
+                    <tr>
+                        <td style="padding: 0 56px 32px 56px; text-align: center;" class="responsive-padding">
+                            <a href="{{unsubscribe_url}}"
+                               style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 400; font-size: 11px; color: #999999; text-decoration: none;">
+                                {{unsubscribe_text}}
+                            </a>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

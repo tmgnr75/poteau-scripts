@@ -1,0 +1,63 @@
+{
+    "id": "example-campaign",
+    "created_at": "2024-12-10",
+    "status": "draft",
+
+    "subject": {
+        "fr": "Du nouveau sur Poteau !",
+        "en": "News from Poteau!",
+        "es": "¡Novedades de Poteau!",
+        "it": "Novità da Poteau!"
+    },
+
+    "preview_text": {
+        "fr": "Découvrez les dernières nouveautés...",
+        "en": "Discover the latest updates...",
+        "es": "Descubre las últimas novedades...",
+        "it": "Scopri le ultime novità..."
+    },
+
+    "greeting": {
+        "fr": "Hey {{display_name}},",
+        "en": "Hey {{display_name}},",
+        "es": "¡Hola {{display_name}}!",
+        "it": "Ciao {{display_name}}!"
+    },
+
+    "body_text_1": {
+        "fr": "Des centaines de matchs t'attendent près de chez toi. Rejoins la communauté et joue dès maintenant.",
+        "en": "Hundreds of games are waiting for you nearby. Join the community and play now.",
+        "es": "Cientos de partidos te esperan cerca de ti. Únete a la comunidad y juega ahora.",
+        "it": "Centinaia di partite ti aspettano vicino a te. Unisciti alla community e gioca ora."
+    },
+
+    "body_text_2": {
+        "fr": "Que tu sois fan de foot ou de padel, il y a forcément un match pour toi. On t'attend !",
+        "en": "Whether you're into football or padel, there's a game for you. We're waiting for you!",
+        "es": "Ya sea que te guste el fútbol o el pádel, hay un partido para ti. ¡Te esperamos!",
+        "it": "Che tu sia appassionato di calcio o padel, c'è una partita per te. Ti aspettiamo!"
+    },
+
+    "cta_text": {
+        "fr": "Voir les matchs",
+        "en": "See games",
+        "es": "Ver partidos",
+        "it": "Vedi partite"
+    },
+
+    "cta_url": "https://poteau.app/games?source=newsletter",
+
+    "signature": {
+        "fr": "L'équipe Poteau",
+        "en": "The Poteau Team",
+        "es": "El equipo Poteau",
+        "it": "Il team Poteau"
+    },
+
+    "unsubscribe_text": {
+        "fr": "J'arrête",
+        "en": "I quit",
+        "es": "Lo dejo",
+        "it": "Smetto"
+    }
+}

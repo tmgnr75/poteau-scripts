@@ -1,0 +1,788 @@
+{
+  "soccer": {
+    "goalkeeper": {
+      "meta": {
+        "question13": {
+          "question": "Tu joues souvent au foot ?",
+          "answer1": "Très rarement, presque jamais",
+          "answer2": "Une fois tous les 2-3 mois",
+          "answer3": "Environ une fois par mois",
+          "answer4": "Environ 2 fois par mois",
+          "answer5": "Presque toutes les semaines",
+          "answer6": "Toutes les semaines, voire plus"
+        },
+        "question14": {
+          "question": "Quand tu joues, ton équipe a l’habitude de…",
+          "answer1": "Se faire éclater à chaque fois",
+          "answer2": "Perdre souvent",
+          "answer3": "Perdre/gagner, ça dépend",
+          "answer4": "Gagner un peu plus qu’elle perd",
+          "answer5": "Gagner souvent",
+          "answer6": "Gagner presque tout le temps"
+        },
+        "question15": {
+          "question": "Tu joues le plus souvent dans quel genre de matchs ?",
+          "answer1": "Des matchs à l’arrache",
+          "answer2": "Des matchs tranquilles",
+          "answer3": "Du five entre potes",
+          "answer4": "Des bons matchs organisés",
+          "answer5": "En tournoi ou ligue",
+          "answer6": "Des matchs très sérieux"
+        },
+        "question16": {
+          "question": "Dans ton équipe, tu es plutôt…",
+          "answer1": "Celui qu’on prend en dernier",
+          "answer2": "Souvent en galère",
+          "answer3": "Correct sans plus",
+          "answer4": "Plutôt fiable",
+          "answer5": "L’un des bons",
+          "answer6": "L’un des meilleurs"
+        },
+        "question17": {
+          "question": "Quand tu parles de ton niveau, tu plutôt…",
+          "answer1": "Je me surestime clairement",
+          "answer2": "Je me vante un peu",
+          "answer3": "Je vois souvent le bon côté",
+          "answer4": "J’essaie d’être honnête",
+          "answer5": "Je suis plutôt objectif",
+          "answer6": "Je suis super lucide (même sur mes défauts)"
+        },
+        "question18": {
+          "question": "Parmi tes potes qui jouent aussi, tu es à quel niveau ?",
+          "answer1": "Je suis en bas du panier",
+          "answer2": "Je suis pas très bon",
+          "answer3": "Je me débrouille",
+          "answer4": "Je suis dans la moyenne haute",
+          "answer5": "Je suis souvent parmi les meilleurs",
+          "answer6": "Je suis au-dessus du lot"
+        },
+        "question19": {
+          "question": "Niveau concentration, sur le terrain, tu es…",
+          "answer1": "Toujours ailleurs",
+          "answer2": "Je décroche souvent",
+          "answer3": "Ça dépend des moments",
+          "answer4": "Plutôt concentré",
+          "answer5": "Focus quasi tout le match",
+          "answer6": "Rien ne me déconcentre"
+        },
+        "question20": {
+          "question": "Le plus important pour toi, c'est de…",
+          "answer1": "Rigoler, ne pas me prendre au sérieux",
+          "answer2": "Me défouler un peu",
+          "answer3": "Passer un bon moment entre potes",
+          "answer4": "Être utile à l’équipe",
+          "answer5": "Gagner si possible",
+          "answer6": "Gagner, peu importe comment"
+        }
+      },
+      "reflexes": {
+        "question1": {
+          "question": "Une frappe est déviée juste devant toi…",
+          "answer1": "Je bouge pas",
+          "answer2": "Je pars du mauvais côté",
+          "answer3": "Je réagis mais trop tard",
+          "answer4": "Je me jette en retard mais je la touche",
+          "answer5": "Je la dévie avec un réflexe tardif",
+          "answer6": "Je la stoppe proprement"
+        },
+        "question2": {
+          "question": "L’attaquant frappe à bout portant…",
+          "answer1": "Je reste sur place",
+          "answer2": "Je réagis trop tard",
+          "answer3": "Je lève le bras trop lentement",
+          "answer4": "Je me jette au dernier moment",
+          "answer5": "Je dévie du pied de justesse",
+          "answer6": "Je l’arrête sans réfléchir"
+        }
+      },
+      "shot-stopping": {
+        "question3": {
+          "question": "Quand une frappe puissante, à ras de terre, est tirée…",
+          "answer1": "Je suis sur les talons, je bouge pas",
+          "answer2": "Je me couche trop lentement",
+          "answer3": "Je tends le pied mais je la dévie mal",
+          "answer4": "Je la freine sans vraiment l’arrêter",
+          "answer5": "Je me couche bien et je la repousse",
+          "answer6": "Je bloque la frappe au sol sans rebond"
+        },
+        "question4": {
+          "question": "Une énorme frappe est tirée de loin…",
+          "answer1": "Je n’ai pas le temps de bouger",
+          "answer2": "Je plonge trop tard",
+          "answer3": "Je la frôle sans l’arrêter",
+          "answer4": "Je la dévie du bout des doigts",
+          "answer5": "Je la repousse bien",
+          "answer6": "Je la capte sans rebond"
+        }
+      },
+      "1-on-1": {
+        "question5": {
+          "question": "Dans ta surface, duel au sol…",
+          "answer1": "Je me fais éliminer direct",
+          "answer2": "Je plonge trop tard",
+          "answer3": "Je me jette mais je touche rien",
+          "answer4": "Je gêne juste assez pour ralentir",
+          "answer5": "Je récupère le ballon en glissant",
+          "answer6": "Je prends le ballon proprement"
+        },
+        "question6": {
+          "question": "Un attaquant se lance face à toi…",
+          "answer1": "Je reste sur ma ligne et je subis",
+          "answer2": "J’hésite à sortir",
+          "answer3": "Je couvre mal l’angle",
+          "answer4": "Je le pousse à tirer vite",
+          "answer5": "Je la touche juste assez pour l’éviter",
+          "answer6": "Je gagne le duel sans contact"
+        }
+      },
+      "positioning": {
+        "question7": {
+          "question": "Après une combinaison rapide devant le but, l’attaquant tire…",
+          "answer1": "Je reste figé, c’est but",
+          "answer2": "Je plonge en retard",
+          "answer3": "J’essaie de suivre le ballon pendant la combinaison",
+          "answer4": "Je touche sans la sortir",
+          "answer5": "Je repousse en réflexe",
+          "answer6": "Je l’arrête proprement"
+        },
+        "question8": {
+          "question": "L’attaquant est un peu excentré, tir au premier poteau…",
+          "answer1": "Je laisse un trou et c’est dedans",
+          "answer2": "Je suis mal placé et je réagis tard",
+          "answer3": "Je tente de fermer mais c’est trop juste",
+          "answer4": "Je dévie du bout du pied",
+          "answer5": "Je ferme bien et je la repousse",
+          "answer6": "Je suis sur la trajectoire et je la capte"
+        }
+      },
+      "footwork": {
+        "question9": {
+          "question": "Après une action, les défenseurs adverses sont montés. Tu relances…",
+          "answer1": "Direct dans les pieds d’un adversaire",
+          "answer2": "Trop lentement, ils ont le temps de revenir",
+          "answer3": "En hauteur, mais c’est imprécis",
+          "answer4": "Long, vers un partenaire en duel",
+          "answer5": "À ras de terre dans l’espace libre",
+          "answer6": "Vite et juste, dans la course d’un coéquipier"
+        },
+        "question10": {
+          "question": "Ton défenseur te fait une passe, mais l’attaquant te presse…",
+          "answer1": "Je panique et rate mon contrôle",
+          "answer2": "Je dégage n’importe comment",
+          "answer3": "Je rends la balle à l’adversaire",
+          "answer4": "Je contrôle mais perds du temps",
+          "answer5": "Je joue simple vers un partenaire",
+          "answer6": "Je l’élimine et je relance proprement"
+        }
+      },
+      "communication": {
+        "question11": {
+          "question": "Deux défenseurs se gênent dans la surface…",
+          "answer1": "Je laisse faire",
+          "answer2": "Je râle une fois que c’est trop tard",
+          "answer3": "Je parle dans le vide",
+          "answer4": "Je les avertis sans trop de conviction",
+          "answer5": "Je leur demande de se replacer",
+          "answer6": "Je les replace et ils réagissent direct"
+        },
+        "question12": {
+          "question": "Un joueur adverse rôde seul dans le dos de ton défenseur…",
+          "answer1": "Je dis rien, je regarde",
+          "answer2": "Je préviens trop tard",
+          "answer3": "Le défenseur ne m’écoute pas",
+          "answer4": "Le défenseur m’entend mais ne réagit pas",
+          "answer5": "Mon défenseur comprend et met du temps à s’adapter",
+          "answer6": "Je le signale fort et clair, il le prend en charge"
+        }
+      }
+    },
+    "defender": {
+      "meta": {
+        "question13": {
+          "question": "Tu joues souvent au foot ?",
+          "answer1": "Très rarement, presque jamais",
+          "answer2": "Une fois tous les 2-3 mois",
+          "answer3": "Environ une fois par mois",
+          "answer4": "Environ 2 fois par mois",
+          "answer5": "Presque toutes les semaines",
+          "answer6": "Toutes les semaines, voire plus"
+        },
+        "question14": {
+          "question": "Quand tu joues, ton équipe a l’habitude de…",
+          "answer1": "Se faire éclater à chaque fois",
+          "answer2": "Perdre souvent",
+          "answer3": "Perdre/gagner, ça dépend",
+          "answer4": "Gagner un peu plus qu’elle perd",
+          "answer5": "Gagner souvent",
+          "answer6": "Gagner presque tout le temps"
+        },
+        "question15": {
+          "question": "Tu joues le plus souvent dans quel genre de matchs ?",
+          "answer1": "Des matchs à l’arrache",
+          "answer2": "Des matchs tranquilles",
+          "answer3": "Du five entre potes",
+          "answer4": "Des bons matchs organisés",
+          "answer5": "En tournoi ou ligue",
+          "answer6": "Des matchs très sérieux"
+        },
+        "question16": {
+          "question": "Dans ton équipe, tu es plutôt…",
+          "answer1": "Celui qu’on prend en dernier",
+          "answer2": "Souvent en galère",
+          "answer3": "Correct sans plus",
+          "answer4": "Plutôt fiable",
+          "answer5": "L’un des bons",
+          "answer6": "L’un des meilleurs"
+        },
+        "question17": {
+          "question": "Quand tu parles de ton niveau, tu plutôt…",
+          "answer1": "Je me surestime clairement",
+          "answer2": "Je me vante un peu",
+          "answer3": "Je vois souvent le bon côté",
+          "answer4": "J’essaie d’être honnête",
+          "answer5": "Je suis plutôt objectif",
+          "answer6": "Je suis super lucide (même sur mes défauts)"
+        },
+        "question18": {
+          "question": "Parmi tes potes qui jouent aussi, tu es à quel niveau ?",
+          "answer1": "Je suis en bas du panier",
+          "answer2": "Je suis pas très bon",
+          "answer3": "Je me débrouille",
+          "answer4": "Je suis dans la moyenne haute",
+          "answer5": "Je suis souvent parmi les meilleurs",
+          "answer6": "Je suis au-dessus du lot"
+        },
+        "question19": {
+          "question": "Niveau concentration, sur le terrain, tu es…",
+          "answer1": "Toujours ailleurs",
+          "answer2": "Je décroche souvent",
+          "answer3": "Ça dépend des moments",
+          "answer4": "Plutôt concentré",
+          "answer5": "Focus quasi tout le match",
+          "answer6": "Rien ne me déconcentre"
+        },
+        "question20": {
+          "question": "Le plus important pour toi, c'est de…",
+          "answer1": "Rigoler, ne pas me prendre au sérieux",
+          "answer2": "Me défouler un peu",
+          "answer3": "Passer un bon moment entre potes",
+          "answer4": "Être utile à l’équipe",
+          "answer5": "Gagner si possible",
+          "answer6": "Gagner, peu importe comment"
+        }
+      },
+      "pace": {
+        "question1": {
+          "question": "L’adversaire contre-attaque, tu dois revenir très vite…",
+          "answer1": "Je ne bouge presque pas",
+          "answer2": "Je fais quelques pas sans conviction",
+          "answer3": "Je reviens mais trop tard",
+          "answer4": "Je reviens juste à temps pour gêner",
+          "answer5": "Je suis présent au duel dans la surface",
+          "answer6": "Je suis revenu avant lui et j’intercepte"
+        },
+        "question2": {
+          "question": "Un attaquant te prend de vitesse sur une passe en profondeur…",
+          "answer1": "Je me fais déposer sans pouvoir réagir",
+          "answer2": "Je cours mais il prend trop d’avance",
+          "answer3": "Je le suis difficilement jusqu'à la surface",
+          "answer4": "Je reviens à temps mais sans pouvoir intervenir",
+          "answer5": "Je reviens et je le pousse à frapper vite",
+          "answer6": "Je le rattrape et je coupe l'action"
+        }
+      },
+      "shooting": {
+        "question3": {
+          "question": "Le ballon traîne à l’entrée de la surface adverse…",
+          "answer1": "Je rate complètement ma frappe",
+          "answer2": "Je tape au-dessus dans la précipitation",
+          "answer3": "Je tire sans contrôle et c’est mou",
+          "answer4": "Je la prends bien mais elle est arrêtée",
+          "answer5": "Je vise bien mais c’est contré",
+          "answer6": "Je frappe fort et ça fait but"
+        },
+        "question4": {
+          "question": "Tu récupères le ballon haut avec un peu d’espace devant toi…",
+          "answer1": "Je ne tente rien",
+          "answer2": "Je frappe sans élan, loin du but",
+          "answer3": "Je frappe trop sur le gardien",
+          "answer4": "Je déclenche un tir correct",
+          "answer5": "Je cadre et le gardien doit intervenir",
+          "answer6": "Je marque avec une frappe propre"
+        }
+      },
+      "passing": {
+        "question5": {
+          "question": "Sous pression, tu dois trouver une solution rapide…",
+          "answer1": "Je panique et je rends la balle",
+          "answer2": "Je balance sans viser",
+          "answer3": "Je garde le ballon sans solution",
+          "answer4": "Je m’en sors avec une passe latérale",
+          "answer5": "Je me retourne et trouve une bonne option",
+          "answer6": "Je garde mon sang-froid et relance propre"
+        },
+        "question6": {
+          "question": "Tu sors proprement avec le ballon, un joueur se démarque…",
+          "answer1": "Je tarde et je perds la balle",
+          "answer2": "Je passe court, l’adversaire intercepte",
+          "answer3": "Je joue dans les pieds sous pression",
+          "answer4": "Je trouve un partenaire en appui",
+          "answer5": "Je casse une ligne par la passe",
+          "answer6": "Je lance un coéquipier dans l’espace"
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "question": "Tu montes avec le ballon, un adversaire te fait face…",
+          "answer1": "Je ralentis, je sais pas quoi faire",
+          "answer2": "Je tente un dribble et je me fais prendre",
+          "answer3": "Je m’arrête et je perds le ballon",
+          "answer4": "Je l’élimine de justesse",
+          "answer5": "Je le dribble puis je passe",
+          "answer6": "Je le fixe et j’enchaîne parfaitement"
+        },
+        "question8": {
+          "question": "Un attaquant presse fort, tu dois sortir du duel…",
+          "answer1": "Je perds le ballon sur le premier contact",
+          "answer2": "Je dégage dans le mur",
+          "answer3": "Je m’en sors avec un contre favorable",
+          "answer4": "Je garde la balle en serrant les dents",
+          "answer5": "Je le dribble de justesse",
+          "answer6": "Je le fixe et je m’en sors proprement"
+        }
+      },
+      "defence": {
+        "question9": {
+          "question": "Un joueur entre dans ta zone en conduite de balle…",
+          "answer1": "Je laisse trop d’espace",
+          "answer2": "Je recule sans intervenir",
+          "answer3": "Je le ralentis mais il passe",
+          "answer4": "Je le pousse à jouer sur le côté",
+          "answer5": "Je bloque l’angle de frappe",
+          "answer6": "Je coupe sa course proprement"
+        },
+        "question10": {
+          "question": "Un attaquant tente de te passer en un contre un…",
+          "answer1": "Je me fais passer sans réagir",
+          "answer2": "Je tacle trop tard et je fais faute",
+          "answer3": "Je le freine un peu mais il passe",
+          "answer4": "Je reste debout et je le gêne bien",
+          "answer5": "Je l’empêche de frapper",
+          "answer6": "Je récupère proprement sans faute"
+        }
+      },
+      "physicality": {
+        "question11": {
+          "question": "En fin de match, une contre-attaque adverse se déclenche…",
+          "answer1": "Je n’arrive plus à courir",
+          "answer2": "Je reste derrière l’action",
+          "answer3": "Je reviens au trot",
+          "answer4": "Je reviens lentement mais sûrement",
+          "answer5": "Je suis au duel malgré la fatigue",
+          "answer6": "Je sprinte et intercepte l’action"
+        },
+        "question12": {
+          "question": "Tu dois contenir un attaquant qui te pousse dans le dos…",
+          "answer1": "Je me fais bouger facilement",
+          "answer2": "Je tombe au contact",
+          "answer3": "Je résiste mais il passe quand même",
+          "answer4": "Je le tiens en déséquilibre",
+          "answer5": "Je gagne le duel dans le corps à corps",
+          "answer6": "Je l’éteins physiquement sans faute"
+        }
+      }
+    },
+    "midfielder": {
+      "meta": {
+        "question13": {
+          "question": "Tu joues souvent au foot ?",
+          "answer1": "Très rarement, presque jamais",
+          "answer2": "Une fois tous les 2-3 mois",
+          "answer3": "Environ une fois par mois",
+          "answer4": "Environ 2 fois par mois",
+          "answer5": "Presque toutes les semaines",
+          "answer6": "Toutes les semaines, voire plus"
+        },
+        "question14": {
+          "question": "Quand tu joues, ton équipe a l’habitude de…",
+          "answer1": "Se faire éclater à chaque fois",
+          "answer2": "Perdre souvent",
+          "answer3": "Perdre/gagner, ça dépend",
+          "answer4": "Gagner un peu plus qu’elle perd",
+          "answer5": "Gagner souvent",
+          "answer6": "Gagner presque tout le temps"
+        },
+        "question15": {
+          "question": "Tu joues le plus souvent dans quel genre de matchs ?",
+          "answer1": "Des matchs à l’arrache",
+          "answer2": "Des matchs tranquilles",
+          "answer3": "Du five entre potes",
+          "answer4": "Des bons matchs organisés",
+          "answer5": "En tournoi ou ligue",
+          "answer6": "Des matchs très sérieux"
+        },
+        "question16": {
+          "question": "Dans ton équipe, tu es plutôt…",
+          "answer1": "Celui qu’on prend en dernier",
+          "answer2": "Souvent en galère",
+          "answer3": "Correct sans plus",
+          "answer4": "Plutôt fiable",
+          "answer5": "L’un des bons",
+          "answer6": "L’un des meilleurs"
+        },
+        "question17": {
+          "question": "Quand tu parles de ton niveau, tu plutôt…",
+          "answer1": "Je me surestime clairement",
+          "answer2": "Je me vante un peu",
+          "answer3": "Je vois souvent le bon côté",
+          "answer4": "J’essaie d’être honnête",
+          "answer5": "Je suis plutôt objectif",
+          "answer6": "Je suis super lucide (même sur mes défauts)"
+        },
+        "question18": {
+          "question": "Parmi tes potes qui jouent aussi, tu es à quel niveau ?",
+          "answer1": "Je suis en bas du panier",
+          "answer2": "Je suis pas très bon",
+          "answer3": "Je me débrouille",
+          "answer4": "Je suis dans la moyenne haute",
+          "answer5": "Je suis souvent parmi les meilleurs",
+          "answer6": "Je suis au-dessus du lot"
+        },
+        "question19": {
+          "question": "Niveau concentration, sur le terrain, tu es…",
+          "answer1": "Toujours ailleurs",
+          "answer2": "Je décroche souvent",
+          "answer3": "Ça dépend des moments",
+          "answer4": "Plutôt concentré",
+          "answer5": "Focus quasi tout le match",
+          "answer6": "Rien ne me déconcentre"
+        },
+        "question20": {
+          "question": "Le plus important pour toi, c'est de…",
+          "answer1": "Rigoler, ne pas me prendre au sérieux",
+          "answer2": "Me défouler un peu",
+          "answer3": "Passer un bon moment entre potes",
+          "answer4": "Être utile à l’équipe",
+          "answer5": "Gagner si possible",
+          "answer6": "Gagner, peu importe comment"
+        }
+      },
+      "pace": {
+        "question1": {
+          "question": "L’adversaire contre-attaque, tu dois revenir défendre…",
+          "answer1": "Je reste en marchant",
+          "answer2": "Je reviens au petit trot",
+          "answer3": "Je suis l’action de loin",
+          "answer4": "Je reviens tard mais je gêne",
+          "answer5": "Je suis présent dans la surface",
+          "answer6": "Je reviens à fond et je coupe l’action"
+        },
+        "question2": {
+          "question": "Ton ailier part dans la profondeur, tu veux le soutenir…",
+          "answer1": "Je ne pars même pas",
+          "answer2": "Je pars trop tard",
+          "answer3": "Je suis mais je décroche vite",
+          "answer4": "Je suis en soutien mais en retard",
+          "answer5": "Je suis disponible à l’entrée de la surface",
+          "answer6": "Je le dépasse et je propose une solution"
+        }
+      },
+      "shooting": {
+        "question3": {
+          "question": "Tu reçois une passe en retrait juste devant la surface…",
+          "answer1": "Je loupe complètement le ballon",
+          "answer2": "Je frappe sans contrôle et ça sort",
+          "answer3": "Je tire mais c’est trop mou",
+          "answer4": "Je cadre sans danger",
+          "answer5": "Je frappe fort, le gardien repousse",
+          "answer6": "Je marque avec une frappe placée"
+        },
+        "question4": {
+          "question": "Tu grattes un ballon au pressing et tu peux frapper vite…",
+          "answer1": "Je me précipite et je rate le ballon",
+          "answer2": "Je frappe en déséquilibre",
+          "answer3": "Je tire vite mais sans puissance",
+          "answer4": "Je cadre malgré la pression",
+          "answer5": "Je frappe bien, le gardien doit intervenir",
+          "answer6": "Je déclenche une frappe rapide et efficace"
+        }
+      },
+      "passing": {
+        "question5": {
+          "question": "Un coéquipier se démarque entre les lignes…",
+          "answer1": "Je ne le vois pas",
+          "answer2": "Je le vois trop tard",
+          "answer3": "Je tente une passe approximative",
+          "answer4": "Je le trouve dans les pieds",
+          "answer5": "Je casse la ligne avec une belle passe",
+          "answer6": "Je le lance parfaitement dans l’espace"
+        },
+        "question6": {
+          "question": "Tu es pressé dos au jeu, une solution se présente…",
+          "answer1": "Je perds la balle sans voir la solution",
+          "answer2": "Je me retourne trop lentement",
+          "answer3": "Je passe en panique en arrière",
+          "answer4": "Je trouve une passe courte sécurisée",
+          "answer5": "Je me retourne et joue juste",
+          "answer6": "Je garde mon calme et joue dans le bon tempo"
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "question": "Au milieu, tu es sous pression, il faut t’en sortir…",
+          "answer1": "Je me fais prendre direct",
+          "answer2": "Je perds le ballon en tentant trop",
+          "answer3": "Je garde la balle sans avancer",
+          "answer4": "Je protège bien et rejoue simple",
+          "answer5": "Je m’en sors avec un petit dribble",
+          "answer6": "Je me retourne et relance proprement"
+        },
+        "question8": {
+          "question": "Un adversaire t’attend en 1v1 au milieu de terrain…",
+          "answer1": "Je me fais passer facilement",
+          "answer2": "Je tente un geste et je perds le ballon",
+          "answer3": "Je bloque l’action sans vraiment avancer",
+          "answer4": "Je le fixe et je l’élimine de justesse",
+          "answer5": "Je l’élimine et je progresse",
+          "answer6": "Je le dribble puis je lance une action"
+        }
+      },
+      "defence": {
+        "question9": {
+          "question": "Un adversaire tente de progresser dans ton axe…",
+          "answer1": "Je laisse passer sans bouger",
+          "answer2": "Je recule sans intervenir",
+          "answer3": "Je le freine un peu mais il passe",
+          "answer4": "Je reste devant lui et je le gêne",
+          "answer5": "Je l’empêche d’avancer",
+          "answer6": "Je le stoppe proprement et récupère"
+        },
+        "question10": {
+          "question": "Tu perds la balle et dois vite la récupérer…",
+          "answer1": "Je laisse filer l’action",
+          "answer2": "Je cours sans réussir à revenir",
+          "answer3": "Je reviens trop tard",
+          "answer4": "Je le rattrape et je le ralentis",
+          "answer5": "Je récupère en taclant de justesse",
+          "answer6": "Je récupère le ballon immédiatement"
+        }
+      },
+      "physicality": {
+        "question11": {
+          "question": "Tu dois protéger le ballon dos au but sous pression…",
+          "answer1": "Je me fais bouger dès le contact",
+          "answer2": "Je perds l’équilibre rapidement",
+          "answer3": "Je résiste un peu puis je perds la balle",
+          "answer4": "Je protège le ballon quelques secondes",
+          "answer5": "Je tiens bien malgré la pression",
+          "answer6": "Je garde la balle en toute sérénité"
+        },
+        "question12": {
+          "question": "Tu dois enchaîner les efforts dans une phase intense…",
+          "answer1": "Je marche, je suis cuit",
+          "answer2": "Je reviens lentement",
+          "answer3": "Je fais les efforts mais je suis en retard",
+          "answer4": "Je tiens le rythme mais je suis à bout",
+          "answer5": "Je reste lucide et défensif",
+          "answer6": "Je poursuis l’action sans baisser d’intensité"
+        }
+      }
+    },
+    "forward": {
+      "meta": {
+        "question13": {
+          "question": "Tu joues souvent au foot ?",
+          "answer1": "Très rarement, presque jamais",
+          "answer2": "Une fois tous les 2-3 mois",
+          "answer3": "Environ une fois par mois",
+          "answer4": "Environ 2 fois par mois",
+          "answer5": "Presque toutes les semaines",
+          "answer6": "Toutes les semaines, voire plus"
+        },
+        "question14": {
+          "question": "Quand tu joues, ton équipe a l’habitude de…",
+          "answer1": "Se faire éclater à chaque fois",
+          "answer2": "Perdre souvent",
+          "answer3": "Perdre/gagner, ça dépend",
+          "answer4": "Gagner un peu plus qu’elle perd",
+          "answer5": "Gagner souvent",
+          "answer6": "Gagner presque tout le temps"
+        },
+        "question15": {
+          "question": "Tu joues le plus souvent dans quel genre de matchs ?",
+          "answer1": "Des matchs à l’arrache",
+          "answer2": "Des matchs tranquilles",
+          "answer3": "Du five entre potes",
+          "answer4": "Des bons matchs organisés",
+          "answer5": "En tournoi ou ligue",
+          "answer6": "Des matchs très sérieux"
+        },
+        "question16": {
+          "question": "Dans ton équipe, tu es plutôt…",
+          "answer1": "Celui qu’on prend en dernier",
+          "answer2": "Souvent en galère",
+          "answer3": "Correct sans plus",
+          "answer4": "Plutôt fiable",
+          "answer5": "L’un des bons",
+          "answer6": "L’un des meilleurs"
+        },
+        "question17": {
+          "question": "Quand tu parles de ton niveau, tu plutôt…",
+          "answer1": "Je me surestime clairement",
+          "answer2": "Je me vante un peu",
+          "answer3": "Je vois souvent le bon côté",
+          "answer4": "J’essaie d’être honnête",
+          "answer5": "Je suis plutôt objectif",
+          "answer6": "Je suis super lucide (même sur mes défauts)"
+        },
+        "question18": {
+          "question": "Parmi tes potes qui jouent aussi, tu es à quel niveau ?",
+          "answer1": "Je suis en bas du panier",
+          "answer2": "Je suis pas très bon",
+          "answer3": "Je me débrouille",
+          "answer4": "Je suis dans la moyenne haute",
+          "answer5": "Je suis souvent parmi les meilleurs",
+          "answer6": "Je suis au-dessus du lot"
+        },
+        "question19": {
+          "question": "Niveau concentration, sur le terrain, tu es…",
+          "answer1": "Toujours ailleurs",
+          "answer2": "Je décroche souvent",
+          "answer3": "Ça dépend des moments",
+          "answer4": "Plutôt concentré",
+          "answer5": "Focus quasi tout le match",
+          "answer6": "Rien ne me déconcentre"
+        },
+        "question20": {
+          "question": "Le plus important pour toi, c'est de…",
+          "answer1": "Rigoler, ne pas me prendre au sérieux",
+          "answer2": "Me défouler un peu",
+          "answer3": "Passer un bon moment entre potes",
+          "answer4": "Être utile à l’équipe",
+          "answer5": "Gagner si possible",
+          "answer6": "Gagner, peu importe comment"
+        }
+      },
+      "pace": {
+        "question1": {
+          "question": "Tu pars en profondeur sur un appel lancé…",
+          "answer1": "Je pars trop tard",
+          "answer2": "Je pars mais je me fais rattraper",
+          "answer3": "Je prends de l’avance mais je suis mal servi",
+          "answer4": "Je suis bien lancé mais je ralentis",
+          "answer5": "Je prends l’espace et je suis servi",
+          "answer6": "Je suis déjà devant et je pars au but"
+        },
+        "question2": {
+          "question": "Ton coéquipier déclenche un contre, tu veux être servi…",
+          "answer1": "Je reste statique",
+          "answer2": "Je pars mais je suis hors tempo",
+          "answer3": "Je cours dans l’axe sans conviction",
+          "answer4": "Je propose un appel moyen",
+          "answer5": "Je déclenche un appel tranchant",
+          "answer6": "Je pars dans le bon timing et je suis trouvé"
+        }
+      },
+      "shooting": {
+        "question3": {
+          "question": "Tu reçois une passe dans l’axe, seul face au gardien…",
+          "answer1": "Je panique et je tire à côté",
+          "answer2": "Je tire direct sur le gardien",
+          "answer3": "Je frappe trop doucement",
+          "answer4": "Je cadre sans le tromper",
+          "answer5": "Je fais un bon tir, le gardien est battu",
+          "answer6": "Je marque sereinement"
+        },
+        "question4": {
+          "question": "Tu es dos au but, tu te retournes pour frapper…",
+          "answer1": "Je rate mon contrôle",
+          "answer2": "Je me retourne trop lentement",
+          "answer3": "Je frappe sans équilibre",
+          "answer4": "Je me retourne et je tire cadré",
+          "answer5": "Je me retourne vite et frappe bien",
+          "answer6": "Je me retourne fluide et je marque"
+        }
+      },
+      "passing": {
+        "question5": {
+          "question": "Un coéquipier est seul à ta gauche pendant une action chaude…",
+          "answer1": "Je ne le vois même pas",
+          "answer2": "Je le vois mais je garde la balle",
+          "answer3": "Je tente la passe trop tard",
+          "answer4": "Je la donne un peu derrière lui",
+          "answer5": "Je le sers bien pour un tir",
+          "answer6": "Je l’assiste parfaitement au bon moment"
+        },
+        "question6": {
+          "question": "Tu fais un une-deux en zone offensive…",
+          "answer1": "Je tarde à passer",
+          "answer2": "Je rate la passe en appui",
+          "answer3": "Je combine mais trop lentement",
+          "answer4": "Je la donne et je repars timide",
+          "answer5": "Je joue vite et je suis relancé",
+          "answer6": "Je fais une combinaison nette et rapide"
+        }
+      },
+      "dribbling": {
+        "question7": {
+          "question": "Tu es face à un défenseur en 1v1 dans les 10 derniers mètres…",
+          "answer1": "Je me fais prendre sans dribbler",
+          "answer2": "Je tente un crochet lent",
+          "answer3": "Je le passe mais je perds la balle après",
+          "answer4": "Je l’élimine en force",
+          "answer5": "Je dribble et je frappe dans la foulée",
+          "answer6": "Je le passe proprement et je marque"
+        },
+        "question8": {
+          "question": "Tu reçois le ballon serré, tu dois t’en sortir…",
+          "answer1": "Je perds le ballon direct",
+          "answer2": "Je le garde un instant puis le perds",
+          "answer3": "Je me retourne mais c’est risqué",
+          "answer4": "Je me protège et joue en retrait",
+          "answer5": "Je m’en sors sous pression",
+          "answer6": "Je me retourne et j’avance balle au pied"
+        }
+      },
+      "defence": {
+        "question9": {
+          "question": "Tu perds un ballon haut, l’adversaire relance…",
+          "answer1": "Je reste à me plaindre",
+          "answer2": "Je fais semblant de presser",
+          "answer3": "Je presse sans y croire",
+          "answer4": "Je gêne la relance",
+          "answer5": "Je pousse à la faute",
+          "answer6": "Je récupère ou fais reculer l’adversaire"
+        },
+        "question10": {
+          "question": "Tu défends sur un relanceur adverse en position basse…",
+          "answer1": "Je ne défends pas",
+          "answer2": "Je suis trop loin pour intervenir",
+          "answer3": "Je m’approche mais trop tard",
+          "answer4": "Je force une passe vers l’arrière",
+          "answer5": "Je coupe sa solution de passe",
+          "answer6": "Je l’empêche totalement de relancer"
+        }
+      },
+      "physicality": {
+        "question11": {
+          "question": "Tu dois te battre avec un défenseur pour un ballon long…",
+          "answer1": "Je perds le duel à l’impact",
+          "answer2": "Je saute trop tôt ou pas du tout",
+          "answer3": "Je le gêne mais je perds la balle",
+          "answer4": "Je gagne la position sans la balle",
+          "answer5": "Je contrôle malgré le contact",
+          "answer6": "Je gagne le duel et je conserve"
+        },
+        "question12": {
+          "question": "Tu joues en pivot avec un défenseur dans ton dos…",
+          "answer1": "Je me fais bouger et je tombe",
+          "answer2": "Je perds le ballon en pivot",
+          "answer3": "Je garde un peu puis je le perds",
+          "answer4": "Je garde dos au but puis je décale",
+          "answer5": "Je me retourne et je fais jouer",
+          "answer6": "Je tiens parfaitement et je crée du jeu"
+        }
+      }
+    }
+  }
+}

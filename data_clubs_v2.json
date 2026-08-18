@@ -1,0 +1,262 @@
+[
+    {
+        "name": "Inter Miami CF",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Finter-miami.png"
+    },
+    {
+        "name": "LA Galaxy",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fla-galaxy.png"
+    },
+    {
+        "name": "New York City FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fnew-york-city.png"
+    },
+    {
+        "name": "Seattle Sounders FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fseattle.png"
+    },
+    {
+        "name": "Al-Hilal",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-hilal.png"
+    },
+    {
+        "name": "Al-Nassr",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-nassr.png"
+    },
+    {
+        "name": "Al-Ittihad",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fittihad.png"
+    },
+    {
+        "name": "Al-Ahli",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-ahli.png"
+    },
+    {
+        "name": "Toronto FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Ffc-toronto.png"
+    },
+    {
+        "name": "Atlanta United FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fatlanta-united.png"
+    },
+    {
+        "name": "Columbus Crew",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fcolumbus.png"
+    },
+    {
+        "name": "Al-Duhail",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Falduhail.png"
+    },
+    {
+        "name": "Al-Sadd",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-sadd.png"
+    },
+    {
+        "name": "Portland Timbers",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fportland-timbers.png"
+    },
+    {
+        "name": "Sporting Kansas City",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fkansas-city.png"
+    },
+    {
+        "name": "Al-Ettifaq",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fettifaq.png"
+    },
+    {
+        "name": "Al-Rayyan",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-rayyan.png"
+    },
+    {
+        "name": "LAFC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Flos-angeles-fc.png"
+    },
+    {
+        "name": "Nashville SC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fnashville.png"
+    },
+    {
+        "name": "Al-Shabab",
+        "league": "Middle-East",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fal-shabab.png"
+    },
+    {
+        "name": "Fluminense",
+        "league": "Brazil",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Ffluminense.png"
+    },
+    {
+        "name": "Grenoble Foot 38",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fgrenoble.png"
+    },
+    {
+        "name": "FC Girondins de Bordeaux",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fbordeaux.png"
+    },
+    {
+        "name": "Le Mans FC",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fle-mans.png"
+    },
+    {
+        "name": "Paris FC",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fparis-fc.png"
+    },
+    {
+        "name": "Red Star FC",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fred-star.png"
+    },
+    {
+        "name": "SC Bastia",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fsc-bastia.png"
+    },
+    {
+        "name": "SL Benfica",
+        "league": "Portugal",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fbenfica.png"
+    },
+    {
+        "name": "AS Nancy Lorraine",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fnancy.png"
+    },
+    {
+        "name": "AC ChievoVerona",
+        "league": "Italy",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fchievo-verone.png"
+    },
+    {
+        "name": "AFC Richmond",
+        "league": "England",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fafc-richmond.png"
+    },
+    {
+        "name": "Queens Park Rangers",
+        "league": "England",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fqueens-park-rangers.png"
+    },
+    {
+        "name": "FC Sochaux-Montbéliard",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Ffcsm.png"
+    },
+    {
+        "name": "US Orléans",
+        "league": "France",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Forleans.png"
+    },
+    {
+        "name": "Austin FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Faustin-fc.png"
+    },
+    {
+        "name": "Charlotte FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fcharlotte-fc.png"
+    },
+    {
+        "name": "Chicago Fire FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fchicago-fire.png"
+    },
+    {
+        "name": "FC Cincinnati",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Ffc-cincinnati.png"
+    },
+    {
+        "name": "Colorado Rapids",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fcolorado.png"
+    },
+    {
+        "name": "D.C. United",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fdc-united.png"
+    },
+    {
+        "name": "FC Dallas",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Ffc-dallas.png"
+    },
+    {
+        "name": "Houston Dynamo FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fhouston-dynamo.png"
+    },
+    {
+        "name": "Minnesota United FC",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fmnufc.png"
+    },
+    {
+        "name": "CF Montréal",
+        "league": "MLS",
+        "logo": "https://storage.googleapis.com/krank-club.appspot.com/clubs%2Fcf-montreal.png"
+    },
+    {
+        "name": "New England Revolution",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fnew-england-revolution.png"
+    },
+    {
+        "name": "New York Red Bulls",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fny-red-bull.png"
+    },
+    {
+        "name": "Orlando City SC",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Forlando.png"
+    },
+    {
+        "name": "Philadelphia Union",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fphiladelphia-union.png"
+    },
+    {
+        "name": "Real Salt Lake",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Freal-salt-lake.png"
+    },
+    {
+        "name": "San Jose Earthquakes",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fquakes-san-jose.png"
+    },
+    {
+        "name": "St. Louis City SC",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fsaint-louis.png"
+    },
+    {
+        "name": "Vancouver Whitecaps FC",
+        "league": "MLS",
+        "logo": "https: //storage.googleapis.com/krank-club.appspot.com/clubs%2Fvancouver.png"
+    }
+]

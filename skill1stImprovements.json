@@ -1,0 +1,566 @@
+[
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_2_text_en",
+    "previous_value": "I try a move and lose the ball",
+    "new_value": "I attempt a dribble and lose the ball"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_2_text_fr",
+    "previous_value": "Je tente un geste et je perds le ballon",
+    "new_value": "Je tente un dribble et je perds le ballon"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_2_text_es",
+    "previous_value": "Intento un movimiento y pierdo el balón",
+    "new_value": "Intento un regate y pierdo el balón"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_2_text_it",
+    "previous_value": "Provo un gesto e perdo il pallone",
+    "new_value": "Provo un dribbling e perdo il pallone"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_3_text_en",
+    "previous_value": "I block the play without really advancing",
+    "new_value": "I hold up play without making progress"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_3_text_fr",
+    "previous_value": "Je bloque l’action sans vraiment avancer",
+    "new_value": "Je bloque le jeu sans vraiment avancer"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_3_text_es",
+    "previous_value": "Bloqueo la jugada sin realmente avanzar",
+    "new_value": "Bloqueo la jugada sin avanzar"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_3_text_it",
+    "previous_value": "Blocco l'azione senza davvero avanzare",
+    "new_value": "Blocco l'azione senza avanzare"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_4_text_en",
+    "previous_value": "I fixate him and narrowly eliminate him",
+    "new_value": "I take him on and barely beat him"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_4_text_es",
+    "previous_value": "Lo fijo y lo elimino por poco",
+    "new_value": "Lo encaro y apenas lo supero"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_4_text_it",
+    "previous_value": "Lo fisso e lo elimino per un pelo",
+    "new_value": "Lo affronto e lo supero per un pelo"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_6_text_en",
+    "previous_value": "I dribble past him and start a play",
+    "new_value": "I dribble past him and start an attack"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_6_text_es",
+    "previous_value": "Lo driblo y luego lanzo una acción",
+    "new_value": "Lo regateo y luego inicio una jugada"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_6_text_it",
+    "previous_value": "Lo dribblo e poi avvio un'azione",
+    "new_value": "Lo dribblo e poi avvio l’azione"
+  },
+  {
+    "firebase_id": "0jXsECv4aPxoiwWiZVFT",
+    "key": "answer_6_text_fr",
+    "previous_value": "Je le dribble puis je lance une action",
+    "new_value": "Je le dribble puis je lance l’attaque"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_2_text_en",
+    "previous_value": "I shoot without control and it goes out",
+    "new_value": "I hit it first time and it goes wide"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_2_text_fr",
+    "previous_value": "Je frappe sans contrôle et ça sort",
+    "new_value": "Je frappe de volée et ça sort"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_2_text_es",
+    "previous_value": "Disparo sin control y se va fuera",
+    "new_value": "Disparo de primeras y se va fuera"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_2_text_it",
+    "previous_value": "Tiro senza controllo e va fuori",
+    "new_value": "Tiro al volo e va fuori"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_4_text_en",
+    "previous_value": "I hit the target but it's not dangerous",
+    "new_value": "I get it on target but it's harmless"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_4_text_fr",
+    "previous_value": "Je cadre sans danger",
+    "new_value": "Je cadre mais ce n’est pas dangereux"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_4_text_es",
+    "previous_value": "Apunto sin peligro",
+    "new_value": "Tiro a puerta pero sin peligro"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_4_text_it",
+    "previous_value": "Inquadro senza pericolo",
+    "new_value": "Tiro in porta ma senza pericolo"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_5_text_en",
+    "previous_value": "I shoot hard, the goalkeeper pushes it away",
+    "new_value": "I hit it hard and the goalkeeper parries it"
+  },
+  {
+    "firebase_id": "0nKIxanmJh8eGN00eoMU",
+    "key": "answer_5_text_es",
+    "previous_value": "Disparo fuerte, el portero rechaza",
+    "new_value": "Disparo fuerte y el portero la repele"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_3_text_en",
+    "previous_value": "I stretch my foot but deflect it poorly",
+    "new_value": "I stick out my foot but deflect it poorly"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_3_text_fr",
+    "previous_value": "Je tends le pied mais je la dévie mal",
+    "new_value": "Je tends la jambe mais la dévie mal"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_3_text_es",
+    "previous_value": "Extiendo el pie pero la desvío mal",
+    "new_value": "Estiro el pie pero la desvío mal"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_3_text_it",
+    "previous_value": "Tendo il piede ma la devio male",
+    "new_value": "Allungo il piede ma la devio male"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_2_text_it",
+    "previous_value": "Mi sdraio troppo lentamente",
+    "new_value": "Mi tuffo troppo lentamente"
+  },
+  {
+    "firebase_id": "3N7iimv1E5smkMbeiVXT",
+    "key": "answer_5_text_it",
+    "previous_value": "Mi sdraio bene e la respingo",
+    "new_value": "Mi tuffo bene e la respingo"
+  },
+  {
+    "firebase_id": "5CraGs8mlCJlHKS9kiSf",
+    "key": "answer_2_text_en",
+    "previous_value": "I clear it into the wall",
+    "new_value": "I clear it but hit the defender"
+  },
+  {
+    "firebase_id": "5CraGs8mlCJlHKS9kiSf",
+    "key": "answer_2_text_es",
+    "previous_value": "Despejo contra el muro",
+    "new_value": "Despejo contra el rival"
+  },
+  {
+    "firebase_id": "5CraGs8mlCJlHKS9kiSf",
+    "key": "answer_2_text_it",
+    "previous_value": "Sgombro nel muro",
+    "new_value": "La spazzo addosso all’avversario"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "question_en",
+    "previous_value": "Le plus important pour toi, c'est de…",
+    "new_value": "What's most important to you is to…"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_2_text_en",
+    "previous_value": "Me défouler un peu",
+    "new_value": "Blow off some steam"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_3_text_en",
+    "previous_value": "Passer un bon moment entre potes",
+    "new_value": "Have a good time with friends"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_4_text_en",
+    "previous_value": "Être utile à l’équipe",
+    "new_value": "Be useful to the team"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_5_text_en",
+    "previous_value": "Gagner si possible",
+    "new_value": "Win if possible"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_6_text_en",
+    "previous_value": "Gagner, peu importe comment",
+    "new_value": "Win no matter how"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_2_text_it",
+    "previous_value": "Sfamarmi un po'",
+    "new_value": "Sfogarmi un po’"
+  },
+  {
+    "firebase_id": "L4X2aMwMH6ULvgsLMdx0",
+    "key": "answer_3_text_it",
+    "previous_value": "Passare un buon momento tra amici",
+    "new_value": "Passare un bel momento con gli amici"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "question_en",
+    "previous_value": "Le plus important pour toi, c'est de…",
+    "new_value": "What's most important to you is to…"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_2_text_en",
+    "previous_value": "Me défouler un peu",
+    "new_value": "Blow off some steam"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_3_text_en",
+    "previous_value": "Passer un bon moment entre potes",
+    "new_value": "Have a good time with friends"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_4_text_en",
+    "previous_value": "Être utile à l’équipe",
+    "new_value": "Be useful to the team"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_5_text_en",
+    "previous_value": "Gagner si possible",
+    "new_value": "Win if possible"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_6_text_en",
+    "previous_value": "Gagner, peu importe comment",
+    "new_value": "Win no matter how"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_2_text_it",
+    "previous_value": "Sfamarmi un po'",
+    "new_value": "Sfogarmi un po’"
+  },
+  {
+    "firebase_id": "PlF5cY5bjPQQhDpkF68k",
+    "key": "answer_3_text_it",
+    "previous_value": "Passare un buon momento tra amici",
+    "new_value": "Passare un bel momento con gli amici"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "question_en",
+    "previous_value": "Le plus important pour toi, c'est de…",
+    "new_value": "What's most important to you is to…"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_2_text_en",
+    "previous_value": "Me défouler un peu",
+    "new_value": "Blow off some steam"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_3_text_en",
+    "previous_value": "Passer un bon moment entre potes",
+    "new_value": "Have a good time with friends"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_4_text_en",
+    "previous_value": "Être utile à l’équipe",
+    "new_value": "Be useful to the team"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_5_text_en",
+    "previous_value": "Gagner si possible",
+    "new_value": "Win if possible"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_6_text_en",
+    "previous_value": "Gagner, peu importe comment",
+    "new_value": "Win no matter how"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_2_text_it",
+    "previous_value": "Sfamarmi un po'",
+    "new_value": "Sfogarmi un po’"
+  },
+  {
+    "firebase_id": "QnuCEs2mcNmw8oE18ki1",
+    "key": "answer_3_text_it",
+    "previous_value": "Passare un buon momento tra amici",
+    "new_value": "Passare un bel momento con gli amici"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "question_en",
+    "previous_value": "Le plus important pour toi, c'est de…",
+    "new_value": "What's most important to you is to…"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_2_text_en",
+    "previous_value": "Me défouler un peu",
+    "new_value": "Blow off some steam"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_3_text_en",
+    "previous_value": "Passer un bon moment entre potes",
+    "new_value": "Have a good time with friends"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_4_text_en",
+    "previous_value": "Être utile à l’équipe",
+    "new_value": "Be useful to the team"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_5_text_en",
+    "previous_value": "Gagner si possible",
+    "new_value": "Win if possible"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_6_text_en",
+    "previous_value": "Gagner, peu importe comment",
+    "new_value": "Win no matter how"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_2_text_it",
+    "previous_value": "Sfamarmi un po'",
+    "new_value": "Sfogarmi un po’"
+  },
+  {
+    "firebase_id": "pbONcFaJc4Kjmh3IVHlv",
+    "key": "answer_3_text_it",
+    "previous_value": "Passare un buon momento tra amici",
+    "new_value": "Passare un bel momento con gli amici"
+  },
+  {
+    "firebase_id": "MbNUKc6V3ynsj1M3C8kw",
+    "key": "answer_1_text_en",
+    "previous_value": "Always elsewhere",
+    "new_value": "Always daydreaming"
+  },
+  {
+    "firebase_id": "MbNUKc6V3ynsj1M3C8kw",
+    "key": "answer_3_text_en",
+    "previous_value": "It depends on the moments",
+    "new_value": "It depends on the moment"
+  },
+  {
+    "firebase_id": "MbNUKc6V3ynsj1M3C8kw",
+    "key": "answer_3_text_fr",
+    "previous_value": "Ça dépend des moments",
+    "new_value": "Ça dépend du moment"
+  },
+  {
+    "firebase_id": "MbNUKc6V3ynsj1M3C8kw",
+    "key": "answer_3_text_it",
+    "previous_value": "Dipende dai momenti",
+    "new_value": "Dipende dal momento"
+  },
+  {
+    "firebase_id": "aOIvnIpZUCG2BlAFPcvo",
+    "key": "answer_1_text_en",
+    "previous_value": "Always elsewhere",
+    "new_value": "Always daydreaming"
+  },
+  {
+    "firebase_id": "aOIvnIpZUCG2BlAFPcvo",
+    "key": "answer_3_text_en",
+    "previous_value": "It depends on the moments",
+    "new_value": "It depends on the moment"
+  },
+  {
+    "firebase_id": "aOIvnIpZUCG2BlAFPcvo",
+    "key": "answer_3_text_fr",
+    "previous_value": "Ça dépend des moments",
+    "new_value": "Ça dépend du moment"
+  },
+  {
+    "firebase_id": "aOIvnIpZUCG2BlAFPcvo",
+    "key": "answer_3_text_it",
+    "previous_value": "Dipende dai momenti",
+    "new_value": "Dipende dal momento"
+  },
+  {
+    "firebase_id": "gkuY0ekg8W4XPnUSPGGg",
+    "key": "answer_1_text_en",
+    "previous_value": "Always elsewhere",
+    "new_value": "Always daydreaming"
+  },
+  {
+    "firebase_id": "gkuY0ekg8W4XPnUSPGGg",
+    "key": "answer_3_text_en",
+    "previous_value": "It depends on the moments",
+    "new_value": "It depends on the moment"
+  },
+  {
+    "firebase_id": "gkuY0ekg8W4XPnUSPGGg",
+    "key": "answer_3_text_fr",
+    "previous_value": "Ça dépend des moments",
+    "new_value": "Ça dépend du moment"
+  },
+  {
+    "firebase_id": "gkuY0ekg8W4XPnUSPGGg",
+    "key": "answer_3_text_it",
+    "previous_value": "Dipende dai momenti",
+    "new_value": "Dipende dal momento"
+  },
+  {
+    "firebase_id": "kKN7DLzFhJSCOWOPWE13",
+    "key": "answer_1_text_en",
+    "previous_value": "Always elsewhere",
+    "new_value": "Always daydreaming"
+  },
+  {
+    "firebase_id": "kKN7DLzFhJSCOWOPWE13",
+    "key": "answer_3_text_en",
+    "previous_value": "It depends on the moments",
+    "new_value": "It depends on the moment"
+  },
+  {
+    "firebase_id": "kKN7DLzFhJSCOWOPWE13",
+    "key": "answer_3_text_fr",
+    "previous_value": "Ça dépend des moments",
+    "new_value": "Ça dépend du moment"
+  },
+  {
+    "firebase_id": "kKN7DLzFhJSCOWOPWE13",
+    "key": "answer_3_text_it",
+    "previous_value": "Dipende dai momenti",
+    "new_value": "Dipende dal momento"
+  },
+  {
+    "firebase_id": "XzDAzsamO5gebQYp3d7P",
+    "key": "answer_4_text_en",
+    "previous_value": "I overpower him",
+    "new_value": "I power past him"
+  },
+  {
+    "firebase_id": "XzDAzsamO5gebQYp3d7P",
+    "key": "answer_4_text_es",
+    "previous_value": "Lo elimino con fuerza",
+    "new_value": "Lo supero con fuerza"
+  },
+  {
+    "firebase_id": "XzDAzsamO5gebQYp3d7P",
+    "key": "answer_4_text_it",
+    "previous_value": "Lo elimino con forza",
+    "new_value": "Lo supero con forza"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "question_en",
+    "previous_value": "You're pressed back to the play, a solution appears...",
+    "new_value": "You’re under pressure with your back to the play when a passing option appears..."
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "question_es",
+    "previous_value": "Te presionan de espaldas al juego, aparece una solución...",
+    "new_value": "Estás presionado de espaldas al juego cuando aparece una opción de pase..."
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "question_it",
+    "previous_value": "Sei sotto pressione con le spalle al gioco, una soluzione si presenta...",
+    "new_value": "Sei sotto pressione con le spalle al gioco quando si apre una soluzione di passaggio..."
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "question_fr",
+    "previous_value": "Tu es pressé dos au jeu, une solution se présente…",
+    "new_value": "Tu es pressé dos au jeu quand une solution de passe se présente…"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "answer_5_text_es",
+    "previous_value": "Me doy la vuelta y juego justo",
+    "new_value": "Me doy la vuelta y juego bien"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "answer_3_text_es",
+    "previous_value": "Paso en pánico hacia atrás",
+    "new_value": "Pase hacia atrás en pánico"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "answer_6_text_es",
+    "previous_value": "Mantengo la calma y juego en el ritmo correcto",
+    "new_value": "Mantengo la calma y juego al ritmo adecuado"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "answer_3_text_it",
+    "previous_value": "Passo nel panico all'indietro",
+    "new_value": "Passo all'indietro nel panico"
+  },
+  {
+    "firebase_id": "xiSsklvfMfsa3xx1ECg2",
+    "key": "answer_5_text_it",
+    "previous_value": "Mi giro e gioco semplice",
+    "new_value": "Mi giro e gioco bene"
+  }
+]

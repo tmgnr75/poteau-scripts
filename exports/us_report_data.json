@@ -1,0 +1,358 @@
+{
+  "meta": {
+    "total": 36,
+    "uniquePlayers": 125,
+    "presences": 639,
+    "avg": 17.8,
+    "first": "2026-02-15",
+    "last": "2026-06-28"
+  },
+  "byMonth": [
+    {
+      "key": "2026-02",
+      "games": 4,
+      "players": 7,
+      "pres": 66,
+      "start": "2026-02-15"
+    },
+    {
+      "key": "2026-03",
+      "games": 11,
+      "players": 40,
+      "pres": 214,
+      "start": "2026-03-01"
+    },
+    {
+      "key": "2026-04",
+      "games": 5,
+      "players": 31,
+      "pres": 99,
+      "start": "2026-04-04"
+    },
+    {
+      "key": "2026-05",
+      "games": 8,
+      "players": 51,
+      "pres": 123,
+      "start": "2026-05-03"
+    },
+    {
+      "key": "2026-06",
+      "games": 8,
+      "players": 64,
+      "pres": 137,
+      "start": "2026-06-06"
+    }
+  ],
+  "byWeek": [
+    {
+      "key": "2026-W07",
+      "games": 1,
+      "players": 1,
+      "pres": 10,
+      "start": "2026-02-15"
+    },
+    {
+      "key": "2026-W08",
+      "games": 2,
+      "players": 5,
+      "pres": 34,
+      "start": "2026-02-22"
+    },
+    {
+      "key": "2026-W09",
+      "games": 2,
+      "players": 9,
+      "pres": 44,
+      "start": "2026-02-28"
+    },
+    {
+      "key": "2026-W10",
+      "games": 3,
+      "players": 20,
+      "pres": 50,
+      "start": "2026-03-07"
+    },
+    {
+      "key": "2026-W11",
+      "games": 3,
+      "players": 23,
+      "pres": 54,
+      "start": "2026-03-14"
+    },
+    {
+      "key": "2026-W12",
+      "games": 2,
+      "players": 19,
+      "pres": 44,
+      "start": "2026-03-21"
+    },
+    {
+      "key": "2026-W13",
+      "games": 2,
+      "players": 25,
+      "pres": 44,
+      "start": "2026-03-28"
+    },
+    {
+      "key": "2026-W14",
+      "games": 2,
+      "players": 20,
+      "pres": 36,
+      "start": "2026-04-04"
+    },
+    {
+      "key": "2026-W15",
+      "games": 1,
+      "players": 18,
+      "pres": 22,
+      "start": "2026-04-12"
+    },
+    {
+      "key": "2026-W16",
+      "games": 1,
+      "players": 18,
+      "pres": 20,
+      "start": "2026-04-19"
+    },
+    {
+      "key": "2026-W17",
+      "games": 1,
+      "players": 15,
+      "pres": 21,
+      "start": "2026-04-26"
+    },
+    {
+      "key": "2026-W18",
+      "games": 1,
+      "players": 18,
+      "pres": 20,
+      "start": "2026-05-03"
+    },
+    {
+      "key": "2026-W19",
+      "games": 2,
+      "players": 19,
+      "pres": 28,
+      "start": "2026-05-09"
+    },
+    {
+      "key": "2026-W20",
+      "games": 2,
+      "players": 29,
+      "pres": 39,
+      "start": "2026-05-16"
+    },
+    {
+      "key": "2026-W21",
+      "games": 2,
+      "players": 22,
+      "pres": 25,
+      "start": "2026-05-23"
+    },
+    {
+      "key": "2026-W22",
+      "games": 1,
+      "players": 10,
+      "pres": 11,
+      "start": "2026-05-31"
+    },
+    {
+      "key": "2026-W23",
+      "games": 2,
+      "players": 18,
+      "pres": 34,
+      "start": "2026-06-06"
+    },
+    {
+      "key": "2026-W24",
+      "games": 2,
+      "players": 15,
+      "pres": 36,
+      "start": "2026-06-13"
+    },
+    {
+      "key": "2026-W25",
+      "games": 2,
+      "players": 23,
+      "pres": 39,
+      "start": "2026-06-20"
+    },
+    {
+      "key": "2026-W26",
+      "games": 2,
+      "players": 20,
+      "pres": 28,
+      "start": "2026-06-27"
+    }
+  ],
+  "byRegion": [
+    {
+      "key": "West",
+      "games": 32,
+      "players": 119,
+      "pres": 597,
+      "start": "2026-02-22"
+    },
+    {
+      "key": "East",
+      "games": 4,
+      "players": 6,
+      "pres": 42,
+      "start": "2026-02-15"
+    }
+  ],
+  "byVenue": [
+    {
+      "key": "13196 Bluff Creek Dr, Los Angeles",
+      "games": 18,
+      "players": 82,
+      "pres": 343,
+      "start": "2026-03-08"
+    },
+    {
+      "key": "2201 E Mariposa Ave, El Segundo",
+      "games": 5,
+      "players": 39,
+      "pres": 98,
+      "start": "2026-02-22"
+    },
+    {
+      "key": "Los Angeles",
+      "games": 5,
+      "players": 27,
+      "pres": 68,
+      "start": "2026-03-07"
+    },
+    {
+      "key": "9950 SW 104th St, Miami",
+      "games": 4,
+      "players": 6,
+      "pres": 42,
+      "start": "2026-02-15"
+    },
+    {
+      "key": "11430 Woodbine St, Los Angeles",
+      "games": 3,
+      "players": 20,
+      "pres": 66,
+      "start": "2026-03-14"
+    },
+    {
+      "key": "13212 Bluff Creek Dr, Playa Vista",
+      "games": 1,
+      "players": 4,
+      "pres": 22,
+      "start": "2026-02-28"
+    }
+  ],
+  "recent": {
+    "first": "2026-05-23",
+    "last": "2026-06-28",
+    "games": 11,
+    "players": 81,
+    "pres": 173,
+    "newPlayers": 66,
+    "list": [
+      {
+        "ymd": "2026-05-23",
+        "wd": "Sat",
+        "region": "West",
+        "venue": "Los Angeles",
+        "players": 8,
+        "app": 8,
+        "out": 0
+      },
+      {
+        "ymd": "2026-05-24",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 17,
+        "app": 17,
+        "out": 0
+      },
+      {
+        "ymd": "2026-05-31",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 11,
+        "app": 11,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-06",
+        "wd": "Sat",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 21,
+        "app": 21,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-07",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 13,
+        "app": 13,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-13",
+        "wd": "Sat",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 17,
+        "app": 17,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-14",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "2201 E Mariposa Ave, El Segundo",
+        "players": 19,
+        "app": 19,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-20",
+        "wd": "Sat",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 21,
+        "app": 21,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-21",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "2201 E Mariposa Ave, El Segundo",
+        "players": 18,
+        "app": 18,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-27",
+        "wd": "Sat",
+        "region": "West",
+        "venue": "13196 Bluff Creek Dr, Los Angeles",
+        "players": 11,
+        "app": 11,
+        "out": 0
+      },
+      {
+        "ymd": "2026-06-28",
+        "wd": "Sun",
+        "region": "West",
+        "venue": "2201 E Mariposa Ave, El Segundo",
+        "players": 17,
+        "app": 17,
+        "out": 0
+      }
+    ]
+  }
+}

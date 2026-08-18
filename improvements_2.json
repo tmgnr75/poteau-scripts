@@ -1,0 +1,710 @@
+[
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possible",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "08rQDDdLjUnoPrXH3f8B",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "4Q5d2VU8gDk1IPIu5mOO",
+        "field": "question_es",
+        "old": "Un disparo enorme se lanza desde lejos…",
+        "new": "Se realiza un gran disparo desde lejos…"
+    },
+    {
+        "firebase_id": "4Q5d2VU8gDk1IPIu5mOO",
+        "field": "question_it",
+        "old": "Un tiro enorme viene scagliato da lontano…",
+        "new": "Parte un tiro enorme da lontano…"
+    },
+    {
+        "firebase_id": "5DDWqfinLIgWDqHVOPD8",
+        "field": "answer_3_text_es",
+        "old": "Correcto sin más",
+        "new": "Correcto, sin más"
+    },
+    {
+        "firebase_id": "5DDWqfinLIgWDqHVOPD8",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "5HRQhE08ugG3YjiBMTpV",
+        "field": "answer_5_text_es",
+        "old": "Casi todo el partido enfocado",
+        "new": "Casi todo el partido concentrado"
+    },
+    {
+        "firebase_id": "5HRQhE08ugG3YjiBMTpV",
+        "field": "answer_5_text_fr",
+        "old": "Focus quasi tout le match",
+        "new": "Concentré quasi tout le match"
+    },
+    {
+        "firebase_id": "5HRQhE08ugG3YjiBMTpV",
+        "field": "answer_5_text_it",
+        "old": "Quasi tutto il match concentrato",
+        "new": "Concentrato quasi tutta la partita"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_4_text_es",
+        "old": "La doy y arranco tímido",
+        "new": "La doy y arranco tímidamente"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_4_text_fr",
+        "old": "Je la donne et je repars timide",
+        "new": "Je la donne et je repars timidement"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_4_text_it",
+        "old": "La do e riparto timido",
+        "new": "La do e riparto timidamente"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_5_text_es",
+        "old": "Juego rápido y me relanzo",
+        "new": "Juego rápido y me reincorporo"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_5_text_fr",
+        "old": "Je joue vite et je suis relancé",
+        "new": "Je joue vite et je me replace"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_5_text_it",
+        "old": "Gioco veloce e sono rilanciato",
+        "new": "Gioco rapido e mi riposiziono"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_6_text_es",
+        "old": "Hago una combinación clara y rápida",
+        "new": "Hago una combinación rápida y limpia"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_6_text_fr",
+        "old": "Je fais une combinaison nette et rapide",
+        "new": "Je fais une combinaison rapide et propre"
+    },
+    {
+        "firebase_id": "5n66imvKSSBc5dusW6px",
+        "field": "answer_6_text_it",
+        "old": "Faccio una combinazione netta e rapida",
+        "new": "Faccio una combinazione rapida e pulita"
+    },
+    {
+        "firebase_id": "5rOMubDARyjEYK9vfsbZ",
+        "field": "answer_3_text_es",
+        "old": "Presiono sin creerlo",
+        "new": "Presiono sin convicción"
+    },
+    {
+        "firebase_id": "5rOMubDARyjEYK9vfsbZ",
+        "field": "answer_3_text_it",
+        "old": "Pressare senza crederci",
+        "new": "Faccio pressing senza convinzione"
+    },
+    {
+        "firebase_id": "5rOMubDARyjEYK9vfsbZ",
+        "field": "answer_4_text_es",
+        "old": "Dificulto la relanza",
+        "new": "Dificulto la salida"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possible",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "7pedAENKPthub901yXbA",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possible",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "7vikih4mNuwB63LWnIIE",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "AtrFhG1FGTMfRnHTFqec",
+        "field": "answer_1_text_es",
+        "old": "Estoy en el fondo del barril",
+        "new": "Estoy en el último lugar"
+    },
+    {
+        "firebase_id": "AtrFhG1FGTMfRnHTFqec",
+        "field": "answer_2_text_fr",
+        "old": "Je suis pas très bon",
+        "new": "Je ne suis pas très bon"
+    },
+    {
+        "firebase_id": "BANci1RkENJGmDfh575p",
+        "field": "answer_5_text_es",
+        "old": "Casi todo el partido enfocado",
+        "new": "Casi todo el partido concentrado"
+    },
+    {
+        "firebase_id": "BANci1RkENJGmDfh575p",
+        "field": "answer_5_text_fr",
+        "old": "Focus quasi tout le match",
+        "new": "Concentré quasi tout le match"
+    },
+    {
+        "firebase_id": "BANci1RkENJGmDfh575p",
+        "field": "answer_5_text_it",
+        "old": "Quasi tutto il match concentrato",
+        "new": "Concentrato quasi tutta la partita"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possible",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "BFIIjHsQdmftBDNNTxyr",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "D6yx7GN6K0HcxU5Z4q2U",
+        "field": "answer_6_text_es",
+        "old": "Le impido totalmente relanzar",
+        "new": "Le impido totalmente lanzar la contra"
+    },
+    {
+        "firebase_id": "ECDl3pGJbnaHpSSoNakA",
+        "field": "answer_5_text_es",
+        "old": "Casi todo el partido enfocado",
+        "new": "Casi todo el partido concentrado"
+    },
+    {
+        "firebase_id": "ECDl3pGJbnaHpSSoNakA",
+        "field": "answer_5_text_fr",
+        "old": "Focus quasi tout le match",
+        "new": "Concentré quasi tout le match"
+    },
+    {
+        "firebase_id": "ECDl3pGJbnaHpSSoNakA",
+        "field": "answer_5_text_it",
+        "old": "Quasi tutto il match concentrato",
+        "new": "Concentrato quasi tutta la partita"
+    },
+    {
+        "firebase_id": "EV1tbCpTsx3AYtizcXL1",
+        "field": "answer_5_text_es",
+        "old": "Casi todo el partido enfocado",
+        "new": "Casi todo el partido concentrado"
+    },
+    {
+        "firebase_id": "EV1tbCpTsx3AYtizcXL1",
+        "field": "answer_5_text_fr",
+        "old": "Focus quasi tout le match",
+        "new": "Concentré quasi tout le match"
+    },
+    {
+        "firebase_id": "EV1tbCpTsx3AYtizcXL1",
+        "field": "answer_5_text_it",
+        "old": "Quasi tutto il match concentrato",
+        "new": "Concentrato quasi tutta la partita"
+    },
+    {
+        "firebase_id": "MVoXiQAdbSqkyAmkfEib",
+        "field": "answer_3_text_es",
+        "old": "Correcto sin más",
+        "new": "Correcto, sin más"
+    },
+    {
+        "firebase_id": "MVoXiQAdbSqkyAmkfEib",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "NF5IjDHYreHyPrqQ1BCI",
+        "field": "answer_1_text_es",
+        "old": "Estoy en el fondo del barril",
+        "new": "Estoy en el último lugar"
+    },
+    {
+        "firebase_id": "NF5IjDHYreHyPrqQ1BCI",
+        "field": "answer_2_text_fr",
+        "old": "Je suis pas très bon",
+        "new": "Je ne suis pas très bon"
+    },
+    {
+        "firebase_id": "OKqVxb8IA5Xrzng7UW0F",
+        "field": "answer_3_text_es",
+        "old": "Correcto sin más",
+        "new": "Correcto, sin más"
+    },
+    {
+        "firebase_id": "OKqVxb8IA5Xrzng7UW0F",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "OQe0XvMUSKBsMVfIMzhx",
+        "field": "answer_6_text_es",
+        "old": "Me doy la vuelta y relanzo limpiamente",
+        "new": "Me doy la vuelta y salgo limpio"
+    },
+    {
+        "firebase_id": "OQe0XvMUSKBsMVfIMzhx",
+        "field": "answer_6_text_it",
+        "old": "Mi giro e rilancio pulito",
+        "new": "Mi giro e riparto pulito"
+    },
+    {
+        "firebase_id": "VH6cL8A7v8msEpefF4sF",
+        "field": "answer_6_text_es",
+        "old": "Me doy la vuelta fluido y marco",
+        "new": "Me doy la vuelta con fluidez and marco"
+    },
+    {
+        "firebase_id": "VH6cL8A7v8msEpefF4sF",
+        "field": "answer_6_text_fr",
+        "old": "Je me retourne fluide et je marque",
+        "new": "Je me retourne fluidement et je marque"
+    },
+    {
+        "firebase_id": "VH6cL8A7v8msEpefF4sF",
+        "field": "answer_6_text_it",
+        "old": "Mi giro fluido e segno",
+        "new": "Mi giro con fluidità e segno"
+    },
+    {
+        "firebase_id": "YFmuCyCSsAbHdsiHpFk4",
+        "field": "answer_1_text_es",
+        "old": "Estoy en el fondo del barril",
+        "new": "Estoy en el último lugar"
+    },
+    {
+        "firebase_id": "YFmuCyCSsAbHdsiHpFk4",
+        "field": "answer_2_text_fr",
+        "old": "Je suis pas très bon",
+        "new": "Je ne suis pas très bon"
+    },
+    {
+        "firebase_id": "ctn0bbS0BbY2HzinNbGW",
+        "field": "answer_6_text_es",
+        "old": "Mantengo la calma y relanzo limpio",
+        "new": "Mantengo la calma y salgo limpio"
+    },
+    {
+        "firebase_id": "ctn0bbS0BbY2HzinNbGW",
+        "field": "answer_6_text_it",
+        "old": "Mantengo la calma e rilancio pulito",
+        "new": "Mantengo la calma e riparto pulito"
+    },
+    {
+        "firebase_id": "dNtUFHIbkiTkUEdPSB9s",
+        "field": "answer_6_text_it",
+        "old": "Vinci il duello senza contatto",
+        "new": "Vinco il duello senza contatto"
+    },
+    {
+        "firebase_id": "ehuQW2eJBqSApwI32TxI",
+        "field": "answer_1_text_es",
+        "old": "Estoy en el fondo del barril",
+        "new": "Estoy en el último lugar"
+    },
+    {
+        "firebase_id": "ehuQW2eJBqSApwI32TxI",
+        "field": "answer_2_text_fr",
+        "old": "Je suis pas très bon",
+        "new": "Je ne suis pas très bon"
+    },
+    {
+        "firebase_id": "hOZb2YjbIEZM92OfIU83",
+        "field": "answer_1_text_es",
+        "old": "Estoy en el fondo del barril",
+        "new": "Estoy en el último lugar"
+    },
+    {
+        "firebase_id": "hOZb2YjbIEZM92OfIU83",
+        "field": "answer_2_text_fr",
+        "old": "Je suis pas très bon",
+        "new": "Je ne suis pas très bon"
+    },
+    {
+        "firebase_id": "ls1VKQN28tXnjZnRdm6Q",
+        "field": "answer_3_text_es",
+        "old": "Correcto sin más",
+        "new": "Correcto, sin más"
+    },
+    {
+        "firebase_id": "ls1VKQN28tXnjZnRdm6Q",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possibile",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "mO0GJDARmGGkLSsKGeG4",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "phc73HAqRHllw8Fl49GE",
+        "field": "question_fr",
+        "old": "L’attaquant est un peu excentré, tir au premier poteau…",
+        "new": "L’attaquant est un peu excentré, tire au premier poteau…"
+    },
+    {
+        "firebase_id": "phc73HAqRHllw8Fl49GE",
+        "field": "question_it",
+        "old": "L’attaccante è un po’ fuori posizione, tira al primo palo…",
+        "new": "L’attaccante è un po’ decentrato, tira sul primo palo…"
+    },
+    {
+        "firebase_id": "qgL1A9dIPN5xzSpm2vBr",
+        "field": "answer_4_text_es",
+        "old": "Hago un pase medio",
+        "new": "Hago un desmarque medio"
+    },
+    {
+        "firebase_id": "qgL1A9dIPN5xzSpm2vBr",
+        "field": "answer_5_text_es",
+        "old": "Inicio un pase decisivo",
+        "new": "Inicio un desmarque decisivo"
+    },
+    {
+        "firebase_id": "qygcqbUeDWh6WQN6LUlc",
+        "field": "answer_6_text_es",
+        "old": "Lo elimino y relanzo limpiamente",
+        "new": "Lo elimino y salgo limpio"
+    },
+    {
+        "firebase_id": "qygcqbUeDWh6WQN6LUlc",
+        "field": "answer_6_text_it",
+        "old": "Lo supero e rilancio pulito",
+        "new": "Lo supero e riparto pulito"
+    },
+    {
+        "firebase_id": "rCchseV5qhleIKISf7bA",
+        "field": "answer_5_text_es",
+        "old": "Casi todo el partido enfocado",
+        "new": "Casi todo el partido concentrado"
+    },
+    {
+        "firebase_id": "rCchseV5qhleIKISf7bA",
+        "field": "answer_5_text_fr",
+        "old": "Focus quasi tout le match",
+        "new": "Concentré quasi tout le match"
+    },
+    {
+        "firebase_id": "rCchseV5qhleIKISf7bA",
+        "field": "answer_5_text_it",
+        "old": "Quasi tutto il match concentrato",
+        "new": "Concentrato quasi tutta la partita"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_2_text_en",
+        "old": "Me défouler un peu",
+        "new": "Let off a little steam"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_2_text_it",
+        "old": "Sfamarmi un po’",
+        "new": "Sfogarmi un po’"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_3_text_en",
+        "old": "Passer un bon moment entre potes",
+        "new": "Have a good time with friends"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_3_text_it",
+        "old": "Passare un buon momento tra amici",
+        "new": "Passare un bel momento con gli amici"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_4_text_en",
+        "old": "Être utile à l’équipe",
+        "new": "Be useful to the team"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_5_text_en",
+        "old": "Gagner si possible",
+        "new": "Win if possible"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_6_text_en",
+        "old": "Gagner, peu importe comment",
+        "new": "Win, no matter what"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "answer_6_text_it",
+        "old": "Vincere, a qualunque costo",
+        "new": "Vincere, non importa come"
+    },
+    {
+        "firebase_id": "uPQ3VYgwKxVYxeCpm4pt",
+        "field": "question_en",
+        "old": "Le plus important pour toi, c’est de…",
+        "new": "What’s most important to you is to…"
+    },
+    {
+        "firebase_id": "x7JN5ExnHfywnfbEh2Yv",
+        "field": "answer_3_text_es",
+        "old": "Correcto sin más",
+        "new": "Correcto, sin más"
+    },
+    {
+        "firebase_id": "x7JN5ExnHfywnfbEh2Yv",
+        "field": "answer_3_text_it",
+        "old": "Corretto senza più",
+        "new": "Discreto, niente di più"
+    }
+]
