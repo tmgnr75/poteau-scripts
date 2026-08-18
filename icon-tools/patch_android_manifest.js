@@ -60,22 +60,28 @@ function main() {
     mediaPermsStripped = (beforeStrip.match(mediaPermRe) || []).length;
   }
 
-  // Portrait lock: flutter_launcher_icons rewrites the MainActivity block on
-  // every run and drops android:screenOrientation="portrait". Re-inject it if
-  // missing so users can never rotate the app on Android.
-  let orientationReapplied = 0;
+  // Orientation is owned at RUNTIME, not by the manifest (2026-08-18).
+  //
+  // This block used to re-INJECT android:screenOrientation="portrait". It must
+  // not: the Live scoreboard is genuinely landscape now, and a manifest lock
+  // wins over SystemChrome.setPreferredOrientations, so re-injecting it would
+  // break rotation on Android only -- iOS would keep working and the bug would
+  // read as "landscape is broken on Android" long after anyone ran this script.
+  //
+  // Portrait everywhere else is enforced by defaultStatusBarStyle(), which the
+  // scoreboard releases on entry and restores on exit. So here we do the
+  // OPPOSITE: strip the attribute if anything puts it back.
+  let orientationStripped = 0;
   const mainActivityMatch = xml.match(/<activity([^>]*?android:name="\.MainActivity"[^>]*?)>/s);
-  if (mainActivityMatch && !mainActivityMatch[1].includes('android:screenOrientation=')) {
+  if (mainActivityMatch && mainActivityMatch[1].includes('android:screenOrientation=')) {
     const originalTag = mainActivityMatch[0];
-    // Insert the attribute just before the closing '>'. Match indentation of
-    // sibling attributes (12 spaces) for readable output.
     const patched = originalTag.replace(
-      /(\n\s+android:hardwareAccelerated="[^"]*")/,
-      `$1\n            android:screenOrientation="portrait"`
+      /\n\s+android:screenOrientation="[^"]*"/,
+      ''
     );
     if (patched !== originalTag) {
       xml = xml.replace(originalTag, patched);
-      orientationReapplied = 1;
+      orientationStripped = 1;
     }
   }
 
@@ -136,14 +142,14 @@ function main() {
     xml = xml.slice(0, recomputedCloseIdx) + insertion + xml.slice(recomputedCloseIdx);
   }
 
-  if (added > 0 || fixed > 0 || orientationReapplied > 0 || mediaPermsStripped > 0 || queriesAdded > 0) {
+  if (added > 0 || fixed > 0 || orientationStripped > 0 || mediaPermsStripped > 0 || queriesAdded > 0) {
     fs.writeFileSync(MANIFEST, xml);
   }
 
   const summary = [];
   if (added > 0) summary.push(`added ${added}`);
   if (fixed > 0) summary.push(`fixed ${fixed} alias icon refs (rewritten by flutter_launcher_icons)`);
-  if (orientationReapplied > 0) summary.push(`re-applied portrait lock (stripped by flutter_launcher_icons)`);
+  if (orientationStripped > 0) summary.push(`stripped portrait lock (orientation is runtime-owned; Live is landscape)`);
   if (mediaPermsStripped > 0) summary.push(`stripped ${mediaPermsStripped} READ_MEDIA_* permission(s) (Play policy)`);
   if (queriesAdded > 0) summary.push(`added <queries> block (WhatsApp package visibility)`);
   if (skipped > 0) summary.push(`skipped ${skipped}`);
