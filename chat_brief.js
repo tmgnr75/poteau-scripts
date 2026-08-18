@@ -33,6 +33,8 @@
 
 const { execFileSync, spawnSync } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
 function dep(name) {
     try { return require(name); }
@@ -273,6 +275,24 @@ function buildCorpus(data, names, games) {
 const PROMPT = `You are the editor of an internal daily newspaper about Poteau, a French app
 where amateur players organise football and padel games at sports centres.
 
+YOUR OUTPUT MUST BEGIN WITH THIS EXACT LINE:
+===TEASER===
+Nothing may precede it. No title, no date, no preamble. If your first line is
+anything else, the output is unusable.
+
+The teaser block is what someone sees in Slack before deciding to open the paper:
+
+===TEASER===
+ONE sentence naming what actually characterised the day.
+- one line per story, between three and five lines, each naming the venue and
+  what happened, under 90 characters, each starting with "- "
+ACT: the single most urgent thing a human should do today, one short line, or
+"ACT: nothing urgent".
+===END TEASER===
+
+Then, after ===END TEASER===, the full brief described below. Do NOT put a title
+or a date line at the start of the brief; the page adds those.
+
 Below is EVERY message real players and centre staff wrote in game chats
 yesterday. Read all of it, then write the day's brief.
 
@@ -322,10 +342,11 @@ RULES:
 - If the day was genuinely quiet, say that in one short brief. Do not inflate
   a nothing day into five stories.
 
-FORMAT (this matters, the output goes into a terminal and a Slack code block):
-Plain text ONLY. No markdown whatsoever: no #, no ##, no **bold**, no bullet
-characters, no backticks, no tables. Section titles in CAPITALS on their own
-line. Indent quotes by two spaces. No em dashes anywhere.
+FORMAT (this matters, the output goes into a terminal, a Slack block and a web
+page): Plain text ONLY. No markdown whatsoever: no #, no ##, no **bold**, no
+bullet characters other than the "- " in the teaser list, no backticks, no
+tables. Section titles in CAPITALS on their own line. Indent quotes by two
+spaces. No em dashes anywhere.
 
 THE MESSAGES:
 
@@ -410,6 +431,319 @@ function writeBrief(corpus) {
 
 // ------------------------------------------------------------------- output
 
+// The published page's head. Newsprint: a warm paper ground, a high-contrast
+// display serif for the masthead and headlines, a reading serif for body, and
+// mono for data. Every colour is a token defined on bare :root, so the two dark
+// blocks only restate values -- a colour whose ONLY definition sits inside a
+// media query renders one theme's text on the other theme's ground.
+const PAGE_HEAD = `<title>The Poteau Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --paper:#FBF9F4; --paper-sunk:#F2EEE5; --ink:#16171B; --ink-soft:#3A3C43;
+    --muted:#6B6E76; --rule:#D8D2C4; --pitch:#1E5B3A; --whistle:#9A6B18;
+    --measure:62ch;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#14151A; --paper-sunk:#1C1E24; --ink:#ECE7DC; --ink-soft:#C6C1B6;
+      --muted:#8E9199; --rule:#33363F; --pitch:#6FBF8E; --whistle:#D8A93F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#14151A; --paper-sunk:#1C1E24; --ink:#ECE7DC; --ink-soft:#C6C1B6;
+    --muted:#8E9199; --rule:#33363F; --pitch:#6FBF8E; --whistle:#D8A93F;
+  }
+  *,*::before,*::after { box-sizing:border-box; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:1.0625rem; line-height:1.62; margin:0; padding:0 1.5rem 6rem;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet { max-width:var(--measure); margin:0 auto; }
+  header.masthead { padding:3.5rem 0 0; border-bottom:3px double var(--pitch); }
+  .eyebrow {
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.6875rem;
+    letter-spacing:0.16em; text-transform:uppercase; color:var(--pitch); margin:0 0 1rem;
+  }
+  h1.title {
+    font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+    font-size:clamp(2.9rem,9vw,5.25rem); line-height:0.94; letter-spacing:-0.015em;
+    margin:0 0 0.6rem; text-wrap:balance;
+  }
+  .dateline {
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.75rem;
+    letter-spacing:0.06em; color:var(--muted); margin:0 0 1.4rem;
+  }
+  .stats {
+    display:flex; flex-wrap:wrap; gap:0 2.25rem; padding:0.9rem 0 1rem;
+    border-bottom:1px solid var(--rule);
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums;
+  }
+  .stat b { display:block; font-weight:500; font-size:1.5rem; line-height:1.1; color:var(--ink); }
+  .stat span {
+    font-size:0.6875rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted);
+  }
+  h2 {
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.75rem; font-weight:500;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--pitch);
+    margin:3.75rem 0 1.5rem; padding-bottom:0.55rem; border-bottom:1px solid var(--rule);
+  }
+  h3 {
+    font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+    font-size:clamp(1.6rem,4vw,2.1rem); line-height:1.14; letter-spacing:-0.01em;
+    margin:2.9rem 0 0.9rem; text-wrap:balance;
+  }
+  p { margin:0 0 1.15rem; }
+  .lead p:first-of-type { font-size:1.1875rem; line-height:1.55; }
+  .lead p:first-of-type::first-letter {
+    font-family:"Instrument Serif",Georgia,serif; font-size:3.6em; float:left;
+    line-height:0.78; padding:0.06em 0.09em 0 0; color:var(--pitch);
+  }
+  blockquote {
+    font-family:"Instrument Serif",Georgia,serif; font-size:clamp(1.22rem,3.1vw,1.5rem);
+    line-height:1.34; margin:1.6rem 0 1.7rem; padding:0.1rem 0 0.1rem 1.35rem;
+    border-left:2px solid var(--pitch); text-wrap:pretty;
+  }
+  p.dlg {
+    background:var(--paper-sunk); border-left:2px solid var(--rule);
+    margin:0 0 0.4rem; padding:0.7rem 1rem 0.7rem 1.1rem; font-size:1rem; color:var(--ink-soft);
+  }
+  p.dlg .who {
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.72rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--pitch);
+    display:block; margin-bottom:0.2rem;
+  }
+  #friction h2, #reply h2 { color:var(--whistle); }
+  #friction blockquote, #reply blockquote { border-left-color:var(--whistle); }
+  .overview { margin:2.25rem 0 0; padding:1.5rem 0 0; }
+  .overview h2 { margin-top:0; }
+  .takeaway {
+    font-family:"Instrument Serif",Georgia,serif; font-size:clamp(1.35rem,3.6vw,1.75rem);
+    line-height:1.28; margin:0 0 1.5rem; text-wrap:balance;
+  }
+  .contents { display:flex; flex-direction:column; gap:0.85rem; margin:0 0 1.5rem; padding:0; list-style:none; }
+  .contents li {
+    display:grid; grid-template-columns:4.5rem 1fr; gap:0 1rem; align-items:baseline;
+    padding-bottom:0.85rem; border-bottom:1px solid var(--rule);
+  }
+  .contents li:last-child { border-bottom:0; padding-bottom:0; }
+  .contents .tag {
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.625rem;
+    letter-spacing:0.1em; text-transform:uppercase; padding-top:0.2rem;
+  }
+  .contents .tag.act { color:var(--whistle); }
+  .contents .tag.read { color:var(--pitch); }
+  .contents a { color:var(--ink); text-decoration:none; border-bottom:1px solid var(--rule); }
+  .contents a:hover { border-bottom-color:var(--pitch); }
+  .contents a:focus-visible { outline:2px solid var(--pitch); outline-offset:3px; }
+  .urgent {
+    background:var(--paper-sunk); border-left:2px solid var(--whistle);
+    padding:0.85rem 1.1rem; font-size:1rem;
+  }
+  .urgent span {
+    display:block; font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.625rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--whistle); margin-bottom:0.25rem;
+  }
+  footer {
+    max-width:var(--measure); margin:4.5rem auto 0; padding-top:1.25rem;
+    border-top:1px solid var(--rule); font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.7rem; line-height:1.7; letter-spacing:0.04em; color:var(--muted);
+  }
+  footer b { color:var(--ink-soft); font-weight:500; }
+  @media (max-width:600px) {
+    body { padding:0 1.15rem 4rem; }
+    .stats { gap:0 1.5rem; }
+    .stat b { font-size:1.25rem; }
+    .contents li { grid-template-columns:3.4rem 1fr; }
+  }
+  @media (prefers-reduced-motion:reduce) { *{animation:none!important;transition:none!important;} }
+</style>`;
+
+/**
+ * Split the writer's output into the Slack teaser and the brief itself.
+ *
+ * Falls back gracefully: if the envelope is missing (a model that ignored the
+ * format), the whole thing becomes the brief and the teaser is derived from its
+ * first paragraph. Never lose an edition over a formatting miss.
+ */
+function splitTeaser(raw) {
+    const m = raw.match(/===TEASER===([\s\S]*?)===END TEASER===([\s\S]*)/);
+    if (!m) {
+        const firstPara = raw.split('\n\n').find(p => p.trim().length > 80) || '';
+        return { teaser: { lead: firstPara.replace(/\s+/g, ' ').slice(0, 300), lines: [], act: '' }, brief: raw };
+    }
+    const block = m[1].trim();
+    const brief = m[2].trim();
+    const lines = [];
+    let lead = '', act = '';
+    for (const l of block.split('\n').map(x => x.trim()).filter(Boolean)) {
+        if (/^ACT:/i.test(l)) act = l.replace(/^ACT:\s*/i, '');
+        else if (l.startsWith('- ')) lines.push(l.slice(2));
+        else if (!lead) lead = l;
+    }
+    return { teaser: { lead, lines, act }, brief };
+}
+
+const esc = (t) => String(t)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/**
+ * Turn the plain-text brief into the published page.
+ *
+ * The writer hard-wraps prose at a fixed width, which is what makes the
+ * structure recoverable: a HEADLINE is a deliberately short flush-left line, so
+ * it sits well below the wrap width, while a wrapped body line runs right up to
+ * it. Detecting headlines by "short" alone matched wrapped first-lines and
+ * turned half the paragraphs into headings, so the margin below the measured
+ * wrap width is the actual signal.
+ */
+function buildPage(brief, meta, teaser) {
+    const SECTIONS = new Set(['LEAD', 'STORIES', 'FRICTION', 'THE MOOD', 'WORTH A REPLY']);
+    const SEC_ID = {
+        LEAD: 'lead', STORIES: 'stories', FRICTION: 'friction',
+        'THE MOOD': 'mood', 'WORTH A REPLY': 'reply',
+    };
+
+    // Drop the writer's own title lines; the masthead carries them.
+    const lines = brief.split('\n');
+    let from = 0;
+    while (from < lines.length && (!lines[from].trim() || /^[A-Z0-9 ,.'’·-]+$/.test(lines[from].trim()) && !SECTIONS.has(lines[from].trim()))) {
+        if (SECTIONS.has(lines[from].trim())) break;
+        from++;
+        if (from > 4) break;
+    }
+
+    const blocks = [];
+    let cur = [];
+    for (const raw of lines.slice(from)) {
+        if (!raw.trim()) { if (cur.length) { blocks.push(cur); cur = []; } continue; }
+        cur.push(raw);
+    }
+    if (cur.length) blocks.push(cur);
+
+    const flush = blocks.filter(b => !b[0].startsWith('  ')).flat();
+    const wrapWidth = flush.reduce((m, l) => Math.max(m, l.trimEnd().length), 0) || 92;
+    const headMax = Math.max(40, wrapWidth - 25);
+
+    const out = [];
+    const headlines = [];
+    let openSec = null;
+
+    for (const blk of blocks) {
+        const first = blk[0].trim();
+        if (SECTIONS.has(first)) {
+            if (openSec) out.push('</section>');
+            const id = SEC_ID[first] || first.toLowerCase().replace(/\s+/g, '-');
+            out.push(`<section id="${id}"${id === 'lead' ? ' class="lead"' : ''}>`);
+            out.push(`<h2>${esc(first)}</h2>`);
+            openSec = id;
+            continue;
+        }
+        if (blk[0].startsWith('  ')) {
+            // Indented: quotes, one per line that starts at the 2-space indent.
+            const chunks = [];
+            let c = [];
+            for (const L of blk) {
+                const startsNew = L.startsWith('  "') || (L.startsWith('  ') && !L.startsWith('   '));
+                if (startsNew && c.length) { chunks.push(c.join(' ').trim()); c = []; }
+                c.push(L.trim());
+            }
+            if (c.length) chunks.push(c.join(' ').trim());
+            for (const ch of chunks) {
+                if (ch.startsWith('"')) out.push(`<blockquote>${esc(ch)}</blockquote>`);
+                else {
+                    const i = ch.indexOf(':');
+                    if (i > 0 && i < 40) {
+                        out.push(`<p class="dlg"><span class="who">${esc(ch.slice(0, i))}</span> ${esc(ch.slice(i + 1).trim())}</p>`);
+                    } else out.push(`<blockquote>${esc(ch)}</blockquote>`);
+                }
+            }
+            continue;
+        }
+        // A story headline takes two shapes in practice. The model was asked for
+        // a short line and sometimes writes one, but it also likes explicit
+        // "STORY ONE: ..." banners in capitals. Both are headlines; a wrapped
+        // body line is neither, which is what the wrap-width margin separates.
+        const isBanner = /^(STORY\b|[A-Z][A-Z0-9 ,'’:.-]{12,}$)/.test(first)
+            && first === first.toUpperCase() && first.length <= 110;
+        const isShortLine = blk.length > 1 && first.length <= headMax
+            && !/[.?!:,"]$/.test(first) && !first.includes('"');
+
+        let start = 0;
+        if (isBanner || isShortLine) {
+            // Stories belong in their own section, not trailing inside LEAD.
+            if (openSec === 'lead' && isBanner) {
+                out.push('</section>');
+                out.push('<section id="stories">');
+                out.push('<h2>STORIES</h2>');
+                openSec = 'stories';
+            }
+            const title = first.replace(/^STORY\s+[A-Z]+\s*[:.]\s*/i, '');
+            out.push(`<h3>${esc(title)}</h3>`);
+            headlines.push(title);
+            start = 1;
+        }
+        const text = blk.slice(start).map(x => x.trim()).join(' ');
+        if (text) out.push(`<p>${esc(text)}</p>`);
+    }
+    if (openSec) out.push('</section>');
+
+    // The overview: what is inside, so a reader picks rather than scrolls.
+    // If the writer skipped the teaser's story lines, the headlines the page
+    // just parsed are a better contents list than nothing at all.
+    if (!teaser.lines.length && headlines.length) {
+        teaser.lines = headlines.slice(0, 5);
+    }
+    const contents = teaser.lines.map((l, i) => {
+        const urgent = teaser.act && i === 0 && /card|carton|bug|blocked|paiement|payment/i.test(l);
+        const href = i < headlines.length ? '#stories' : '#friction';
+        return `    <li><span class="tag ${urgent ? 'act' : 'read'}">${urgent ? 'ACT' : 'READ'}</span><span><a href="${href}">${esc(l)}</a></span></li>`;
+    }).join('\n');
+
+    const overview = `<section class="overview">
+  <h2>What the day was about</h2>
+  <p class="takeaway">${esc(teaser.lead)}</p>
+${teaser.lines.length ? `  <ul class="contents">\n${contents}\n  </ul>` : ''}
+${teaser.act && !/^nothing urgent/i.test(teaser.act) ? `  <p class="urgent"><span>Needs a human today</span>${esc(teaser.act)}</p>` : ''}
+</section>`;
+
+    const stat = (n, l) => `    <div class="stat"><b>${n}</b><span>${l}</span></div>`;
+    return `${PAGE_HEAD}
+<header class="masthead">
+  <div class="sheet">
+    <p class="eyebrow">Poteau &middot; what players actually said</p>
+    <h1 class="title">The Poteau Daily</h1>
+    <p class="dateline">${esc(meta.dayLabel)} &nbsp;/&nbsp; read from every game chat of the day</p>
+  </div>
+</header>
+
+<div class="sheet">
+  <div class="stats">
+${stat(meta.messages.toLocaleString('en-US'), 'messages')}
+${stat(meta.threads, 'games')}
+${stat(meta.authors, 'players')}
+${stat(meta.joins || '—', 'joined')}
+${stat(meta.leaves || '—', 'left')}
+  </div>
+${overview}
+</div>
+
+<main class="sheet">
+${out.join('\n')}
+</main>
+
+<footer>
+  Written by <b>chat_brief.js</b> from the <b>messages</b> collection, Europe/Paris day boundary.<br>
+  Quotes are verbatim and unedited; players are named as they appear in their own profiles.<br>
+  Published daily at 09:00.
+</footer>`;
+}
+
 function slackWebhookUrl() {
     if (!fs.existsSync(WEBHOOK_ENV)) {
         throw new Error(
@@ -428,29 +762,99 @@ function post(payload) {
 }
 
 /**
- * Slack caps a text block at 3000 characters and silently truncates past it,
- * so the brief is split across blocks on paragraph boundaries rather than
- * mid-sentence.
+ * Publish the page as an Artifact and return its URL.
+ *
+ * Uses `claude -p` with the Artifact tool, verified to work headlessly: the CLI
+ * has no --artifact flag, so this is the only automated route. --allowedTools
+ * keeps the run from wandering into the filesystem, and the prompt demands a
+ * bare URL so parsing is not a guess.
+ *
+ * Returns null rather than throwing: an edition that cannot be published as a
+ * page is still worth posting to Slack as text. Losing the whole brief because
+ * the artifact step failed would be the worse outcome.
  */
-function chunk(text, max = 2800) {
-    const out = [];
-    let cur = '';
-    for (const para of text.split('\n\n')) {
-        if ((cur + '\n\n' + para).length > max && cur) { out.push(cur); cur = para; }
-        else cur = cur ? cur + '\n\n' + para : para;
+function publishArtifact(html, dayKey, description) {
+    const file = path.join(os.tmpdir(), `poteau_daily_${dayKey}.html`);
+    fs.writeFileSync(file, html, 'utf8');
+    try {
+        const res = spawnSync('claude', [
+            '-p',
+            `Publish the file ${file} as an artifact using the Artifact tool. `
+            + `Use favicon 📰 and this description: "${description.replace(/"/g, "'")}". `
+            + `Then output ONLY the resulting artifact URL on one line, nothing else.`,
+            '--allowedTools', 'Artifact',
+        ], { encoding: 'utf8', input: '', maxBuffer: 32 * 1024 * 1024, timeout: 10 * 60 * 1000 });
+        const url = ((res.stdout || '').match(/https:\/\/claude\.ai\/code\/artifact\/[a-f0-9-]+/) || [])[0];
+        if (!url) {
+            console.error('[chat_brief] artifact publish returned no URL:',
+                ((res.stdout || res.stderr || '').trim().slice(0, 200)));
+            return null;
+        }
+        return url;
+    } catch (e) {
+        console.error('[chat_brief] artifact publish failed:', e.message.slice(0, 120));
+        return null;
+    } finally {
+        try { fs.unlinkSync(file); } catch (_) { /* best effort */ }
     }
-    if (cur) out.push(cur);
-    return out;
 }
 
-function postBrief(brief, meta) {
+/**
+ * Post the TEASER to Slack, with a button through to the full edition.
+ *
+ * Deliberately not the whole brief. A 14,000 character editorial pasted into a
+ * channel as six stacked code blocks is unreadable on a phone and buries its own
+ * best story; the page is the publication and Slack is the front page of it. So
+ * this carries the day's thesis, up to five story lines, the one thing needing a
+ * human, and a link. Nothing else.
+ */
+function postBrief({ teaser, meta, url }) {
     const blocks = [
-        { type: 'header', text: { type: 'plain_text', text: `The Poteau Daily · ${day.toFormat('cccc d LLLL')}`, emoji: true } },
-        { type: 'context', elements: [{ type: 'mrkdwn', text: `${meta.messages} messages  ·  ${meta.threads} games with chat  ·  ${meta.authors} players  ·  ${meta.routinePct}% routine` }] },
-        { type: 'divider' },
+        {
+            type: 'header',
+            text: { type: 'plain_text', text: `The Poteau Daily · ${meta.dayLabel}`, emoji: true },
+        },
+        {
+            type: 'context',
+            elements: [{
+                type: 'mrkdwn',
+                text: `${meta.messages.toLocaleString('en-US')} messages  ·  ${meta.threads} games  ·  ${meta.authors} players`,
+            }],
+        },
     ];
-    for (const part of chunk(brief)) {
-        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: '```\n' + part.replace(/```/g, "'''") + '\n```' } });
+
+    if (teaser.lead) {
+        blocks.push({ type: 'section', text: { type: 'mrkdwn', text: `*${teaser.lead}*` } });
+    }
+    if (teaser.lines.length) {
+        blocks.push({
+            type: 'section',
+            text: { type: 'mrkdwn', text: teaser.lines.map(l => `•  ${l}`).join('\n') },
+        });
+    }
+    if (teaser.act && !/^nothing urgent/i.test(teaser.act)) {
+        blocks.push({
+            type: 'section',
+            text: { type: 'mrkdwn', text: `:eyes:  *Needs a human today*\n${teaser.act}` },
+        });
+    }
+
+    if (url) {
+        blocks.push({
+            type: 'actions',
+            elements: [{
+                type: 'button',
+                text: { type: 'plain_text', text: 'Read the full edition', emoji: true },
+                url,
+                style: 'primary',
+            }],
+        });
+    } else {
+        // No page, so say so rather than leaving a teaser that goes nowhere.
+        blocks.push({
+            type: 'context',
+            elements: [{ type: 'mrkdwn', text: '_The full edition could not be published today. Run `node scripts/chat_brief.js --date=' + meta.dayKey + '` on the Mac._' }],
+        });
     }
     post({ blocks });
 }
@@ -461,22 +865,18 @@ function postBrief(brief, meta) {
  * WHY A LEDGER EXISTS.
  *
  * "If the Mac is off for 10 days I want 10 briefs waiting." Neither launchd nor
- * Cloud Scheduler can deliver that: a missed calendar slot fires ONCE on the next
- * opportunity, never ten times. `StartCalendarInterval` catches up a single
- * tick, and Scheduler simply skips what it missed. So the schedule cannot be the
- * record of what has been published.
+ * Cloud Scheduler can deliver that: a missed calendar slot fires ONCE on the
+ * next opportunity, never ten times. So the schedule cannot be the record of
+ * what has been published.
  *
- * Instead each published day is recorded in Firestore, and every run asks "which
- * days are missing?" rather than "what is yesterday?". Ten days of silence then
- * produces ten briefs, in order, oldest first, because the gap is computed from
- * the ledger and not from the clock.
- *
- * Kept in `internal_state/chat_brief` so it survives the Mac entirely and works
- * identically if this ever moves to a Cloud Function.
+ * Instead each published day is recorded in Firestore, and every run asks
+ * "which days are missing?" rather than "what is yesterday?". Ten days of
+ * silence then produces ten briefs, oldest first, because the gap is computed
+ * from the ledger and not from the clock.
  */
 const STATE_DOC = 'internal_state/chat_brief';
 // Do not mine history forever on a fresh install: the ledger starts the day the
-// feature shipped. Without this, the first run would try to write months of
+// feature shipped. Without this the first run would try to write months of
 // briefs and burn a fortune in tokens.
 const EPOCH = '2026-08-17';
 
@@ -508,7 +908,6 @@ async function missingDays(maxDays) {
         if (!done.has(key)) out.push(key);
         cursor = cursor.plus({ days: 1 });
     }
-    // Oldest first, so a reader scrolling #newspaper gets them chronologically.
     return out.slice(0, maxDays);
 }
 
@@ -556,17 +955,36 @@ async function runOneDay(targetDay) {
     };
 
     console.error(`[chat_brief] ${dayKey}: ${meta.messages} messages, ${meta.threads} games, ${corpus.length} chars -> claude`);
-    const brief = writeBriefWithRetry(corpus);
+    const raw = writeBriefWithRetry(corpus);
+    const { teaser, brief } = splitTeaser(raw);
+
+    meta.dayKey = dayKey;
+    meta.dayLabel = day.toFormat('cccc d LLLL yyyy');
+    // Roster facts for the stats strip, from the log lines rather than the chat.
+    meta.joins = Object.entries(data.logs)
+        .filter(([k]) => /rejoint/i.test(k)).reduce((n, [, v]) => n + v, 0);
+    meta.leaves = Object.entries(data.logs)
+        .filter(([k]) => /quitt/i.test(k)).reduce((n, [, v]) => n + v, 0);
 
     console.log(brief);
     if (RAW) return false;
+
+    if (DRY) {
+        console.log('\n--- teaser ---');
+        console.log(JSON.stringify(teaser, null, 1));
+        console.log('\n--- dry: not publishing, not posting, not marking ---');
+        return false;
+    }
+
     if (SLACK) {
-        if (DRY) { console.log('\n--- dry: not posting, not marking published ---'); return false; }
-        postBrief(brief, meta);
+        const html = buildPage(brief, meta, teaser);
+        const url = publishArtifact(html, dayKey, teaser.lead || `The Poteau Daily for ${meta.dayLabel}`);
+        postBrief({ teaser, meta, url });
         // Mark ONLY after a successful post. If Slack throws, the day stays
         // missing and the next run retries it, which is the behaviour you want
         // from a ledger.
         await markPublished(dayKey);
+        if (url) console.error(`[chat_brief] ${dayKey} published: ${url}`);
     }
     return true;
 }
