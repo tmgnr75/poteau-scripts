@@ -754,8 +754,24 @@ function buildPage(brief, meta, teaser, avatars = {}) {
 
     const blocks = [];
     let cur = [];
+    // Set when a bare "STORY ONE" label was just consumed, so the first line of
+    // the next block is known to be a headline whatever its casing.
+    let pendingStory = false;
+    const storyBlocks = new Set();
     for (const raw of lines.slice(from)) {
         if (!raw.trim()) { if (cur.length) { blocks.push(cur); cur = []; } continue; }
+        // A bare "STORY ONE" label carries no information; the real headline is
+        // the descriptive line under it. Fold the two so the label never becomes
+        // the heading and the description never becomes body text. The writer
+        // alternates between this shape and a single combined line, so both
+        // have to work.
+        if (/^STORY\s+(ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|\d+)\s*[:.]?\s*$/i.test(raw.trim())) {
+            if (cur.length) { blocks.push(cur); }
+            cur = [];
+            pendingStory = true;      // the NEXT line is the real headline
+            continue;
+        }
+        if (pendingStory && !cur.length) { storyBlocks.add(blocks.length); pendingStory = false; }
         cur.push(raw);
     }
     if (cur.length) blocks.push(cur);
@@ -816,10 +832,11 @@ function buildPage(brief, meta, teaser, avatars = {}) {
         // sets it in full capitals on its own line. Allow accents and digits,
         // and allow it to run past the wrap width.
         const letters = first.replace(/[^A-Za-zÀ-ÿ]/g, '');
-        const isBanner = letters.length > 8
-            && first === first.toUpperCase()
-            && first.length <= 160
-            && !first.startsWith('"');
+        const isBanner = storyBlocks.has(blocks.indexOf(blk))
+            || (letters.length > 8
+                && first === first.toUpperCase()
+                && first.length <= 160
+                && !first.startsWith('"'));
         const isShortLine = blk.length > 1 && first.length <= headMax
             && !/[.?!:,"]$/.test(first) && !first.includes('"');
 
