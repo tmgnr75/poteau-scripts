@@ -27,6 +27,8 @@
  *   node chat_brief.js --date=2026-08-17  # a specific day
  *   node chat_brief.js --corpus           # dump the LLM input, call nothing
  *   node chat_brief.js --raw              # print the brief the LLM returned
+ *   node chat_brief.js --catchup          # publish EVERY day still missing
+ *   node chat_brief.js --catchup --max=10 # cap how many days one run will do
  */
 
 const { execFileSync, spawnSync } = require('child_process');
@@ -51,10 +53,18 @@ const TZ = 'Europe/Paris';
 const WEBHOOK_ENV = process.env.NEWSPAPER_WEBHOOK_ENV
     || `${process.env.HOME}/.poteau/newspaper_webhook.env`;
 
-const arg = (k) => (process.argv.find(a => a.startsWith(`--${k}=`)) || '').split('=')[1];
+const arg = (k, d) => {
+    const v = process.argv.find(a => a.startsWith(`--${k}=`));
+    return v ? v.split('=')[1] : d;
+};
 const SLACK = process.argv.includes('--slack');
 const CORPUS_ONLY = process.argv.includes('--corpus');
 const RAW = process.argv.includes('--raw');
+const DRY = process.argv.includes('--dry');       // build everything, post nothing
+const CATCHUP = process.argv.includes('--catchup');
+// A backlog cap, so a long outage cannot fire an unbounded number of LLM calls in
+// one run. Whatever is left over is picked up by the next run.
+const MAX_DAYS = Number(arg('max', 14) || 14);
 const DATE_ARG = arg('date');
 
 if (!admin.apps.length) {
@@ -65,11 +75,19 @@ const db = admin.firestore();
 // The day boundary is Europe/Paris, not UTC. In August that is UTC+2, so a
 // UTC-midnight window would put two hours of the previous evening's chat — the
 // busiest slot of the day, when games actually kick off — into the wrong brief.
-const day = DATE_ARG
+// Mutable, because one run may publish several days when catching up. setDay()
+// is the only writer; everything downstream reads these.
+let day = DATE_ARG
     ? DateTime.fromISO(DATE_ARG, { zone: TZ }).startOf('day')
     : DateTime.now().setZone(TZ).minus({ days: 1 }).startOf('day');
-const START = day.toJSDate();
-const END = day.plus({ days: 1 }).toJSDate();
+let START = day.toJSDate();
+let END = day.plus({ days: 1 }).toJSDate();
+
+function setDay(d) {
+    day = d;
+    START = day.toJSDate();
+    END = day.plus({ days: 1 }).toJSDate();
+}
 
 // ------------------------------------------------------------ routine buckets
 
@@ -437,18 +455,83 @@ function postBrief(brief, meta) {
     post({ blocks });
 }
 
+// ------------------------------------------------------------ catch-up state
+
+/**
+ * WHY A LEDGER EXISTS.
+ *
+ * "If the Mac is off for 10 days I want 10 briefs waiting." Neither launchd nor
+ * Cloud Scheduler can deliver that: a missed calendar slot fires ONCE on the next
+ * opportunity, never ten times. `StartCalendarInterval` catches up a single
+ * tick, and Scheduler simply skips what it missed. So the schedule cannot be the
+ * record of what has been published.
+ *
+ * Instead each published day is recorded in Firestore, and every run asks "which
+ * days are missing?" rather than "what is yesterday?". Ten days of silence then
+ * produces ten briefs, in order, oldest first, because the gap is computed from
+ * the ledger and not from the clock.
+ *
+ * Kept in `internal_state/chat_brief` so it survives the Mac entirely and works
+ * identically if this ever moves to a Cloud Function.
+ */
+const STATE_DOC = 'internal_state/chat_brief';
+// Do not mine history forever on a fresh install: the ledger starts the day the
+// feature shipped. Without this, the first run would try to write months of
+// briefs and burn a fortune in tokens.
+const EPOCH = '2026-08-17';
+
+async function publishedDays() {
+    const snap = await db.doc(STATE_DOC).get();
+    return new Set((snap.exists && snap.data().published_days) || []);
+}
+
+async function markPublished(dayKey) {
+    await db.doc(STATE_DOC).set({
+        published_days: admin.firestore.FieldValue.arrayUnion(dayKey),
+        last_run_at: admin.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+}
+
+/**
+ * Every day that should have a brief and does not, oldest first.
+ *
+ * Excludes today: the day is not over, so briefing it would produce a partial
+ * edition that never gets corrected.
+ */
+async function missingDays(maxDays) {
+    const done = await publishedDays();
+    const yesterday = DateTime.now().setZone(TZ).minus({ days: 1 }).startOf('day');
+    let cursor = DateTime.fromISO(EPOCH, { zone: TZ }).startOf('day');
+    const out = [];
+    while (cursor <= yesterday) {
+        const key = cursor.toFormat('yyyy-MM-dd');
+        if (!done.has(key)) out.push(key);
+        cursor = cursor.plus({ days: 1 });
+    }
+    // Oldest first, so a reader scrolling #newspaper gets them chronologically.
+    return out.slice(0, maxDays);
+}
+
 // --------------------------------------------------------------------- main
 
-(async () => {
+/** Produce and publish one day. Returns true if a brief was posted. */
+async function runOneDay(targetDay) {
+    setDay(targetDay);
+    const dayKey = day.toFormat('yyyy-MM-dd');
     const data = await fetchDay();
 
     if (data.human.length === 0) {
-        const msg = `No game chat at all on ${day.toFormat('cccc d LLLL')}. Either a genuinely silent day or the message pipeline is broken — worth checking, because a zero here is unusual.`;
+        // A silent day is still a PUBLISHED day: mark it, or every future run
+        // retries it forever and the catch-up never converges.
+        const msg = `No game chat at all on ${day.toFormat('cccc d LLLL')}. Either a genuinely silent day or the message pipeline is broken, worth checking, because a zero here is unusual.`;
         console.log(msg);
-        if (SLACK) post({ blocks: [
-            { type: 'header', text: { type: 'plain_text', text: `The Poteau Daily · ${day.toFormat('cccc d LLLL')}`, emoji: true } },
-            { type: 'section', text: { type: 'mrkdwn', text: msg } }] });
-        process.exit(0);
+        if (SLACK && !DRY) {
+            post({ blocks: [
+                { type: 'header', text: { type: 'plain_text', text: `The Poteau Daily · ${day.toFormat('cccc d LLLL')}`, emoji: true } },
+                { type: 'section', text: { type: 'mrkdwn', text: msg } }] });
+            await markPublished(dayKey);
+        }
+        return false;
     }
 
     const [names, gameDocs] = await Promise.all([
@@ -463,8 +546,7 @@ function postBrief(brief, meta) {
     ]);
 
     const { corpus, threads, routineTotal } = buildCorpus(data, names, gameDocs);
-
-    if (CORPUS_ONLY) { console.log(corpus); process.exit(0); }
+    if (CORPUS_ONLY) { console.log(corpus); return false; }
 
     const meta = {
         messages: data.human.length,
@@ -473,13 +555,46 @@ function postBrief(brief, meta) {
         routinePct: Math.round((routineTotal / data.human.length) * 100),
     };
 
-    console.error(`[chat_brief] ${meta.messages} messages, ${meta.threads} games, ${corpus.length} chars -> claude`);
+    console.error(`[chat_brief] ${dayKey}: ${meta.messages} messages, ${meta.threads} games, ${corpus.length} chars -> claude`);
     const brief = writeBriefWithRetry(corpus);
-    if (!brief) throw new Error('the writer returned nothing');
 
     console.log(brief);
-    if (RAW) process.exit(0);
-    if (SLACK) postBrief(brief, meta);
+    if (RAW) return false;
+    if (SLACK) {
+        if (DRY) { console.log('\n--- dry: not posting, not marking published ---'); return false; }
+        postBrief(brief, meta);
+        // Mark ONLY after a successful post. If Slack throws, the day stays
+        // missing and the next run retries it, which is the behaviour you want
+        // from a ledger.
+        await markPublished(dayKey);
+    }
+    return true;
+}
+
+(async () => {
+    if (CATCHUP) {
+        const days = await missingDays(MAX_DAYS);
+        if (days.length === 0) {
+            console.log('Nothing missing. Every day through yesterday has a brief.');
+            process.exit(0);
+        }
+        console.error(`[chat_brief] ${days.length} day(s) missing: ${days.join(', ')}`);
+        let posted = 0;
+        for (const key of days) {
+            try {
+                const ok = await runOneDay(DateTime.fromISO(key, { zone: TZ }).startOf('day'));
+                if (ok) posted++;
+            } catch (e) {
+                // One bad day must not block the rest of the backlog. It stays
+                // unmarked, so tomorrow's run picks it up again.
+                console.error(`[chat_brief] ${key} FAILED: ${e.message.slice(0, 120)}`);
+            }
+        }
+        console.error(`[chat_brief] published ${posted} of ${days.length}`);
+        process.exit(0);
+    }
+
+    await runOneDay(day);
     process.exit(0);
 })().catch(e => {
     // Never fail silently: a missing brief must not look like a quiet day.
