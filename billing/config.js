@@ -5,7 +5,12 @@
 const REPORTING_SHEET_ID = '1jkekhti9_9UgRCmsFN3ceINb5seakO-IqNl7BYHcYjk';
 const BILLING_SHEET_ID = '1SDNSA_I0MCemhG5hOLNyn_8QhHLHHGEZ_def1btoRsY';
 
-const GOCARDLESS_ACCESS_TOKEN = 'live_1kc5Mb3mzucBGml9F6H9qXWGcnkE0QUZiQbz-M63';
+const GOCARDLESS_ACCESS_TOKEN = process.env.GOCARDLESS_ACCESS_TOKEN;
+if (!GOCARDLESS_ACCESS_TOKEN) {
+  console.error('Missing GOCARDLESS_ACCESS_TOKEN in the environment.');
+  console.error('Run:  source ~/.poteau/gocardless.env');
+  process.exit(1);
+}
 
 // Pricing tiers (HT in euros) — same as "Pricing model & Data" tab
 // 0-5 = free, 6-11 = 99, 12-17 = 199, 18-23 = 299, 24+ = 599
