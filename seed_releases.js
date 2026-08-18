@@ -253,15 +253,22 @@ const RELEASES = [
         title_en: 'Poteau Live, and fairer reporting 🔴',
         title_es: 'Poteau Live y reportes más justos 🔴',
         title_it: 'Poteau Live e segnalazioni più giuste 🔴',
-        // Only the reporting change is written up here. Poteau Live is named in
-        // the title because it is the headline of 5.2.0, but its own section
-        // gets written when the feature lands rather than guessed at now.
+        // Poteau Live is named in the title because it is the headline of
+        // 5.2.0, but its own section gets written when the feature lands rather
+        // than guessed at now. Everything else that ships gets appended here as
+        // it lands, which is why the body grows between now and the ship date.
         body_fr: [
             '🚩 Signaler quelqu\'un, avec le contexte',
             'Quand tu signales un joueur, tu peux expliquer ce qui s\'est passé. C\'est obligatoire si tu choisis "Autre", parce que sans explication on ne peut rien en faire. Plus tu nous en dis, plus la décision est juste.',
             '',
             '⚖️ Les cartons fonctionnent vraiment',
             'Une désinscription à la dernière minute sur un match presque complet compte désormais comme prévu. Ça marchait mal jusqu\'ici, c\'est corrigé.',
+            '',
+            '🕐 Un seul match à la fois',
+            'Impossible de t\'inscrire à deux matchs qui se chevauchent. Tu voyais parfois un match complet alors qu\'un joueur était déjà ailleurs à la même heure : ça n\'arrivera plus. Ton créneau est vraiment le tien.',
+            '',
+            '📅 Tu es dans le match, et dans ton agenda',
+            'Après ton inscription, ajoute le match à ton agenda en un tap : le centre, l\'adresse, et un rappel 30 minutes avant l\'heure de partir, qui s\'adapte même au trafic sur iPhone. Tu peux aussi inviter quelqu\'un dans la foulée, et à 5 joueurs un match se joue presque toujours.',
         ].join('\n'),
         body_en: [
             '🚩 Reporting someone, with the context',
@@ -269,6 +276,12 @@ const RELEASES = [
             '',
             '⚖️ Cards actually work now',
             'Dropping out at the last minute from an almost full game now counts, the way it was meant to. It was not working properly until now. Fixed.',
+            '',
+            '🕐 One game at a time',
+            'You can no longer join two games that overlap. Until now a game could look full while one of its players was already somewhere else at the same time. Your slot is genuinely yours.',
+            '',
+            '📅 You are in the game, and in your calendar',
+            'Once you have joined, add the game to your calendar in one tap: the centre, the address, and a reminder 30 minutes before it is time to leave, which even adjusts to the traffic on iPhone. You can invite someone in the same breath, and with five players a game almost always gets played.',
         ].join('\n'),
         body_es: [
             '🚩 Reportar a alguien, con contexto',
@@ -276,6 +289,12 @@ const RELEASES = [
             '',
             '⚖️ Las tarjetas funcionan de verdad',
             'Darse de baja a última hora en un partido casi completo ya cuenta, como estaba previsto. Hasta ahora no funcionaba bien. Corregido.',
+            '',
+            '🕐 Un partido a la vez',
+            'Ya no puedes apuntarte a dos partidos que se solapan. Antes un partido podía parecer completo mientras uno de sus jugadores ya estaba en otro sitio a la misma hora. Tu hueco es de verdad tuyo.',
+            '',
+            '📅 Estás en el partido, y en tu calendario',
+            'Una vez apuntado, añade el partido a tu calendario con un toque: el centro, la dirección, y un recordatorio 30 minutos antes de salir, que en iPhone se adapta incluso al tráfico. También puedes invitar a alguien al momento, y con cinco jugadores un partido casi siempre se juega.',
         ].join('\n'),
         body_it: [
             '🚩 Segnalare qualcuno, con il contesto',
@@ -283,6 +302,12 @@ const RELEASES = [
             '',
             '⚖️ I cartellini funzionano davvero',
             'Disdire all\'ultimo minuto una partita quasi completa ora conta, come previsto. Finora non funzionava bene. Corretto.',
+            '',
+            '🕐 Una partita alla volta',
+            'Non puoi più iscriverti a due partite che si sovrappongono. Prima una partita poteva sembrare completa mentre uno dei suoi giocatori era già altrove alla stessa ora. Il tuo posto è davvero tuo.',
+            '',
+            '📅 Sei nella partita, e nel tuo calendario',
+            'Dopo l\'iscrizione, aggiungi la partita al calendario con un tap: il centro, l\'indirizzo, e un promemoria 30 minuti prima di uscire, che su iPhone si adatta anche al traffico. Puoi anche invitare qualcuno subito, e con cinque giocatori una partita si gioca quasi sempre.',
         ].join('\n'),
     },
 ];
