@@ -931,9 +931,30 @@ function slackWebhookUrl() {
     return url;
 }
 
+/**
+ * Post to Slack and VERIFY it landed.
+ *
+ * `curl -s` exits 0 whether Slack answered "ok" or rejected the payload with
+ * 400 invalid_blocks, so the old version could not tell success from failure:
+ * a rejected edition marked itself published in the ledger and vanished. The
+ * body is the only reliable signal, so it is read and anything other than "ok"
+ * throws.
+ */
 function post(payload) {
-    execFileSync('curl', ['-s', '-X', 'POST', '-H', 'Content-type: application/json',
-        '--data', JSON.stringify(payload), slackWebhookUrl()], { encoding: 'utf8' });
+    const body = JSON.stringify(payload);
+    const out = execFileSync('curl', [
+        '-sS', '--max-time', '30',
+        '-w', '\n%{http_code}',
+        '-X', 'POST', '-H', 'Content-type: application/json',
+        '--data-binary', '@-', slackWebhookUrl(),
+    ], { encoding: 'utf8', input: body });
+
+    const lines = out.trim().split('\n');
+    const code = lines.pop();
+    const reply = lines.join('\n').trim();
+    if (code !== '200' || reply !== 'ok') {
+        throw new Error(`Slack rejected the post (HTTP ${code}): ${reply.slice(0, 200)}`);
+    }
 }
 
 /**
