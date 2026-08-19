@@ -45,7 +45,7 @@
  * Usage:
  *   node seed_test_matrix.js            # dry run, prints the plan
  *   node seed_test_matrix.js --write    # purge, then create
- *   node seed_test_matrix.js --purge    # delete everything it made, create nothing
+ *   node seed_test_matrix.js --purge    # delete every test game, create nothing
  */
 const admin = require("firebase-admin");
 const serviceAccount = require("./krank-club-firebase-adminsdk-bl4zy-d8facdf022.json");
@@ -323,16 +323,82 @@ async function verifyWritten() {
 }
 
 /**
- * Delete every game this script made, and unpick the references to it that
- * live on Tim's user document.
+ * Delete every test game on Tim's account, and unpick the references to it
+ * that live on user documents.
+ *
+ * Selects on `is_test_game`, NOT on this script's own `seed_tag`. Tagging was
+ * too narrow: every other seeder (padel live matrix, card states, home
+ * sections, ...) writes its own tag, so their games accumulated forever and
+ * Tim had to purge by hand. Anything flagged as a test game is fair game here.
+ *
+ * Refuses to touch a game that reached a real person -- an invitation, a
+ * notification, a chat message, or a payment belonging to someone who is not
+ * Tim and not a test account. Deleting those would erase invitations real
+ * users still hold. Such games are reported and skipped.
  *
  * Chunked: "Transaction too big" is what you get for assuming one game means a
  * handful of related documents.
  */
 async function purge() {
-    const games = await db.collection("games").where("seed_tag", "==", TAG).get();
-    console.log(`purging ${games.size} seeded game(s)`);
     const timRef = db.collection("users").doc(TIM);
+
+    const flagged = await db.collection("games").where("is_test_game", "==", true).get();
+    const games = { docs: [] };
+    const skipped = [];
+
+    // A uid is "safe" if it is Tim or an is_test_account. Cached: the same
+    // handful of test users appears on every seeded game.
+    const safeCache = new Map([[TIM, true]]);
+    async function isSafe(uid) {
+        if (!uid) return true;
+        if (safeCache.has(uid)) return safeCache.get(uid);
+        const u = await db.collection("users").doc(uid).get();
+        const safe = !u.exists || u.data().is_test_account === true;
+        safeCache.set(uid, safe);
+        return safe;
+    }
+
+    for (const g of flagged.docs) {
+        const d = g.data();
+        const isTims =
+            d.organizer === TIM ||
+            (d.attendees || []).some((r) => r && r.id === TIM);
+        if (!isTims) continue;
+
+        const why = [];
+        const [conns, invs, msgs, pays] = await Promise.all([
+            db.collection("connect").where("game", "==", g.ref).get(),
+            db.collection("game_invitations").where("game", "==", g.ref).get(),
+            db.collection("messages").where("game_id", "==", g.ref).get(),
+            db.collection("payments").where("game_ref", "==", g.ref).get(),
+        ]);
+        for (const p of pays.docs) {
+            if (p.data().user_ref?.id !== TIM) why.push(`payment ${p.id} is not Tim's`);
+        }
+        for (const c of conns.docs) {
+            for (const r of c.data().recipient || []) {
+                if (r?.id && r.id !== "Team-App" && !(await isSafe(r.id))) why.push(`notified ${r.id}`);
+            }
+        }
+        for (const i of invs.docs) {
+            for (const uid of [i.data().invitee?.id, i.data().inviter?.id]) {
+                if (uid && uid !== "Team-App" && !(await isSafe(uid))) why.push(`invited ${uid}`);
+            }
+        }
+        for (const m of msgs.docs) {
+            const uid = m.data().author_id?.id;
+            if (uid && !(await isSafe(uid))) why.push(`${uid} wrote in the chat`);
+        }
+
+        if (why.length) skipped.push({ id: g.id, why: [...new Set(why)] });
+        else games.docs.push(g);
+    }
+
+    console.log(`purging ${games.docs.length} test game(s)`);
+    if (skipped.length) {
+        console.log(`SKIPPING ${skipped.length} that reached real people:`);
+        for (const s of skipped) console.log(`  ${s.id}: ${s.why.slice(0, 3).join(", ")}`);
+    }
 
     for (const g of games.docs) {
         const invs = await db.collection("game_invitations").where("game", "==", g.ref).get();
@@ -350,8 +416,30 @@ async function purge() {
             events.docs.slice(i, i + 400).forEach((d) => b.delete(d.ref));
             await b.commit();
         }
+        // Chat, notifications, guests and payments all point back at the game.
+        // Leaving them behind is what left 263 messages and 222 connect docs
+        // orphaned across earlier seeded games.
+        for (const [coll, field] of [
+            ["messages", "game_id"],
+            ["connect", "game"],
+            ["payments", "game_ref"],
+        ]) {
+            const snap = await db.collection(coll).where(field, "==", g.ref).get();
+            for (let i = 0; i < snap.docs.length; i += 400) {
+                const b = db.batch();
+                snap.docs.slice(i, i + 400).forEach((d) => b.delete(d.ref));
+                await b.commit();
+            }
+        }
+        const outsiders = await g.ref.collection("outsiders").get();
+        for (const o of outsiders.docs) await o.ref.delete();
+
+        // games and pending_votes were missing here, so a purged game kept a
+        // dead ref on the user doc and showed up as a phantom row.
         await timRef.update({
+            games: admin.firestore.FieldValue.arrayRemove(g.ref),
             pending_feedback: admin.firestore.FieldValue.arrayRemove(g.ref),
+            pending_votes: admin.firestore.FieldValue.arrayRemove(g.ref),
             played_games: admin.firestore.FieldValue.arrayRemove(g.ref),
             upcoming_games: admin.firestore.FieldValue.arrayRemove(g.ref),
         }).catch(() => {});
