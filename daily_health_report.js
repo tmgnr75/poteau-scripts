@@ -251,6 +251,61 @@ async function errors(startZ, endZ) {
     };
 }
 
+// ------------------------------------------------------- money safety
+
+// Failures that cost a user money, found WITHOUT a severity filter.
+//
+// Everything else in this report keys off `severity>=ERROR`. That is the right
+// default for noise, and it is exactly why this section exists separately:
+// `console.error` on Cloud Run lands at DEFAULT severity, not ERROR. Any
+// money-losing failure logged that way is invisible to the rest of the report.
+//
+// That is not theoretical. removePlayer failed to release Stripe authorizations
+// ten times between 2026-07-23 and 2026-08-18 because the function never
+// declared STRIPE_SECRET. Each failure left a live hold that was captured at
+// T-1h, so players paid for games they had left. Every one was logged with
+// console.error inside a deliberate catch, no report ever mentioned it, and we
+// learned about it when a user emailed to say he had been charged twice.
+//
+// So: match on TEXT, not severity, and check the resulting state in Firestore
+// rather than trusting that a log line would have been loud.
+async function moneySafety(startZ, endZ) {
+    const window = `timestamp>="${startZ}" AND timestamp<"${endZ}"`;
+    const findings = [];
+
+    // 1. Any Stripe call that ran without a usable key. The generic SDK message
+    //    is matched too, because a missing key surfaces as "did not provide an
+    //    API key" from deep inside the SDK when nothing catches it first.
+    const keyless = await HOST.readLogs(
+        `${window} AND (textPayload:"STRIPE_KEY_MISSING" OR textPayload:"did not provide an API key" OR textPayload:"StripeAuthenticationError")`,
+        { limit: 100, withDetail: true }
+    );
+    if (keyless.length) {
+        findings.push({
+            code: 'STRIPE_KEY_MISSING',
+            n: keyless.length,
+            what: 'a Stripe call ran without a usable API key',
+            soWhat: 'authorizations may not have been released; players can be charged for games they left',
+        });
+    }
+
+    // 2. The explicit alert removePlayer now emits when it cannot release a hold.
+    const stranded = await HOST.readLogs(
+        `${window} AND textPayload:"PAYMENT_STRANDED"`,
+        { limit: 100, withDetail: true }
+    );
+    if (stranded.length) {
+        findings.push({
+            code: 'PAYMENT_STRANDED',
+            n: stranded.length,
+            what: 'a player left a game but their payment authorization could not be released',
+            soWhat: 'that money is still held and will be captured unless someone cancels it',
+        });
+    }
+
+    return { findings };
+}
+
 // -------------------------------------------------------------- cron health
 
 async function crons(asOf) {
@@ -383,7 +438,7 @@ function row(label, c) {
     return `${pad(label, 16)}${padL(N(c.week), 8)}${padL(N(c.prev), 9)}${padL(N(c.cur), 9)}`;
 }
 
-function build(day, a, e, c, h, dep) {
+function build(day, a, e, c, h, dep, m) {
     // Each warning is: severity dot, bold WHAT, then a plain-language SO WHAT
     // on its own indented line. The consequence is the part worth reading and
     // it should not be buried mid-sentence.
@@ -391,6 +446,14 @@ function build(day, a, e, c, h, dep) {
     // is just anxiety - the reader cannot tell whether to act or ignore it.
     const attention = [];
     const warn = (dot, what, soWhat, doWhat) => attention.push({ dot, what, soWhat, doWhat });
+
+    // Money first. Everything else in this report is about the platform being
+    // healthy; this is about a specific person being wrongly charged, which
+    // outranks every other finding and must never sit below a thin-day notice.
+    ((m && m.findings) || []).forEach(f => warn('🔴',
+        `${f.code} (${f.n} ${f.n === 1 ? 'time' : 'times'}) — ${f.what}`,
+        f.soWhat,
+        'find the affected users and refund them BEFORE fixing the cause — the money already moved'));
 
     if (c.error) warn('🔴', 'Cron liveness check failed', c.error,
         'the report is blind to stale crons until this is fixed — check gcloud auth');
@@ -656,8 +719,9 @@ async function buildReport(targetDate) {
     const c = await crons(dayEnd.toJSDate());
     const h = await horizon();
     const dep = await deploys(dayStart.toISODate(), dayEnd.toISODate());
+    const m = await moneySafety(dayStart.toUTC().toISO(), dayEnd.toUTC().toISO());
 
-    return build(target, a, e, c, h, dep);
+    return build(target, a, e, c, h, dep, m);
 }
 
 module.exports = { buildReport, setHost };
