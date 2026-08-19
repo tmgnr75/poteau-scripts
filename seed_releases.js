@@ -257,6 +257,13 @@ const RELEASES = [
         // 5.2.0, but its own section gets written when the feature lands rather
         // than guessed at now. Everything else that ships gets appended here as
         // it lands, which is why the body grows between now and the ship date.
+        //
+        // NOT BUILT YET (2026-08-19): the "you know when you pay" section is
+        // written ahead of the feature. The payment lifecycle it describes is
+        // real (hold on join, capture at T-1h once the game is confirmed --
+        // see gen2/letsPay.js and gen2/handlePaymentAuth.js), but the in-app
+        // screens that explain it to the player are still to build. This
+        // section must ship or be removed before 5.2.0 goes out.
         body_fr: [
             '🚩 Signaler quelqu\'un, avec le contexte',
             'Quand tu signales un joueur, tu peux expliquer ce qui s\'est passé. C\'est obligatoire si tu choisis "Autre", parce que sans explication on ne peut rien en faire. Plus tu nous en dis, plus la décision est juste.',
@@ -269,6 +276,9 @@ const RELEASES = [
             '',
             '📅 Tu es dans le match, et dans ton agenda',
             'Après ton inscription, ajoute le match à ton agenda en un tap : le centre, l\'adresse, et un rappel 30 minutes avant l\'heure de partir, qui s\'adapte même au trafic sur iPhone. Tu peux aussi inviter quelqu\'un dans la foulée, et à 5 joueurs un match se joue presque toujours.',
+            '',
+            '💳 Tu sais quand tu paies',
+            'Sur les matchs payables dans l\'app, on t\'annonce maintenant clairement le déroulé : ta carte est seulement retenue quand tu t\'inscris, et débitée une heure avant le coup d\'envoi, une fois le match confirmé. Si le match ne se joue pas, tu ne paies rien.',
         ].join('\n'),
         body_en: [
             '🚩 Reporting someone, with the context',
@@ -282,6 +292,9 @@ const RELEASES = [
             '',
             '📅 You are in the game, and in your calendar',
             'Once you have joined, add the game to your calendar in one tap: the centre, the address, and a reminder 30 minutes before it is time to leave, which even adjusts to the traffic on iPhone. You can invite someone in the same breath, and with five players a game almost always gets played.',
+            '',
+            '💳 You know when you pay',
+            'On games you pay for in the app, we now spell out exactly how it goes: your card is only held when you join, and charged one hour before kick-off, once the game is confirmed. If the game does not get played, you pay nothing.',
         ].join('\n'),
         body_es: [
             '🚩 Reportar a alguien, con contexto',
@@ -295,6 +308,9 @@ const RELEASES = [
             '',
             '📅 Estás en el partido, y en tu calendario',
             'Una vez apuntado, añade el partido a tu calendario con un toque: el centro, la dirección, y un recordatorio 30 minutos antes de salir, que en iPhone se adapta incluso al tráfico. También puedes invitar a alguien al momento, y con cinco jugadores un partido casi siempre se juega.',
+            '',
+            '💳 Sabes cuándo pagas',
+            'En los partidos que se pagan en la app, ahora te explicamos claramente cómo funciona: tu tarjeta solo queda retenida al apuntarte, y se cobra una hora antes del inicio, cuando el partido está confirmado. Si el partido no se juega, no pagas nada.',
         ].join('\n'),
         body_it: [
             '🚩 Segnalare qualcuno, con il contesto',
@@ -308,6 +324,9 @@ const RELEASES = [
             '',
             '📅 Sei nella partita, e nel tuo calendario',
             'Dopo l\'iscrizione, aggiungi la partita al calendario con un tap: il centro, l\'indirizzo, e un promemoria 30 minuti prima di uscire, che su iPhone si adatta anche al traffico. Puoi anche invitare qualcuno subito, e con cinque giocatori una partita si gioca quasi sempre.',
+            '',
+            '💳 Sai quando paghi',
+            'Sulle partite che si pagano nell\'app, ora ti spieghiamo chiaramente come funziona: la tua carta viene solo bloccata quando ti iscrivi, e addebitata un\'ora prima del fischio d\'inizio, quando la partita è confermata. Se la partita non si gioca, non paghi nulla.',
         ].join('\n'),
     },
 ];
