@@ -360,12 +360,36 @@ async function purge() {
 
     for (const g of flagged.docs) {
         const d = g.data();
-        const isTims =
-            d.organizer === TIM ||
-            (d.attendees || []).some((r) => r && r.id === TIM);
-        if (!isTims) continue;
 
+        // NOT GATED ON TIM BEING ON THE GAME (fixed 2026-08-20).
+        //
+        // This used to `continue` on any test game Tim was neither organizer
+        // nor attendee of. Silently: not deleted, not counted, not reported.
+        // So every OTHER session's seeded games survived every purge and piled
+        // up -- 22 games at VSD39 Dole when the run claimed to write 13, three
+        // of them from `home_sections_matrix` with no `team_side` at all, which
+        // is what Tim saw as "no players in my spots".
+        //
+        // The safety property that matters is "no REAL player was touched",
+        // which `why` computes below from is_test_account. Whether Tim happens
+        // to be on the pitch is irrelevant to that -- and gating on it made the
+        // purge weaker precisely for the games nobody was watching.
         const why = [];
+
+        // A game whose roster contains a non-test account is not ours to
+        // delete, even though something flagged it as a test game.
+        for (const spot of d.teams || []) {
+            if (spot?.user_id && !(await isSafe(spot.user_id))) {
+                why.push(`${spot.user_id} holds a spot`);
+            }
+        }
+        for (const r of d.attendees || []) {
+            if (r?.id && !(await isSafe(r.id))) why.push(`${r.id} is an attendee`);
+        }
+        if (d.organizer && d.organizer !== TIM && !(await isSafe(d.organizer))) {
+            why.push(`organized by ${d.organizer}`);
+        }
+
         const [conns, invs, msgs, pays] = await Promise.all([
             db.collection("connect").where("game", "==", g.ref).get(),
             db.collection("game_invitations").where("game", "==", g.ref).get(),
@@ -394,7 +418,8 @@ async function purge() {
         else games.docs.push(g);
     }
 
-    console.log(`purging ${games.docs.length} test game(s)`);
+    console.log(
+        `purging ${games.docs.length} of ${flagged.size} flagged test game(s)`);
     if (skipped.length) {
         console.log(`SKIPPING ${skipped.length} that reached real people:`);
         for (const s of skipped) console.log(`  ${s.id}: ${s.why.slice(0, 3).join(", ")}`);
