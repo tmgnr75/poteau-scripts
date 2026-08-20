@@ -216,7 +216,7 @@ async function resolveAll(collection, ids, pick) {
  * tail section: they cannot form a story, but a complaint can still hide in
  * one, so they are included rather than dropped.
  */
-function buildCorpus(data, names, games) {
+function buildCorpus(data, names, games, facts, players) {
     const rosterByGame = data.roster || {};
     const byGame = {};
     for (const m of data.human) {
@@ -248,6 +248,28 @@ function buildCorpus(data, names, games) {
     Object.entries(routineCounts).sort((a, b) => b[1] - a[1])
         .forEach(([k, n]) => L.push(`  ${n} x ${k}`));
     L.push(`  (${routineTotal} of ${data.human.length} messages are routine)`);
+    if (facts) {
+        L.push('');
+        L.push('DAY FACTS (counted from the database, not the chat — this is how the day');
+        L.push('ACTUALLY went, and most of it never appears in a message):');
+        L.push(`  ${facts.played} games were PLAYED, ${facts.cancelled} cancelled`);
+        L.push(`  ${facts.filled} of the played games filled every spot`);
+        L.push(`  ${facts.praise} pieces of praise left by players for each other afterwards`);
+        L.push(`  ${facts.spots} spots taken, of which ${facts.plusOnes} were +1 guests`);
+        if (facts.topCentres.length) {
+            L.push(`  busiest venues: ${facts.topCentres.map(([c, n]) => `${c} (${n} games)`).join(', ')}`);
+        }
+    }
+    if (players && Object.keys(players).length) {
+        L.push('');
+        L.push('PLAYER CONTEXT (for anyone you name in NEEDS A HUMAN TODAY):');
+        for (const [name, p] of Object.entries(players)) {
+            L.push(`  ${name}: joined ${p.joined}`
+                + (p.daysOld !== null ? ` (${p.daysOld} days ago)` : '')
+                + (p.games === null ? ', game count unavailable' : `, has played ${p.games} games`)
+                + (p.gold ? ', Gold member' : ''));
+        }
+    }
     L.push('');
     L.push('='.repeat(70));
     L.push('THE CONVERSATIONS');
@@ -261,6 +283,7 @@ function buildCorpus(data, names, games) {
         const when = g.date ? DateTime.fromJSDate(g.date).setZone(TZ).toFormat('HH:mm') : '?';
         L.push('');
         L.push(`--- ${g.centre || 'unknown venue'} · kickoff ${when} · ${g.sport || '?'} · ${t.msgs.length} messages`);
+        L.push(`    GAME ID: ${t.gid}`);
 
         // THE ENDING, stated as fact. Without this the writer can only report
         // that players argued; it cannot say whether they played, which is the
@@ -332,124 +355,88 @@ where amateur players organise football and padel games at sports centres.
 
 YOUR OUTPUT MUST BEGIN WITH THIS EXACT LINE:
 ===TEASER===
-Nothing may precede it. No title, no date, no preamble. If your first line is
-anything else, the output is unusable.
-
-The teaser block is what someone sees in Slack before deciding to open the paper:
+Nothing may precede it. No title, no date, no preamble.
 
 ===TEASER===
 ONE sentence naming what actually characterised the day.
-- one line per story, between three and five lines, each naming the venue and
-  what happened, under 90 characters, each starting with "- "
+- one line per item below, three to five lines, each naming the venue and what
+  happened, under 90 characters, each starting with "- "
 ACT: the single most urgent thing a human should do today, one short line, or
 "ACT: nothing urgent".
 ===END TEASER===
 
-Then, after ===END TEASER===, the full brief described below. Do NOT put a title
-or a date line at the start of the brief; the page adds those.
+Then the brief.
 
-Below is EVERY message real players and centre staff wrote in game chats
-yesterday. Read all of it, then write the day's brief.
+WHAT THIS PAPER IS FOR. Tim reads it over coffee to know how his product is
+doing. He does NOT need a catalogue of complaints. Chat is a complaints channel
+by nature: people type when something is wrong and stay silent when a game
+simply works, so reading only the chat gives a false, bleak picture. The
+DAY FACTS block below counts what actually happened. Use it.
 
-Poteau context you need to read this correctly:
-- Games are organised by whoever creates them. They fill only if strangers join,
-  and most games never fill. Players joining and leaving is normal, not drama.
-- A "+1" is a spot someone books for a friend, not a named person.
-- Centre staff messages are marked [CENTRE STAFF] — they speak for the venue,
-  so what they say carries more weight than one player's opinion.
-- Messages marked (routine) are mechanical coordination. Never quote them.
-- Each conversation carries HOW IT ENDED, AFTERWARDS and ROSTER MOVED lines.
-  These are FACTS from the database, not chat. They are how you know whether a
-  game was played, how full it got, and who was reported afterwards. The chat
-  itself never states these. Use them, and never contradict them.
-- "10 of 10 spots taken by 6 distinct people" means the game LOOKED full while
-  only six humans were coming: the rest are +1 guests. That gap is often the
-  story.
+BALANCE IS A RULE, NOT A PREFERENCE. Open with what went well. Most games are
+played by people who enjoyed themselves, and that is the truth of the day just
+as much as an argument is.
 
 WRITE THIS STRUCTURE:
 
-1. A one-paragraph LEAD. What actually characterised yesterday? Not "players
-   coordinated games" — that is always true and says nothing. Find the real
-   theme of the day, and ground it in the numbers you were given.
+1. LEAD, one paragraph. What characterised the day, grounded in the DAY FACTS
+   numbers: how many games played, how many filled, how much praise players
+   left each other. Not "players coordinated games", which is always true.
 
-   Then a short paragraph headed HOW THE DAY RAN, tracing the shape of it in
-   time: when the first games were being filled, when the pressure peaked, what
-   the evening looked like. Use the clock times and the roster movements.
+2. WHAT WENT WELL. Three to five short items, each one concrete and specific.
+   This is the section Tim wants most and it must never be padded or invented.
+   Good material:
+   - a centre that hosted an unusual number of games in one day
+   - games where players praised each other afterwards
+   - someone who gave up their spot, brought equipment, drove someone, welcomed
+     a newcomer, or defused an argument
+   - a venue that solved a problem well
+   - a first-timer whose first game went fine
+   Quote the good messages. If a day genuinely has little good in it, say so in
+   one line rather than manufacturing warmth.
 
-2. 3 to 5 STORIES, in CHRONOLOGICAL order of when the game kicked off, earliest
-   first, so the brief reads as the day unfolding.
-
-   HEADLINES ARE INFORMATIVE, NOT MYSTERIOUS. This is an investigative rundown,
-   not clickbait. A reader skimming only the headlines must come away knowing
-   what happened. Name the venue, the time, and the outcome.
+3. TWO or THREE STORIES. No more. Only things that MATTER: something that
+   changed an outcome, revealed a product problem, or is worth Tim knowing.
+   Skip routine grumbling. Order them by kickoff time, earliest first.
+   Headlines are INFORMATIVE, never mysterious. This is an investigative
+   rundown, not clickbait. Name the venue, the time and the outcome:
      BAD:  "The night the roster melted"
-     BAD:  "A card for someone else's mistake"
-     GOOD: "LE FIVE Marville, 21:30: roster hit 13, collapsed to 9, played 10/10"
-     GOOD: "Foot POWER 5: Nash carded after the organiser's own misclick"
+     GOOD: "LE FIVE Marville, 21:30: roster hit 13, collapsed, played 10/10"
+   For each story: open with what happened and how it ended, walk the exchange
+   in clock order so replies have their context, and CLOSE with a line starting
+   "HOW IT ENDED:" using the HOW IT ENDED and AFTERWARDS facts. You always know
+   the ending. Never write that you do not.
 
-   For each story, write it as a reporter would:
-   - open with what happened and how it ended, not with a tease
-   - then walk the exchange in TIME ORDER with the clock times, so the reader
-     sees the conversation, not two quotes floating without context. When
-     someone replies to someone else, give enough of the exchange that the reply
-     makes sense: who said what, at what time, and what came back.
-   - name every speaker and the venue. Quote in the original French; add a short
-     English gloss in brackets only when the meaning is not obvious.
-   - EVERY indented quote line must end with its speaker and the time, in this
-     exact shape, or the reader cannot tell who is talking:
-       "Tout le monde peut confirmé svp ?" (Mohamed, 12:16)
-     Two spaces of indent, the quote in double quotes, then the name and clock
-     time in round brackets. Never an indented quote without that attribution.
-   - CLOSE EVERY STORY with a line starting "HOW IT ENDED:" stating the outcome
-     from the HOW IT ENDED and AFTERWARDS facts given to you. Never leave a
-     story hanging on "we do not know if they played". You DO know. Use it.
-     If a story has no ending in the data, say exactly that instead of guessing.
+4. NEEDS A HUMAN TODAY. The most useful section in the paper, so give it real
+   substance. For each item, on its own lines:
+     WHO:    the player's name, and the context supplied in PLAYER CONTEXT
+             (when they joined, how many games they have played). A first-timer
+             and a 200-game regular are different situations.
+     WHERE:  the venue, the kickoff time, and the GAME ID exactly as given
+     WHAT:   what happened, with the quote that shows it
+     WHY:    why it needs a human rather than waiting
+     DO:     the specific action you would take
+   Be concrete enough that Tim can act without opening anything else. If there
+   is genuinely nothing, write "Nothing needs a human today" and stop.
 
-3. FRICTION — anything a player struggled with that is Poteau's fault, not the
-   players'. Confusions about how the app works, missing features they asked
-   for, things they had to work around by exchanging phone numbers. Be concrete
-   and quote them. If there is none, say so plainly.
-
-4. THE MOOD — one or two sentences. Were people warm, irritated, funny?
-
-5. WORTH A REPLY — a short list of anyone who asked something nobody answered,
-   or who deserves a human response from the Poteau team. Name them and the
-   venue. If nobody, say so.
+5. THE MOOD, one or two sentences.
 
 RULES:
 - EVERY QUOTE MUST BE COPIED CHARACTER FOR CHARACTER from the messages below.
-  Do not tidy spelling, do not fix grammar, do not translate into the quote, do
-  not merge two messages into one quote. If you cannot copy it exactly, do not
-  quote it. These go in front of the players who wrote them.
-- EVERY CLOCK TIME must be the one printed next to that message. Never estimate
-  a time, never round it, never infer one from context.
-- NEVER state a number that was not given to you. Roster counts, spots, who was
-  reported, whether a game played: all of that is in the HOW IT ENDED and
-  AFTERWARDS lines. If a number is not there, do not produce one.
-- Do not describe what a player "felt", "assumed", "intended" or "was thinking".
-  You have their words, not their mind. Report what they wrote and what
-  followed.
-- If two readings of an exchange are possible, give the one the text supports
-  and say plainly that the rest is unclear. An honest gap is worth more than a
-  confident guess, because Tim will check.
-- Ground everything in the actual messages. Never invent a quote or a fact. If
-  you are unsure what someone meant, say so rather than guessing.
-- Lead with what is interesting. Routine volume goes in one line at most.
-- Quotes are the point. Use plenty of real ones.
-- Write in English, but keep the French quotes in French.
-- Use "game", never "match", when writing your own prose.
-- No em dashes. No bullet-point soup — write actual sentences.
-- Plain text only, no markdown headers or ** bold **. This is going into a
-  terminal and a Slack code block. Use CAPS for section titles and two-space
-  indentation for quotes.
-- If the day was genuinely quiet, say that in one short brief. Do not inflate
-  a nothing day into five stories.
-
-FORMAT (this matters, the output goes into a terminal, a Slack block and a web
-page): Plain text ONLY. No markdown whatsoever: no #, no ##, no **bold**, no
-bullet characters other than the "- " in the teaser list, no backticks, no
-tables. Section titles in CAPITALS on their own line. Indent quotes by two
-spaces. No em dashes anywhere.
+  Do not tidy spelling, do not fix grammar, do not merge two messages into one
+  quote. If you cannot copy it exactly, do not quote it. Quotes are checked
+  against the database automatically and failures are printed on the page.
+- EVERY indented quote must end with its speaker and time, exactly like this:
+    "Tout le monde peut confirmé svp ?" (Mohamed, 12:16)
+- EVERY CLOCK TIME must be the one printed next to that message. Never estimate.
+- NEVER state a number that was not given to you.
+- Do not describe what a player "felt", "assumed" or "intended". You have their
+  words, not their mind.
+- If two readings are possible, give the one the text supports and say the rest
+  is unclear. Tim checks.
+- Write in English, keep French quotes in French. Say "game", never "match".
+- No em dashes. No markdown: no #, no **, no bullet characters, no backticks.
+  Section titles in CAPITALS on their own line, quotes indented two spaces.
 
 THE MESSAGES:
 
@@ -978,6 +965,93 @@ function post(payload) {
 }
 
 /**
+ * The day's positive facts, computed rather than inferred.
+ *
+ * WHY THIS EXISTS. Chat is a complaints channel by nature: people type when
+ * something is wrong and say nothing when a game simply works. Reading only the
+ * chat therefore produces a relentlessly negative paper, which is both
+ * demoralising and FALSE, because on 19 August 67 games played, every one of
+ * them filled, and players left 131 pieces of praise for each other.
+ *
+ * None of that is in the messages. It has to be counted.
+ */
+async function dayFacts(games) {
+    const played = [], cancelled = [];
+    const byCentre = {};
+    let praise = 0, filled = 0, plusOnes = 0, spots = 0;
+
+    for (const [gid, g] of Object.entries(games)) {
+        if (g.status === 'played') {
+            played.push(gid);
+            byCentre[g.centre] = (byCentre[g.centre] || 0) + 1;
+            praise += g.praised || 0;
+            if (g.max && g.spots >= g.max) filled++;
+            spots += g.spots || 0;
+            plusOnes += Math.max(0, (g.spots || 0) - (g.players || 0));
+        } else if (g.status === 'canceled' || g.status === 'hidden') {
+            cancelled.push(gid);
+        }
+    }
+    return {
+        played: played.length,
+        cancelled: cancelled.length,
+        filled,
+        praise,
+        spots,
+        plusOnes,
+        topCentres: Object.entries(byCentre).sort((a, b) => b[1] - a[1]).slice(0, 5),
+    };
+}
+
+/**
+ * Who is this player? Signup date and how many games they have actually played.
+ *
+ * Tim's ask: when the brief names someone, say enough that he can judge them.
+ * A first-timer complaining and a 200-game regular complaining are different
+ * events, and the chat cannot tell them apart.
+ */
+async function playerContext(names, wanted) {
+    const out = {};
+    const uids = wanted
+        .map(n => Object.keys(names).find(k => names[k] === n))
+        .filter(Boolean);
+    for (let i = 0; i < uids.length; i += 200) {
+        const docs = await db.getAll(...uids.slice(i, i + 200).map(u => db.doc(`users/${u}`)));
+        for (const d of docs) {
+            if (!d.exists) continue;
+            const u = d.data();
+            const created = u.created_time ? u.created_time.toDate() : null;
+            out[(u.display_name || '').trim()] = {
+                uid: d.id,
+                ref: d.ref,
+                joined: created ? DateTime.fromJSDate(created).setZone(TZ).toFormat('d LLL yyyy') : 'unknown',
+                daysOld: created ? Math.round((Date.now() - created.getTime()) / 86400000) : null,
+                games: null,          // filled below
+                gold: u.gold_status === true,
+            };
+        }
+    }
+    // `played_games` is NOT usable here: it reads 0 for members with a hundred
+    // games behind them (Adibou: array says 0, the real count is 97). Printing
+    // "0 games" next to a three-year member would be a plain falsehood in a
+    // paper whose whole problem has been trust, so the count is measured with an
+    // aggregation query instead. One cheap count() per named player.
+    await Promise.all(Object.values(out).map(async (p) => {
+        try {
+            const c = await db.collection('games')
+                .where('attendees', 'array-contains', p.ref)
+                .where('status', '==', 'played')
+                .count().get();
+            p.games = c.data().count;
+        } catch (e) {
+            p.games = null;   // reported as unknown, never as zero
+        }
+        delete p.ref;
+    }));
+    return out;
+}
+
+/**
  * Check every quote in the brief against the messages that actually exist.
  *
  * WHY. Tim's judgement on the first editions was "unreliable, some things were
@@ -1261,7 +1335,27 @@ async function runOneDay(targetDay) {
         }),
     ]);
 
-    const { corpus, threads, routineTotal } = buildCorpus(data, names, gameDocs);
+    // Player context needs to know who will be named, which only the finished
+    // brief reveals. Rather than run the writer twice, supply context for every
+    // author who wrote more than a couple of lines: that covers everyone a story
+    // could plausibly be about, at one extra batched read.
+    const talkative = Object.entries(
+        data.human.reduce((acc, m) => {
+            const n = names[m.aid];
+            if (n) acc[n] = (acc[n] || 0) + 1;
+            return acc;
+        }, {}))
+        .filter(([, n]) => n >= 2)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 40)
+        .map(([n]) => n);
+
+    const [facts, players] = await Promise.all([
+        dayFacts(gameDocs),
+        playerContext(names, talkative),
+    ]);
+
+    const { corpus, threads, routineTotal } = buildCorpus(data, names, gameDocs, facts, players);
     if (CORPUS_ONLY) { console.log(corpus); return false; }
 
     const meta = {
@@ -1278,6 +1372,7 @@ async function runOneDay(targetDay) {
     meta.dayKey = dayKey;
     meta.dayLabel = day.toFormat('cccc d LLLL yyyy');
     // Roster facts for the stats strip, from the log lines rather than the chat.
+    meta.facts = facts;
     meta.joins = Object.entries(data.logs)
         .filter(([k]) => /rejoint/i.test(k)).reduce((n, [, v]) => n + v, 0);
     meta.leaves = Object.entries(data.logs)
