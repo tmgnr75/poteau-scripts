@@ -417,6 +417,21 @@ WRITE THIS STRUCTURE:
    venue. If nobody, say so.
 
 RULES:
+- EVERY QUOTE MUST BE COPIED CHARACTER FOR CHARACTER from the messages below.
+  Do not tidy spelling, do not fix grammar, do not translate into the quote, do
+  not merge two messages into one quote. If you cannot copy it exactly, do not
+  quote it. These go in front of the players who wrote them.
+- EVERY CLOCK TIME must be the one printed next to that message. Never estimate
+  a time, never round it, never infer one from context.
+- NEVER state a number that was not given to you. Roster counts, spots, who was
+  reported, whether a game played: all of that is in the HOW IT ENDED and
+  AFTERWARDS lines. If a number is not there, do not produce one.
+- Do not describe what a player "felt", "assumed", "intended" or "was thinking".
+  You have their words, not their mind. Report what they wrote and what
+  followed.
+- If two readings of an exchange are possible, give the one the text supports
+  and say plainly that the rest is unclear. An honest gap is worth more than a
+  confident guess, because Tim will check.
 - Ground everything in the actual messages. Never invent a quote or a fact. If
   you are unsure what someone meant, say so rather than guessing.
 - Lead with what is interesting. Routine volume goes in one line at most.
@@ -914,7 +929,12 @@ ${out.join('\n')}
 
 <footer>
   Written by <b>chat_brief.js</b> from the <b>messages</b> collection, Europe/Paris day boundary.<br>
-  Quotes are verbatim and unedited; players are named as they appear in their own profiles.<br>
+  ${meta.check
+    ? `<b>${meta.check.verified} of ${meta.check.checked}</b> quotes matched against the database automatically`
+      + (meta.check.failures.length
+        ? `. <b>${meta.check.failures.length} could not be matched</b> and may be paraphrased: ${meta.check.failures.map(f => esc(f)).join(' &middot; ')}`
+        : ' &mdash; every quote is verbatim.')
+    : 'Quotes are copied from the messages.'}<br>
   Published daily at 09:00.
 </footer>`;
 }
@@ -955,6 +975,44 @@ function post(payload) {
     if (code !== '200' || reply !== 'ok') {
         throw new Error(`Slack rejected the post (HTTP ${code}): ${reply.slice(0, 200)}`);
     }
+}
+
+/**
+ * Check every quote in the brief against the messages that actually exist.
+ *
+ * WHY. Tim's judgement on the first editions was "unreliable, some things were
+ * false", and that is fatal for a paper: one invented quote makes a reader
+ * distrust the true ones. A prompt instruction is not a guarantee, so the
+ * quotes are verified against the corpus before anything is published.
+ *
+ * Matching is deliberately lenient about whitespace and quote characters
+ * (the writer normalises curly apostrophes) but strict about the words. A
+ * quote that cannot be found is reported, not silently dropped: knowing the
+ * edition has three unverifiable quotes is the point.
+ *
+ * Returns { checked, verified, failures[] }.
+ */
+function verifyQuotes(brief, humanMessages) {
+    const norm = (t) => String(t)
+        .replace(/[’‘‚‛]/g, "'")
+        .replace(/[“”„]/g, '"')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+
+    const haystack = humanMessages.map(m => norm(m.text));
+    const failures = [];
+    let checked = 0;
+
+    // Only the attributed, indented quotes: prose that merely mentions a phrase
+    // is not a quotation and must not be held to this standard.
+    for (const m of brief.matchAll(/^\s+"([^"\n]{8,})"/gm)) {
+        const q = norm(m[1]);
+        checked++;
+        // A quote may legitimately be a fragment of a longer message.
+        if (!haystack.some(h => h.includes(q))) failures.push(m[1].slice(0, 90));
+    }
+    return { checked, verified: checked - failures.length, failures };
 }
 
 /**
@@ -1060,7 +1118,11 @@ function postBrief({ teaser, meta, url }) {
             type: 'context',
             elements: [{
                 type: 'mrkdwn',
-                text: `${meta.messages.toLocaleString('en-US')} messages  ·  ${meta.threads} games  ·  ${meta.authors} players`,
+                text: `${meta.messages.toLocaleString('en-US')} messages  ·  ${meta.threads} games  ·  ${meta.authors} players`
+                    + (meta.check
+                        ? `  ·  ${meta.check.verified}/${meta.check.checked} quotes verified`
+                          + (meta.check.failures.length ? ' :warning:' : '')
+                        : ''),
             }],
         },
     ];
@@ -1242,6 +1304,14 @@ async function runOneDay(targetDay) {
         ].map(x => x.trim()))].filter(n => n.length > 1 && n.length < 40).slice(0, 30);
         const avatars = quoted.length ? fetchAvatars(names, photoUrls, quoted) : {};
         console.error(`[chat_brief] ${dayKey}: ${Object.keys(avatars).length}/${quoted.length} avatars`);
+        // Verify before publishing. A failure does not block the edition, but it
+        // is printed and carried onto the page, because an unnoticed false quote
+        // is what destroys trust in the whole thing.
+        const check = verifyQuotes(brief, data.human);
+        meta.check = check;
+        console.error(`[chat_brief] ${dayKey}: quotes ${check.verified}/${check.checked} verified`
+            + (check.failures.length ? ` — UNVERIFIED: ${check.failures.join(' | ').slice(0, 300)}` : ''));
+
         const html = buildPage(brief, meta, teaser, avatars);
         const url = publishArtifact(html, dayKey, teaser.lead || `The Poteau Daily for ${meta.dayLabel}`);
         postBrief({ teaser, meta, url });
