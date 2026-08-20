@@ -155,14 +155,22 @@ function atDays(offsetDays, hour, minute) {
 const PLAN = [
     // --- ALREADY STARTED ----------------------------------------------------
     {
-        label: "soccer · STARTED 20min ago · full",
+        label: "soccer · STARTED 20min ago · full · SCORING 2-1",
         sport: "soccer", startsIn: -20, duration: 60,
         filled: 6, max: 6, mine: true, price: 8, live: true,
+        // A match genuinely UNDERWAY, not merely one whose clock has passed.
+        // Without this every seeded game needed the teams step walked by hand
+        // before anything mid-match could be looked at -- the green band, the
+        // Lock Screen card and the watch all require confirmed teams.
+        liveScore: { a: 2, b: 1 },
     },
     {
-        label: "padel · STARTED 10min ago · full 2v2",
+        label: "padel · STARTED 10min ago · full 2v2 · SCORING",
         sport: "padel", startsIn: -10, duration: 90,
         filled: 4, max: 4, mine: true, price: 12, live: true,
+        // Five points to us, three to them: inside the first game of the first
+        // set, so the board shows 40-40 territory rather than a finished set.
+        liveScore: { a: 5, b: 3 },
     },
 
     // --- STARTING IN LESS THAN 30 MIN (inside the Live window) --------------
@@ -579,8 +587,42 @@ async function run() {
         // shows a scoreboard, whatever Remote Config says.
         if (p.live) data.poteau_live = true;
 
+        // Teams must be confirmed before a match counts as underway. This is
+        // the gate the game card's green LIVE band, the Lock Screen Activity
+        // and the watch all read -- kickoff alone is only "the clock passed".
+        if (p.liveScore) {
+            data.live_teams_confirmed_at =
+                admin.firestore.Timestamp.fromDate(inMinutes(p.startsIn - 2));
+        }
+
         const ref = await db.collection("games").add(data);
         if (p.played) feedbackRefs.push(ref);
+
+        // The score is a LOG, never a stored number. Points are appended as
+        // ordinary events and the fold derives the score from them, exactly as
+        // a real tap does -- so a seeded match and a played one are
+        // indistinguishable downstream. Writing an `a`/`b` field instead would
+        // seed a state the app can never itself produce.
+        if (p.liveScore) {
+            const kickoff = inMinutes(p.startsIn);
+            let n = 0;
+            for (const side of ["team_a", "team_b"]) {
+                const count = side === "team_a" ? p.liveScore.a : p.liveScore.b;
+                for (let i = 0; i < count; i++) {
+                    // Spread through the elapsed time so the minutes read
+                    // plausibly rather than every goal landing at kickoff.
+                    const at = new Date(kickoff.getTime() + (++n) * 90 * 1000);
+                    await ref.collection("live_events").add({
+                        type: "point",
+                        side,
+                        created_by: TIM,
+                        created_at: admin.firestore.Timestamp.fromDate(at),
+                        client_at: admin.firestore.Timestamp.fromDate(at),
+                        client_event_id: `seed_${ref.id}_${n}`,
+                    });
+                }
+            }
+        }
     }
 
     if (WRITE && feedbackRefs.length) {
