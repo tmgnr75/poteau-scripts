@@ -54,6 +54,16 @@ const CONCURRENCY = 8;
 const db = admin.firestore();
 const bucket = admin.storage().bucket();
 
+// Every mutation is appended here before it happens, so a revert never depends
+// on reconstructing state from the bucket. One JSON object per line, flushed
+// immediately -- a crash mid-run must still leave a usable manifest.
+const fsSync = require('fs');
+const MANIFEST = process.env.BACKFILL_MANIFEST ||
+    `${__dirname}/backfill_manifest_${new Date().toISOString().slice(0, 10)}.jsonl`;
+function record(entry) {
+    fsSync.appendFileSync(MANIFEST, JSON.stringify(entry) + '\n');
+}
+
 function storagePathFromUrl(url) {
     // https://firebasestorage.googleapis.com/v0/b/<bucket>/o/<encoded path>?...
     const m = /\/o\/([^?]+)/.exec(url);
@@ -109,6 +119,9 @@ async function processUser(doc, stats) {
 
     const newPath = path.replace(/\.[^./]+$/, '') + `_c${MAX_EDGE}.jpg`;
     const token = require('crypto').randomUUID();
+    // Recorded first: if the save or the update dies halfway, the revert still
+    // knows which user to put back and what to put back.
+    record({ uid: doc.id, oldUrl: url, oldPath: path, newPath, bytesBefore: size, bytesAfter: out.length });
     await bucket.file(newPath).save(out, {
         metadata: {
             contentType: 'image/jpeg',
