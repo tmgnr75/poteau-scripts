@@ -48,6 +48,8 @@ const QUALITY = 82;
 // Below this a file is not worth rewriting: the saving does not pay for a new
 // object, a Firestore write and a cache miss for that user.
 const MIN_BYTES = 400 * 1024;
+// Rewrite only when it actually buys something.
+const MIN_SAVING_RATIO = 0.15;
 const ACTIVE_DAYS = 90;
 const CONCURRENCY = 8;
 
@@ -102,7 +104,10 @@ async function processUser(doc, stats) {
         return;
     }
 
-    if (out.length >= size) { stats.skippedNotSmaller++; return; }
+    // A marginal saving is not worth a new object, a Firestore write and a
+    // cache miss for that user. Observed on the 2026-08-24 run: 7% of rewrites
+    // saved under 15%, several of them 0%.
+    if (out.length >= size * (1 - MIN_SAVING_RATIO)) { stats.skippedNotSmaller++; return; }
 
     // Verify before trusting it.
     const check = await sharp(out).metadata();
