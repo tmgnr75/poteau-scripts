@@ -84,6 +84,12 @@ async function processUser(doc, stats) {
     const [exists] = await file.exists();
     if (!exists) { stats.skippedMissing++; return; }
 
+    // Never re-process our own output. A second run over the same users would
+    // otherwise produce _c1600_c1600.jpg and a second JPEG generation -- it
+    // happened on 2026-08-24 to 11 users whose photos had been rewritten by an
+    // earlier batch in the same session.
+    if (path.includes(`_c${MAX_EDGE}.`)) { stats.skippedAlreadyDone++; return; }
+
     const [meta] = await file.getMetadata();
     const size = Number(meta.size || 0);
     if (size < MIN_BYTES) { stats.skippedSmall++; return; }
@@ -146,7 +152,8 @@ async function processUser(doc, stats) {
     const stats = {
         rewritten: 0, bytesBefore: 0, bytesAfter: 0,
         skippedNoPhoto: 0, skippedSmall: 0, skippedMissing: 0,
-        skippedForeign: 0, skippedNotSmaller: 0, failedDecode: 0, failedVerify: 0,
+        skippedForeign: 0, skippedNotSmaller: 0, skippedAlreadyDone: 0,
+        failedDecode: 0, failedVerify: 0,
     };
 
     let q = db.collection('users');
@@ -181,6 +188,7 @@ async function processUser(doc, stats) {
     console.log(`skipped (small)  : ${stats.skippedSmall}`);
     console.log(`skipped (no photo/foreign/missing): ${stats.skippedNoPhoto}/${stats.skippedForeign}/${stats.skippedMissing}`);
     console.log(`skipped (not smaller): ${stats.skippedNotSmaller}`);
+    console.log(`skipped (already done): ${stats.skippedAlreadyDone}`);
     console.log(`failed           : ${stats.failedDecode + stats.failedVerify}`);
     if (!WRITE) console.log('\nDRY RUN — nothing written. Re-run with --write.');
 })();

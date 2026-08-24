@@ -23,3 +23,4 @@ Thumbs.db
 .idea/
 *.swp
 __pycache__/
+backfill_manifest_*.jsonl
