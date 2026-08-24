@@ -57,6 +57,32 @@ const cutoff = admin.firestore.Timestamp.fromDate(
     new Date(Date.now() - GAME_OVER_DAYS * 24 * 3600 * 1000)
 );
 
+/**
+ * --by-created mode: for the ~11M documents written before `game_date` existed.
+ *
+ * Firestore cannot select on an ABSENT field, so those documents are invisible
+ * to the game_date query above and to `game_date == null` alike (that matches
+ * only explicit nulls, of which there are zero). They are unreachable forever
+ * by any field query.
+ *
+ * `created` IS indexed, and for this population it is a safe proxy: an
+ * invitation written more than 500 days ago cannot point at a game that has not
+ * happened. Verified against production 2026-08-24 -- of the 60 NEWEST
+ * invitations created >500d ago (the riskiest, closest to the cutoff), 60 had a
+ * game already in the past, 0 had a game still in the future, and 0 were
+ * orphaned.
+ *
+ * Backfilling game_date onto them instead was considered and rejected on cost:
+ * ~11M reads to scan plus ~11M writes (~$27) to enable a delete that costs
+ * ~$2.20 on its own. An orphaned invitation whose game no longer exists is
+ * deleted by the same pass, which is the right outcome either way.
+ */
+const CREATED_OVER_DAYS = 500;
+const createdCutoff = admin.firestore.Timestamp.fromDate(
+    new Date(Date.now() - CREATED_OVER_DAYS * 24 * 3600 * 1000)
+);
+const BY_CREATED = args.includes('--by-created');
+
 function fmt(n) { return n.toLocaleString(); }
 
 /**
@@ -66,30 +92,49 @@ function fmt(n) { return n.toLocaleString(); }
  * live invitations.
  */
 async function preflight() {
-    const snap = await db.collection('game_invitations')
-        .where('game_date', '<', cutoff)
-        .orderBy('game_date', 'desc')   // NEWEST matches = closest to the cutoff = riskiest
-        .limit(200)
-        .get();
+    const snap = BY_CREATED
+        ? await db.collection('game_invitations')
+            .where('created', '<', createdCutoff)
+            .orderBy('created', 'desc')  // NEWEST matches = closest to the cutoff = riskiest
+            .limit(200).get()
+        : await db.collection('game_invitations')
+            .where('game_date', '<', cutoff)
+            .orderBy('game_date', 'desc')
+            .limit(200).get();
 
     if (snap.empty) return { ok: true, checked: 0 };
 
     const now = new Date();
     let future = 0, missing = 0;
     for (const d of snap.docs) {
-        const gd = d.get('game_date');
-        if (!gd) { missing++; continue; }
-        if (gd.toDate() > now) future++;
+        // In --by-created mode the whole point is that game_date is absent, so
+        // the guard checks `created` is genuinely ancient instead.
+        const field = BY_CREATED ? d.get('created') : d.get('game_date');
+        if (!field) { missing++; continue; }
+        if (BY_CREATED) {
+            if (field.toDate() > new Date(Date.now() - CREATED_OVER_DAYS * 86400000)) future++;
+        } else if (field.toDate() > now) {
+            future++;
+        }
     }
 
     if (future > 0 || missing > 0) {
         return { ok: false, checked: snap.size, future, missing };
     }
-    return { ok: true, checked: snap.size, newest: snap.docs[0].get('game_date').toDate() };
+    // In --by-created mode game_date is absent by definition, so report the
+    // field the mode actually sorted on.
+    const newestField = snap.docs[0].get(BY_CREATED ? 'created' : 'game_date');
+    return {
+        ok: true,
+        checked: snap.size,
+        newest: newestField && newestField.toDate ? newestField.toDate() : null,
+    };
 }
 
 async function main() {
-    console.log(`cutoff: game_date < ${cutoff.toDate().toISOString()} (${GAME_OVER_DAYS} days ago)`);
+    console.log(BY_CREATED
+        ? `cutoff: created < ${createdCutoff.toDate().toISOString()} (${CREATED_OVER_DAYS} days ago) [--by-created]`
+        : `cutoff: game_date < ${cutoff.toDate().toISOString()} (${GAME_OVER_DAYS} days ago)`);
     console.log(`mode:   ${APPLY ? 'APPLY (deleting)' : 'DRY RUN (nothing will be deleted)'}`);
     if (MAX !== Infinity) console.log(`max:    ${fmt(MAX)}`);
     console.log('');
@@ -109,11 +154,14 @@ async function main() {
         // Count in bounded slices; an unbounded count() on this collection
         // exceeds the deadline.
         const D = n => admin.firestore.Timestamp.fromDate(new Date(Date.now() - n * 86400000));
-        const windows = [[3650, 365], [365, 180], [180, 90], [90, 30], [30, GAME_OVER_DAYS]];
+        const field = BY_CREATED ? 'created' : 'game_date';
+        const windows = BY_CREATED
+            ? [[3650, 900], [900, 700], [700, 600], [600, CREATED_OVER_DAYS]]
+            : [[3650, 365], [365, 180], [180, 90], [90, 30], [30, GAME_OVER_DAYS]];
         let total = 0;
         for (const [a, b] of windows) {
             const c = (await db.collection('game_invitations')
-                .where('game_date', '>=', D(a)).where('game_date', '<', D(b))
+                .where(field, '>=', D(a)).where(field, '<', D(b))
                 .count().get()).data().count;
             console.log(`  ${a}d..${b}d ago: ${fmt(c)}`);
             total += c;
@@ -128,11 +176,14 @@ async function main() {
     let deleted = 0;
 
     while (deleted < MAX) {
-        const snap = await db.collection('game_invitations')
-            .where('game_date', '<', cutoff)
-            .orderBy('game_date', 'asc')      // oldest first
-            .limit(Math.min(PAGE, MAX - deleted))
-            .get();
+        const lim = Math.min(PAGE, MAX - deleted);
+        const snap = BY_CREATED
+            ? await db.collection('game_invitations')
+                .where('created', '<', createdCutoff)
+                .orderBy('created', 'asc').limit(lim).get()
+            : await db.collection('game_invitations')
+                .where('game_date', '<', cutoff)
+                .orderBy('game_date', 'asc').limit(lim).get();
 
         if (snap.empty) {
             console.log('\nno more matches - backlog clear.');
