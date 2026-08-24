@@ -77,7 +77,10 @@ const cutoff = admin.firestore.Timestamp.fromDate(
  * ~$2.20 on its own. An orphaned invitation whose game no longer exists is
  * deleted by the same pass, which is the right outcome either way.
  */
-const CREATED_OVER_DAYS = 500;
+const CREATED_OVER_DAYS = (() => {
+    const a = process.argv.slice(2).find(x => x.startsWith('--created-days='));
+    return a ? parseInt(a.split('=')[1], 10) : 500;
+})();
 const createdCutoff = admin.firestore.Timestamp.fromDate(
     new Date(Date.now() - CREATED_OVER_DAYS * 24 * 3600 * 1000)
 );
@@ -156,7 +159,9 @@ async function main() {
         const D = n => admin.firestore.Timestamp.fromDate(new Date(Date.now() - n * 86400000));
         const field = BY_CREATED ? 'created' : 'game_date';
         const windows = BY_CREATED
-            ? [[3650, 900], [900, 700], [700, 600], [600, CREATED_OVER_DAYS]]
+            ? [[3650, 900], [900, 700], [700, 600], [600, 500], [500, 180], [180, 90], [90, 30]]
+                .filter(([a, b]) => a > CREATED_OVER_DAYS)
+                .map(([a, b]) => [a, Math.max(b, CREATED_OVER_DAYS)])
             : [[3650, 365], [365, 180], [180, 90], [90, 30], [30, GAME_OVER_DAYS]];
         let total = 0;
         for (const [a, b] of windows) {
