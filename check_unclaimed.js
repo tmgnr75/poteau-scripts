@@ -26,7 +26,7 @@ const GRACE_S = 180;
   const since = new Date(Date.now() - MINUTES * 60000);
   const snap = await db.collection('connect').where('datetime', '>=', since).limit(3000).get();
   const by = {};
-  let stale = 0, inflight = 0, noRecip = 0, malformed = 0;
+  let stale = 0, inflight = 0, noRecip = 0, malformed = 0, selfOnly = 0;
   snap.forEach(d => {
     const age = (Date.now() - d.get('datetime').toDate()) / 1000;
     if (d.get('pushed') === true) { const g = d.get('pushed_by') || '?'; by[g] = (by[g] || 0) + 1; return; }
@@ -41,6 +41,15 @@ const GRACE_S = 180;
     // Counting those as dropped pushes reported phantom failures at ~5%.
     if ((d.get('recipient') || []).length === 0) { noRecip++; return; }
     if (!d.get('type') && !d.get('title')) { malformed++; return; }
+    // Sender-exclusion: the handler drops the sender from the recipient list, so
+    // a doc addressed only to its own sender resolves to nobody. Verified live
+    // on 2026-08-25: a live_kickoff where sender and sole recipient were the
+    // same UID, logged "No recipients to process" by BOTH generations. Counting
+    // it as a dropped push reported a 2.13% failure rate against a system that
+    // was behaving exactly as designed.
+    const senderId = d.get('sender') && d.get('sender').id;
+    const recips = (d.get('recipient') || []).map(r => r && r.id).filter(Boolean);
+    if (senderId && recips.length && recips.every(r => r === senderId)) { selfOnly++; return; }
     if (age < GRACE_S) inflight++; else stale++;
   });
   const total = snap.size;
@@ -51,6 +60,7 @@ const GRACE_S = 180;
   console.log(`  in flight (<${GRACE_S}s)          : ${inflight}`);
   console.log(`  no recipients (fine)      : ${noRecip}`);
   console.log(`  malformed, no type (fine) : ${malformed}`);
+  console.log(`  sender-only (fine)        : ${selfOnly}`);
   console.log(`  DROPPED (>${GRACE_S}s, unclaimed) : ${stale}  (${pct}%)`);
   if (stale > 0) {
     console.log(`  *** ${stale} push(es) NEVER SENT - this is the 09:30 failure signature ***`);
