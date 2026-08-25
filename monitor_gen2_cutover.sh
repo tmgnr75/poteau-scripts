@@ -76,6 +76,7 @@ echo "  claim transaction errors  : $G1_CLAIMERR / $G2_CLAIMERR"
 echo "  consumer crashes          : $CRASH"
 
 ALERTS=()
+# bash 3.2 on macOS treats an empty array as unbound under `set -u`.
 [ "$TOTAL_PUB" -eq 0 ] && ALERTS+=("NOTHING PUBLISHED by either generation in $W - push path may be DOWN")
 [ "$EXEC" -eq 0 ] && [ "$TOTAL_PUB" -gt 0 ] && ALERTS+=("pushes published but consumer NEVER RAN - Pub/Sub or consumer broken")
 [ "$G1_13" -gt 20 ] && ALERTS+=("$G1_13 '13 INTERNAL' on Gen1 - the 08-24 signature is back")
@@ -89,14 +90,14 @@ if [ ${#ALERTS[@]} -eq 0 ]; then
   echo "  STATUS: OK"
 else
   echo "  STATUS: ATTENTION"
-  for a in "${ALERTS[@]}"; do echo "    - $a"; done
+  for a in "${ALERTS[@]:-}"; do echo "    - $a"; done
 fi
 
 if [ "${SLACK:-0}" = "1" ] && [ -f "$HOME/.poteau/slack_webhook.env" ]; then
   . "$HOME/.poteau/slack_webhook.env"
   ICON="🟢"; [ ${#ALERTS[@]} -gt 0 ] && ICON="🔴"
   TXT="$ICON *Gen2 push cutover* · last $W\nGen1 published *$G1_PUB* · Gen2 published *$G2_PUB*\nFCM delivered *$DELIVERED* · emails *$EMAILS*\nfaults: 13INTERNAL $G1_13/$G2_13 · claim errors $G1_CLAIMERR/$G2_CLAIMERR"
-  for a in "${ALERTS[@]}"; do TXT="$TXT\n• $a"; done
+  for a in "${ALERTS[@]:-}"; do [ -n "$a" ] && TXT="$TXT\n• $a"; done
   curl -s -X POST -H 'Content-type: application/json' \
     --data "{\"text\":\"$(printf '%b' "$TXT" | sed 's/"/\\"/g')\"}" "$SLACK_WEBHOOK_URL" >/dev/null || true
 fi
