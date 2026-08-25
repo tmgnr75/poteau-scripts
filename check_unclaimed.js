@@ -26,11 +26,21 @@ const GRACE_S = 180;
   const since = new Date(Date.now() - MINUTES * 60000);
   const snap = await db.collection('connect').where('datetime', '>=', since).limit(3000).get();
   const by = {};
-  let stale = 0, inflight = 0, noRecip = 0;
+  let stale = 0, inflight = 0, noRecip = 0, malformed = 0;
   snap.forEach(d => {
     const age = (Date.now() - d.get('datetime').toDate()) / 1000;
     if (d.get('pushed') === true) { const g = d.get('pushed_by') || '?'; by[g] = (by[g] || 0) + 1; return; }
+    // Docs the handler legitimately declines, which are NOT drops. Both
+    // generations agree on these -- verified against live examples on
+    // 2026-08-25, where each was logged identically by Gen1 and Gen2:
+    //   - no recipients at all
+    //   - a doc with no `type` and no `title`, which the handler rejects with
+    //     "Title not found" and has always rejected; malformed, not missed
+    // The recipient array is also filtered later (sender exclusion, dedup), so
+    // a doc can arrive with recipients and still correctly resolve to nobody.
+    // Counting those as dropped pushes reported phantom failures at ~5%.
     if ((d.get('recipient') || []).length === 0) { noRecip++; return; }
+    if (!d.get('type') && !d.get('title')) { malformed++; return; }
     if (age < GRACE_S) inflight++; else stale++;
   });
   const total = snap.size;
@@ -40,6 +50,7 @@ const GRACE_S = 180;
   console.log(`  claimed                   : ${JSON.stringify(by)}`);
   console.log(`  in flight (<${GRACE_S}s)          : ${inflight}`);
   console.log(`  no recipients (fine)      : ${noRecip}`);
+  console.log(`  malformed, no type (fine) : ${malformed}`);
   console.log(`  DROPPED (>${GRACE_S}s, unclaimed) : ${stale}  (${pct}%)`);
   if (stale > 0) {
     console.log(`  *** ${stale} push(es) NEVER SENT - this is the 09:30 failure signature ***`);
