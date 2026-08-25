@@ -49,6 +49,9 @@ FAILALL=$(cnt "$push" "Push failed for all tokens")
 EMAILS=$(cnt "$push" "Fallback email published")
 NOTOK=$(cnt "$push" "No FCM tokens available")
 CRASH=$(cnt "$push" "TypeError\|ReferenceError\|Cannot read")
+G2_OOM=$(cnt "$g2" "Memory limit\|exceeded memory\|OOM\|was killed")
+G2_MEM=$(gcloud logging read 'resource.labels.service_name="translatepluspush" AND textPayload:"Memory limit"' \
+  --project=$PROJ --limit=1 --freshness="$W" --format="value(textPayload)" 2>/dev/null | head -1)
 THROTTLED=$(cnt "$push" "\[throttle\] Suppressing")
 RCQUOTA=$(cnt "$push" "Quota exceeded")
 EXEC=$(cnt "$push" "Function execution started")
@@ -74,6 +77,16 @@ echo "  13 INTERNAL   Gen1/Gen2   : $G1_13 / $G2_13"
 echo "  capacity throttle         : $G1_CAP / $G2_CAP   (benign class)"
 echo "  claim transaction errors  : $G1_CLAIMERR / $G2_CLAIMERR"
 echo "  consumer crashes          : $CRASH"
+echo "  Gen2 OOM kills            : $G2_OOM   (concurrency 50 on 512MiB is UNMEASURED)"
+echo "  Gen2 peak memory          : ${G2_MEM:-n/a}"
+
+# The unclaimed count is the ONLY end-to-end proof that nothing was dropped.
+# Log counts cannot show it: a doc whose trigger never fired leaves no log line
+# at all, which is exactly how the first flip lost 51 pushes while every
+# published-vs-delivered number still looked healthy.
+if [ -f "$HOME/.poteau/gen2_cutover_start" ] && [ -x "$HOME/poteau-workspace/scripts/check_unclaimed.js" ]; then
+  node "$HOME/poteau-workspace/scripts/check_unclaimed.js" 2>/dev/null || true
+fi
 
 ALERTS=()
 # bash 3.2 on macOS treats an empty array as unbound under `set -u`.
@@ -82,6 +95,7 @@ ALERTS=()
 [ "$G1_13" -gt 20 ] && ALERTS+=("$G1_13 '13 INTERNAL' on Gen1 - the 08-24 signature is back")
 [ "$G2_13" -gt 20 ] && ALERTS+=("$G2_13 '13 INTERNAL' on Gen2")
 [ "$CRASH" -gt 0 ] && ALERTS+=("$CRASH crashes in sendPushNotification")
+[ "$G2_OOM" -gt 0 ] && ALERTS+=("$G2_OOM Gen2 OOM kills - concurrency 50 is too high for 512MiB, LOWER IT")
 { [ "$G1_CLAIMERR" -gt 5 ] || [ "$G2_CLAIMERR" -gt 5 ]; } && ALERTS+=("claim transaction failing - fail-open means DUPLICATES are possible")
 # "Both publishing" is only meaningful once the window no longer straddles the
 # flip. For the first reports after a flip the lookback necessarily covers
