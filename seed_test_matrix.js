@@ -576,6 +576,15 @@ async function run() {
             currency: "EUR",
             payment_type: "on-site",
             sport: p.sport,
+            // `type` and `level_deltas` were never seeded at all, so a seeded
+            // game read as "undefined" wherever the app shows the format or
+            // the level spread -- the padel wrap-up game was the one Tim
+            // caught (2026-08-25).
+            //
+            // The format follows max_players: padel is always 2v2, soccer is
+            // whatever half the pitch holds.
+            type: p.sport === "padel" ? "2v2" : `${p.max / 2}v${p.max / 2}`,
+            level_deltas: [],
             level: 3,
             mood: "fun",
             time_zone: "Europe/Paris",
