@@ -83,7 +83,32 @@ ALERTS=()
 [ "$G2_13" -gt 20 ] && ALERTS+=("$G2_13 '13 INTERNAL' on Gen2")
 [ "$CRASH" -gt 0 ] && ALERTS+=("$CRASH crashes in sendPushNotification")
 { [ "$G1_CLAIMERR" -gt 5 ] || [ "$G2_CLAIMERR" -gt 5 ]; } && ALERTS+=("claim transaction failing - fail-open means DUPLICATES are possible")
-{ [ "$G1_PUB" -gt 0 ] && [ "$G2_PUB" -gt 0 ]; } && ALERTS+=("BOTH generations publishing - expected only mid-flip, not steady state")
+# "Both publishing" is only meaningful once the window no longer straddles the
+# flip. For the first reports after a flip the lookback necessarily covers
+# pre-flip Gen1 traffic, so this would fire on a PERFECT cutover -- which it did
+# at 09:25 on 2026-08-25, sending a red alert about a migration that was working.
+# A monitor that cries wolf during the one event it exists to watch trains you to
+# ignore it, so it now stays quiet until the window is clear of the flip.
+FLIP_STAMP="$HOME/.poteau/gen2_cutover_start"
+STRADDLES=0
+if [ -f "$FLIP_STAMP" ]; then
+  SINCE_FLIP=$(( ( $(date -u +%s) - $(cat "$FLIP_STAMP") ) / 60 ))
+  case "$W" in
+    *m) WMIN=${W%m} ;;
+    *h) WMIN=$(( ${W%h} * 60 )) ;;
+    *)  WMIN=10 ;;
+  esac
+  [ "$SINCE_FLIP" -lt "$WMIN" ] && STRADDLES=1
+fi
+if [ "$STRADDLES" = "1" ]; then
+  echo "  (window straddles the flip - 'both publishing' suppressed)"
+else
+  { [ "$G1_PUB" -gt 0 ] && [ "$G2_PUB" -gt 0 ]; } && ALERTS+=("BOTH generations publishing - expected only mid-flip, not steady state")
+fi
+# After the flip has settled, Gen1 publishing AT ALL is the real regression.
+if [ "$STRADDLES" = "0" ] && [ -f "$FLIP_STAMP" ] && [ "$G1_PUB" -gt 0 ]; then
+  ALERTS+=("Gen1 published $G1_PUB pushes AFTER the cutover settled - it should be skipping")
+fi
 
 echo
 if [ ${#ALERTS[@]} -eq 0 ]; then
