@@ -554,10 +554,25 @@ function parseSignals(raw) {
     const text = String(raw || '').trim();
     if (!text) throw new Error('the writer returned nothing');
 
+    // Truncation is checked on the RAW text, before any extraction.
+    //
+    // A response cut off mid-object has no closing brace at all, so
+    // `lastIndexOf('}')` returns -1 and the slice below silently becomes the
+    // empty string — which then fails to parse as an ordinary malformed
+    // response and gets retried twice at full cost. That is exactly what the
+    // first cloud deploy did. Detect it here, where the evidence still exists.
+    const opens = text.indexOf('{');
+    if (opens !== -1 && text.lastIndexOf('}') < opens) {
+        throw new Error(
+            `the writer's JSON was cut off at the output ceiling `
+            + `(${text.length} chars, no closing brace). Not transient: `
+            + `raise the output budget. Starts: ${text.slice(0, 120)}`);
+    }
+
     // A fenced block first, then the outermost brace pair.
     const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/);
     const candidate = fenced ? fenced[1]
-        : text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
+        : text.slice(opens, text.lastIndexOf('}') + 1);
 
     let parsed;
     try {
@@ -600,8 +615,16 @@ async function writeSignalsWithRetry(corpus, attempts = 3) {
             return parseSignals(raw);
         } catch (e) {
             last = e;
-            const transient = /529|overloaded|rate.?limit|timeout|ECONN|503|502|did not return valid JSON/i
-                .test(e.message);
+            // A truncated response is NOT transient and must never be retried:
+            // the same prompt hits the same output ceiling every time. The first
+            // cloud deploy retried it twice at full cost before failing, because
+            // "did not return valid JSON" matched the transient pattern below
+            // and cut-off JSON is, technically, invalid JSON. The host names
+            // this case explicitly so it can be excluded here.
+            const permanent = /output ceiling|cut off/i.test(e.message);
+            const transient = !permanent
+                && /529|overloaded|rate.?limit|timeout|ECONN|503|502|did not return valid JSON/i
+                    .test(e.message);
             if (!transient || i === attempts) break;
             const wait = i * 60;
             console.error(`[daily_signals] attempt ${i} failed (${e.message.slice(0, 90)}), retrying in ${wait}s`);
