@@ -14,7 +14,13 @@ if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(
 const db = admin.firestore();
 
 const MINUTES = Number(process.argv[2] || 15);
-const GRACE_S = 60;
+// 180s, not 60. At 60 this reported a "drop" that was simply still in flight and
+// claimed moments later -- a false positive on the very first post-flip check.
+// Gen1's p99 is 5.8s, but with retry enabled a redelivery can arrive well after
+// that, and a burst queues behind the instance ceiling. Three minutes is longer
+// than any observed legitimate delay and still catches a real drop within one
+// monitor tick.
+const GRACE_S = 180;
 
 (async () => {
   const since = new Date(Date.now() - MINUTES * 60000);
