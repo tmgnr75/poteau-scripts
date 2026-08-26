@@ -17,8 +17,11 @@ node "$HERE/_only.js" "$CASE"          >/dev/null 2>&1
 
 # Cold restart: a reload leaves Firestore's Dart layer orphaned and reads
 # never complete (see handovers/SESSION_2026-08-25.md).
-kill -USR2 "$(cat /tmp/flutter.pid)" 2>/dev/null
-sleep 17
+DEV="$(xcrun simctl list devices booted | sed -n 's/.*(\([0-9A-F-]\{36\}\)) (Booted).*/\1/p' | head -1)"
+xcrun simctl terminate "$DEV" com.krank.club >/dev/null 2>&1
+sleep 2
+xcrun simctl launch "$DEV" com.krank.club >/dev/null 2>&1
+sleep 14
 
 label_xy() {  # echo "x y" for the first button whose label matches
   $IDB ui describe-all 2>/dev/null | python3 -c "
@@ -39,19 +42,41 @@ print(' | '.join((e.get('AXLabel') or '').replace(chr(10),' ')
 }
 
 # Open the pending-feedback card on Home, then its CTA.
+$IDB ui describe-all >/dev/null 2>&1; sleep 2
 $IDB ui tap 201 348 >/dev/null 2>&1; sleep 6
-$IDB ui tap 201 269 >/dev/null 2>&1; sleep 6
+$IDB ui tap 201 269 >/dev/null 2>&1; sleep 7
 
 # Walk the steps. A describe-all immediately before a tap can swallow it, so
 # always settle in between.
 for _ in $(seq 1 8); do
   L="$(labels)"
   case "$L" in *"JOUÉ SUR POTEAU"*) break;; esac
+  # Some steps have NO primary CTA at all -- the result step is answered by
+  # tapping an option, and its only button is the ghost. Fall through to the
+  # ghost list rather than giving up when no CTA is present.
   XY="$(label_xy Valider Continuer Terminer)"
-  [ -z "$XY" ] && break
-  sleep 2
-  $IDB ui tap $XY >/dev/null 2>&1
-  sleep 8
+  if [ -n "$XY" ]; then
+    sleep 2
+    $IDB ui tap $XY >/dev/null 2>&1
+    sleep 8
+  fi
+
+  # A padel game with no sets entered keeps Valider DISABLED on purpose -- a
+  # blank padel score is 0-0, which is not a padel score. The way past is the
+  # skip, so fall back to it whenever the screen did not change.
+  if [ "$(labels)" = "$L" ]; then
+    SKIP="$(label_xy 'Je ne connais pas le score' 'I do not know the score' \
+                     'No sé el marcador' 'Non so il punteggio' \
+                     'Finalement, tout allait bien' 'Actually, it was fine' \
+                     Passer Skip)"
+    if [ -n "$SKIP" ]; then
+      sleep 2
+      $IDB ui tap $SKIP >/dev/null 2>&1
+      sleep 8
+    else
+      break   # nothing left to press: stop rather than spin
+    fi
+  fi
 done
 
 L="$(labels)"
