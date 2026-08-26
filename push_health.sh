@@ -70,6 +70,26 @@ else:
     if sum(v for k,v in g2.items() if k!='2xx')>0: verdict="ACT NOW"; notes.append("producer returning errors")
     if sum(v for k,v in cons.items() if k!='ok')>0: verdict="ACT NOW"; notes.append("consumer returning errors")
     if g2.get('2xx',0)>0 and cons.get('ok',0)==0: verdict="ACT NOW"; notes.append("producer publishing but consumer never ran")
+# Cost guard. The one way this architecture can inflate a bill is retry
+# looping: every redelivery is a billed invocation, so a persistent failure
+# could multiply invocations without matching user traffic. Requests per
+# document is the tell -- around 1.0 is healthy, sustained >1.3 means retries
+# are amplifying rather than recovering.
+try:
+    import subprocess
+    out=subprocess.run(['node','/Users/tmgnr/poteau-workspace/scripts/count_docs.js',str(m)],
+                       capture_output=True,text=True,timeout=90).stdout.strip()
+    docs=int(out) if out.isdigit() else 0
+    req=sum(g2.values()) if g2 else 0
+    if docs>50 and req:
+        ratio=req/docs
+        print(f"  req/doc    : {ratio:.2f}   (retry-amplification tell; ~1.0 healthy)")
+        if ratio>1.3:
+            verdict="ACT NOW"
+            notes.append(f"retry amplification {ratio:.2f}x - invocations outpacing documents")
+except Exception:
+    pass
+
 print(f"  VERDICT    : {verdict}")
 for n in notes: print(f"    - {n}")
 PY
