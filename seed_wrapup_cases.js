@@ -325,6 +325,54 @@ const CASES = [
         expect: { periods: 1, verdict: "draw" },
     },
     {
+        id: "roster-empty-teams",
+        why: "19 production games have an EMPTY teams array. No faces at all.",
+        sport: "soccer",
+        sides: [0, 0],
+        duration: 60,
+        score: scoreProposal([period(1, 1)]),
+        result: resultProposal(null, true),
+        expect: { periods: 1, verdict: "draw", filled: 0 },
+    },
+    {
+        id: "padel-pair-with-guest",
+        why: "108 of 132 padel games have a +1. A guest fills a padel seat too.",
+        sport: "padel",
+        sides: [1, 2],
+        guests: 1,
+        duration: 90,
+        score: scoreProposal([period(6, 1), period(6, 0)]),
+        result: resultProposal("team_a"),
+        expect: { periods: 2, setsA: 2, setsB: 0, verdict: "won", guests: 1 },
+    },
+    {
+        id: "padel-five-periods",
+        why: "Live appends as it goes: a group playing on can store more than three sets. The card must cap, not overflow.",
+        sport: "padel",
+        sides: [2, 2],
+        duration: 90,
+        score: scoreProposal([
+            period(6, 4),
+            period(6, 3),
+            period(6, 2),
+            period(4, 6),
+            period(6, 1),
+        ]),
+        result: resultProposal("team_a"),
+        expect: { periods: 5, verdict: "won" },
+    },
+    {
+        id: "soccer-high-scoring",
+        why: "Double digits must not overflow the scoreline box.",
+        sport: "soccer",
+        sides: [4, 4],
+        duration: 90,
+        score: scoreProposal([period(12, 11)]),
+        result: resultProposal("team_a"),
+        goals: 4,
+        expect: { periods: 1, verdict: "won", myGoals: 4 },
+    },
+    {
         id: "duration-45-minutes",
         why: "Under an hour keeps minutes: 45MIN, never 0H45.",
         sport: "soccer",
@@ -505,7 +553,11 @@ async function verify() {
                     `set ${i + 1}: tie_break=${p.tie_break} but score ${p.team_a}-${p.team_b}`
                 );
             }
-            if (i === 2 && !p.super_tie_break) {
+            // Index 2 is a super tie-break only in a match that WENT to three
+            // sets. A group playing on past a finished match stores a fourth
+            // and fifth ordinary set, and its third is not a decider at all --
+            // so this is asserted only when the match is exactly three long.
+            if (i === 2 && periods.length === 3 && !p.super_tie_break) {
                 problems.push(`set 3 is not flagged as a super tie-break`);
             }
         });
