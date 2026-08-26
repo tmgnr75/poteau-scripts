@@ -11,6 +11,11 @@
 #        SLACK=1 gen2_peak_watch.sh 1h    also posts to #health-reports
 set -uo pipefail
 W="${1:-10m}"
+# Accept a bare number as minutes. gcloud silently returns NOTHING for a
+# unitless --freshness, which made every counter read zero and the watch shout
+# "NOTHING published" while 2,354 pushes were confirmed delivered in the same
+# run. A monitor that fails to a false alarm is as bad as one that fails silent.
+case "$W" in *[0-9]) W="${W}m";; esac
 P=krank-club
 TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 LOCAL=$(date +%H:%M)
@@ -26,30 +31,45 @@ WARN=$(gcloud logging read 'resource.labels.service_name="translatepluspush" AND
 c(){ printf '%s' "$1" | grep -c "$2" 2>/dev/null || true; }
 ci(){ printf '%s' "$1" | grep -ciE "$2" 2>/dev/null || true; }
 
-G2P=$(c "$G2" "Message published successfully")
-G1P=$(c "$G1" "Message published successfully")
+# TARGETED queries, not greps over a bulk fetch. A generic fetch of this
+# service truncates hard under load -- measured 183 publish lines where a
+# targeted query found 2,361 -- which made the watch report "NOTHING published"
+# while 2,353 pushes were confirmed delivered in the same run.
+G2P=$(gcloud logging read 'resource.labels.service_name="translatepluspush" AND textPayload:"All messages published successfully"' \
+      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
+G1P=$(gcloud logging read 'resource.type="cloud_function" AND resource.labels.function_name="translateAndSendPush" AND textPayload:"Message published successfully"' \
+      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
 G2T=$(c "$G2" "no available instance")
 G1T=$(c "$G1" "no available instance")
 OOM=$(ci "$WARN" "memory limit|exceeded memory|was killed|container terminated")
 RCF=$(c "$G2$G1" "Failed to read")
 I13=$(c "$G2$G1" "13 INTERNAL")
 CLAIMED=$(c "$G1" "already claimed")
-OKC=$(c "$PU" "Push succeeded")
-EM=$(c "$PU" "Fallback email published")
+OKC=$(gcloud logging read 'resource.labels.function_name="sendPushNotification" AND textPayload:"Push succeeded"' \
+      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
+EM=$(gcloud logging read 'resource.labels.function_name="sendPushNotification" AND textPayload:"Fallback email published"' \
+     --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
 FAIL=$(c "$PU" "Push failed for all tokens")
 CR=$(printf '%s' "$PU" | grep -cE "TypeError|ReferenceError|Cannot read" 2>/dev/null || true)
 EXEC=$(c "$PU" "Function execution started")
 
-UNC=$(node "$SD/check_unclaimed.js" "$WMIN" 2>&1 || true)
-DROPN=$(printf '%s' "$UNC" | grep DROPPED | grep -oE ': [0-9]+' | grep -oE '[0-9]+' | head -1)
+# check_delivery.js, NOT check_unclaimed.js. The latter read a `pushed` marker
+# that no longer exists (the claim was removed 2026-08-26), so it now reports
+# every document as delivered no matter what actually happened -- a detector
+# that always says "fine" is worse than none.
+UNC=$(node "$SD/check_delivery.js" "$WMIN" 2>&1 || true)
+DROPN=$(printf '%s' "$UNC" | grep "NEVER SENT" | grep -oE ': [0-9]+' | grep -oE '[0-9]+' | head -1)
 DROPN=${DROPN:-0}
-DROPPCT=$(printf '%s' "$UNC" | grep DROPPED | grep -oE '\([0-9.]+%\)' | tr -d '()')
-CLAIMS=$(printf '%s' "$UNC" | grep "claimed  " | sed 's/.*: //')
-BROKEN=$(printf '%s' "$UNC" | grep -c "check failed" || true)
+DROPPCT=""
+SENTN=$(printf '%s' "$UNC" | grep "confirmed published" | grep -oE ': [0-9]+' | grep -oE '[0-9]+' | head -1)
+CLAIMS="gen2 only"
+# UNKNOWN covers both a crash and a truncated log fetch. Either way the state
+# is not proven healthy and must not be reported as such.
+BROKEN=$(printf '%s' "$UNC" | grep -cE "check failed|RESULT: UNKNOWN" || true)
 
 VERDICT="HEALTHY"; ACTION="none"
 A=()
-[ "$BROKEN" -gt 0 ] && { A+=("drop-detector itself failed - state UNKNOWN, not proven healthy"); VERDICT="UNKNOWN"; ACTION="re-run check_unclaimed.js by hand"; }
+[ "$BROKEN" -gt 0 ] && { A+=("drop-detector itself failed - state UNKNOWN, not proven healthy"); VERDICT="UNKNOWN"; ACTION="re-run check_delivery.js with a shorter window"; }
 [ "$OOM" -gt 0 ] && { A+=("$OOM OOM kill(s) - concurrency 80 is too high for 1GiB"); VERDICT="ACT NOW"; ACTION="lower concurrency to 50 and redeploy translatePlusPush"; }
 [ "$DROPN" -gt 10 ] && { A+=("$DROPN pushes never sent"); VERDICT="ACT NOW"; ACTION="delete/disable translatePlusPush so Gen1 carries it alone"; }
 [ "$G2T" -gt 50 ] && { A+=("$G2T Gen2 capacity throttles"); [ "$VERDICT" = HEALTHY ] && { VERDICT="WATCH"; ACTION="raise maxInstances above 1000"; }; }
@@ -67,7 +87,8 @@ echo "  VERDICT: $VERDICT"
 [ "$ACTION" != "none" ] && echo "  ACTION : $ACTION"
 echo
 echo "  DID EVERY PUSH GET SENT?"
-echo "    pushes never sent   : $DROPN ${DROPPCT:-}   <- the number that matters"
+echo "    pushes never sent   : $DROPN   <- the number that matters"
+echo "    confirmed published : ${SENTN:-?}"
 echo "    claimed by          : ${CLAIMS:-n/a}"
 echo "  WAS IT DELIVERED?"
 echo "    FCM delivered       : $OKC"
@@ -77,7 +98,7 @@ echo "    consumer runs       : $EXEC   crashes: $CR"
 echo "  IS GEN2 CARRYING IT?"
 echo "    published gen2/gen1 : $G2P / $G1P   (Gen2 share ${SHARE}%)"
 echo "    Gen1 stood down     : $CLAIMED times"
-echo "  IS THE NEW CAPACITY HOLDING? (80 concurrency, 1GiB, minInstances 1)"
+echo "  IS THE CAPACITY HOLDING? (80 concurrency, 1GiB, no minInstances)"
 echo "    OOM kills           : $OOM"
 echo "    throttled gen2/gen1 : $G2T / $G1T"
 echo "    RC failures         : $RCF"
