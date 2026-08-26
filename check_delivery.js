@@ -50,6 +50,12 @@ function publishedIds(minutes) {
   // false alarm: on 2026-08-26 a 20-minute window hit the 20,000-line cap and
   // reported 2,998 pushes as "never sent" when every one had been delivered.
   if (lines >= 19900) return null;
+  // Also refuse when the set is merely LARGE. On 2026-08-26 a burst returned
+  // just under the cap, passed this check, and then reported 109 delivered
+  // pushes as never sent -- three were verified by hand as published. Near the
+  // cap the fetch is effectively unreliable even when not formally truncated,
+  // so hand off to count mode rather than accuse a delivered push.
+  if (ids.size >= 5000) return null;
   return ids;
 }
 
