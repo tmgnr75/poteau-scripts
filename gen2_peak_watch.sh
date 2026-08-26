@@ -29,26 +29,39 @@ PU=$(gcloud logging read 'resource.labels.function_name="sendPushNotification"' 
 WARN=$(gcloud logging read 'resource.labels.service_name="translatepluspush" AND severity>=WARNING' --project=$P --limit=300 --freshness="$W" --format="value(textPayload)" 2>/dev/null || true)
 
 c(){ printf '%s' "$1" | grep -c "$2" 2>/dev/null || true; }
+
+# Count rows from a log query, distinguishing "genuinely zero" from "the query
+# failed". `|| true` turns a failed gcloud call into 0, which on 2026-08-26
+# made the watch report FCM=0 and "consumer never ran" while the consumer was
+# in fact serving 2,000 invocations and 404 successful pushes. Under burst load
+# these calls fail transiently; a monitor must not read that as silence.
+# Echoes ERR on failure so callers can report UNKNOWN rather than zero.
+qcount(){
+  local out rc
+  out=$(gcloud logging read "$1" --project=krank-club --limit=2000 --freshness="$W" --format="value(timestamp)" 2>/dev/null); rc=$?
+  if [ $rc -ne 0 ]; then echo ERR; return; fi
+  local n
+  n=$(printf '%s' "$out" | grep -c "^2026" 2>/dev/null || true)
+  # grep -c can emit nothing on no-match; normalise to a bare integer.
+  case "$n" in ''|*[!0-9]*) n=0;; esac
+  printf '%s' "$n"
+}
 ci(){ printf '%s' "$1" | grep -ciE "$2" 2>/dev/null || true; }
 
 # TARGETED queries, not greps over a bulk fetch. A generic fetch of this
 # service truncates hard under load -- measured 183 publish lines where a
 # targeted query found 2,361 -- which made the watch report "NOTHING published"
 # while 2,353 pushes were confirmed delivered in the same run.
-G2P=$(gcloud logging read 'resource.labels.service_name="translatepluspush" AND textPayload:"All messages published successfully"' \
-      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
-G1P=$(gcloud logging read 'resource.type="cloud_function" AND resource.labels.function_name="translateAndSendPush" AND textPayload:"Message published successfully"' \
-      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
+G2P=$(qcount 'resource.labels.service_name="translatepluspush" AND textPayload:"All messages published successfully"')
+G1P=$(qcount 'resource.type="cloud_function" AND resource.labels.function_name="translateAndSendPush" AND textPayload:"Message published successfully"')
 G2T=$(c "$G2" "no available instance")
 G1T=$(c "$G1" "no available instance")
 OOM=$(ci "$WARN" "memory limit|exceeded memory|was killed|container terminated")
 RCF=$(c "$G2$G1" "Failed to read")
 I13=$(c "$G2$G1" "13 INTERNAL")
 CLAIMED=$(c "$G1" "already claimed")
-OKC=$(gcloud logging read 'resource.labels.function_name="sendPushNotification" AND textPayload:"Push succeeded"' \
-      --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
-EM=$(gcloud logging read 'resource.labels.function_name="sendPushNotification" AND textPayload:"Fallback email published"' \
-     --project=$P --limit=20000 --freshness="$W" --format="value(labels.execution_id)" 2>/dev/null | grep -c . || true)
+OKC=$(qcount 'resource.labels.function_name="sendPushNotification" AND textPayload:"Push succeeded"')
+EM=$(qcount 'resource.labels.function_name="sendPushNotification" AND textPayload:"Fallback email published"')
 FAIL=$(c "$PU" "Push failed for all tokens")
 CR=$(printf '%s' "$PU" | grep -cE "TypeError|ReferenceError|Cannot read" 2>/dev/null || true)
 EXEC=$(c "$PU" "Function execution started")
@@ -67,8 +80,17 @@ CLAIMS="gen2 only"
 # is not proven healthy and must not be reported as such.
 BROKEN=$(printf '%s' "$UNC" | grep -cE "check failed|RESULT: UNKNOWN" || true)
 
-VERDICT="HEALTHY"; ACTION="none"
 A=()
+# ERR means the query failed, not that nothing happened. Report UNKNOWN rather
+# than doing arithmetic on it and printing a confident zero.
+QFAIL=0
+for v in "$G2P" "$G1P" "$OKC" "$EM"; do [ "$v" = ERR ] && QFAIL=1; done
+if [ "$QFAIL" = 1 ]; then
+  A+=("a log query FAILED - counters below are incomplete, state not proven")
+  VERDICT="UNKNOWN"; ACTION="re-run in a minute; gcloud fails transiently under burst load"
+  G2P=${G2P/ERR/0}; G1P=${G1P/ERR/0}; OKC=${OKC/ERR/0}; EM=${EM/ERR/0}
+fi
+VERDICT="HEALTHY"; ACTION="none"
 [ "$BROKEN" -gt 0 ] && { A+=("drop-detector itself failed - state UNKNOWN, not proven healthy"); VERDICT="UNKNOWN"; ACTION="re-run check_delivery.js with a shorter window"; }
 [ "$OOM" -gt 0 ] && { A+=("$OOM OOM kill(s) - concurrency 80 is too high for 1GiB"); VERDICT="ACT NOW"; ACTION="lower concurrency to 50 and redeploy translatePlusPush"; }
 [ "$DROPN" -gt 10 ] && { A+=("$DROPN pushes never sent"); VERDICT="ACT NOW"; ACTION="delete/disable translatePlusPush so Gen1 carries it alone"; }
