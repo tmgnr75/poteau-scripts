@@ -457,42 +457,74 @@ to act on any of this. You are making him a short list of situations worth a
 look, and NOTHING else. There is no newspaper, no lead paragraph, no summary of
 how the day went, no mood. A list.
 
-WHAT COUNTS AS WORTH A LOOK
+THE ONE TEST
 
-Something a person would want to know about. In rough order of value:
+For every candidate, ask: IS THERE SOMETHING ONLY POTEAU CAN DO ABOUT THIS?
 
-  A user is unhappy in a way that needs a reply. Someone who paid and did not
-  play, was treated badly, or asked for help and got none.
+If the answer is no, it does not go on the list, no matter how upsetting the
+chat sounds. This single question is what the list is for, and getting it wrong
+in the generous direction is the failure mode that makes the list not worth
+reading.
 
-  Something good worth acknowledging. Someone gave up their spot, drove a
-  teammate, lent equipment, welcomed a newcomer, calmed an argument down, or
-  ran a game well when it was falling apart. These are as valuable as the
-  complaints and are routinely missed.
+POTEAU IS NOT RESPONSIBLE FOR GAMES ACTUALLY HAPPENING.
 
-  A product problem visible in the chat. People confused by the same thing,
-  working around something broken, or asking a question the app should have
-  answered.
+This is the part that is easy to get wrong. Many users are unreliable. They
+book the wrong day, they do not show up, they leave at the last minute, they
+cancel on nine other people. The chat is full of the fallout and it reads as
+urgent and human and important. It is NOT a signal, because there is nothing
+Poteau can offer someone disappointed by another user. Do not report:
 
-  A centre behaving unusually, well or badly.
+  A game ruined by somebody's unreliability, no matter how many people it cost.
+  A player who paid a centre and did not get to play because the organiser
+    booked wrong. That money is the centre's, not Poteau's.
+  A disappointed or angry player with no Poteau remedy.
+  An ordinary complaint about another player's behaviour towards them.
+  A cancellation, however late or however rude.
 
-  A game in an unusual place. If the UNUSUAL PLACES block lists anything, each
-  entry is a candidate on its own, even when the chat there was silent or
-  empty. Say where it is and what happened. A single game in a new city is
-  worth one line.
+A bad day for a user is not automatically a task. Report the underlying gap if
+there is one, never the disappointment itself.
 
-  Anything genuinely surprising that does not fit the categories above.
+WHAT COUNTS, ALL FIVE KINDS
 
-WHAT DOES NOT COUNT
+  product_gap  Someone hit a limit in the app, worked around something that
+               should have worked, or asked a question the app should have
+               answered. An organiser who could not remove a player, someone
+               who could not tell whether they can contact a teammate, the same
+               confusion appearing in several chats. THIS IS THE MOST VALUABLE
+               KIND and it is usually hiding inside a story that looks like a
+               complaint: the complaint is noise, the limit they hit is signal.
 
-  Games filling up. People joining and leaving. Someone asking the booking
-  name. Routine grumbling that resolved itself. A late player who apologised.
-  Ordinary coordination. These are the overwhelming majority of the chat and
-  they are why this list exists: to find the few things that are not this.
+  centre       A venue that needs a word from Tim. Misusing Poteau, treating
+               players badly, changing terms without telling anyone, or dealing
+               with something big enough that he should know it happened.
 
-CALIBRATION. A normal day has three to eight items. Some days have one. If a
-day genuinely has nothing, return an empty list, which is a valid and useful
-answer. Never pad the list to look thorough, and never split one situation into
-two items to reach a number.
+  person       A specific user worth singling out, in EITHER direction. Someone
+               gaming the system (spam, recruiting for a rival, a fake-looking
+               account, repeated no-shows), or someone doing real work for the
+               community. Name them and say what they did. Both directions
+               belong here: a user worth watching is worth watching either way.
+
+  asked_us     A user addressing Poteau directly. A question about the app, a
+               request, a confusion nobody answered. Rare, always actionable.
+
+  place        A game where we barely operate. If the UNUSUAL AREAS block lists
+               anything it is a candidate even when the chat was silent, but at
+               most ONE place item per day: pick the most remote or most
+               surprising one and mention the others in its "what" if they are
+               worth a clause. These are the lowest-value kind on the list, so
+               a place item must never displace a product_gap.
+
+CALIBRATION. Three to five items is a normal day. More than six means the test
+above is being applied too generously: go back and cut everything that fails
+it. Some days have one. If a day genuinely has nothing, return an empty list,
+which is a correct and useful answer. Never pad, and never split one situation
+into two items.
+
+THE SAME PROBLEM TWICE IS ONE ITEM, AND A STRONGER ONE. If the same gap shows
+up in two or three different games, report it ONCE and say it happened more
+than once, naming each game. Two organisers hitting the same limit on the same
+day is far better evidence than either alone, and splitting it into two items
+buries that.
 
 Rank them. The first item should be the one you would tell him about if he only
 read one line.
@@ -504,23 +536,32 @@ Return ONLY a JSON object, no prose before or after it, no markdown fence:
 {
   "signals": [
     {
-      "kind": "complaint" | "good" | "product" | "centre" | "place" | "other",
+      "kind": "product_gap" | "centre" | "person" | "asked_us" | "place",
       "urgency": "reply" | "worth_knowing",
       "headline": "One line, under 80 characters. Say the thing, not a tease.",
       "where": "Venue, kickoff time. Empty string if it does not apply.",
       "game_id": "the GAME ID exactly as given, or empty string",
-      "what": "2 to 4 sentences. What happened and how it ended. Concrete.",
+      "what": "2 to 4 sentences. What happened and how it ended. Concrete. If this happened in more than one game, say so here and name them.",
       "quote": "One message copied EXACTLY, or empty string.",
       "quote_who": "Who said it and when, as: Name, 20:59",
-      "why": "One sentence: why this is worth his attention.",
-      "do": "One short line: what you would actually do. Or empty string."
+      "why": "One sentence: what Poteau can actually do something about here.",
+      "do": "A concrete step, ONLY if one genuinely exists. Empty string otherwise."
     }
   ]
 }
 
-"urgency": use "reply" ONLY when a real person is waiting on an answer or
-something is actively going wrong. Everything else is "worth_knowing", including
-the good news. Most items are "worth_knowing".
+"do" IS OPTIONAL AND USUALLY EMPTY. Leave it empty unless there is a real,
+specific step. Never invent an action to fill the field, and never write a
+vague one ("keep an eye on this", "monitor", "consider whether"). An item can
+be worth knowing with nothing to do about it today, and saying so honestly is
+better than manufacturing a task. In particular do NOT prescribe messaging a
+user just because they did something good: report what they did and let Tim
+decide whether to reach out.
+
+"urgency": use "reply" ONLY when a real person is waiting on an answer FROM
+POTEAU, or money is wrong in a way Poteau controls. A user being upset about
+another user is never "reply", because there is nothing to reply with. Most
+items are "worth_knowing"; many days have no "reply" item at all.
 
 RULES
 
@@ -584,11 +625,14 @@ function parseSignals(raw) {
         throw new Error(`no signals array in the response: ${text.slice(0, 200)}`);
     }
 
-    const KINDS = new Set(['complaint', 'good', 'product', 'centre', 'place', 'other']);
+    // An unrecognised kind falls back to product_gap rather than being dropped:
+    // the situation was found, only its label is wrong, and losing a real
+    // finding over a typo'd enum is the worse outcome.
+    const KINDS = new Set(['product_gap', 'centre', 'person', 'asked_us', 'place']);
     return parsed.signals
         .filter(s => s && typeof s === 'object' && (s.headline || '').trim())
         .map(s => ({
-            kind: KINDS.has(s.kind) ? s.kind : 'other',
+            kind: KINDS.has(s.kind) ? s.kind : 'product_gap',
             urgency: s.urgency === 'reply' ? 'reply' : 'worth_knowing',
             headline: String(s.headline || '').trim(),
             where: String(s.where || '').trim(),
@@ -751,12 +795,11 @@ async function playerContext(db, names, wanted) {
 // -------------------------------------------------------------------- slack
 
 const KIND_ICON = {
-    complaint: ':rotating_light:',
-    good: ':green_heart:',
-    product: ':wrench:',
+    product_gap: ':wrench:',
     centre: ':office:',
+    person: ':bust_in_silhouette:',
+    asked_us: ':speech_balloon:',
     place: ':round_pushpin:',
-    other: ':eyes:',
 };
 
 /**
@@ -773,6 +816,21 @@ const KIND_ICON = {
  * would read as "that was everything".
  */
 const MAX_SIGNALS_POSTED = 12;
+
+// At most one `place` item per day, enforced here as well as in the prompt.
+//
+// A place note ("a game happened in Nice") is worth knowing but is the lowest
+// value kind on the list: there is rarely anything to do about it. On
+// 2026-08-25 two of them rode along and pushed a 4-item list to 6, which is
+// exactly the padding that makes a triage list stop being read. The prompt
+// asks for one; this guarantees it, the same way quotes are verified rather
+// than trusted.
+//
+// Order is preserved, so the one kept is the highest-ranked place item.
+function capPlaceItems(signals) {
+    let seen = 0;
+    return signals.filter(s => s.kind !== 'place' || ++seen === 1);
+}
 
 function buildBlocks({ signals, meta }) {
     const blocks = [
@@ -814,7 +872,7 @@ function buildBlocks({ signals, meta }) {
     for (const s of shown) {
         blocks.push({ type: 'divider' });
 
-        const icon = KIND_ICON[s.kind] || KIND_ICON.other;
+        const icon = KIND_ICON[s.kind] || KIND_ICON.product_gap;
         const flag = s.urgency === 'reply' ? '  `needs a reply`' : '';
         const lines = [`${icon}  *${s.headline}*${flag}`];
         if (s.where) lines.push(`_${s.where}_`);
@@ -999,7 +1057,14 @@ async function runOneDay(db, targetDay, { post = false, corpusOnly = false } = {
     console.error(`[daily_signals] ${dayKey}: ${meta.messages} messages, ${meta.threads} games, `
         + `${corpus.length} chars, ${venues ? venues.length : '?'} unusual venues -> model`);
 
-    const signals = await writeSignalsWithRetry(corpus);
+    // Cap here, not in buildBlocks, so the terminal output and Slack show the
+    // same list. A --date run that disagrees with what was posted is worse
+    // than useless for checking a day by hand.
+    const produced = await writeSignalsWithRetry(corpus);
+    const signals = capPlaceItems(produced);
+    if (signals.length !== produced.length) {
+        console.error(`[daily_signals] dropped ${produced.length - signals.length} extra place item(s)`);
+    }
     meta.check = verifyQuotes(signals, data.human);
     console.error(`[daily_signals] ${dayKey}: ${signals.length} signals, `
         + `quotes ${meta.check.verified}/${meta.check.checked} verified`
