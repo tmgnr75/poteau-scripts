@@ -608,6 +608,24 @@ async function run() {
         const ref = await db.collection("games").add(g);
         refs.push(ref);
     }
+    // DECLARE THE GOALS the cases ask for. `goals` was carried on the case and
+    // written nowhere, so no case ever exercised the card's strongest line and
+    // "2 buts dans la victoire" went untested all session.
+    for (let i = 0; i < CASES.length; i++) {
+        const g = CASES[i].goals || 0;
+        if (!g) continue;
+        const events = refs[i].collection("live_events");
+        for (let n = 0; n < g; n++) {
+            await events.add({
+                type: "attribution",
+                scorer_id: TIM,
+                created_by: TIM,
+                created_at: new Date(),
+                source: "wrap_up",
+            });
+        }
+    }
+
     // Every case must be reachable from Home, or none of them can be tested.
     await db
         .collection("users")
