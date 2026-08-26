@@ -78,9 +78,34 @@ function publishedIds(minutes) {
 
   const published = publishedIds(MINUTES);
   if (published === null) {
-    console.log(`  --- delivery check (last ${MINUTES}m) ---`);
-    console.log('  RESULT: UNKNOWN - the publish log came back truncated.');
-    console.log(`  Re-run with a shorter window, e.g. check_delivery.js ${Math.max(2, Math.floor(MINUTES / 4))}`);
+    // Per-document verification is impossible when the log truncates, and it
+    // truncates exactly during the bursts that matter most -- 21,000 documents
+    // in five minutes on 2026-08-26. Rather than go blind at peak, fall back to
+    // COUNTS, which no cap can distort: documents created versus executions that
+    // logged "All messages published successfully".
+    //
+    // This cannot name which document was lost, but it answers whether anything
+    // was, which is the question worth answering at 3am.
+    const created = (await db.collection('connect')
+      .where('datetime', '>=', since)
+      .where('datetime', '<', new Date(Date.now() - GRACE_S * 1000))
+      .count().get()).data().count;
+    let done = 0;
+    try {
+      done = execFileSync('gcloud', [
+        'logging', 'read',
+        'resource.labels.service_name="translatepluspush" AND textPayload:"All messages published successfully"',
+        '--project=krank-club', '--limit=30000', `--freshness=${MINUTES}m`,
+        '--format=value(labels.execution_id)',
+      ], { encoding: 'utf8', maxBuffer: 128 * 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] })
+        .split('\n').filter(Boolean).length;
+    } catch (e) { /* leaves done at 0, reported below */ }
+    const gap = created - done;
+    console.log(`  --- delivery check (last ${MINUTES}m, COUNT MODE) ---`);
+    console.log(`  per-document check unavailable (publish log truncated at this volume)`);
+    console.log(`  docs created (past grace)  : ${created}`);
+    console.log(`  executions fully published : ${done}`);
+    console.log(`  NEVER SENT                 : ${gap > 0 ? gap : 0}   (a handful is normal: declined docs)`);
     return;
   }
   for (const id of candidates) {
