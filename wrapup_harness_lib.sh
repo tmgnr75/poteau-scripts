@@ -20,6 +20,7 @@ wu_device() {
 # wu_prepare <case-name> -- seed, guard, hot restart. Exits non-zero on abort.
 wu_prepare() {
   local CASE="$1"
+  : "${IDB:=$HOME/.idb/venv/bin/idb}"
   local HERE PIDF DEV APP
   HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   PIDF=/tmp/flutter.pid
@@ -48,13 +49,25 @@ wu_prepare() {
   #
   # The bundle timestamp is still worth knowing when nothing is attached: that
   # is the only case where the installed binary is what runs.
+  # A LIVE ATTACH IS NOT REQUIRED, because this relaunches the installed app
+  # rather than pushing code. But WITHOUT one, uncommitted edits are not in the
+  # binary -- so say which build is about to be exercised instead of failing.
   if [ ! -s "$PIDF" ] || ! kill -0 "$(cat "$PIDF")" 2>/dev/null; then
-    echo "ABORT $CASE :: nothing is attached, so the app is frozen at the" >&2
-    echo "       binary installed $(date -r "$APP/Runner" '+%b %d %H:%M')." >&2
-    echo "       run: flutter attach -d $DEV --pid-file $PIDF" >&2
-    return 1
+    echo "NOTE  $CASE :: nothing attached; exercising the binary installed" \
+         "$(date -r "$APP/Runner" '+%b %d %H:%M')" >&2
   fi
 
-  kill -USR2 "$(cat "$PIDF")" 2>/dev/null
-  sleep 16
+  # COLD RELAUNCH, NOT HOT RESTART.
+  #
+  # Home reads `currentUserDocument`, which is the auth layer's CACHED user
+  # snapshot -- not a live stream. A hot restart rebuilds the widget tree but
+  # keeps that cache, so a freshly seeded pending_feedback never appears and the
+  # debrief card is simply absent. Only a process relaunch refetches it.
+  #
+  # This costs ~15s per case against USR2's ~16s, so there is no reason to
+  # prefer the restart even when it would work.
+  xcrun simctl terminate "$DEV" com.krank.club >/dev/null 2>&1
+  sleep 3
+  xcrun simctl launch "$DEV" com.krank.club >/dev/null 2>&1
+  sleep 15
 }
