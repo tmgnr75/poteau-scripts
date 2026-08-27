@@ -32,6 +32,7 @@
  *   node seed_wrapup_cases.js --verify   # re-read and check each case
  */
 const admin = require("firebase-admin");
+const { longTestVenue } = require("./lib/test_game");
 const serviceAccount = require("./krank-club-firebase-adminsdk-bl4zy-d8facdf022.json");
 
 admin.initializeApp({
@@ -75,6 +76,18 @@ const KNOWN = new Set([TIM, ...POOL]);
  * `guests` adds that many +1 spots to team_a, each repeating its HOST's uid --
  * which is what a +1 IS in this schema, not a bug.
  */
+/**
+ * A roster shaped like a REAL one.
+ *
+ * Measured over 982 games played in the last 14 days: the dominant shape is
+ * soccer 5v5 with max_players 10 and a LOT of guests -- 187 games are 5v5 with
+ * eight of the ten spots taken by `+1`s, which is two real people and eight
+ * borrowed seats. Every case in this file was 3v3 or 4v4 with at most two
+ * guests, so the commonest card in production had never been rendered.
+ *
+ * `guests` spots are distributed across BOTH sides rather than piled onto
+ * team_a, because that is how a real game fills: everyone brings someone.
+ */
 function roster([a, b], { guests = 0, tim = true } = {}) {
     const out = [];
     let n = 0;
@@ -87,12 +100,21 @@ function roster([a, b], { guests = 0, tim = true } = {}) {
         const uid = tim && i === 0 ? TIM : take();
         out.push(spot(out.length + 1, "team_a", uid, false));
     }
-    for (let i = 0; i < guests; i++) {
-        // A guest repeats its host's uid: the first team_a player brought them.
-        out.push(spot(out.length + 1, "team_a", out[0].user_id, true));
-    }
+    const teamAReal = [...out];
+    const bStart = out.length;
     for (let i = 0; i < b; i++) {
         out.push(spot(out.length + 1, "team_b", take(), false));
+    }
+    const teamBReal = out.slice(bStart);
+    // Alternate sides, and rotate through the real players as hosts, so the
+    // guests belong to different people the way they do in a real game.
+    for (let i = 0; i < guests; i++) {
+        const toA = i % 2 === 0;
+        const hosts = toA ? teamAReal : teamBReal;
+        if (!hosts.length) continue;
+        const host = hosts[Math.floor(i / 2) % hosts.length];
+        out.push(spot(out.length + 1, toA ? "team_a" : "team_b",
+            host.user_id, true));
     }
     return out;
 }
@@ -314,12 +336,51 @@ const CASES = [
 
     // ---- text shapes -----------------------------------------------------
     {
+        id: "real-5v5-eight-guests",
+        why: "THE COMMONEST GAME IN PRODUCTION: 187 of 982 recent games are 5v5 with 8 of the 10 spots taken by +1s. Two real people, eight borrowed seats.",
+        sport: "soccer",
+        sides: [1, 1],
+        guests: 8,
+        maxPlayers: 10,
+        duration: 60,
+        score: scoreProposal([period(4, 3)]),
+        result: resultProposal("team_a"),
+        goals: 2,
+        expect: { periods: 1, verdict: "won", filled: 10, guests: 8 },
+    },
+    {
+        id: "real-5v5-no-guests",
+        why: "38 recent games are a clean 5v5: ten named people, five a side.",
+        sport: "soccer",
+        sides: [4, 4],
+        maxPlayers: 10,
+        duration: 60,
+        score: scoreProposal([period(6, 5)]),
+        result: resultProposal("team_a"),
+        goals: 1,
+        expect: { periods: 1, verdict: "won", filled: 8 },
+    },
+    {
+        id: "real-8v8-twelve-guests",
+        why: "16-spot games happen 20 times a fortnight. The card must survive 16 slots.",
+        sport: "soccer",
+        sides: [2, 2],
+        guests: 12,
+        maxPlayers: 16,
+        duration: 90,
+        score: scoreProposal([period(9, 7)]),
+        result: resultProposal("team_a"),
+        expect: { periods: 1, verdict: "won", filled: 16, guests: 12 },
+    },
+    {
         id: "venue-very-long-name",
         why: "An 81-char venue exists in production. Must not push the card around.",
         sport: "soccer",
         sides: [3, 3],
         duration: 60,
-        centre: "Complexe Sportif Intercommunal Marcel Cerdan de Saint-Ouen-sur-Seine Nord",
+        // 81 characters, the length of the longest real venue name in
+        // production -- at the TEST venue, not on a pitch in Saint-Ouen.
+        venueChars: 81,
         score: scoreProposal([period(2, 2)]),
         result: resultProposal(null, true),
         expect: { periods: 1, verdict: "draw" },
@@ -426,21 +487,41 @@ function assertGuards(docs) {
 function build(c, i) {
     const teams = roster(c.sides, { guests: c.guests || 0 });
     const date = daysAgo(2 + i, 18);
+    // THE VENUE IS NOT THE CASE'S TO CHOOSE (2026-08-27).
+    //
+    // `c.centre` used to let a case name its own venue, and one did: the
+    // long-name case sat at "Complexe Sportif Intercommunal Marcel Cerdan de
+    // Saint-Ouen-sur-Seine Nord", a REAL Paris pitch, purely to test how 81
+    // characters wrap on a card. It then showed up in Tim's played history as
+    // a real game for weeks.
+    //
+    // A layout test needs the character COUNT, not the place. `venueName`
+    // pads the test venue to the same length, so the card sees the same
+    // problem and nobody can stand on the result.
+    const venue = c.venueChars
+        ? longTestVenue(c.venueChars)
+        : TEST_VENUE.centre;
+
     return {
         seed_tag: SEED_TAG,
         seed_case: c.id,
         sport: c.sport,
         status: "played",
         visibility: REQUIRED_VISIBILITY,
-        centre: c.centre || TEST_VENUE.centre,
-        address: TEST_VENUE.centre,
+        // WITHOUT THIS FLAG A FIXTURE IS PERMANENT. The purge selects on it,
+        // so an unflagged game is invisible to the cleanup meant to remove it
+        // -- and counts on every profile and in users.stats meanwhile. 22 of
+        // them accumulated here before anybody noticed.
+        is_test_game: true,
+        centre: venue,
+        address: venue,
         centre_place_id: TEST_VENUE.placeId,
         place_id: TEST_VENUE.placeId,
         location: new admin.firestore.GeoPoint(TEST_VENUE.lat, TEST_VENUE.lng),
         date,
         end_time: new Date(date.getTime() + c.duration * 60000),
         duration: c.duration,
-        max_players: teams.length,
+        max_players: c.maxPlayers || teams.length,
         organizer: TIM,
         teams,
         attendees: teams.map((t) => db.doc(`users/${t.user_id}`)),
@@ -473,6 +554,13 @@ async function purge() {
             console.log(`  SKIPPING ${d.id}: a real uid is on it`);
             continue;
         }
+        // DELETE THE SUBCOLLECTION FIRST. Firestore does not cascade: deleting
+        // a game leaves its live_events behind, and because the seeder reuses
+        // nothing it simply accumulated -- 2 declared goals became 8 across
+        // four reseeds, and the card dutifully showed "8 buts marqués" on a
+        // 3-1 win.
+        const events = await d.ref.collection("live_events").get();
+        for (const e of events.docs) await e.ref.delete();
         await d.ref.delete();
         n++;
     }
