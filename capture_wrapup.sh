@@ -12,17 +12,9 @@ CASE="$1"
 OUT="${2:?usage: capture_wrapup.sh <case> <out.png>}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
-node "$HERE/seed_wrapup_cases.js" --write >/dev/null 2>&1
-node "$HERE/_only.js" "$CASE"          >/dev/null 2>&1
-
-# Cold restart: a reload leaves Firestore's Dart layer orphaned and reads
-# never complete (see handovers/SESSION_2026-08-25.md).
-DEV="$(xcrun simctl list devices booted | sed -n 's/.*(\([0-9A-F-]\{36\}\)) (Booted).*/\1/p' | head -1)"
-xcrun simctl terminate "$DEV" com.krank.club >/dev/null 2>&1
-sleep 2
-xcrun simctl launch "$DEV" com.krank.club >/dev/null 2>&1
-sleep 14
-
+. "$HERE/wrapup_harness_lib.sh"
+wu_prepare "$CASE" || exit 1
+DEV="$(wu_device)"
 label_xy() {  # echo "x y" for the first button whose label matches
   $IDB ui describe-all 2>/dev/null | python3 -c "
 import json,sys
@@ -42,9 +34,22 @@ print(' | '.join((e.get('AXLabel') or '').replace(chr(10),' ')
 }
 
 # Open the pending-feedback card on Home, then its CTA.
-$IDB ui describe-all >/dev/null 2>&1; sleep 2
-$IDB ui tap 201 348 >/dev/null 2>&1; sleep 6
-$IDB ui tap 201 269 >/dev/null 2>&1; sleep 7
+# RESOLVE THE HOME CTA BY LABEL, NEVER BY COORDINATE. The debrief card's
+# position depends on how many upcoming games sit above it, so a hardcoded
+# y opened an unrelated game and the run then screenshotted the wrong flow
+# entirely while still reporting progress.
+OPEN="$(label_xy 'Débriefer le match' 'Debrief the game' \
+                 'Analizar el partido' 'Analizza la partita')"
+if [ -z "$OPEN" ]; then
+  echo "ABORT $CASE :: no debrief card on Home (is pending_feedback set?)" >&2
+  exit 1
+fi
+sleep 2; $IDB ui tap $OPEN >/dev/null 2>&1; sleep 7
+
+# The sheet's own CTA, again by label.
+GO="$(label_xy 'Tout s'"'"'est bien passé' 'It all went well' \
+               'Todo salió bien' 'È andato tutto bene')"
+[ -n "$GO" ] && { sleep 2; $IDB ui tap $GO >/dev/null 2>&1; sleep 7; }
 
 # Walk the steps. A describe-all immediately before a tap can swallow it, so
 # always settle in between.
