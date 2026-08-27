@@ -242,6 +242,33 @@ const PLAN = [
         sport: "padel", date: atDays(-2, 18, 0), duration: 90,
         filled: 4, max: 4, mine: true, price: 12, played: true,
     },
+
+    // --- PLAYED, WITH A SETTLED SCORE ---------------------------------------
+    //
+    // The only cases where `score_proposals` exists, which is what the game
+    // sheet's FINAL band reads. Distinct from the two above deliberately:
+    // those are games still awaiting a wrap-up, and a game whose score is
+    // already agreed is a different state, not a later stage of the same one.
+    {
+        label: "soccer · PLAYED 3 days ago · SCORE RECORDED 3-2",
+        sport: "soccer", date: atDays(-3, 19, 0), duration: 60,
+        filled: 6, max: 6, mine: true, price: 6,
+        // One period, which is the football case.
+        finalScore: [{ team_a: 3, team_b: 2 }],
+    },
+    {
+        label: "padel · PLAYED 4 days ago · SCORE RECORDED 2-1 in sets",
+        sport: "padel", date: atDays(-4, 18, 30), duration: 90,
+        filled: 4, max: 4, mine: true, price: 13,
+        // THREE SETS, WON 2-1. The case worth seeding: summing these games
+        // gives 19-13, and the sheet must read 2-1. Anything that regresses
+        // `finalScoreNumbers` to a sum shows up here immediately.
+        finalScore: [
+            { team_a: 6, team_b: 0 },
+            { team_a: 6, team_b: 7 },
+            { team_a: 7, team_b: 6 },
+        ],
+    },
 ];
 
 // ---------------------------------------------------------------- guards ----
@@ -560,7 +587,7 @@ async function run() {
                 new Date(date.getTime() + p.duration * MIN)
             ),
             duration: p.duration,
-            status: p.played ? "played" : "published",
+            status: (p.played || p.finalScore) ? "played" : "published",
             organizer: mine ? TIM : POOL[0],
             // GUARD 2: never anything but the test venue.
             centre: TEST_VENUE.centre,
@@ -591,6 +618,23 @@ async function run() {
             reservation_name: p.label,
             created_on: admin.firestore.FieldValue.serverTimestamp(),
         };
+
+        // A SETTLED SCORE, shaped exactly as `enterResult` writes one.
+        //
+        // `periods`, never a flat a/b pair: reducing periods to a match score is
+        // sport-dependent and deliberately not stored -- football sums them,
+        // padel counts sets won. See matchScore() in gen2/recomputeUserStats.js
+        // and finalScoreNumbers() in the app.
+        if (p.finalScore) {
+            data.score_proposals = [{
+                periods: p.finalScore,
+                proposed_by: TIM,
+                proposed_at: admin.firestore.Timestamp.fromDate(
+                    new Date(date.getTime() + p.duration * MIN)
+                ),
+                agreed_by: [TIM],
+            }];
+        }
 
         // Poteau Live is per-game and opt-in: a game without the flag never
         // shows a scoreboard, whatever Remote Config says.
