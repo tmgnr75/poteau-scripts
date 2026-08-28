@@ -584,6 +584,45 @@ THE MESSAGES:
 `;
 
 /**
+ * Report why a JSON document does not close, or null if it does.
+ *
+ * Scans once, tracking string state so that braces and brackets appearing
+ * INSIDE a value are ignored — signal headlines are free text written by a
+ * model and regularly contain both. An unterminated string is itself proof of
+ * truncation, and is reported first because it is the most common shape: the
+ * response stops mid-headline, as it did on 2026-08-25 at `"where": "LE FIVE Col`.
+ *
+ * Returns a short human phrase for the error message, e.g.
+ * "unterminated string" or "3 unclosed objects, 1 unclosed array".
+ */
+function unbalancedTail(text) {
+    let inString = false, escaped = false, curly = 0, square = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (escaped) { escaped = false; continue; }
+        if (c === '\\') { escaped = true; continue; }
+        if (c === '"') { inString = !inString; continue; }
+        if (inString) continue;
+        if (c === '{') curly++;
+        else if (c === '}') curly--;
+        else if (c === '[') square++;
+        else if (c === ']') square--;
+    }
+
+    if (inString) return 'unterminated string';
+
+    // Negative means more closers than openers: malformed, but not truncated.
+    // Say so plainly rather than reporting a nonsensical negative count.
+    if (curly < 0 || square < 0) return 'mismatched brackets';
+
+    const parts = [];
+    if (curly > 0) parts.push(`${curly} unclosed object${curly === 1 ? '' : 's'}`);
+    if (square > 0) parts.push(`${square} unclosed array${square === 1 ? '' : 's'}`);
+    return parts.length ? parts.join(', ') : null;
+}
+
+/**
  * Parse the model's JSON, tolerating the ways it wraps it.
  *
  * The instruction says "no markdown fence" and it is mostly obeyed, but a
@@ -597,17 +636,25 @@ function parseSignals(raw) {
 
     // Truncation is checked on the RAW text, before any extraction.
     //
-    // A response cut off mid-object has no closing brace at all, so
-    // `lastIndexOf('}')` returns -1 and the slice below silently becomes the
-    // empty string — which then fails to parse as an ordinary malformed
-    // response and gets retried twice at full cost. That is exactly what the
-    // first cloud deploy did. Detect it here, where the evidence still exists.
+    // The ORIGINAL check here was `lastIndexOf('}') < indexOf('{')`, i.e. "no
+    // closing brace anywhere". That only catches a response cut off before the
+    // very first signal object closes. A response cut off LATER — after two or
+    // three complete objects — is full of closing braces and sailed straight
+    // past it into the JSON.parse catch below, which produces the generic
+    // "did not return valid JSON" message, which the retry loop treats as
+    // transient. That is 2026-08-25: three full-cost attempts, nine minutes,
+    // identical failure every time.
+    //
+    // So truncation is now detected STRUCTURALLY, by balance rather than by
+    // presence. Quote-aware, because a brace inside a headline string is not
+    // structure — and headlines routinely contain them.
     const opens = text.indexOf('{');
-    if (opens !== -1 && text.lastIndexOf('}') < opens) {
+    if (opens !== -1 && unbalancedTail(text) !== null) {
         throw new Error(
-            `the writer's JSON was cut off at the output ceiling `
-            + `(${text.length} chars, no closing brace). Not transient: `
-            + `raise the output budget. Starts: ${text.slice(0, 120)}`);
+            `the writer's JSON was cut off (${text.length} chars, `
+            + `${unbalancedTail(text)}). Not transient: the same prompt `
+            + `truncates the same way every time. `
+            + `Starts: ${text.slice(0, 120)}`);
     }
 
     // A fenced block first, then the outermost brace pair.
@@ -619,7 +666,19 @@ function parseSignals(raw) {
     try {
         parsed = JSON.parse(candidate);
     } catch (e) {
-        throw new Error(`the writer did not return valid JSON: ${text.slice(0, 200)}`);
+        // Print the TAIL as well as the head, and the total length.
+        //
+        // The failure on 2026-08-25 could not be diagnosed after the fact
+        // because only the first 200 chars were kept: a response that stops
+        // mid-string looks identical, in its opening, to one that is malformed
+        // at the very end. The tail is what distinguishes them, and it is the
+        // half that was being thrown away. Cheap to log, and the whole reason
+        // the next occurrence will be answerable.
+        throw new Error(
+            `the writer did not return valid JSON (${text.length} chars, `
+            + `parse error: ${e.message}). `
+            + `Starts: ${text.slice(0, 200)} `
+            + `... Ends: ${text.slice(-200)}`);
     }
     if (!parsed || !Array.isArray(parsed.signals)) {
         throw new Error(`no signals array in the response: ${text.slice(0, 200)}`);
@@ -665,7 +724,7 @@ async function writeSignalsWithRetry(corpus, attempts = 3) {
             // "did not return valid JSON" matched the transient pattern below
             // and cut-off JSON is, technically, invalid JSON. The host names
             // this case explicitly so it can be excluded here.
-            const permanent = /output ceiling|cut off/i.test(e.message);
+            const permanent = /output ceiling|cut off|unterminated string|unclosed/i.test(e.message);
             const transient = !permanent
                 && /529|overloaded|rate.?limit|timeout|ECONN|503|502|did not return valid JSON/i
                     .test(e.message);
