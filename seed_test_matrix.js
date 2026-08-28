@@ -616,6 +616,21 @@ async function run() {
             mood: "fun",
             time_zone: "Europe/Paris",
             reservation_name: p.label,
+            // A DESCRIPTION ON EVERY FIXTURE (Tim, 2026-08-28).
+            //
+            // The seeder never wrote one, so the description section of the
+            // game sheet had no content in any test -- which is why it looked
+            // like it had stopped working. It had not: only 9% of real future
+            // games carry a description, so the section is simply empty most
+            // of the time in production too.
+            //
+            // Deliberately mundane text. A fixture description must never
+            // contain a phone number or a link: that is exactly the content
+            // the Gold gate exists to protect, and seeding it would put a
+            // realistic-looking bypass target in the database.
+            description: p.description ||
+                'Terrain synthétique, vestiaires et douches sur place. ' +
+                'Chasubles fournies, prévoir des baskets propres.',
             created_on: admin.firestore.FieldValue.serverTimestamp(),
         };
 
