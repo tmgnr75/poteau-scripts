@@ -6,7 +6,7 @@
 //  By default, bills for the PREVIOUS month.
 //  --dry-run:  preview everything without writing anything
 //  --month YYYY-MM: override the billing month
-//  --invoices: ONLY do step 4 (PDFs + Firebase + Drive + Firestore docs)
+//  --invoices: ONLY do step 4 (PDFs + Firebase Storage + Firestore docs)
 //              based on existing Billing sheet rows. Skips Firestore query,
 //              Reporting update, Sheet write, and GoCardless payments.
 //  --no-charge: run steps 1-4 (sheets + PDFs) but STOP before step 5, so no
@@ -15,7 +15,7 @@
 //              on its own. Charging is the one irreversible step here.
 //  --charge-only: ONLY do step 5, from the invoice rows already in the Billing
 //              sheet. The mirror of --no-charge and the second half of the
-//              two-pass close. Does NOT touch Firestore, Drive or the sheets,
+//              two-pass close. Does NOT touch Firestore or the sheets,
 //              so it cannot duplicate pro_invoices documents the way a full
 //              re-run does (each generatePDFs call .add()s a fresh doc).
 //              Mandates are resolved from the sheet's own Mandate column,
@@ -33,7 +33,6 @@ const {
   getPriceHT, TVA_RATE, FRENCH_MONTHS, FRENCH_MONTH_CODES, CENTRES,
 } = require('./config');
 
-const DRIVE_ROOT_FOLDER_ID = '1w05RB53a3q0GrqGO6rX5d3IJbgcFOTJz';
 
 // ── Parse CLI args ──────────────────────────────────────────
 const args = process.argv.slice(2);
@@ -86,7 +85,9 @@ const sheetsAuth = new google.auth.GoogleAuth({
   keyFile: path.join(__dirname, '..', 'Poteau Billing IAM Admin.json'),
   scopes: [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive',
+    // drive scope dropped 2026-09-01: invoice PDFs live in Firebase Storage
+    // and are served to centres from there. The service account has no Drive
+    // storage quota of its own, so every upload failed anyway.
   ],
 });
 
@@ -148,6 +149,19 @@ async function queryGames() {
 
     snapshot.forEach(doc => {
       const game = doc.data();
+
+      // POTEAU MAX BILLS PRO GAMES ONLY.
+      //
+      // A centre's tier counts the games IT organised through Poteau Max.
+      // A `captain` game is a consumer-app game a player set up at that venue
+      // -- the centre neither created it nor gets billed for it.
+      //
+      // This filter was missing, and in July 2026 it over-tiered Monclub
+      // Futbol: captain games pushed it from 299 EUR to 599 EUR and the debit
+      // had to be reversed by hand (718,80 -> 358,80). August 2026 had one
+      // captain game at the same centre; it happened not to cross a tier
+      // boundary, which is exactly why this stayed invisible.
+      if ((game.type || '') !== 'pro') return;
 
       // REVENUE IS max_players * price, NOT attendees * price.
       //
@@ -444,7 +458,7 @@ async function updateBilling(sheets, results) {
 
 // ── STEP 4: Generate PDFs via Google Sheets export ──────────
 async function generatePDFs(sheets, invoiceRows) {
-  console.log('📄 Step 4: Generating invoice PDFs → Firebase + Google Drive...\n');
+  console.log('📄 Step 4: Generating invoice PDFs → Firebase Storage...\n');
 
   // Get OAuth token for PDF export
   const authClient = await sheetsAuth.getClient();
@@ -461,30 +475,6 @@ async function generatePDFs(sheets, invoiceRows) {
   const bucket = admin.storage().bucket();
   const invoiceDocs = [];
 
-  // Google Drive: find or create subfolder for billing month (YYYY-MM)
-  const drive = google.drive({ version: 'v3', auth: await sheetsAuth.getClient() });
-  const billedYM = `${billingYear}-${String(billingMonth).padStart(2, '0')}`;
-
-  let driveFolderId;
-  const folderSearch = await drive.files.list({
-    q: `'${DRIVE_ROOT_FOLDER_ID}' in parents and name='${billedYM}' and mimeType='application/vnd.google-apps.folder'`,
-    fields: 'files(id)',
-  });
-  if (folderSearch.data.files.length > 0) {
-    driveFolderId = folderSearch.data.files[0].id;
-    console.log(`  Drive folder "${billedYM}" found: ${driveFolderId}`);
-  } else {
-    const created = await drive.files.create({
-      requestBody: {
-        name: billedYM,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [DRIVE_ROOT_FOLDER_ID],
-      },
-      fields: 'id',
-    });
-    driveFolderId = created.data.id;
-    console.log(`  Drive folder "${billedYM}" created: ${driveFolderId}`);
-  }
   console.log('');
 
   for (const inv of invoiceRows) {
@@ -557,35 +547,6 @@ async function generatePDFs(sheets, invoiceRows) {
 
       const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(storagePath)}?alt=media&token=${downloadToken}`;
 
-      // Upload to Google Drive
-      const { Readable } = require('stream');
-      // Check if file already exists in Drive folder
-      const existingFiles = await drive.files.list({
-        q: `'${driveFolderId}' in parents and name='${inv.invoiceNumber}.pdf'`,
-        fields: 'files(id)',
-        supportsAllDrives: true,
-      });
-      if (existingFiles.data.files.length > 0) {
-        console.log(`    📁 Already on Drive: ${billedYM}/${inv.invoiceNumber}.pdf`);
-      } else {
-        try {
-          await drive.files.create({
-            requestBody: {
-              name: `${inv.invoiceNumber}.pdf`,
-              parents: [driveFolderId],
-            },
-            media: {
-              mimeType: 'application/pdf',
-              body: Readable.from(pdfBlob),
-            },
-            supportsAllDrives: true,
-          });
-          console.log(`    📁 Uploaded to Drive: ${billedYM}/${inv.invoiceNumber}.pdf`);
-        } catch (driveErr) {
-          console.log(`    ⚠️ Drive upload failed (${driveErr.message}) — continuing without Drive`);
-        }
-      }
-
       // Create pro_invoices document in Firestore
       const centreUid = findCentreUid(inv.centre);
       const accountRef = db.doc(`users/${centreUid}`);
@@ -599,10 +560,29 @@ async function generatePDFs(sheets, invoiceRows) {
         amount: amountHT,
         file: fileUrl,
         invoice_date: admin.firestore.Timestamp.fromDate(new Date(invoiceYear, invoiceMonth - 1, 1)),
+        invoice_name: inv.invoiceNumber,
         status: inv.status,
       };
 
-      const docRef = await db.collection('pro_invoices').add(invoiceDoc);
+      // THE INVOICE NUMBER IS THE DOCUMENT ID.
+      //
+      // This used to be .add(), which mints a new document on every call --
+      // so any second pass over a month (a --invoices re-run, a retry after a
+      // network blip) silently created a duplicate set. Closing August 2026
+      // produced 20 documents for 10 invoices and they had to be deleted by
+      // hand, along with the dangling refs in users.pro_invoices.
+      //
+      // POT-BZN-26-09-01 is already unique per centre per month, so it IS the
+      // natural key. set() then makes step 4 idempotent: re-running rewrites
+      // the same ten documents instead of adding ten more. arrayUnion on the
+      // user is a no-op the second time for the same reason.
+      //
+      // invoice_name is also now stored on the document. It never was, so
+      // every pro_invoices doc in the database has an undefined invoice_name
+      // and cannot be traced back to its row in the Billing sheet.
+      const docRef = db.collection('pro_invoices').doc(inv.invoiceNumber);
+      const existed = (await docRef.get()).exists;
+      await docRef.set(invoiceDoc);
 
       // Add reference to the centre's user document pro_invoices array
       await db.collection('users').doc(centreUid).update({
@@ -611,10 +591,13 @@ async function generatePDFs(sheets, invoiceRows) {
 
       invoiceDocs.push({ ...invoiceDoc, docId: docRef.id });
 
-      console.log(`    ✅ ${inv.invoiceNumber} → uploaded, Firestore doc ${docRef.id} created, added to users/${centreUid}.pro_invoices`);
+      console.log(`    ✅ ${inv.invoiceNumber} → PDF uploaded, pro_invoices/${docRef.id} ${existed ? 'updated' : 'created'}, linked to users/${centreUid}`);
 
-      // Rate limit between PDFs
-      await new Promise(r => setTimeout(r, 3000));
+      // Rate limit between PDFs. The Sheets export endpoint is the only thing
+      // here that rate-limits; 1s has been enough in practice and the retry
+      // loop above handles a 429 if it is not. Was 3s, which cost 30 seconds
+      // per run for nothing.
+      await new Promise(r => setTimeout(r, 1000));
     }
   }
 
@@ -721,7 +704,7 @@ async function main() {
   const sheets = google.sheets({ version: 'v4', auth: await sheetsAuth.getClient() });
 
   if (INVOICES_ONLY) {
-    // Only do step 4: PDFs + Firebase + Drive + Firestore docs
+    // Only do step 4: PDFs + Firebase Storage + Firestore docs
     const invoiceRows = await loadInvoicesFromSheet(sheets);
 
     if (invoiceRows.length === 0) {
