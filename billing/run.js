@@ -130,9 +130,26 @@ async function queryGames() {
 
     snapshot.forEach(doc => {
       const game = doc.data();
-      const players = game.attendees ? game.attendees.length : (game.currentPlayers || 0);
+
+      // REVENUE IS max_players * price, NOT attendees * price.
+      //
+      // A centre books a pitch, not a seat. Once a game is played the slot is
+      // consumed and the centre bills it whole, so the revenue it generated is
+      // the full field price -- whether ten players showed up or eight.
+      // Counting the roster instead understates every game that ran short, and
+      // understates it silently (never high, always low).
+      //
+      // This used to read `game.attendees.length`, which disagreed with the
+      // pro dashboard (`updateProMetrics`, cloud-functions index.js) that has
+      // always used max_players. Found 2026-09-01 while closing August:
+      // Stadium Thiais differed by 162 EUR, IMPULSTAR PARK by 126 EUR over the
+      // month. The dashboard was right; this was wrong. Tim, 2026-09-01:
+      // "Centers reason with fields booked (so full price)."
+      //
+      // Reporting only -- invoices are tiered on game COUNT, so no invoice
+      // total changes as a result of this fix.
       const price = game.price || 0;
-      const gameRevenue = price * players;
+      const gameRevenue = price * (game.max_players || 0);
       const paymentType = (game.payment_type || 'on-site').toLowerCase().replace(/[_\s]+/g, '-');
 
       totalGames++;
