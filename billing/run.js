@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // ============================================================
 //  POTEAU BILLING — Monthly Billing Orchestrator
-//  Usage: node run.js [--dry-run] [--month YYYY-MM] [--invoices]
+//  Usage: node run.js [--dry-run] [--month YYYY-MM] [--invoices] [--no-charge]
 //
 //  By default, bills for the PREVIOUS month.
 //  --dry-run:  preview everything without writing anything
@@ -9,6 +9,17 @@
 //  --invoices: ONLY do step 4 (PDFs + Firebase + Drive + Firestore docs)
 //              based on existing Billing sheet rows. Skips Firestore query,
 //              Reporting update, Sheet write, and GoCardless payments.
+//  --no-charge: run steps 1-4 (sheets + PDFs) but STOP before step 5, so no
+//              GoCardless payment is created. The intended two-pass close:
+//              fill the reporting, eyeball the numbers, then re-run step 5
+//              on its own. Charging is the one irreversible step here.
+//  --charge-only: ONLY do step 5, from the invoice rows already in the Billing
+//              sheet. The mirror of --no-charge and the second half of the
+//              two-pass close. Does NOT touch Firestore, Drive or the sheets,
+//              so it cannot duplicate pro_invoices documents the way a full
+//              re-run does (each generatePDFs call .add()s a fresh doc).
+//              Mandates are resolved from the sheet's own Mandate column,
+//              which holds the GoCardless customer ID.
 // ============================================================
 
 const admin = require('firebase-admin');
@@ -28,6 +39,13 @@ const DRIVE_ROOT_FOLDER_ID = '1w05RB53a3q0GrqGO6rX5d3IJbgcFOTJz';
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const INVOICES_ONLY = args.includes('--invoices');
+const NO_CHARGE = args.includes('--no-charge');
+const CHARGE_ONLY = args.includes('--charge-only');
+
+if (NO_CHARGE && CHARGE_ONLY) {
+  console.error('--no-charge and --charge-only are mutually exclusive.');
+  process.exit(1);
+}
 const monthIdx = args.indexOf('--month');
 let billingYear, billingMonth;
 
@@ -52,7 +70,7 @@ const invoiceDateStr = `1 ${FRENCH_MONTHS[invoiceMonth - 1]}`;
 console.log(`\n${'='.repeat(60)}`);
 console.log(`  POTEAU BILLING — ${billingMonthName} ${billingYear}`);
 console.log(`  Invoice date: ${invoiceDateStr} ${invoiceYear}`);
-console.log(`  Mode: ${DRY_RUN ? '🔍 DRY RUN' : '⚡ LIVE'}`);
+console.log(`  Mode: ${DRY_RUN ? '🔍 DRY RUN' : '⚡ LIVE'}${NO_CHARGE ? '  (--no-charge: steps 1-4 only, no debits)' : ''}${CHARGE_ONLY ? '  (--charge-only: step 5 only)' : ''}`);
 console.log(`${'='.repeat(60)}\n`);
 
 // ── Init services ───────────────────────────────────────────
@@ -721,6 +739,66 @@ async function main() {
     process.exit(0);
   }
 
+  if (CHARGE_ONLY) {
+    // Step 5 alone, against the rows already written to the Billing sheet.
+    const invoiceRows = await loadInvoicesFromSheet(sheets);
+    if (invoiceRows.length === 0) {
+      console.log('No invoices found in the sheet for this month. Nothing to charge.');
+      process.exit(0);
+    }
+
+    // loadInvoicesFromSheet leaves mandateID null (--invoices mode never needs
+    // it). Resolve each one here from the sheet's Mandate column -- the value
+    // there is the GoCardless CUSTOMER id, so look up that customer's active
+    // mandate. Reading the sheet rather than config.js keeps one source of
+    // truth: if the two ever drift, the sheet Tim maintains is the one that
+    // wins.
+    const mandates = await gcClient.mandates.list({ status: 'active', limit: 100 });
+    const mandateByCustomer = {};
+    for (const m of mandates.mandates) mandateByCustomer[m.links.customer] = m.id;
+
+    const sheetData = await sheets.spreadsheets.values.get({
+      spreadsheetId: BILLING_SHEET_ID,
+      range: 'Invoices!A1:U500',
+    });
+    const sheetRows = sheetData.data.values || [];
+    const customerByInvoice = {};
+    for (const row of sheetRows.slice(1)) {
+      if (row[0]) customerByInvoice[row[0]] = (row[14] || '').trim(); // col O
+    }
+
+    let unresolved = 0;
+    for (const inv of invoiceRows) {
+      if (inv.type !== 'on site') continue;
+      const customerID = customerByInvoice[inv.invoiceNumber];
+      inv.mandateID = customerID ? mandateByCustomer[customerID] : null;
+      if (!inv.mandateID) {
+        console.log(`  ⚠️  ${inv.invoiceNumber} (${inv.centre}): no active mandate for customer ${customerID || '(blank in column O)'} — will be SKIPPED`);
+        unresolved++;
+      }
+    }
+    if (unresolved > 0) {
+      console.log(`\n  ${unresolved} on-site invoice(s) could not be matched to a mandate. Aborting rather than charging a partial run.`);
+      process.exit(1);
+    }
+
+    // Refuse to charge a month whose invoices are already marked paid.
+    const alreadyPaid = invoiceRows.filter(i => i.type === 'on site' && String(i.status).toLowerCase() === 'paid');
+    if (alreadyPaid.length > 0) {
+      console.log(`\n  ⚠️  ${alreadyPaid.length} on-site invoice(s) are already marked "paid" in the sheet:`);
+      alreadyPaid.forEach(i => console.log(`      ${i.invoiceNumber}  ${i.centre}`));
+      console.log('  Aborting: this month looks charged already. Clear the status or charge by hand.');
+      process.exit(1);
+    }
+
+    await createPayments(invoiceRows, null);
+
+    console.log(`${'='.repeat(60)}`);
+    console.log(`  CHARGE STEP COMPLETE — ${billingMonthName} ${billingYear}`);
+    console.log(`${'='.repeat(60)}\n`);
+    process.exit(0);
+  }
+
   // Full flow
   // Step 1: Query Firestore
   const results = await queryGames();
@@ -740,13 +818,21 @@ async function main() {
   await generatePDFs(sheets, invoiceRows);
 
   // Step 5: Create GoCardless payments
-  await createPayments(invoiceRows, mandateMap);
+  if (NO_CHARGE) {
+    const onSite = invoiceRows.filter(i => i.type === 'on site');
+    const totalTTC = onSite.reduce((sum, i) => sum + (i.priceTTC || 0), 0);
+    console.log('💳 Step 5: SKIPPED (--no-charge)\n');
+    console.log(`  ${onSite.length} on-site invoices left uncharged, ${formatEur(Math.round(totalTTC * 100) / 100)} TTC.`);
+    console.log('  Re-run without --no-charge to create the GoCardless payments.\n');
+  } else {
+    await createPayments(invoiceRows, mandateMap);
+  }
 
   // Summary
   console.log(`${'='.repeat(60)}`);
   console.log(`  BILLING COMPLETE — ${billingMonthName} ${billingYear}`);
   console.log(`  ${invoiceRows.length} invoices created`);
-  console.log(`  ${invoiceRows.filter(i => i.type === 'on site').length} on-site payments initiated`);
+  console.log(`  ${invoiceRows.filter(i => i.type === 'on site').length} on-site payments ${NO_CHARGE ? 'NOT charged (--no-charge)' : 'initiated'}`);
   console.log(`  ${invoiceRows.filter(i => i.type === 'in-app').length} in-app invoices recorded`);
   console.log(`${'='.repeat(60)}\n`);
 
