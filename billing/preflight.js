@@ -117,9 +117,13 @@ const fmt = d => d.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
     snap.forEach(d => { const t = d.data().type; if (t === 'pro') pro++; else capt++; });
     if (pro === 0 && capt === 0) continue;
     const ht = c.skip || !c.billingName ? 0 : getPriceHT(pro);
-    const note = c.skip ? ' (annual, skipped)' : !c.billingName ? ' (not billed)' : '';
+    const credit = c.oneOffCreditTTC;
+    const hasCredit = credit && credit.month === `${year}-${String(month).padStart(2,'0')}`;
+    const note = c.skip ? ' (annual, skipped)' : !c.billingName ? ' (not billed)'
+      : hasCredit ? `  <-- CREDIT ${credit.amount} EUR TTC: ${credit.reason}` : '';
     if (ht > 0) { totalHT += ht; billable++; }
-    console.log(`   ${c.reportingName.padEnd(26)} | ${String(pro).padStart(3)} | ${String(capt).padStart(4)} | ${String(ht).padStart(6)} | ${(ht * (1 + TVA_RATE)).toFixed(2).padStart(8)}${note}`);
+    const ttc = Math.max(0, ht * (1 + TVA_RATE) - (hasCredit ? credit.amount : 0));
+    console.log(`   ${c.reportingName.padEnd(26)} | ${String(pro).padStart(3)} | ${String(capt).padStart(4)} | ${String(ht).padStart(6)} | ${ttc.toFixed(2).padStart(8)}${note}`);
   }
   console.log('   ' + '-'.repeat(62));
   console.log(`   ${billable} invoices | ${totalHT} EUR HT | ${(totalHT * (1 + TVA_RATE)).toFixed(2)} EUR TTC\n`);

@@ -346,7 +346,18 @@ async function updateBilling(sheets, results) {
     // On-site invoice: if total games >= 6
     if (gamesPlayed >= 6) {
       const priceHT = getPriceHT(gamesPlayed);
-      const priceTTC = Math.round(priceHT * (1 + TVA_RATE) * 100) / 100;
+      let priceTTC = Math.round(priceHT * (1 + TVA_RATE) * 100) / 100;
+
+      // One-off credit carried over from a previous month, when a debit had
+      // already been submitted to GoCardless and could not be cancelled. Set
+      // on the centre in config.js and scoped to a single month so it can
+      // never silently apply twice. See the block on Monclub Futbol.
+      const credit = centre.oneOffCreditTTC;
+      if (credit && credit.month === `${billingYear}-${String(billingMonth).padStart(2, '0')}`) {
+        const before = priceTTC;
+        priceTTC = Math.round(Math.max(0, priceTTC - credit.amount) * 100) / 100;
+        console.log(`  ⓘ ${centre.reportingName}: credit of ${credit.amount} EUR TTC applied (${before} -> ${priceTTC}) — ${credit.reason}`);
+      }
 
       invoiceRows.push({
         type: 'on site',

@@ -324,6 +324,21 @@ const CENTRES = [
     reportingTab: 'Indies',
     revenueRow: 19, matchesRow: 45,
     customerID: 'CU01KEKVZ9RVH6',
+    // ONE-OFF CREDIT, SEPTEMBER 2026 ONLY (applied when billing on 1 Oct 2026).
+    //
+    // August 2026 was billed at 20 games (299 EUR HT). As a goodwill gesture
+    // Tim reduced it to 13 games (199 EUR HT), but the 358,80 EUR direct debit
+    // had already been submitted to GoCardless and could not be cancelled, so
+    // the 120 EUR TTC difference is credited on the following month instead.
+    //
+    // Promised to Thibaut in Messenger on 2026-09-01 18:37, together with the
+    // rule that from September onward EVERY game organised on Poteau Max is
+    // billed regardless of how many players Poteau brought. This is the last
+    // manual adjustment: it exists to honour that message, not to set a
+    // precedent.
+    //
+    // Delete this block once the September invoice has been issued.
+    oneOffCreditTTC: { month: '2026-09', amount: 120, reason: 'Geste commercial août 2026 (20 -> 13 matchs)' },
   },
   {
     uid: 'iPGJt0M9QdQfe8GNIjXR0DhEZ3J2',
