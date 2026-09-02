@@ -124,6 +124,11 @@ function readLogs(filter, { limit = 1000, withDetail = false } = {}) {
         // Which container served it — lets the report tell a poisoned instance
         // apart from a genuinely broken dependency.
         instanceId: (e.labels && e.labels.instanceId) || "",
+        // WHEN it happened. The report needs this to tell a fault that is still
+        // firing from one that stopped hours ago: on 2026-09-01 a 19-minute
+        // platform blip was still rendered as a red "needs attention today"
+        // the following morning, long after it had ended. See recoveredAt.
+        timestamp: e.timestamp || "",
       };
     });
 }

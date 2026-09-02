@@ -145,11 +145,32 @@ async function errors(startZ, endZ) {
     // starting up. They are surfaced as their own dim line rather than hidden,
     // because a SPIKE in them is a real signal (a function whose cold start
     // got slower), even though a handful a day is normal.
-    const COLD_START = /STARTUP TCP probe failed|failed the readiness check|Connection failed with status DEADLINE_EXCEEDED/i;
+    // These patterns must cover BOTH sides of a container-start failure. Cloud
+    // Run writes two records for the same event: a system log ("Default STARTUP
+    // TCP probe failed...") and a request log ("The request failed because the
+    // instance could not start successfully."). Only the system side was
+    // matched here, so on 2026-09-01 a 19-minute platform blip put 247 of the
+    // latter and 50 "Connection failed with status CANCELLED" into the CODE
+    // error bucket -- a headline of "265 real errors" and five red findings,
+    // one per affected service, for a single upstream fault that had ended
+    // 40 hours before anyone read it. Three of those five services had not
+    // been deployed since March, which is the tell: unchanged code does not
+    // start failing on its own.
+    const COLD_START = /STARTUP TCP probe failed|failed the readiness check|instance could not start successfully|instance failed the readiness check|Connection failed with status (DEADLINE_EXCEEDED|CANCELLED)/i;
     const isColdStart = (e) => COLD_START.test(e.textPayload || '');
 
-    const coldStarts = realEntries.filter(isColdStart);
-    const codeErrors = realEntries.filter((e) => !isColdStart(e));
+    // A container killed by a signal is NOT a cold start, even when it happens
+    // during one. SIGSEGV/SIGBUS/SIGABRT/SIGKILL mean the process died hard,
+    // and that is exactly the kind of thing the reclassification above could
+    // otherwise bury: the same 2026-09-01 window contained 3 "Uncaught signal:
+    // 7" (SIGBUS) entries sitting one line below 247 benign ones. Those stay
+    // in the code-error bucket and are reported on their own terms.
+    const HARD_CRASH = /Uncaught signal|SIGSEGV|SIGBUS|SIGABRT|SIGKILL|out of memory|Memory limit of .* exceeded/i;
+    const isHardCrash = (e) => HARD_CRASH.test(e.textPayload || '');
+
+    // Hard crash wins over the cold-start pattern, never the other way round.
+    const coldStarts = realEntries.filter((e) => isColdStart(e) && !isHardCrash(e));
+    const codeErrors = realEntries.filter((e) => !isColdStart(e) || isHardCrash(e));
 
     const byService = {};
     codeErrors.forEach((e) => {
@@ -157,11 +178,33 @@ async function errors(startZ, endZ) {
         byService[name] = (byService[name] || 0) + 1;
     });
 
+    // Hard crashes tracked separately so they can be reported explicitly and
+    // are never eligible for the recovery downgrade below.
+    const hardCrashByService = {};
+    codeErrors.filter(isHardCrash).forEach((e) => {
+        const name = e.service || 'unknown';
+        hardCrashByService[name] = (hardCrashByService[name] || 0) + 1;
+    });
+
     const coldByService = {};
     coldStarts.forEach((e) => {
         const name = e.service || 'unknown';
         coldByService[name] = (coldByService[name] || 0) + 1;
     });
+
+    // Timing for the cold-start burst as a whole, so the report can say whether
+    // a platform fault is still running or already over.
+    let coldQuietFor, coldSpanH;
+    {
+        const ts = coldStarts.map((x) => x.timestamp).filter(Boolean).sort();
+        if (ts.length) {
+            const endMsC = Date.parse(endZ);
+            const last = Date.parse(ts[ts.length - 1]);
+            const first = Date.parse(ts[0]);
+            if (Number.isFinite(endMsC - last)) coldQuietFor = (endMsC - last) / 3600000;
+            if (Number.isFinite(last - first)) coldSpanH = (last - first) / 3600000;
+        }
+    }
 
     // One concrete sample per offending service, so the finding can say what
     // actually went wrong instead of telling the reader to go dig.
@@ -191,6 +234,36 @@ async function errors(startZ, endZ) {
     const singleInstance = {};
     for (const [svc, set] of Object.entries(instancesByService)) {
         if (set.size === 1 && (byService[svc] || 0) >= 3) singleInstance[svc] = [...set][0];
+    }
+
+    // RECOVERY. When did each service last fail, and how long was its window?
+    //
+    // A 24h bucket cannot tell "still broken" from "broke and recovered", so
+    // every fault read as ongoing: on 2026-09-01 a blip that ended at 16:57
+    // was still headed "incident / needs attention today" the next morning.
+    // The reader cannot act on that, and a report that cries wolf daily is one
+    // nobody opens on the morning it matters.
+    //
+    // This ONLY ever downgrades presentation. The finding is still printed,
+    // still counted in the headline totals, and still names the service. A
+    // fault that stopped is not a fault that did not happen -- it is one whose
+    // next step is "confirm it stayed gone", not "drop everything".
+    const lastSeen = {}, firstSeen = {};
+    codeErrors.forEach((e) => {
+        const svc = e.service || 'unknown';
+        const t = e.timestamp;
+        if (!t) return;
+        if (!lastSeen[svc] || t > lastSeen[svc]) lastSeen[svc] = t;
+        if (!firstSeen[svc] || t < firstSeen[svc]) firstSeen[svc] = t;
+    });
+    // Hours between a service's last error and the end of the reported day.
+    // Measured against the window end, not wall-clock now, so a backfilled or
+    // re-run report reads the same as the live one.
+    const endMs = Date.parse(endZ);
+    const quietFor = {};
+    for (const [svc, t] of Object.entries(lastSeen)) {
+        const ms = endMs - Date.parse(t);
+        if (Number.isFinite(ms)) quietFor[svc] = ms / 3600000;
     }
 
     const samples = {}, hints = {};
@@ -243,7 +316,13 @@ async function errors(startZ, endZ) {
         throttled: total - real,
         coldStarts: coldStarts.length,
         coldByService,
+        coldQuietFor,
+        coldSpanH,
+        hardCrashByService,
         byService,
+        quietFor,
+        firstSeen,
+        lastSeen,
         indexErrors,
         samples,
         hints,
@@ -445,7 +524,11 @@ function build(day, a, e, c, h, dep, m) {
     // Every finding carries a recommendation. An amber dot with no next step
     // is just anxiety - the reader cannot tell whether to act or ignore it.
     const attention = [];
-    const warn = (dot, what, soWhat, doWhat) => attention.push({ dot, what, soWhat, doWhat });
+    // `ongoing` marks a finding as still live at the end of the window. It is
+    // what separates "something is broken" from "something broke and stopped",
+    // and only affects the summary sentence — never whether a finding is shown.
+    const warn = (dot, what, soWhat, doWhat, ongoing = true) =>
+        attention.push({ dot, what, soWhat, doWhat, ongoing });
 
     // Money first. Everything else in this report is about the platform being
     // healthy; this is about a specific person being wrongly charged, which
@@ -535,7 +618,44 @@ function build(day, a, e, c, h, dep, m) {
         // A credential/config fault is red at ANY volume: it does not heal, and
         // it usually means a whole code path is dead rather than flaky.
         const isConfigFault = Boolean(matched) && matched === CAUSES[0];
-        const dot = (n >= 5 || isConfigFault) ? '🔴' : '🟡';
+        let dot = (n >= 5 || isConfigFault) ? '🔴' : '🟡';
+
+        // RECOVERED? Downgrade the COLOUR only, and only for a fault that both
+        // stopped a while ago and was confined to a short burst. Everything
+        // else about the finding is unchanged: it is still listed, still
+        // counted, still names the service and quotes the error.
+        //
+        // Deliberately NOT eligible, at any age:
+        //   - a config/credential fault: it does not heal. Silence means the
+        //     path is dead, not fixed (the 2026-08-17 letsPay key was "quiet"
+        //     precisely because nothing could call it).
+        //   - a hard crash: a container dying on a signal is worth a look even
+        //     if it happened once at dawn.
+        //   - anything spanning more than ~2h, which is a bad day rather than
+        //     a blip, or still firing within the last 4h.
+        //
+        // 4h, not 6: the reported day is a PARIS day, so it closes at 22:00
+        // Paris (20:00-21:00 UTC depending on DST). An afternoon fault can
+        // therefore never show more than ~5h of quiet no matter how cleanly it
+        // recovered, and a 6h bar made the check unreachable for exactly the
+        // window these blips land in. 4h still means four consecutive hours of
+        // silence, which no live fault produces.
+        const quiet = e.quietFor ? e.quietFor[svc] : undefined;
+        const spanH = (e.firstSeen && e.lastSeen && e.firstSeen[svc] && e.lastSeen[svc])
+            ? (Date.parse(e.lastSeen[svc]) - Date.parse(e.firstSeen[svc])) / 3600000
+            : undefined;
+        const crashed = e.hardCrashByService && e.hardCrashByService[svc];
+        const recovered = quiet !== undefined && quiet >= 4
+            && spanH !== undefined && spanH <= 2
+            && !isConfigFault && !crashed;
+
+        if (recovered) {
+            dot = '🟡';
+            const ago = quiet >= 24 ? `${Math.round(quiet / 24)}d` : `${Math.round(quiet)}h`;
+            const mins = Math.max(1, Math.round(spanH * 60));
+            soWhat += ` — confined to a ${mins}min window and silent for ${ago} since, so this has already recovered`;
+            hint = `no action unless it returns — confirm it is still quiet before spending time on it`;
+        }
 
         // A fault confined to one container while others served fine is a bad
         // instance, and saying "14 failures is a real rate" actively misleads.
@@ -556,8 +676,27 @@ function build(day, a, e, c, h, dep, m) {
         warn(dot, `${svc} — ${n} error${n === 1 ? '' : 's'}`, soWhat,
             hint || (n >= 5
                 ? `${n} failures in one day is a real rate — check whether users are affected`
-                : genericLow));
+                : genericLow), !recovered);
     });
+
+    // HARD CRASHES get their own line, always, at any volume.
+    //
+    // A container killed by a signal is the one thing that must never be lost
+    // to a noise filter. On 2026-09-01 three SIGBUS kills sat directly beneath
+    // 297 benign container-start entries; the danger of classifying that noise
+    // correctly is that the one real crash goes with it. It cannot: hard
+    // crashes are excluded from the cold-start bucket at source, exempt from
+    // the recovery downgrade, and named here even for a single occurrence.
+    const crashes = Object.entries(e.hardCrashByService || {}).sort((x, y) => y[1] - x[1]);
+    if (crashes.length) {
+        const total = crashes.reduce((sum, [, n]) => sum + n, 0);
+        const where = crashes.map(([s, n]) => `${s} ×${n}`).join(', ');
+        warn(total >= 5 ? '🔴' : '🟡',
+            `${total} container${total === 1 ? '' : 's'} killed by a signal`,
+            `the process died hard rather than returning an error (${where}) — a segfault, a bus error or an OOM kill, `
+            + `which is never normal even once`,
+            'check the function\'s memory setting first, then whether a native dependency crashed on a specific input');
+    }
 
     // Cold starts get ONE dim line, never one per service. They are normal at
     // a handful a day; the reason to show them at all is that a jump is a real
@@ -567,7 +706,32 @@ function build(day, a, e, c, h, dep, m) {
         const worst = Object.entries(e.coldByService || {})
             .sort((x, y) => y[1] - x[1]).slice(0, 3)
             .map(([s, n]) => `${s} ×${n}`).join(', ');
-        if (e.coldStarts >= 20) {
+        // Cold starts are normally background noise, which is why they get one
+        // dim line. But the reclassification above now routes a LOT more here,
+        // and a platform fault that fails hundreds of container starts is a
+        // real outage even though no single entry is a bug. If this line stayed
+        // quietly yellow at any volume, moving those 297 entries out of the
+        // code bucket would have turned a loud wrong alarm into no alarm --
+        // which is worse. So volume escalates it, and it says what it means.
+        if (e.coldStarts >= 100) {
+            // Same recovery question as a per-service fault: a platform blip
+            // that ended hours ago is worth knowing about, but it is not
+            // something to drop the morning for.
+            const cq = e.coldQuietFor;
+            const cs = e.coldSpanH;
+            const done = cq !== undefined && cq >= 4;
+            const when = done
+                ? ` It ran for ${cs !== undefined ? `${Math.max(1, Math.round(cs * 60))}min` : 'a short window'}`
+                  + ` and has been silent for ${cq >= 24 ? `${Math.round(cq / 24)}d` : `${Math.round(cq)}h`} since, so it has already passed`
+                : '';
+            warn(done ? '🟡' : '🔴', `${e.coldStarts} container-start failures`,
+                `containers could not start (${worst}) — at this volume it is a platform or capacity fault, not per-function noise. `
+                + `Requests are retried, so users are usually served.${when}`,
+                done
+                    ? 'no action if the affected functions caught up — worth confirming any queue-backed work drained'
+                    : 'if it is still going, check Google Cloud status for us-central1; if it stopped, confirm any queue-backed work drained',
+                !done);
+        } else if (e.coldStarts >= 20) {
             warn('🟡', `${e.coldStarts} cold-start failures`,
                 `containers failing their startup probe (${worst}) — well above the usual handful`,
                 'check whether a recent deploy slowed a function\'s boot, or set minInstances on the busiest one');
@@ -575,7 +739,12 @@ function build(day, a, e, c, h, dep, m) {
     }
 
     const red = attention.some(x => x.dot === '🔴');
-    const light = red ? '🔴' : (attention.length ? '🟡' : '🟢');
+    // A red item that is still firing is an incident. A day whose only findings
+    // already recovered is not -- calling it one every morning is what teaches
+    // the reader to skip the report on the morning it is real.
+    const redOngoing = attention.some(x => x.dot === '🔴' && x.ongoing !== false);
+    const recoveredOnly = attention.length > 0 && attention.every(x => x.ongoing === false);
+    const light = redOngoing ? '🔴' : (attention.length ? '🟡' : '🟢');
 
     // --- summary: two or three sentences judging the day against D-7 ---
     // A table cannot say "quiet Sunday, nothing unusual", and on a phone that
@@ -596,10 +765,26 @@ function build(day, a, e, c, h, dep, m) {
         sentences.push(`Against last ${wd}: ${phr.join(', ')}.`);
         if (notable.length > 3) sentences.push(`${notable.length - 3} other metric(s) also moved more than 25%.`);
     }
-    if (red) {
+    if (redOngoing) {
         sentences.push(`*Something is broken and needs attention today* — see below.`);
+    } else if (recoveredOnly) {
+        sentences.push(`Nothing is broken now: every issue below started and stopped inside the day. Worth reading, not worth dropping anything for.`);
+    } else if (red) {
+        sentences.push(`${attention.length} item${attention.length === 1 ? '' : 's'} below, none of them still failing.`);
     } else if (attention.length) {
-        sentences.push(`Nothing is broken; ${attention.length} item${attention.length === 1 ? '' : 's'} worth a decision when convenient.`);
+        // Say how many still need a look versus how many already passed, so a
+        // list dominated by recovered items does not make the live ones
+        // invisible -- and so "nothing is broken" is never claimed over the top
+        // of a hard crash or an unresolved timeout.
+        const live = attention.filter(x => x.ongoing !== false).length;
+        const done = attention.length - live;
+        if (live && done) {
+            sentences.push(`${live} item${live === 1 ? '' : 's'} still open, ${done} already recovered.`);
+        } else if (live) {
+            sentences.push(`Nothing is broken; ${live} item${live === 1 ? '' : 's'} worth a decision when convenient.`);
+        } else {
+            sentences.push(`Nothing is broken now: all ${attention.length} items below started and stopped inside the day.`);
+        }
     } else {
         // Only claim a clean bill of health when the error count is actually
         // zero. This sentence used to run whenever nothing crossed a warning
@@ -622,7 +807,7 @@ function build(day, a, e, c, h, dep, m) {
     const blocks = [];
 
     // --- headline: the verdict IS the header, not a separate line ---
-    const headline = red
+    const headline = redOngoing
         ? `${light} Poteau — incident`
         : (attention.length ? `${light} Poteau — ${attention.length} to look at` : `${light} Poteau — all clear`);
     blocks.push({ type: 'header', text: { type: 'plain_text', text: headline, emoji: true } });
