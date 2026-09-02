@@ -265,6 +265,9 @@ const RELEASES = [
         // screens that explain it to the player are still to build. This
         // section must ship or be removed before 5.2.0 goes out.
         body_fr: [
+            '👥 Ton équipe, suggérée',
+            'Sur ta page d\'accueil, on te propose maintenant des joueurs avec qui tu as déjà joué. Tu vois pourquoi chacun apparaît : dans ton dernier match, ou le nombre de fois où vous avez joué ensemble. Un tap pour l\'ajouter à ton équipe, un autre pour passer.',
+            '',
             '🚩 Signaler quelqu\'un, avec le contexte',
             'Quand tu signales un joueur, tu peux expliquer ce qui s\'est passé. C\'est obligatoire si tu choisis "Autre", parce que sans explication on ne peut rien en faire. Plus tu nous en dis, plus la décision est juste.',
             '',
@@ -281,6 +284,9 @@ const RELEASES = [
             'Sur les matchs payables dans l\'app, on t\'annonce maintenant clairement le déroulé : ta carte est seulement retenue quand tu t\'inscris, et débitée une heure avant le coup d\'envoi, une fois le match confirmé. Si le match ne se joue pas, tu ne paies rien.',
         ].join('\n'),
         body_en: [
+            '👥 Your team, suggested',
+            'Your home page now suggests players you have already played with. Each one says why it is there: in your last game, or how many times you have played together. One tap adds them to your team, another skips.',
+            '',
             '🚩 Reporting someone, with the context',
             'When you report a player, you can explain what happened. It is required if you pick "Other", because without an explanation there is nothing we can act on. The more you tell us, the fairer the decision.',
             '',
@@ -297,6 +303,9 @@ const RELEASES = [
             'On games you pay for in the app, we now spell out exactly how it goes: your card is only held when you join, and charged one hour before kick-off, once the game is confirmed. If the game does not get played, you pay nothing.',
         ].join('\n'),
         body_es: [
+            '👥 Tu equipo, sugerido',
+            'Tu página de inicio ahora te sugiere jugadores con los que ya has jugado. Cada uno indica por qué aparece: en tu último partido, o cuántas veces habéis jugado juntos. Un toque para añadirlo a tu equipo, otro para pasar.',
+            '',
             '🚩 Reportar a alguien, con contexto',
             'Cuando reportas a un jugador, puedes explicar qué pasó. Es obligatorio si eliges "Otro", porque sin explicación no podemos hacer nada. Cuanto más nos cuentes, más justa es la decisión.',
             '',
@@ -313,6 +322,9 @@ const RELEASES = [
             'En los partidos que se pagan en la app, ahora te explicamos claramente cómo funciona: tu tarjeta solo queda retenida al apuntarte, y se cobra una hora antes del inicio, cuando el partido está confirmado. Si el partido no se juega, no pagas nada.',
         ].join('\n'),
         body_it: [
+            '👥 La tua squadra, suggerita',
+            'La tua home page ora ti suggerisce giocatori con cui hai già giocato. Ognuno dice perché è lì: nella tua ultima partita, o quante volte avete giocato insieme. Un tap per aggiungerlo alla tua squadra, un altro per passare.',
+            '',
             '🚩 Segnalare qualcuno, con il contesto',
             'Quando segnali un giocatore, puoi spiegare cosa è successo. È obbligatorio se scegli "Altro", perché senza spiegazione non possiamo farci nulla. Più ci racconti, più la decisione è giusta.',
             '',
