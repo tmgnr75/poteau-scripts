@@ -28,16 +28,25 @@ SIM="EB99DAC3-2756-4233-A12D-E4C99D496912"
 
 if [ "${1:-}" = "--verify" ]; then
   needle="${2:?usage: reload.sh --verify <string>}"
-  app=$(find ~/Library/Developer/CoreSimulator/Devices/"$SIM"/data/Containers/Bundle/Application \
-        -name "Runner.app" -maxdepth 3 2>/dev/null | head -1)
-  blob="$app/Frameworks/App.framework/flutter_assets/kernel_blob.bin"
-  n=$(grep -a -c "$needle" "$blob" 2>/dev/null || echo 0)
-  # A failed grep returns empty, which reads deceptively like "no matches".
-  if [ "$n" -gt 0 ]; then
-    echo "IN THE BINARY ($n) — $needle"
-  else
-    echo "NOT in the binary — $needle  (the app on screen predates this change)"
+  # THE LIVE VM, NOT THE DISK BUNDLE.
+  #
+  # kernel_blob.bin is the last FULL BUILD and never changes on hot reload, so
+  # grepping it reports "not in the binary" for code that is running fine. That
+  # false negative cost a round of pointless rebuilds on 2026-09-02.
+  #
+  # The VM's own copy of the source is what is actually executing.
+  ws=$(grep -ho "ws://127\.0\.0\.1:[0-9]*/[^/]*/ws" \
+        "${FLUTTER_LOG:-}" 2>/dev/null | tail -1)
+  if [ -z "$ws" ]; then
+    url=$(grep -ho "http://127\.0\.0\.1:[0-9]*/[A-Za-z0-9_=-]*/" \
+          /private/tmp/claude-501/*/*/scratchpad/run*.log 2>/dev/null | tail -1)
+    [ -n "$url" ] && ws="ws://${url#http://}ws"
   fi
+  if [ -z "$ws" ]; then
+    echo "No VM service URL found. Pass the run log as FLUTTER_LOG=..."
+    exit 1
+  fi
+  python3 "$(dirname "$0")/vm_source.py" "$ws" "$needle"
   exit 0
 fi
 
