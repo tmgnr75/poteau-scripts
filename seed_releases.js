@@ -281,92 +281,129 @@ const RELEASES = [
         // than guessed at now. Everything else that ships gets appended here as
         // it lands, which is why the body grows between now and the ship date.
         //
-        // AUDITED 2026-09-07, every section against the shipped code. The note
-        // that used to sit here said the payment section was written ahead of
-        // the feature and had to ship or be cut; both of the sections that
-        // carried that warning turned out to be built, and the note was simply
-        // never updated. Verified rather than remembered:
+        // REWRITTEN 2026-09-07 after auditing all 488 app commits since 5.1.0.
         //
-        //   overlap guard    _clashBlocks() in api_calls.dart, called from
-        //                    BOTH AddPlayerCall and ConfirmSpotsCall, with
-        //                    b_s_game_clash explaining it. Fails open.
-        //   report + text    b_s_report_user, free text with "Obligatoire
-        //                    pour Autre" enforced.
-        //   your team        your_team_section_widget.dart on Home, backed by
-        //                    gen2/getTeamSuggestions (shipped 2026-09-07).
-        //   calendar         addGameToCalendar, offered from b_s_joined_game.
-        //   payment          b_s_payment_promise, shown by init_payment_sheet
-        //                    BEFORE the Stripe sheet: "Paiement protégé", then
-        //                    Maintenant / Une heure avant / Sur le terrain.
-        //                    That is exactly what "on explique comment ça se
-        //                    passe" claims.
+        // The body described five things and never once mentioned Poteau Live
+        // -- in a release TITLED "Poteau Live". 85 of those commits are Live,
+        // 25 padel, 13 Apple Watch, and none of it was in the notes. The
+        // release now leads with what it is named after.
+        //
+        // ORDERED HEAVIEST TO LIGHTEST, and chronologically through a game:
+        // during the match, on the wrist, after the match, then the two
+        // lighter things that happen when you sign up.
+        //
+        // A CHANGELOG DESCRIBES THE VERSION, NOT WHAT IS SWITCHED ON TODAY.
+        // Live is gated on a per-game `poteau_live` flag which currently sits
+        // true on four seeded fixtures and nothing else. That is not a reason
+        // to omit it: Tim flips it on every game at release, so a player on
+        // this build can reach it. Do not "correct" this by cutting Live back
+        // out because production looks quiet the day before shipping.
+        //
+        // Verified reachable against the code, not remembered:
+        //   Live board      /live route, nav.dart:456. Entry from the game
+        //                   sheet, the Home game card, and the upcoming card.
+        //                   Attendees + organiser. Real landscape rotation.
+        //   padel           fold_live_score.dart PadelScore -- points, games,
+        //                   sets, tie-break. Not soccer minus goals.
+        //   Apple Watch     ios/PoteauWatch Watch App, embedded via the
+        //                   Runner's Embed Watch Content phase. iOS only, and
+        //                   it needs the phone's board open (no watchOS
+        //                   Firestore) -- which is why the copy says "sans
+        //                   reprendre le téléphone en main", NOT "sans sortir
+        //                   ton téléphone du sac".
+        //   Live Activity   ios/PoteauLiveActivity, lock screen + Dynamic
+        //                   Island, NSSupportsLiveActivities in both plists.
+        //   wrap-up         /wrap-up, wrap_up_widget.dart, from three places.
+        //   share card      wrap_up_share_card_widget.dart.
+        //   your team       your_team_section_widget.dart, backed by
+        //                   gen2/getTeamSuggestions (shipped 2026-09-07).
+        //   overlap guard   _clashBlocks() in api_calls.dart, called from BOTH
+        //                   AddPlayerCall and ConfirmSpotsCall. Fails open.
+        //   calendar        addGameToCalendar, offered from b_s_joined_game.
+        //
+        // CUT DELIBERATELY, though they shipped: the Gold-exclusive chat leak
+        // and the private-game leak (announcing a hole advertises what was
+        // exposed), and the 'female'/'woman' copy bug that gave 405 women
+        // masculine French -- fixing that quietly is the right call.
         //
         // Anything appended here later gets the same treatment before the date
         // moves again: the changelog is the one place we cannot describe
         // something the reader will go looking for and not find.
         body_fr: [
-            '🤹\u200D♂️ Stop aux inscriptions sur plusieurs matchs',
-            'On voyait de plus en plus de joueurs s\'inscrire sur plusieurs matchs en même temps. Sauf que c\'est impossible d\'être à 2 endroits en même temps. Donc les joueurs que tu vois inscrits à un match ne sont inscrits que sur ce match.',
+            '⚽ Le score se compte pendant le match',
+            'Jusqu’ici le score vivait dans la tête des joueurs, et à la fin tout le monde avait un chiffre différent. Du coup on a mis un tableau dans l’app. Tu tournes ton téléphone et tu tapes de ton côté quand ça marque. Au foot comme au padel, avec les points, les jeux et les sets.',
             '',
-            '💬 Signaler quelqu\'un, avec ta version des faits',
-            'En signalant un joueur, tu peux écrire ce qui s\'est passé. C\'est obligatoire si tu choisis "Autre", sinon on ne sait pas quoi en faire. Ce que tu écris est lu par quelqu\'un chez nous.',
+            '⌚ Compter au poignet, suivre sur l’écran verrouillé',
+            'Sur Apple Watch, tu tapes sans reprendre le téléphone en main. Sur iPhone, le match s’affiche sur l’écran verrouillé et dans la Dynamic Island. Ça se met à jour tout seul.',
             '',
-            '🔗 Des joueurs avec qui tu as déjà joué',
-            'L\'accueil propose des joueurs croisés sur des matchs précédents. Chaque suggestion dit pourquoi elle est là, le dernier match ensemble ou le nombre de fois. Un tap pour l\'ajouter à ton équipe, un autre pour passer.',
+            '🏆 Qui a gagné, qui a marqué, et une carte à partager',
+            'Avant, un match fini disparaissait. Maintenant l’app demande comment c’était et qui a marqué. Ça donne une carte avec le terrain et les joueurs, à envoyer au groupe. Les buts déclarés comptent sur le profil.',
             '',
-            '🚗 Le match dans ton calendrier, rappel compris',
-            'Une fois inscrit, tu peux ajouter le match au calendrier en un tap, avec le centre et l\'adresse. Le rappel se déclenche 30 minutes avant l\'heure de partir, et sur iPhone il tient compte du trafic. Quand un match atteint 5 joueurs, il se joue presque toujours.',
+            '🔗 Les joueurs croisés sur tes matchs précédents',
+            'On se retrouve souvent sur le terrain avec les mêmes personnes, sans jamais les ajouter. L’accueil te les propose, en disant pourquoi : le dernier match ensemble, ou le nombre de fois. Un tap pour l’ajouter à ton équipe, un autre pour passer.',
             '',
-            '🧊 La carte n\'est débitée qu\'au dernier moment',
-            'Sur les matchs payables dans l\'app, on explique comment ça se passe. La carte est seulement retenue à l\'inscription, puis débitée une heure avant le coup d\'envoi, quand le match est confirmé. Si le match ne se joue pas, il n\'y a pas de débit.',
+            '🤹‍♂️ Stop aux inscriptions sur plusieurs matchs',
+            'On voyait de plus en plus de joueurs s’inscrire sur plusieurs matchs en même temps. Sauf que c’est impossible d’être à 2 endroits en même temps. Donc les joueurs que tu vois inscrits à un match ne sont inscrits que sur ce match.',
+            '',
+            '🚗 Le match dans ton agenda, rappel compris',
+            'Une fois inscrit, tu peux ajouter le match au calendrier en un tap, avec le centre et l’adresse. Le rappel se déclenche 30 minutes avant l’heure de partir, et sur iPhone il tient compte du trafic.',
         ].join('\n'),
         body_en: [
-            '🤹\u200D♂️ No more signing up for several games at once',
+            '⚽ The score gets counted during the game',
+            'Until now the score lived in the players’ heads, and by the end everyone had a different number. So we put a scoreboard in the app. Turn your phone sideways and tap your side when someone scores. Football and padel alike, with points, games and sets.',
+            '',
+            '⌚ Count on your wrist, follow on the lock screen',
+            'On Apple Watch, you tap without picking the phone back up. On iPhone, the game shows on the lock screen and in the Dynamic Island. It updates on its own.',
+            '',
+            '🏆 Who won, who scored, and a card to share',
+            'A finished game used to just disappear. Now the app asks how it went and who scored. That makes a card with the pitch and the players, to send to the group. Goals declared count on the profile.',
+            '',
+            '🔗 The players from your previous games',
+            'You end up on the pitch with the same people over and over, without ever adding them. The home page suggests them, and says why: the last game together, or the number of times. One tap to add them to your team, another to skip.',
+            '',
+            '🤹‍♂️ No more signing up for several games at once',
             'We were seeing more and more players sign up for several games at the same time. Except nobody can be in 2 places at once. So the players you see signed up to a game are only signed up to that one.',
             '',
-            '💬 Reporting someone, with your side of it',
-            'When you report a player, you can write what happened. It is required if you pick "Other", otherwise we have nothing to go on. What you write is read by someone here.',
-            '',
-            '🔗 Players you have already played with',
-            'The home page suggests players from your previous games. Each suggestion says why it is there, the last game together or the number of times. One tap to add them to your team, another to skip.',
-            '',
             '🚗 The game in your calendar, reminder included',
-            'Once you are in, you can add the game to your calendar in one tap, with the centre and the address. The reminder goes off 30 minutes before it is time to leave, and on iPhone it takes traffic into account. When a game reaches 5 players, it almost always gets played.',
-            '',
-            '🧊 The card is only charged at the last moment',
-            'On games you pay for in the app, we explain how it works. The card is only held when you sign up, then charged an hour before kick-off, once the game is confirmed. If the game does not happen, nothing is charged.',
+            'Once you are in, you can add the game to your calendar in one tap, with the centre and the address. The reminder goes off 30 minutes before it is time to leave, and on iPhone it takes traffic into account.',
         ].join('\n'),
         body_es: [
-            '🤹\u200D♂️ Se acabó apuntarse a varios partidos a la vez',
+            '⚽ El marcador se lleva durante el partido',
+            'Hasta ahora el marcador vivía en la cabeza de los jugadores, y al final cada uno tenía un número distinto. Así que pusimos un marcador en la app. Giras el teléfono y tocas tu lado cuando alguien marca. En fútbol y en pádel, con puntos, juegos y sets.',
+            '',
+            '⌚ Contar en la muñeca, seguirlo en la pantalla bloqueada',
+            'En Apple Watch, tocas sin volver a coger el teléfono. En iPhone, el partido aparece en la pantalla bloqueada y en la Dynamic Island. Se actualiza solo.',
+            '',
+            '🏆 Quién ganó, quién marcó, y una tarjeta para compartir',
+            'Antes, un partido terminado desaparecía. Ahora la app pregunta qué tal fue y quién marcó. Sale una tarjeta con la pista y los jugadores, para mandar al grupo. Los goles declarados cuentan en el perfil.',
+            '',
+            '🔗 Los jugadores de tus partidos anteriores',
+            'Uno acaba coincidiendo en la pista con las mismas personas y nunca las añade. El inicio te las propone, y dice por qué: el último partido juntos, o el número de veces. Un toque para añadirlo a tu equipo, otro para pasar.',
+            '',
+            '🤹‍♂️ Se acabó apuntarse a varios partidos a la vez',
             'Veíamos cada vez más jugadores apuntarse a varios partidos a la misma hora. Solo que es imposible estar en 2 sitios a la vez. Así que los jugadores que ves apuntados a un partido solo están apuntados a ese.',
             '',
-            '💬 Reportar a alguien, con tu versión',
-            'Al reportar a un jugador, puedes escribir qué pasó. Es obligatorio si eliges "Otro", si no, no sabemos qué hacer con ello. Lo que escribes lo lee alguien de aquí.',
-            '',
-            '🔗 Jugadores con los que ya has jugado',
-            'El inicio propone jugadores de tus partidos anteriores. Cada sugerencia dice por qué está ahí, el último partido juntos o el número de veces. Un toque para añadirlo a tu equipo, otro para pasar.',
-            '',
             '🚗 El partido en tu calendario, con recordatorio',
-            'Una vez apuntado, puedes añadir el partido al calendario con un toque, con el centro y la dirección. El recordatorio salta 30 minutos antes de la hora de salir, y en iPhone tiene en cuenta el tráfico. Cuando un partido llega a 5 jugadores, casi siempre se juega.',
-            '',
-            '🧊 La tarjeta solo se cobra al final',
-            'En los partidos que se pagan en la app, te explicamos cómo funciona. La tarjeta solo queda retenida al apuntarte, y se cobra una hora antes del inicio, cuando el partido está confirmado. Si el partido no se juega, no se cobra nada.',
+            'Una vez apuntado, puedes añadir el partido al calendario con un toque, con el centro y la dirección. El recordatorio salta 30 minutos antes de la hora de salir, y en iPhone tiene en cuenta el tráfico.',
         ].join('\n'),
         body_it: [
-            '🤹\u200D♂️ Basta iscrizioni a più partite insieme',
+            '⚽ Il punteggio si conta durante la partita',
+            'Finora il punteggio viveva nella testa dei giocatori, e alla fine ognuno aveva un numero diverso. Quindi abbiamo messo un tabellone nell’app. Giri il telefono e tocchi dalla tua parte quando qualcuno segna. Nel calcio come nel padel, con punti, giochi e set.',
+            '',
+            '⌚ Contare al polso, seguire sulla schermata di blocco',
+            'Su Apple Watch, tocchi senza riprendere in mano il telefono. Su iPhone, la partita compare sulla schermata di blocco e nella Dynamic Island. Si aggiorna da sola.',
+            '',
+            '🏆 Chi ha vinto, chi ha segnato, e una card da condividere',
+            'Prima, una partita finita spariva. Ora l’app chiede com’è andata e chi ha segnato. Ne esce una card con il campo e i giocatori, da mandare al gruppo. I gol dichiarati contano sul profilo.',
+            '',
+            '🔗 I giocatori incrociati nelle partite precedenti',
+            'Ci si ritrova in campo sempre con le stesse persone, senza mai aggiungerle. La home te le propone, e dice perché: l’ultima partita insieme, o quante volte. Un tap per aggiungerlo alla squadra, un altro per passare.',
+            '',
+            '🤹‍♂️ Basta iscrizioni a più partite insieme',
             'Vedevamo sempre più giocatori iscriversi a più partite alla stessa ora. Solo che è impossibile essere in 2 posti insieme. Quindi i giocatori che vedi iscritti a una partita sono iscritti solo a quella.',
             '',
-            '💬 Segnalare qualcuno, con la tua versione',
-            'Quando segnali un giocatore, puoi scrivere cosa è successo. È obbligatorio se scegli "Altro", altrimenti non sappiamo cosa farne. Quello che scrivi lo legge qualcuno qui.',
-            '',
-            '🔗 Giocatori con cui hai già giocato',
-            'La home propone giocatori delle tue partite precedenti. Ogni suggerimento dice perché è lì, l\'ultima partita insieme o il numero di volte. Un tap per aggiungerlo alla tua squadra, un altro per passare.',
-            '',
-            '🚗 La partita nel calendario, promemoria incluso',
-            'Una volta iscritto, puoi aggiungere la partita al calendario con un tap, con il centro e l\'indirizzo. Il promemoria parte 30 minuti prima dell\'ora di uscire, e su iPhone tiene conto del traffico. Quando una partita arriva a 5 giocatori, quasi sempre si gioca.',
-            '',
-            '🧊 La carta si addebita solo all\'ultimo',
-            'Sulle partite che si pagano nell\'app, spieghiamo come funziona. La carta viene solo bloccata all\'iscrizione, poi addebitata un\'ora prima del fischio d\'inizio, quando la partita è confermata. Se la partita non si gioca, non viene addebitato nulla.',
+            '🚗 La partita nel calendario, promemoria compreso',
+            'Una volta iscritto, puoi aggiungere la partita al calendario con un tap, con il centro e l’indirizzo. Il promemoria parte 30 minuti prima dell’ora di uscire, e su iPhone tiene conto del traffico.',
         ].join('\n'),
     },
 ];
