@@ -245,9 +245,10 @@ const RELEASES = [
     },
     {
         build: 520,
-        // Placeholder ship date: this release is staged, not out. Correct it
-        // and re-run before flipping published to true.
-        date: new Date('2026-09-01T12:00:00Z'),
+        // Was a placeholder (2026-09-01) while the release was staged. Set to
+        // the real date once every section below was verified as actually
+        // built (2026-09-07) -- see the audit note above body_fr.
+        date: new Date('2026-09-07T12:00:00Z'),
         // Published ahead of the build shipping. This is safe because
         // fetchChangelogs caps entries at the RUNNING version: nobody on 5.1
         // can see this, and the Home banner only ever fires for the build the
@@ -280,12 +281,29 @@ const RELEASES = [
         // than guessed at now. Everything else that ships gets appended here as
         // it lands, which is why the body grows between now and the ship date.
         //
-        // NOT BUILT YET (2026-08-19): the "you know when you pay" section is
-        // written ahead of the feature. The payment lifecycle it describes is
-        // real (hold on join, capture at T-1h once the game is confirmed --
-        // see gen2/letsPay.js and gen2/handlePaymentAuth.js), but the in-app
-        // screens that explain it to the player are still to build. This
-        // section must ship or be removed before 5.2.0 goes out.
+        // AUDITED 2026-09-07, every section against the shipped code. The note
+        // that used to sit here said the payment section was written ahead of
+        // the feature and had to ship or be cut; both of the sections that
+        // carried that warning turned out to be built, and the note was simply
+        // never updated. Verified rather than remembered:
+        //
+        //   overlap guard    _clashBlocks() in api_calls.dart, called from
+        //                    BOTH AddPlayerCall and ConfirmSpotsCall, with
+        //                    b_s_game_clash explaining it. Fails open.
+        //   report + text    b_s_report_user, free text with "Obligatoire
+        //                    pour Autre" enforced.
+        //   your team        your_team_section_widget.dart on Home, backed by
+        //                    gen2/getTeamSuggestions (shipped 2026-09-07).
+        //   calendar         addGameToCalendar, offered from b_s_joined_game.
+        //   payment          b_s_payment_promise, shown by init_payment_sheet
+        //                    BEFORE the Stripe sheet: "Paiement protégé", then
+        //                    Maintenant / Une heure avant / Sur le terrain.
+        //                    That is exactly what "on explique comment ça se
+        //                    passe" claims.
+        //
+        // Anything appended here later gets the same treatment before the date
+        // moves again: the changelog is the one place we cannot describe
+        // something the reader will go looking for and not find.
         body_fr: [
             '🤹\u200D♂️ Stop aux inscriptions sur plusieurs matchs',
             'On voyait de plus en plus de joueurs s\'inscrire sur plusieurs matchs en même temps. Sauf que c\'est impossible d\'être à 2 endroits en même temps. Donc les joueurs que tu vois inscrits à un match ne sont inscrits que sur ce match.',
