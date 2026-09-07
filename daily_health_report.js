@@ -355,8 +355,20 @@ async function moneySafety(startZ, endZ) {
     // 1. Any Stripe call that ran without a usable key. The generic SDK message
     //    is matched too, because a missing key surfaces as "did not provide an
     //    API key" from deep inside the SDK when nothing catches it first.
+    //
+    //    Match BOTH payload shapes. Filtering textPayload alone made this check
+    //    structurally blind to the one function it most needed to watch:
+    //    letsPay logs through firebase-functions' logger, which emits
+    //    jsonPayload and NO textPayload at all, so a real Stripe key failure
+    //    there could never have matched. Verified 2026-09-07 — every letsPay
+    //    entry in the last week is jsonPayload-only.
     const keyless = await HOST.readLogs(
-        `${window} AND (textPayload:"STRIPE_KEY_MISSING" OR textPayload:"did not provide an API key" OR textPayload:"StripeAuthenticationError")`,
+        `${window} AND (` +
+        ['STRIPE_KEY_MISSING', 'did not provide an API key', 'StripeAuthenticationError']
+            .map((p) => `textPayload:"${p}" OR jsonPayload.message:"${p}" ` +
+                        `OR jsonPayload.error:"${p}" OR jsonPayload.stack:"${p}"`)
+            .join(' OR ') +
+        `)`,
         { limit: 100, withDetail: true }
     );
     if (keyless.length) {
@@ -369,8 +381,11 @@ async function moneySafety(startZ, endZ) {
     }
 
     // 2. The explicit alert removePlayer now emits when it cannot release a hold.
+    //    Same both-shapes rule as above: removePlayer is gen2 and logs
+    //    structurally, so textPayload alone would miss its own alert.
     const stranded = await HOST.readLogs(
-        `${window} AND textPayload:"PAYMENT_STRANDED"`,
+        `${window} AND (textPayload:"PAYMENT_STRANDED" OR jsonPayload.message:"PAYMENT_STRANDED" ` +
+        `OR jsonPayload.error:"PAYMENT_STRANDED" OR jsonPayload.stack:"PAYMENT_STRANDED")`,
         { limit: 100, withDetail: true }
     );
     if (stranded.length) {
