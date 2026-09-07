@@ -102,11 +102,23 @@ async function main() {
   console.log(`attendee entries: ${rawEntries} raw -> ${dedupedEntries} after dedupe`);
   console.log(`  a naive count would be ${inflation.toFixed(1)}x too high\n`);
 
+  // Mirrors the blended score in getTeamSuggestions.js. If the two ever
+  // disagree, the function is the one that ships.
+  const now = Date.now();
+  const HALF_LIFE_MS = 30 * 24 * 3600 * 1000;
+  for (const [, t] of tally) {
+    const ageMs = t.lastGameAt ? Math.max(0, now - t.lastGameAt.getTime()) : Infinity;
+    const recency = t.lastGameAt ? Math.pow(0.5, ageMs / HALF_LIFE_MS) : 0;
+    t.recency = recency;
+    t.frequency = Math.log2(1 + t.count);
+    t.score = 1.0 * recency + 0.9 * t.frequency;
+  }
   const ranked = [...tally.entries()].sort((a, b) => {
+    if (b[1].score !== a[1].score) return b[1].score - a[1].score;
     const at = a[1].lastGameAt ? a[1].lastGameAt.getTime() : 0;
     const bt = b[1].lastGameAt ? b[1].lastGameAt.getTime() : 0;
     if (bt !== at) return bt - at;
-    return b[1].count - a[1].count;
+    return a[0] < b[0] ? -1 : 1;
   });
 
   console.log(`SUGGESTIONS: ${ranked.length} distinct teammates\n`);
@@ -119,17 +131,18 @@ async function main() {
     const d = docs[i];
     const u = d.exists ? d.data() : {};
     const t = top[i][1];
-    const reason = t.inLastGame
-      ? "dans ton dernier match"
-      : t.count >= 2
-        ? `vous avez joué ${t.count} fois ensemble`
+    const reason = t.count >= 2
+      ? `vous avez joué ${t.count} fois ensemble`
+      : t.inLastGame
+        ? "dans ton dernier match"
         : `dans ton match du ${t.lastGameAt ? t.lastGameAt.toISOString().slice(0, 10) : "?"}`;
     const flags = [];
     if (!d.exists) flags.push("NO USER DOC");
     if (u.banned === true) flags.push("BANNED - filtered");
     if (!u.display_name) flags.push("NO NAME");
     console.log(
-      `  ${(u.display_name || d.id).padEnd(24)} ${String(t.count).padStart(2)}x  ${reason}` +
+      `  ${t.score.toFixed(2)}  ${(u.display_name || d.id).padEnd(22)} ${String(t.count).padStart(2)}x  ` +
+        `(r ${t.recency.toFixed(2)} f ${t.frequency.toFixed(2)})  ${reason}` +
         (flags.length ? `   [${flags.join(", ")}]` : "")
     );
   }
