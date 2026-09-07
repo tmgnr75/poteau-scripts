@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Post-deploy watch for the confirmSpots STRIPE_SECRET fix (7 Sept 2026).
+ * Post-deploy watch for the 7 Sept 2026 fixes: the confirmSpots STRIPE_SECRET
+ * binding, and the onMessageSpamCheck query projections.
  *
  * What it proves, and why each check exists:
  *
@@ -19,9 +20,9 @@
  * Read-only. Never writes to Firestore, never calls Stripe, never needs the key.
  *
  * Usage:
- *   node monitor_stripe_secret_fix.js            # human-readable
- *   node monitor_stripe_secret_fix.js --slack    # also post to #health-reports
- *   node monitor_stripe_secret_fix.js --quiet    # Slack only if something is wrong
+ *   node monitor_post_deploy_watch.js            # human-readable
+ *   node monitor_post_deploy_watch.js --slack    # also post to #health-reports
+ *   node monitor_post_deploy_watch.js --quiet    # Slack only if something is wrong
  */
 
 const { execFileSync } = require('child_process');
@@ -105,6 +106,29 @@ function checkConfirmSpotsHealth(sinceISO) {
         };
     } catch (e) {
         return { ok: false, label: 'confirmSpots without failures', detail: 'check failed: ' + e.message };
+    }
+}
+
+function checkNoSpamCheckOOM(sinceISO) {
+    // The 7 Sept projections cut what onMessageSpamCheck loads per invocation.
+    // It OOMed once (6 Sept, 265MiB vs 256MiB). If it recurs, the next lever is
+    // lowering containerConcurrency from 80, not more memory.
+    try {
+        const out = sh('gcloud', [
+            'logging', 'read',
+            `resource.labels.service_name="onmessagespamcheck" AND timestamp>="${sinceISO}" ` +
+            `AND (textPayload:"Memory limit" OR textPayload:"Uncaught signal" OR textPayload:"Container terminated")`,
+            '--project=' + PROJECT, '--limit=10',
+            '--format=value(timestamp,textPayload)',
+        ]).trim();
+        const lines = out ? out.split('\n').filter(Boolean) : [];
+        return {
+            ok: lines.length === 0,
+            label: 'onMessageSpamCheck not OOMing',
+            detail: lines.length === 0 ? 'no OOM/kill' : lines.length + ' event(s): ' + lines[0].slice(0, 120),
+        };
+    } catch (e) {
+        return { ok: false, label: 'onMessageSpamCheck not OOMing', detail: 'check failed: ' + e.message };
     }
 }
 
@@ -209,6 +233,7 @@ async function upcomingCaptures() {
         checkSecretBound(),
         checkNoStripeAuthErrors(sinceISO),
         checkConfirmSpotsHealth(sinceISO),
+        checkNoSpamCheckOOM(sinceISO),
         await checkNoStuckReserved(),
         await checkNoWrongfulCharge(),
     ];
@@ -217,7 +242,7 @@ async function upcomingCaptures() {
     const next = await upcomingCaptures();
 
     // Console output
-    console.log('confirmSpots STRIPE_SECRET watch —', fr(new Date()));
+    console.log('Post-deploy watch (Stripe + spam check) —', fr(new Date()));
     results.forEach((r) => console.log(`  ${r.ok ? 'OK  ' : 'FAIL'}  ${r.label}: ${r.detail}`));
     if (next.length) {
         const n = next[0];
