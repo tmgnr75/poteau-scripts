@@ -283,7 +283,29 @@ async function errors(startZ, endZ) {
                 // and use latency to distinguish a timeout (which looks like a
                 // generic 504) from a genuine upstream failure.
                 const secs = parseFloat(latency) || 0;
-                const caller = /Cloud-Scheduler/i.test(ua || '') ? 'the scheduler' : 'a client';
+                // NAME THE CALLER, DO NOT SUPPRESS IT (2026-09-08).
+                //
+                // "a client" reads as real app traffic, and on 2026-09-07 that
+                // sent a whole investigation after a phantom user bug: both of
+                // the day's errors were a curl smoke test fired by hand eight
+                // minutes before the banUser authorization fix deployed. The
+                // evidence was already in the entry -- userAgent was
+                // "curl/8.7.1", collected but never read past the scheduler
+                // check on this line.
+                //
+                // Deliberately NOT downgrading severity on this: userAgent is
+                // caller-controlled, "curl" is what an anonymous prober sends
+                // too, and banUser was reachable unauthenticated until the
+                // fix. A hostile scan and a smoke test are indistinguishable
+                // here, so the report says WHO called and leaves the dot alone.
+                // Naming it is enough to stop the misread; filtering on it
+                // would hand a scanner a way to be ignored.
+                const ualc = (ua || '').toLowerCase();
+                const caller = /Cloud-Scheduler/i.test(ua || '')
+                    ? 'the scheduler'
+                    : /^curl\//.test(ualc)
+                        ? `${ua.split(' ')[0]}, not the app`
+                        : 'a client';
                 const meaning = {
                     504: secs >= 55
                         ? `timed out after ${Math.round(secs)}s — the function needs longer than its timeoutSeconds`
