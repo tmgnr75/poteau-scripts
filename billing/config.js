@@ -53,23 +53,23 @@ const FRENCH_MONTH_CODES = [
 // LE PARK Servon (uid VeBdqhGJRZSOrajilg8pefl2PEk1), onboarded 2026-09-09.
 //
 //   - Free for September and October 2026 inclusive. Billing starts November.
-//   - Agreed commission is 15%, NOT the tiered getPriceHT() model above.
+//   - Commission is 15%, NOT the tiered getPriceHT() model above.
 //
-// It is absent from CENTRES on purpose, for two reasons:
+// BILLED BY HAND, PERMANENTLY. This is settled (Tim, 2026-09-09), not a
+// pending migration: the 15% deal is a pricing experiment running outside
+// this system, and Le Park is not meant to end up in CENTRES.
+//
+// Do NOT "finish the job" by adding it below. Two things would break:
 //
 //   1. This file has no concept of a commission rate. Pricing is tiered on
-//      games played (0-5 free, 6-11 = 99 EUR, ...), so there is nowhere to put
-//      15% that anything would actually read. Adding a `rate` field would look
-//      configured while changing no euro billed.
+//      games played (0-5 free, 6-11 = 99 EUR, ...), so an entry here would
+//      bill Le Park on the tiered model instead of its 15%.
 //   2. revenueRow / matchesRow address real cells in the Reporting sheet, and
 //      the Indies block is full: row 27 is "Total TTC" and row 53 is "Total".
 //      An invented row would overwrite a totals formula.
 //
-// So Le Park is billed MANUALLY until both are resolved. Before the November
-// run, someone has to decide whether to model a percentage rate here or keep
-// it off-system, and add a Reporting row if it goes in.
-//
-// Adding it to CENTRES without doing that WILL bill it on the tiered model.
+// If the experiment ever becomes the standard model, that is a change to
+// getPriceHT() and the Reporting sheet, not a new row here.
 
 const CENTRES = [
   // ── PLAYERS tab (4PADEL / LE FIVE) ──

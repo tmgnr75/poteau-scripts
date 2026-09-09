@@ -17,16 +17,17 @@ const db = admin.firestore();
 
 const { CENTRES, getPriceHT, TVA_RATE } = require('./config.js');
 
-// Partner centres that are live but deliberately absent from CENTRES, because
+// Partner centres that are live but permanently outside this system, because
 // their deal does not fit the tiered model. See the block above CENTRES in
-// config.js. They are invoiced by hand, so preflight has to name them: a
-// centre that is billed manually and never mentioned is a centre that silently
-// stops being billed.
+// config.js. They are invoiced by hand every month, indefinitely, so preflight
+// has to name them: a centre that is billed manually and never printed is a
+// centre that silently stops being billed.
 const OFF_SYSTEM_CENTRES = [
   {
     uid: 'VeBdqhGJRZSOrajilg8pefl2PEk1',
     name: 'LE PARK Servon',
-    deal: '15% commission, free through October 2026 inclusive',
+    commissionRate: 0.15,
+    deal: 'pricing experiment, off-system by design',
     billableFrom: '2026-11',
   },
 ];
@@ -52,14 +53,20 @@ async function reportOffSystemCentres(db, start, end, year, month) {
     });
 
     const free = monthKey < c.billableFrom;
+    const pct = `${(c.commissionRate * 100).toFixed(0)}%`;
     console.log(`   ${c.name}`);
-    console.log(`     deal          : ${c.deal}`);
+    console.log(`     deal          : ${pct} commission (${c.deal})`);
     console.log(`     games played  : ${snap.size}`);
     console.log(`     revenue (est.): ${revenue.toFixed(2)} EUR`);
     if (free) {
       console.log(`     -> FREE this month (billable from ${c.billableFrom}). Nothing to charge.\n`);
     } else {
-      console.log(`     -> INVOICE BY HAND. run.js will not charge this centre.\n`);
+      // Quote the amount, not just "do it by hand": a reminder without a
+      // number is a reminder that gets postponed.
+      const commission = revenue * c.commissionRate;
+      console.log(`     commission    : ${commission.toFixed(2)} EUR HT (${pct})`);
+      console.log(`                     ${(commission * (1 + TVA_RATE)).toFixed(2)} EUR TTC`);
+      console.log(`     -> INVOICE BY HAND. run.js never charges this centre.\n`);
     }
   }
 }
