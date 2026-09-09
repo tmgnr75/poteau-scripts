@@ -24,3 +24,6 @@ Thumbs.db
 *.swp
 __pycache__/
 backfill_manifest_*.jsonl
+
+# Le Park watch state (local, regenerated)
+.lepark_watch_state.json
