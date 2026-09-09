@@ -17,6 +17,53 @@ const db = admin.firestore();
 
 const { CENTRES, getPriceHT, TVA_RATE } = require('./config.js');
 
+// Partner centres that are live but deliberately absent from CENTRES, because
+// their deal does not fit the tiered model. See the block above CENTRES in
+// config.js. They are invoiced by hand, so preflight has to name them: a
+// centre that is billed manually and never mentioned is a centre that silently
+// stops being billed.
+const OFF_SYSTEM_CENTRES = [
+  {
+    uid: 'VeBdqhGJRZSOrajilg8pefl2PEk1',
+    name: 'LE PARK Servon',
+    deal: '15% commission, free through October 2026 inclusive',
+    billableFrom: '2026-11',
+  },
+];
+
+// Mirrors run.js: revenue is max_players * price, never attendees * price.
+// A centre books a pitch, not a seat.
+async function reportOffSystemCentres(db, start, end, year, month) {
+  if (OFF_SYSTEM_CENTRES.length === 0) return;
+
+  console.log('3b. OFF-SYSTEM CENTRES (billed by hand, not by run.js)\n');
+  const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+
+  for (const c of OFF_SYSTEM_CENTRES) {
+    const snap = await db.collection('games')
+      .where('organizer', '==', c.uid).where('status', '==', 'played')
+      .where('date', '>=', admin.firestore.Timestamp.fromDate(start))
+      .where('date', '<=', admin.firestore.Timestamp.fromDate(end)).get();
+
+    let revenue = 0;
+    snap.forEach(d => {
+      const g = d.data();
+      revenue += (g.price || 0) * (g.max_players || 0);
+    });
+
+    const free = monthKey < c.billableFrom;
+    console.log(`   ${c.name}`);
+    console.log(`     deal          : ${c.deal}`);
+    console.log(`     games played  : ${snap.size}`);
+    console.log(`     revenue (est.): ${revenue.toFixed(2)} EUR`);
+    if (free) {
+      console.log(`     -> FREE this month (billable from ${c.billableFrom}). Nothing to charge.\n`);
+    } else {
+      console.log(`     -> INVOICE BY HAND. run.js will not charge this centre.\n`);
+    }
+  }
+}
+
 const args = process.argv.slice(2);
 const mi = args.indexOf('--month');
 let year, month;
@@ -127,6 +174,8 @@ const fmt = d => d.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
   }
   console.log('   ' + '-'.repeat(62));
   console.log(`   ${billable} invoices | ${totalHT} EUR HT | ${(totalHT * (1 + TVA_RATE)).toFixed(2)} EUR TTC\n`);
+
+  await reportOffSystemCentres(db, start, end, year, month);
 
   // ── 4. Has this month already been charged? ────────────────
   console.log('4. ALREADY CHARGED?\n');

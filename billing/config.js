@@ -48,6 +48,29 @@ const FRENCH_MONTH_CODES = [
 //   skip:          If true, skip this centre entirely (e.g. Stadium Thiais = annual)
 //   paymentType:   'on-site' | 'in-app' | 'hybrid' — from Firestore, but we default to on-site
 
+// ── CENTRES DELIBERATELY NOT IN THE LIST BELOW ──────────────
+//
+// LE PARK Servon (uid VeBdqhGJRZSOrajilg8pefl2PEk1), onboarded 2026-09-09.
+//
+//   - Free for September and October 2026 inclusive. Billing starts November.
+//   - Agreed commission is 15%, NOT the tiered getPriceHT() model above.
+//
+// It is absent from CENTRES on purpose, for two reasons:
+//
+//   1. This file has no concept of a commission rate. Pricing is tiered on
+//      games played (0-5 free, 6-11 = 99 EUR, ...), so there is nowhere to put
+//      15% that anything would actually read. Adding a `rate` field would look
+//      configured while changing no euro billed.
+//   2. revenueRow / matchesRow address real cells in the Reporting sheet, and
+//      the Indies block is full: row 27 is "Total TTC" and row 53 is "Total".
+//      An invented row would overwrite a totals formula.
+//
+// So Le Park is billed MANUALLY until both are resolved. Before the November
+// run, someone has to decide whether to model a percentage rate here or keep
+// it off-system, and add a Reporting row if it goes in.
+//
+// Adding it to CENTRES without doing that WILL bill it on the tiered model.
+
 const CENTRES = [
   // ── PLAYERS tab (4PADEL / LE FIVE) ──
   {
