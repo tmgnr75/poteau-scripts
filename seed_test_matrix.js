@@ -269,6 +269,70 @@ const PLAN = [
             { team_a: 7, team_b: 6 },
         ],
     },
+
+    // --- THE JOIN SHEET ------------------------------------------------------
+    //
+    // Four branches of the Join sheet could not be reached from this seeder at
+    // all, because `payment_type`, `price_undiscounted`, `level_deltas` and
+    // `gold_exclusive` were hardcoded in the writer. So the payment timeline,
+    // the discount badge, the level row and the ENTIRE Gold path had never
+    // rendered from a fixture (2026-09-10).
+    //
+    // THE KICKOFF MINUTE IS THE FIXTURE'S NAME (Tim's idea). Every game below
+    // starts at a deliberately odd HH:MM, so the card alone tells you which
+    // case you are looking at without opening anything.
+    //
+    // ALL FIVE ARE `mine: false`, and that is forced, not a preference: the
+    // Join sheet only opens on a game Tim is NOT already in. It also means
+    // they appear as FOLLOWED on Home, which is where you tap to reach them.
+    {
+        // 19:38 -- IN-APP PAYMENT. The three-step timeline, "à payer dans
+        // l'app", and the Autoriser CTA. The only in-app fixture: 93.5% of
+        // real games are on-site, and the timeline must never show for those.
+        label: "JOIN 19:38 · soccer · IN-APP · timeline + Autoriser",
+        sport: "soccer", date: atDays(1, 19, 38), duration: 60,
+        filled: 3, max: 6, mine: false, price: 6, inApp: true,
+    },
+    {
+        // 20:47 -- DISCOUNT. price 7 against price_undiscounted 12 is -42%,
+        // so the row goes full width: old price struck through, new price,
+        // how it is paid, badge hard right. This is also the shape whose
+        // divide-by-zero crashed the sheet, so it is worth having seeded.
+        label: "JOIN 20:47 · soccer · DISCOUNT -42% · in-app",
+        sport: "soccer", date: atDays(1, 20, 47), duration: 60,
+        filled: 2, max: 6, mine: false, price: 7,
+        priceUndiscounted: 12, inApp: true,
+    },
+    {
+        // 21:53 -- GOLD EXCLUSIVE. The offer block, the three plan tiers, the
+        // "Sans engagement" line, and the pinned footer buying IN PLACE.
+        // Never rendered by anyone before today.
+        label: "JOIN 21:53 · soccer · GOLD ONLY · plans + buy in place",
+        sport: "soccer", date: atDays(2, 21, 53), duration: 60,
+        // PRICED AND IN-APP on purpose: Gold's argument is what it saves on
+        // in-app games, and at price 0 the sheet would just say "Gratuit"
+        // with nothing for the saving line to work against.
+        filled: 2, max: 6, mine: false, price: 9, inApp: true, gold: true,
+    },
+    {
+        // 07:12 -- LEVEL SPREAD, a real subset. Renders LevelScaleWidget with
+        // the middle three buckets lit. On-site and free, so the sheet is
+        // just card + level + CTA: the plainest possible Join sheet.
+        label: "JOIN 07:12 · soccer · LEVEL 3-4/5-6/7-8 · on-site free",
+        sport: "soccer", date: atDays(2, 7, 12), duration: 60,
+        filled: 2, max: 6, mine: false, price: 0,
+        levelDeltas: ["three_four", "five_six", "seven_eight"],
+    },
+    {
+        // 02:32 -- OPEN TO ALL LEVELS. All five buckets, which the sheet
+        // renders as the words "Ouvert à tous les niveaux" and NO bar -- a
+        // fully lit scale says nothing. Padel, so the level copy and the
+        // card colour are both on their padel branch.
+        label: "JOIN 02:32 · padel · ALL LEVELS · words not a bar",
+        sport: "padel", date: atDays(3, 2, 32), duration: 90,
+        filled: 1, max: 4, mine: false, price: 11,
+        levelDeltas: ["one_two", "three_four", "five_six", "seven_eight", "nine_plus"],
+    },
 ];
 
 // ---------------------------------------------------------------- guards ----
@@ -573,7 +637,16 @@ async function run() {
             .filter((s) => s.user_id)
             .map((s) => db.collection("users").doc(s.user_id));
 
-        const when = date.toISOString().slice(0, 16).replace("T", " ");
+        // LOCAL TIME, not toISOString() (2026-09-10). atDays() sets local
+        // hours and the app renders each game in ITS OWN timezone, so a UTC
+        // console line disagreed with both -- the fixture labelled 19:38
+        // printed as 17:38. This log is what you read to know what to test,
+        // so it has to match what the card will say.
+        const pad = (n) => String(n).padStart(2, "0");
+        const when =
+            `${date.getFullYear()}-${pad(date.getMonth() + 1)}-` +
+            `${pad(date.getDate())} ${pad(date.getHours())}:` +
+            `${pad(date.getMinutes())}`;
         console.log(`  ${when}  ${String(p.filled).padStart(2)}/${p.max}  ${p.label}`);
         if (!WRITE) continue;
 
@@ -599,9 +672,14 @@ async function run() {
             attendees,
             interested: mine ? [] : [timRef],
             price: p.price,
-            price_undiscounted: p.price,
+            // An UNDISCOUNTED price above `price` is what the app treats as a
+            // genuine discount; equal to it means none. Defaulting to p.price
+            // keeps every existing fixture undiscounted, as before.
+            price_undiscounted: p.priceUndiscounted || p.price,
             currency: "EUR",
-            payment_type: "on-site",
+            // On-site unless the fixture asks for in-app. Only the payment
+            // timeline and the Autoriser CTA depend on this.
+            payment_type: p.inApp ? "in-app" : "on-site",
             sport: p.sport,
             // `type` and `level_deltas` were never seeded at all, so a seeded
             // game read as "undefined" wherever the app shows the format or
@@ -611,7 +689,11 @@ async function run() {
             // The format follows max_players: padel is always 2v2, soccer is
             // whatever half the pitch holds.
             type: p.sport === "padel" ? "2v2" : `${p.max / 2}v${p.max / 2}`,
-            level_deltas: [],
+            level_deltas: p.levelDeltas || [],
+            // GOLD-EXCLUSIVE gates the game behind membership. The field was
+            // absent from every fixture, so the Join sheet's Gold offer, its
+            // plan picker and its in-place purchase were unreachable.
+            gold_exclusive: p.gold === true,
             level: 3,
             mood: "fun",
             time_zone: "Europe/Paris",
