@@ -113,7 +113,30 @@ async function activity(d0, d1, d7) {
 // ------------------------------------------------------------------ errors
 
 async function errors(startZ, endZ) {
-    const base = `severity>=ERROR AND timestamp>="${startZ}" AND timestamp<"${endZ}"`;
+    // AUDIT LOGS ARE NOT PRODUCTION ERRORS. A failed or rolled-back deploy is
+    // written to cloudaudit.googleapis.com at severity ERROR, and it describes
+    // something WE did to the platform, not something the platform did to a
+    // user. Excluded at the filter so every downstream read inherits it and the
+    // two hosts cannot disagree about what an entry is.
+    //
+    // The hosts already dropped entries with NEITHER a service_name nor a
+    // function_name, which caught most of these (CreateBuild, CreateTopic,
+    // RunJob, CreateNotificationChannel all have blank labels). An
+    // UpdateFunction failure does NOT: the audit record is ABOUT a function, so
+    // it carries that function's name and sailed straight through the one guard
+    // written to stop it. It then passed every filter below too, because those
+    // all match on textPayload and an audit proto has none -- landing in the
+    // code-error bucket with an empty sample, which is why the finding fell
+    // back to the generic "something is genuinely failing".
+    //
+    // That is what happened on 2026-09-09: a transient INTERNAL_ERROR building
+    // onMessageSpamCheck at 12:12, retried successfully at 15:58 the same day,
+    // reported the next morning as the day's one real error. The build service
+    // account's IAM was intact throughout; the "missing permission" text in
+    // that message is misleading. Left unfixed this fires on every deploy
+    // hiccup, which is a guaranteed amber day for a non-event.
+    const base = `severity>=ERROR AND timestamp>="${startZ}" AND timestamp<"${endZ}"`
+        + ` AND NOT logName:"cloudaudit.googleapis.com"`;
     const count = async (filter) => (await HOST.readLogs(filter, { limit: 1000 })).length;
     const total = await count(base);
     // "Real" must use the SAME exclusions as the per-service breakdown below,

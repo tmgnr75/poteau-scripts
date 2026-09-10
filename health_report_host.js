@@ -102,7 +102,14 @@ function readLogs(filter, { limit = 1000, withDetail = false } = {}) {
       // Same rule as the cloud host: an entry with neither label is not Cloud
       // Function output (scheduler bookkeeping, audit-log protos) and must not
       // be counted as a production error.
+      //
+      // The label test alone is NOT enough. An audit record about a function
+      // carries that function's name, so a failed deploy (UpdateFunction) has a
+      // function_name and passes this check -- see the note on `base` in
+      // daily_health_report.js. Callers exclude cloudaudit at the filter; this
+      // is the belt-and-braces for any caller that forgets.
       const l = (e.resource && e.resource.labels) || {};
+      if (typeof e.logName === "string" && e.logName.includes("cloudaudit.googleapis.com")) return false;
       return Boolean(l.service_name || l.function_name);
     })
     .map((e) => {
