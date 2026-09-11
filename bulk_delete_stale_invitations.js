@@ -180,20 +180,37 @@ async function main() {
     const started = Date.now();
     let deleted = 0;
 
+    // Cursor into the scan. Without it every page re-runs the same query from
+    // the head of the collection, and Firestore has to skip the tombstones of
+    // everything already deleted before it reaches the next live match. That
+    // cost grows with every page, so throughput decays instead of holding.
+    //
+    // Measured on 2026-09-11, 1.67M documents into a run:
+    //   head-of-collection page: 1,985ms / 1,010ms / 931ms for 500 docs
+    //   startAfter cursor page:    140ms for 500 docs
+    // and the marginal delete rate had fallen 631/s -> 271/s and was still
+    // dropping. It would have asymptoted well before clearing the backlog.
+    //
+    // The cursor only ever moves forward past documents this run has already
+    // deleted, so it cannot skip a live match: anything it passes is gone.
+    let cursor = null;
+
     while (deleted < MAX) {
         const lim = Math.min(PAGE, MAX - deleted);
-        const snap = BY_CREATED
-            ? await db.collection('game_invitations')
-                .where('created', '<', createdCutoff)
-                .orderBy('created', 'asc').limit(lim).get()
-            : await db.collection('game_invitations')
-                .where('game_date', '<', cutoff)
-                .orderBy('game_date', 'asc').limit(lim).get();
+        let q = BY_CREATED
+            ? db.collection('game_invitations')
+                .where('created', '<', createdCutoff).orderBy('created', 'asc')
+            : db.collection('game_invitations')
+                .where('game_date', '<', cutoff).orderBy('game_date', 'asc');
+        if (cursor) q = q.startAfter(cursor);
+        const snap = await q.limit(lim).get();
 
         if (snap.empty) {
             console.log('\nno more matches - backlog clear.');
             break;
         }
+
+        cursor = snap.docs[snap.docs.length - 1];
 
         const writer = db.bulkWriter();
         // Without an error handler a single failed delete rejects close() and
