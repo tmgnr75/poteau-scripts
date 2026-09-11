@@ -8,10 +8,16 @@
 # still open. A watch that silently stops is worse than no watch: the absence
 # of bad news reads as good news.
 #
+# Runs hourly with a 60-minute window, so each report covers exactly the hour
+# since the last one. The window must match the interval: an overlapping window
+# re-reports the same blocked organizer in consecutive posts, which makes one
+# incident look like several and is how "Guard refusals: 25" read as volume
+# rather than one person retrying.
+#
 # Usage: run_publish_price_monitor.sh [WINDOW_MINUTES]
 set -u
 
-WINDOW="${1:-120}"
+WINDOW="${1:-60}"
 
 # gcloud must be the adminsdk SA. Parallel sessions switch core/account to
 # poteau-billing@, which cannot read logs -- the monitor then reports
