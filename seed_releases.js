@@ -350,6 +350,9 @@ const RELEASES = [
             '',
             '🚗 Le match dans ton agenda, rappel compris',
             'Une fois inscrit, tu peux ajouter le match au calendrier en un tap, avec le centre et l’adresse. Le rappel se déclenche 30 minutes avant l’heure de partir, et sur iPhone il tient compte du trafic.',
+            '',
+            '📸 Les photos du match, pour tout le monde',
+            'Le bouton photo était là pour tous, mais seuls les Gold pouvaient s’en servir. On trouvait ça dommage, juste au moment où le groupe se raconte le match. Tout le monde peut envoyer ses photos dans la discussion, jusqu’à 3 par message.',
         ].join('\n'),
         body_en: [
             '⚽ The score gets counted during the game',
@@ -372,6 +375,9 @@ const RELEASES = [
             '',
             '🚗 The game in your calendar, reminder included',
             'Once you are in, you can add the game to your calendar in one tap, with the centre and the address. The reminder goes off 30 minutes before it is time to leave, and on iPhone it takes traffic into account.',
+            '',
+            '📸 Photos from the game, for everyone',
+            'The photo button was there for everyone, but only Gold members could use it. That felt like a shame, right when the group is going back over the game. Anyone can send photos to the chat now, up to 3 per message.',
         ].join('\n'),
         body_es: [
             '⚽ El marcador se lleva durante el partido',
@@ -394,6 +400,9 @@ const RELEASES = [
             '',
             '🚗 El partido en tu calendario, con recordatorio',
             'Una vez apuntado, puedes añadir el partido al calendario con un toque, con el centro y la dirección. El recordatorio salta 30 minutos antes de la hora de salir, y en iPhone tiene en cuenta el tráfico.',
+            '',
+            '📸 Las fotos del partido, para todos',
+            'El botón de fotos estaba para todos, pero solo los Gold podían usarlo. Nos parecía una pena, justo cuando el grupo repasa el partido. Cualquiera puede enviar sus fotos a la conversación, hasta 3 por mensaje.',
         ].join('\n'),
         body_it: [
             '⚽ Il punteggio si conta durante la partita',
@@ -416,6 +425,9 @@ const RELEASES = [
             '',
             '🚗 La partita nel calendario, promemoria compreso',
             'Una volta iscritto, puoi aggiungere la partita al calendario con un tap, con il centro e l’indirizzo. Il promemoria parte 30 minuti prima dell’ora di uscire, e su iPhone tiene conto del traffico.',
+            '',
+            '📸 Le foto della partita, per tutti',
+            'Il pulsante foto c’era per tutti, ma solo i Gold potevano usarlo. Ci sembrava un peccato, proprio quando il gruppo si racconta la partita. Tutti possono mandare le loro foto nella chat, fino a 3 per messaggio.',
         ].join('\n'),
     },
 ];
