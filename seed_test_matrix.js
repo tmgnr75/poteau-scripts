@@ -289,8 +289,14 @@ const PLAN = [
         // 19:38 -- IN-APP PAYMENT. The three-step timeline, "à payer dans
         // l'app", and the Autoriser CTA. The only in-app fixture: 93.5% of
         // real games are on-site, and the timeline must never show for those.
-        label: "JOIN 19:38 · soccer · IN-APP · timeline + Autoriser",
+        label: "JOIN 19:38 · soccer · IN-APP + LEVEL · timeline + Autoriser",
         sport: "soccer", date: atDays(1, 19, 38), duration: 60,
+        // LEVELS HERE TOO (Tim, 2026-09-11). This is the fixture anyone
+        // opens first, and without deltas the level row correctly renders
+        // NOTHING -- which reads as the feature having disappeared rather
+        // than as the fixture lacking data. It cost Tim a "WTF happened to
+        // level deltas". One screen should show the whole sheet.
+        levelDeltas: ["five_six", "seven_eight"],
         filled: 3, max: 6, mine: false, price: 6, inApp: true,
     },
     {
