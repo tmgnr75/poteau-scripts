@@ -146,13 +146,57 @@ const GUARD_LIVE = new Date('2026-09-10T13:12:00Z');
     console.log('\n(could not read Cloud Logging - check gcloud auth)');
   }
 
+  // WHO, not just where. A centre name says a building had a problem; it does
+  // not say a person did. "UrbanSoccer - Porte d'Aubervilliers x8" reads like a
+  // site outage, when it was Lamine pressing Publish 34 times and getting
+  // nothing. Names make the number feel like what it is, and they are what you
+  // need to reach someone. Looked up once per organizer, not per draft.
+  const nameById = {};
+  const organizerIds = [...new Set(refusalDrafts.map(d => d.organizer).filter(Boolean))];
+  for (const uid of organizerIds) {
+    try {
+      const u = await db.collection('users').doc(uid).get();
+      nameById[uid] = u.exists ? (u.data().display_name || uid.slice(0, 6)) : uid.slice(0, 6);
+    } catch (e) {
+      nameById[uid] = uid.slice(0, 6);
+    }
+  }
+  // One row per PERSON, worst first. A person with four blocked drafts is one
+  // problem to solve, not four lines to read.
+  const byOrganizer = new Map();
+  refusalDrafts.forEach(d => {
+    const k = d.organizer || '(unknown)';
+    if (!byOrganizer.has(k)) byOrganizer.set(k, { uid: k, drafts: 0, attempts: 0, centres: new Set() });
+    const e = byOrganizer.get(k);
+    e.drafts++; e.attempts += d.attempts;
+    if (d.centre) e.centres.add(d.centre);
+  });
+  const people = [...byOrganizer.values()].sort((a, b) => b.attempts - a.attempts);
+
   // Green ONLY when nothing went wrong for anyone: no priceless game slipped
   // through, nobody was refused, nobody needed a rescued price, and we were
   // actually able to look.
   const ok = bad.length === 0 && refusalDrafts.length === 0 && restoredCount === 0 && !logReadFailed;
 
+  // SEVERITY SCALES WITH HOW MANY PEOPLE, AND GREEN STILL POSTS.
+  //
+  // One organizer stuck is worth knowing about; it is not worth the same colour
+  // as five. Flat red for any refusal at all is how a channel teaches its reader
+  // to discount it, which is exactly what happened to the push watch. A green
+  // run still posts, because a silent monitor and a dead monitor look identical.
+  //
+  // No :rotating_light:. The colour already says it is an alert.
+  const affected = people.length;
+  let icon, headline;
+  if (logReadFailed)      { icon = ':white_circle:'; headline = 'state unknown'; }
+  else if (affected > 3)  { icon = ':red_circle:';    headline = `${affected} organizers blocked`; }
+  else if (affected > 1)  { icon = ':large_orange_circle:'; headline = `${affected} organizers blocked`; }
+  else if (affected === 1){ icon = ':large_yellow_circle:'; headline = '1 organizer blocked'; }
+  else if (!ok)           { icon = ':large_orange_circle:'; headline = 'needs a look'; }
+  else                    { icon = ':large_green_circle:';  headline = 'nobody blocked'; }
+
   const lines = [
-    `${ok ? ':white_check_mark:' : ':rotating_light:'} *publishGame price monitor* (last ${SINCE_MIN} min)`,
+    `${icon} *publishGame price monitor* · ${headline} · last ${SINCE_MIN} min`,
     `Games created: *${snap.size}*  |  priced: *${priced}*  |  free (0): *${zero}*  |  no price: *${missing}*` +
       (legacy ? ` (${legacy} pre-guard)` : '') + (inferred ? `  |  inferred: ${inferred}` : ''),
   ];
@@ -166,15 +210,19 @@ const GUARD_LIVE = new Date('2026-09-10T13:12:00Z');
     bad.forEach(b => lines.push(`• \`${b.id}\` ${b.centre} [${b.status}]`));
   }
 
-  if (refusalDrafts.length > 0) {
-    const people = refusalOrganizers === 1 ? '1 organizer' : `${refusalOrganizers} organizers`;
+  if (people.length > 0) {
     lines.push(
-      `*${people} could not publish* - ${refusalDrafts.length} game${refusalDrafts.length === 1 ? '' : 's'} blocked, ` +
-      `${refusalAttempts} attempt${refusalAttempts === 1 ? '' : 's'}:`
+      `*Could not publish:* ${refusalDrafts.length} game${refusalDrafts.length === 1 ? '' : 's'}, ` +
+      `${refusalAttempts} attempt${refusalAttempts === 1 ? '' : 's'}`
     );
-    refusalDrafts.forEach(d => lines.push(
-      `• \`${d.id}\` ${d.centre}${d.attempts > 1 ? ` - tried ${d.attempts}x` : ''}`
-    ));
+    // Name first, centre second. The retry count is the bad-experience signal:
+    // someone who pressed Publish a dozen times was staring at a dead button.
+    people.forEach(p => {
+      const where = [...p.centres].join(', ');
+      const games = p.drafts === 1 ? '1 game' : `${p.drafts} games`;
+      const tried = p.attempts > p.drafts ? `, tried ${p.attempts}x` : '';
+      lines.push(`• *${nameById[p.uid] || p.uid}* ${games}${tried}${where ? ` · ${where}` : ''}`);
+    });
   }
 
   if (restoredCount > 0) {
