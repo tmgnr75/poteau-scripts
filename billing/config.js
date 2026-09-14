@@ -70,6 +70,20 @@ const FRENCH_MONTH_CODES = [
 //
 // If the experiment ever becomes the standard model, that is a change to
 // getPriceHT() and the Reporting sheet, not a new row here.
+//
+// ── RealFive Pont-à-Mousson, onboarded 2026-09-14 ───────────
+//
+// Absent for a DIFFERENT and TEMPORARY reason. Free for September and October
+// 2026, then billed on the normal tiered model above from November.
+//
+// It is not a pricing experiment: when the free period ends it belongs in
+// CENTRES like every other partner. Until then there is nothing to bill, and
+// an entry here would invoice it during its free months.
+//
+// preflight.js lists it under INTRO_FREE_CENTRES so it is named every month,
+// and shouts from 2026-11 onwards until someone adds it below. Adding it means
+// the usual fields: billingName, reportingName, reportingTab, revenueRow,
+// matchesRow and a GoCardless customerID.
 
 const CENTRES = [
   // ── PLAYERS tab (4PADEL / LE FIVE) ──

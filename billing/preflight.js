@@ -32,6 +32,57 @@ const OFF_SYSTEM_CENTRES = [
   },
 ];
 
+// Partner centres on a free introductory period. Unlike OFF_SYSTEM_CENTRES,
+// these are TEMPORARY: once the free months are over they bill on the normal
+// tiered model and belong in CENTRES like everyone else.
+//
+// They are listed here so preflight names them while they are free, and warns
+// loudly the first month they are not. A centre that quietly stays free is the
+// failure mode this guards against.
+const INTRO_FREE_CENTRES = [
+  {
+    uid: 'W514nnZZkwR1XVX666uDzTnvunY2',
+    name: 'RealFive Pont-à-Mousson',
+    deal: 'free September and October 2026, tiered model from November',
+    billableFrom: '2026-11',
+    // Nothing to add to CENTRES until billableFrom. When that month arrives,
+    // add a normal entry (billingName, reportingName, reportingTab, rows,
+    // customerID from GoCardless) and delete this one.
+  },
+];
+
+async function reportIntroFreeCentres(db, start, end, year, month) {
+  const pending = INTRO_FREE_CENTRES.filter(c => c.uid);
+  if (pending.length === 0) return;
+
+  console.log('3c. INTRO-FREE CENTRES (free for now, tiered later)\n');
+  const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+
+  for (const c of pending) {
+    const snap = await db.collection('games')
+      .where('organizer', '==', c.uid).where('status', '==', 'played')
+      .where('date', '>=', admin.firestore.Timestamp.fromDate(start))
+      .where('date', '<=', admin.firestore.Timestamp.fromDate(end)).get();
+
+    let pro = 0;
+    snap.forEach(d => { if (d.data().type === 'pro') pro++; });
+
+    console.log(`   ${c.name}`);
+    console.log(`     deal          : ${c.deal}`);
+    console.log(`     games played  : ${snap.size} (${pro} pro)`);
+
+    if (monthKey < c.billableFrom) {
+      console.log(`     -> FREE this month (billable from ${c.billableFrom}). Nothing to charge.\n`);
+    } else {
+      // The free period is over and it is still not in CENTRES, so run.js
+      // will not bill it. Quote what it would owe, so the gap has a number.
+      console.log(`     would owe     : ${getPriceHT(pro).toFixed(2)} EUR HT on the tiered model`);
+      console.log(`     -> ACTION: the free period ended ${c.billableFrom}. Add it to CENTRES`);
+      console.log(`        in config.js and remove it from INTRO_FREE_CENTRES, or it stays free.\n`);
+    }
+  }
+}
+
 // Mirrors run.js: revenue is max_players * price, never attendees * price.
 // A centre books a pitch, not a seat.
 async function reportOffSystemCentres(db, start, end, year, month) {
@@ -183,6 +234,7 @@ const fmt = d => d.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' });
   console.log(`   ${billable} invoices | ${totalHT} EUR HT | ${(totalHT * (1 + TVA_RATE)).toFixed(2)} EUR TTC\n`);
 
   await reportOffSystemCentres(db, start, end, year, month);
+  await reportIntroFreeCentres(db, start, end, year, month);
 
   // ── 4. Has this month already been charged? ────────────────
   console.log('4. ALREADY CHARGED?\n');
