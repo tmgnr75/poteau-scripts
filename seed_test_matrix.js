@@ -91,9 +91,20 @@ const NOAH = "9si5imsCVUUQ48LF5sc9XFLFtEj1";
 const LIAM = "Go2YXYj9FFW6xG28HZNBcrDkIJV2";
 const SOPHIE = "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2";
 const TODD = "xz7cm07tVlZkt71QsLdmeTSCPYI3";
+// RECRUITED 2026-09-14 so soccer games can be ten players. Both are
+// `is_test_account`, both carry `sports: [soccer, padel]`, a photo and a
+// skill level, and NEITHER has `type` set -- they are players.
+//
+// The other two test accounts are deliberately NOT here: `Sophie Pro Test`
+// and `Prati United` are both `type: "pro"`, and Prati has no skill levels
+// at all. Guard 3 would pass them, since it only checks `is_test_account`,
+// but a pro standing on a player roster misrepresents exactly the thing
+// these fixtures exist to reproduce.
+const SPARE = "FkWN1YsfFtP5PwTCxBEpZ9NpMS23";
+const MARC = "hQmClsn4bFU79IvwqTJuYrZdOg63";
 
 /** Everyone who may stand on a seeded pitch. Tim included; he is the tester. */
-const POOL = [GINA, MARCO, LUCIA, NOAH, LIAM, SOPHIE, TODD];
+const POOL = [GINA, MARCO, LUCIA, NOAH, LIAM, SOPHIE, TODD, SPARE, MARC];
 
 const MIN = 60 * 1000;
 
@@ -157,7 +168,7 @@ const PLAN = [
     {
         label: "soccer · STARTED 20min ago · full · SCORING 2-1",
         sport: "soccer", startsIn: -20, duration: 60,
-        filled: 6, max: 6, mine: true, price: 8, live: true,
+        filled: 10, max: 10, mine: true, price: 8, live: true,
         // A match genuinely UNDERWAY, not merely one whose clock has passed.
         // Without this every seeded game needed the teams step walked by hand
         // before anything mid-match could be looked at -- the green band, the
@@ -177,7 +188,7 @@ const PLAN = [
     {
         label: "soccer · starts in 15min · full · LIVE WINDOW OPEN",
         sport: "soccer", startsIn: 15, duration: 60,
-        filled: 6, max: 6, mine: true, price: 7, live: true,
+        filled: 10, max: 10, mine: true, price: 7, live: true,
     },
     {
         label: "padel · starts in 25min · full 2v2 · LIVE WINDOW OPEN",
@@ -189,7 +200,7 @@ const PLAN = [
     {
         label: "soccer · starts in 2h · one spot left",
         sport: "soccer", startsIn: 120, duration: 60,
-        filled: 5, max: 6, mine: true, price: 6,
+        filled: 9, max: 10, mine: true, price: 6,
     },
     {
         label: "padel · starts in 3h · full 2v2",
@@ -201,12 +212,12 @@ const PLAN = [
     {
         label: "soccer · tomorrow · HALF EMPTY",
         sport: "soccer", date: atDays(1, 19, 0), duration: 60,
-        filled: 3, max: 6, mine: true, price: 8,
+        filled: 5, max: 10, mine: true, price: 8,
     },
     {
-        label: "soccer · in 3 days · NEARLY EMPTY (2 of 8)",
+        label: "soccer · in 3 days · NEARLY EMPTY (2 of 10)",
         sport: "soccer", date: atDays(3, 20, 30), duration: 60,
-        filled: 2, max: 8, mine: true, price: 5,
+        filled: 2, max: 10, mine: true, price: 5,
     },
     {
         label: "padel · in 2 days · one spot left",
@@ -218,7 +229,7 @@ const PLAN = [
     {
         label: "soccer · FOLLOWED · full · in 4 days",
         sport: "soccer", date: atDays(4, 19, 0), duration: 60,
-        filled: 6, max: 6, mine: false, price: 8,
+        filled: 9, max: 10, mine: false, price: 8,
     },
     {
         label: "padel · FOLLOWED · a spot opened · in 5 days",
@@ -235,7 +246,7 @@ const PLAN = [
     {
         label: "soccer · PLAYED yesterday · wrap up",
         sport: "soccer", date: atDays(-1, 19, 0), duration: 60,
-        filled: 6, max: 6, mine: true, price: 5, played: true,
+        filled: 10, max: 10, mine: true, price: 5, played: true,
     },
     {
         label: "padel · PLAYED 2 days ago · wrap up",
@@ -252,7 +263,7 @@ const PLAN = [
     {
         label: "soccer · PLAYED 3 days ago · SCORE RECORDED 3-2",
         sport: "soccer", date: atDays(-3, 19, 0), duration: 60,
-        filled: 6, max: 6, mine: true, price: 6,
+        filled: 10, max: 10, mine: true, price: 6,
         // One period, which is the football case.
         finalScore: [{ team_a: 3, team_b: 2 }],
     },
@@ -297,7 +308,7 @@ const PLAN = [
         // than as the fixture lacking data. It cost Tim a "WTF happened to
         // level deltas". One screen should show the whole sheet.
         levelDeltas: ["five_six", "seven_eight"],
-        filled: 3, max: 6, mine: false, price: 6, inApp: true,
+        filled: 6, max: 10, mine: false, price: 6, inApp: true,
     },
     {
         // 20:47 -- DISCOUNT. price 7 against price_undiscounted 12 is -42%,
@@ -306,7 +317,7 @@ const PLAN = [
         // divide-by-zero crashed the sheet, so it is worth having seeded.
         label: "JOIN 20:47 · soccer · DISCOUNT -42% · in-app",
         sport: "soccer", date: atDays(1, 20, 47), duration: 60,
-        filled: 2, max: 6, mine: false, price: 7,
+        filled: 6, max: 10, mine: false, price: 7,
         priceUndiscounted: 12, inApp: true,
     },
     {
@@ -318,7 +329,7 @@ const PLAN = [
         // PRICED AND IN-APP on purpose: Gold's argument is what it saves on
         // in-app games, and at price 0 the sheet would just say "Gratuit"
         // with nothing for the saving line to work against.
-        filled: 2, max: 6, mine: false, price: 9, inApp: true, gold: true,
+        filled: 6, max: 10, mine: false, price: 9, inApp: true, gold: true,
     },
     {
         // 07:12 -- LEVEL SPREAD, a real subset. Renders LevelScaleWidget with
@@ -326,7 +337,7 @@ const PLAN = [
         // just card + level + CTA: the plainest possible Join sheet.
         label: "JOIN 07:12 · soccer · LEVEL 3-4/5-6/7-8 · on-site free",
         sport: "soccer", date: atDays(2, 7, 12), duration: 60,
-        filled: 2, max: 6, mine: false, price: 0,
+        filled: 6, max: 10, mine: false, price: 0,
         levelDeltas: ["three_four", "five_six", "seven_eight"],
     },
     {
