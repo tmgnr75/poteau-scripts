@@ -163,14 +163,23 @@ main().catch((error) => {
 });
 
 /**
- * A NOTE ON users.last_radius
- * ---------------------------
+ * A NOTE ON users.last_radius — AND WHY LEAVING IT ALONE WAS WRONG
+ * ----------------------------------------------------------------
  * The games feed (getGamesMulti) reads `users.last_radius`, NOT this
- * collection. Widening availabilities changes who gets invited and matched;
- * it does not change what a player sees when they open the Games tab.
+ * collection. Widening availabilities changes who gets invited and matched; it
+ * does not change what a player sees when they open the Games tab.
  *
- * That field is left alone here on purpose: it is the player's own current
- * filter setting, visible in the app, and rewriting it would silently change
- * their search without them touching anything. A player who wants to see
- * further changes it themselves in one tap.
+ * This script originally left that field alone, reasoning that it is the
+ * player's own visible filter and should not be rewritten under them. That
+ * produced a worse state than either extreme: 525 players in the corridor were
+ * being invited to games up to 50 km away while their own feed still stopped
+ * at 20 km. A notification for a game you cannot find is not a kindness.
+ *
+ * The two fields are one idea, and the app already treats them that way:
+ * availability_widget.dart writes `lastRadius` in the same update as the
+ * availability's `radius`. Only a direct database write can separate them,
+ * which is exactly what this script did.
+ *
+ * Run sync_last_radius_to_availability.js after this one. Better still, do not
+ * write one without the other again.
  */
