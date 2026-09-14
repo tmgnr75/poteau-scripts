@@ -33,19 +33,19 @@ const DRY = process.argv.includes('--dry');
 const LANGS = {
     fr: {
         subject: '{{OTC}} est ton code Poteau',
-        text: 'Ton code de connexion Poteau : {{OTC}}\n\nSaisis-le dans l\'app pour terminer ton inscription.\n\nTu n\'as pas demande ce code ? Ignore cet e-mail, ton compte reste protege.',
+        text: 'Ton code de connexion Poteau : {{OTC}}\n\nSaisis-le dans l\'app pour terminer ton inscription.\n\nTu n\'as pas demandé ce code ? Ignore cet e-mail, ton compte reste protégé.',
     },
     en: {
         subject: '{{OTC}} is your Poteau code',
         text: 'Your Poteau sign-in code: {{OTC}}\n\nEnter it in the app to finish signing up.\n\nDidn\'t request this code? Just ignore this email, your account is safe.',
     },
     es: {
-        subject: '{{OTC}} es tu codigo Poteau',
-        text: 'Tu codigo de acceso Poteau: {{OTC}}\n\nIntroducelo en la app para terminar tu registro.\n\nNo has pedido este codigo? Ignora este correo, tu cuenta esta protegida.',
+        subject: '{{OTC}} es tu código Poteau',
+        text: 'Tu código de acceso Poteau: {{OTC}}\n\nIntrodúcelo en la app para terminar tu registro.\n\n¿No has pedido este código? Ignora este correo, tu cuenta está protegida.',
     },
     it: {
-        subject: '{{OTC}} e il tuo codice Poteau',
-        text: 'Il tuo codice di accesso Poteau: {{OTC}}\n\nInseriscilo nell\'app per completare la registrazione.\n\nNon hai richiesto questo codice? Ignora questa email, il tuo account e al sicuro.',
+        subject: '{{OTC}} è il tuo codice Poteau',
+        text: 'Il tuo codice di accesso Poteau: {{OTC}}\n\nInseriscilo nell\'app per completare la registrazione.\n\nNon hai richiesto questo codice? Ignora questa email, il tuo account è al sicuro.',
     },
 };
 

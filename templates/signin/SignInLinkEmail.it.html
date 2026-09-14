@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poteau Max - Link</title>
+    <style>
+        body {
+            font-family: 'Sora', sans-serif;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            background-color: #016001;
+            min-height: 100vh;
+            width: 100%;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 0;
+            border-spacing: 0;
+            font-family: 'Sora', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        td {
+            padding: 0;
+            vertical-align: top;
+            box-sizing: border-box;
+        }
+
+        table.inner {
+            max-width: 500px;
+            width: 100%;
+            background-color: #FFF;
+            margin: 50px auto;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin: 1rem 0;
+            font-weight: 600;
+            font-size: 24px;
+            color: #101213;
+        }
+
+        p {
+            font-size: 16px;
+            color: #101213;
+            line-height: 1.5;
+            margin: 20px 0 10px;
+        }
+
+        strong {
+            font-size: 20px;
+            color: #101213;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        img {
+            width: 60px;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
+        .footer {
+            padding-top: 20px;
+            color: #666666;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #666666;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #0B35A4;
+        }
+
+        div {
+            margin: 30px;
+            box-sizing: border-box;
+        }
+
+
+            /* Ensuring QR code remains responsive on mobile */
+            img.qr-code {
+                width: 80%;
+                max-width: 300px;
+                height: auto;
+            }
+
+        /* Mobile adjustments */
+        @media screen and (max-width: 500px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 14px;
+                margin: 25px;
+            }
+
+            strong {
+                font-size: 20px;
+            }
+
+            div {
+                margin: 0;
+            }
+
+            table.inner {
+                margin: 0 0 40px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400..600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <table role="presentation">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="inner">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2FDark%20Transparent%20App%20Icon%20(1).png?alt=media&token=46c7011c-53d7-4a81-8510-3afebe1d1416"
+                                            alt="Poteau Max">
+                                    </div>
+                                    <div>
+                                        <p style="font-weight:600">La tua richiesta di connessione è stata approvata. Clicca o scansiona con il tuo telefono per connetterti.</p>
+                                        <div style="margin: 10px;"><strong><a href="{{SignInLink}}" style="color: #016001; text-decoration: none; text-align:center;">Apri Poteau Max</a></strong></div>
+                                        <!-- Enlarged QR Code Placeholder -->
+<a href="{{SignInLink}}" style="text-decoration: none;">                                        <div style="text-align: center; margin: 20px 0 10px;">
+                                            <img src="{{QrCode}}" alt="Codice QR" width="300" class="qr-code">
+                                        </div></a>
+                                        <p>Questo link è valido solo una volta e scade tra un’ora.</p>
+                                        <p>Se non hai richiesto questa email, eliminala e sarà tutto a posto.</p>
+                                        <p>Il team di Poteau Max</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
