@@ -139,9 +139,16 @@ function readLog(filter, limit = 200) {
     }
   }
 
-  // --- 3. The new guard firing (the bug, caught before it bit) --------------
+  // --- 3. The guards firing (the bug, caught before it bit) ----------------
+  // TWO codes, because there are two ways to lose a paid spot and both must be
+  // visible. CASE 1 resets an empty roster (ROSTER_RESET_BLOCKED_PAID_SPOT);
+  // CASE 2's recovery rebuild and CASE 3's normalizeTeamSize can drop one while
+  // the roster is NOT empty (ROSTER_REBUILD_DROPPED_PAID_SPOT). The second was
+  // found only because a live test reproduced it -- watching just the first
+  // would have reported "nothing blocked" while money was being stranded.
   const blocked = readLog(
-    `timestamp>="${sinceIso}" AND jsonPayload.code="ROSTER_RESET_BLOCKED_PAID_SPOT"`
+    `timestamp>="${sinceIso}" AND (jsonPayload.code="ROSTER_RESET_BLOCKED_PAID_SPOT" ` +
+    `OR jsonPayload.code="ROSTER_REBUILD_DROPPED_PAID_SPOT")`
   );
   const logFailed = blocked === null;
   const blockedCount = logFailed ? 0 : blocked.length;
