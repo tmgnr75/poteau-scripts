@@ -26,6 +26,18 @@ mkdir -p "$DEST_DIR"
 cp "$SRC_DIR/daily_signals.js" "$DEST_DIR/daily_signals.js"
 echo "vendored daily_signals.js"
 
+# The chat-photo digest rides along with the Daily: same schedule, same
+# function, posted as its own message immediately after. Both modules are
+# vendored for the same reason daily_signals.js is — the deploy uploads only
+# the functions directory.
+#
+# slack_files.js needs no stub: unlike the Mac host it uses axios and plain
+# HTTP, which exist in a Cloud Function exactly as they do here.
+cp "$SRC_DIR/chat_photos.js" "$DEST_DIR/chat_photos.js"
+echo "vendored chat_photos.js"
+cp "$SRC_DIR/slack_files.js" "$DEST_DIR/slack_files.js"
+echo "vendored slack_files.js"
+
 # The Mac host is NOT vendored on purpose: it shells out to the `claude` CLI and
 # curl, neither of which exists in a Cloud Function. The cloud supplies its own
 # host (gen2/dailySignalsHost.js) via setHost(). But daily_signals.js lazily

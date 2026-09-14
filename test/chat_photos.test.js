@@ -151,17 +151,30 @@ const END = new Date('2026-09-05T00:00:00Z');
         `singulars are singular: ${oneCount}`);
     console.log('ok  buildDigest gets singular and plural right');
 
-    // The cap holds back the overflow and SAYS so.
+    // By default there is NO cap: a day posts every photo it found. A cap that
+    // never binds at 0-2 photos a day would only ever hide photos on the single
+    // most interesting day of the year.
+    assert.strictEqual(MAX_PHOTOS_POSTED, Infinity, 'the default is uncapped');
+
     const many = [];
-    for (let i = 0; i < MAX_PHOTOS_POSTED + 5; i++) {
+    for (let i = 0; i < 60; i++) {
         many.push({ ...photos[0], gameId: `G${i}`, authorId: 'U1' });
     }
-    const capped = buildDigest({ photos: many, names, games, dayLabel: 'x' });
-    assert.strictEqual(capped.uploads.length, MAX_PHOTOS_POSTED, 'never posts more than the cap');
-    assert.strictEqual(capped.heldBack, 5, 'counts what it held back');
-    assert.ok(JSON.stringify(capped.header).includes('5 more not posted'),
+    const uncapped = buildDigest({ photos: many, names, games, dayLabel: 'x' });
+    assert.strictEqual(uncapped.uploads.length, 60, 'posts every photo by default');
+    assert.strictEqual(uncapped.heldBack, 0, 'nothing held back when uncapped');
+    assert.ok(!JSON.stringify(uncapped.header).includes('not posted'),
+        'no overflow line when nothing was held back');
+    console.log('ok  buildDigest posts every photo by default');
+
+    // An explicit cap (the backfill uses one) holds back the overflow and SAYS
+    // so, rather than truncating silently.
+    const capped = buildDigest({ photos: many, names, games, dayLabel: 'x', cap: 40 });
+    assert.strictEqual(capped.uploads.length, 40, 'an explicit cap is honoured');
+    assert.strictEqual(capped.heldBack, 20, 'counts what it held back');
+    assert.ok(JSON.stringify(capped.header).includes('20 more not posted'),
         'says how many were held back rather than truncating silently');
-    console.log('ok  buildDigest caps the batch and explains the overflow');
+    console.log('ok  buildDigest honours an explicit cap and explains the overflow');
 
     console.log('\nall chat_photos tests passed');
 })().catch(e => { console.error('FAILED:', e.message); process.exit(1); });

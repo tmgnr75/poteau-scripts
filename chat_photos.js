@@ -27,10 +27,16 @@ const { DateTime } = require('luxon');
 
 const TZ = 'Europe/Paris';
 
-// Slack renders at most this many photos before the digest becomes a wall.
-// A day over the cap posts the first N and says how many it held back, rather
-// than truncating silently — an unexplained missing photo reads as a bug.
-const MAX_PHOTOS_POSTED = 20;
+// No cap by default: a day posts every photo it found.
+//
+// Volume is 0-2 photos on a normal day (~40 per 90 days as of 2026-09-14), so
+// a cap would essentially never bind, and the one thing it would reliably do
+// is hide photos on the single most interesting day of the year. A caller that
+// wants one passes `cap` to buildDigest — the 90-day backfill does.
+//
+// When a cap IS passed, the overflow is announced rather than dropped
+// silently: an unexplained missing photo reads as a bug.
+const MAX_PHOTOS_POSTED = Infinity;
 
 // Firebase Storage download URLs are served through the CDN, a paid Cloudflare
 // Worker live since 2026-08-17. Rewriting the host keeps the digest on the
