@@ -167,6 +167,8 @@ const PLAN = [
     // --- ALREADY STARTED ----------------------------------------------------
     {
         label: "soccer · STARTED 20min ago · full · SCORING 2-1",
+        check: "Le bandeau vert LIVE sur la carte, et le score 2-1 dessus.",
+        open: "live",
         sport: "soccer", startsIn: -20, duration: 60,
         filled: 10, max: 10, mine: true, price: 8, live: true,
         // A match genuinely UNDERWAY, not merely one whose clock has passed.
@@ -177,6 +179,8 @@ const PLAN = [
     },
     {
         label: "padel · STARTED 10min ago · full 2v2 · SCORING",
+        check: "Trois colonnes SETS/JEUX/PTS, et US identifie bien mon côté.",
+        open: "live",
         sport: "padel", startsIn: -10, duration: 90,
         filled: 4, max: 4, mine: true, price: 12, live: true,
         // Five points to us, three to them: inside the first game of the first
@@ -187,11 +191,15 @@ const PLAN = [
     // --- STARTING IN LESS THAN 30 MIN (inside the Live window) --------------
     {
         label: "soccer · starts in 15min · full · LIVE WINDOW OPEN",
+        check: "Le bouton Live apparaît, équipes à confirmer avant de compter.",
+        open: "live",
         sport: "soccer", startsIn: 15, duration: 60,
         filled: 10, max: 10, mine: true, price: 7, live: true,
     },
     {
         label: "padel · starts in 25min · full 2v2 · LIVE WINDOW OPEN",
+        check: "Live ouvert 30min avant, pas plus tôt.",
+        open: "live",
         sport: "padel", startsIn: 25, duration: 90,
         filled: 4, max: 4, mine: true, price: 14, live: true,
     },
@@ -199,11 +207,15 @@ const PLAN = [
     // --- STARTING IN MORE THAN 30 MIN (window still shut) -------------------
     {
         label: "soccer · starts in 2h · one spot left",
+        check: "La carte dit 1 place libre, et 9 ronds sur 10 remplis.",
+        open: "fiche",
         sport: "soccer", startsIn: 120, duration: 60,
         filled: 9, max: 10, mine: true, price: 6,
     },
     {
         label: "padel · starts in 3h · full 2v2",
+        check: "Complet : pas de bouton Rejoindre, 4 ronds pleins.",
+        open: "fiche",
         sport: "padel", startsIn: 180, duration: 90,
         filled: 4, max: 4, mine: true, price: 11,
     },
@@ -211,16 +223,22 @@ const PLAN = [
     // --- UPCOMING, FURTHER OUT ----------------------------------------------
     {
         label: "soccer · tomorrow · HALF EMPTY",
+        check: "5 sur 10 : la carte doit vendre le match, pas le constater.",
+        open: "fiche",
         sport: "soccer", date: atDays(1, 19, 0), duration: 60,
         filled: 5, max: 10, mine: true, price: 8,
     },
     {
         label: "soccer · in 3 days · NEARLY EMPTY (2 of 10)",
+        check: "2 sur 10 sans dramatiser : pas de rouge, pas d'alerte.",
+        open: "fiche",
         sport: "soccer", date: atDays(3, 20, 30), duration: 60,
         filled: 2, max: 10, mine: true, price: 5,
     },
     {
         label: "padel · in 2 days · one spot left",
+        check: "Une place en padel = le match se joue ou non. Urgence lisible ?",
+        open: "fiche",
         sport: "padel", date: atDays(2, 18, 30), duration: 90,
         filled: 3, max: 4, mine: true, price: 13,
     },
@@ -228,11 +246,15 @@ const PLAN = [
     // --- FOLLOWED (upcoming, Tim watching, NOT playing) ---------------------
     {
         label: "soccer · FOLLOWED · full · in 4 days",
+        check: "Suivi mais complet : « Arrêter de suivre », pas « Rejoindre ».",
+        open: "fiche",
         sport: "soccer", date: atDays(4, 19, 0), duration: 60,
         filled: 9, max: 10, mine: false, price: 8,
     },
     {
         label: "padel · FOLLOWED · a spot opened · in 5 days",
+        check: "Une place s'est libérée sur un match suivi : Rejoindre revient.",
+        open: "fiche",
         sport: "padel", date: atDays(5, 20, 0), duration: 90,
         filled: 3, max: 4, mine: false, price: 12,
     },
@@ -245,11 +267,15 @@ const PLAN = [
     // the one the flow has to handle.
     {
         label: "soccer · PLAYED yesterday · wrap up",
+        check: "On me demande le résultat. Rien n'est pré-rempli.",
+        open: "wrapup",
         sport: "soccer", date: atDays(-1, 19, 0), duration: 60,
         filled: 10, max: 10, mine: true, price: 5, played: true,
     },
     {
         label: "padel · PLAYED 2 days ago · wrap up",
+        check: "Saisie en SETS, pas en points.",
+        open: "wrapup",
         sport: "padel", date: atDays(-2, 18, 0), duration: 90,
         filled: 4, max: 4, mine: true, price: 12, played: true,
     },
@@ -262,6 +288,8 @@ const PLAN = [
     // already agreed is a different state, not a later stage of the same one.
     {
         label: "soccer · PLAYED 3 days ago · SCORE RECORDED 3-2",
+        check: "3-2 affiché comme acquis, plus aucune question posée.",
+        open: "fiche",
         sport: "soccer", date: atDays(-3, 19, 0), duration: 60,
         filled: 10, max: 10, mine: true, price: 6,
         // One period, which is the football case.
@@ -269,6 +297,8 @@ const PLAN = [
     },
     {
         label: "padel · PLAYED 4 days ago · SCORE RECORDED 2-1 in sets",
+        check: "Doit lire 2-1 (sets gagnés), jamais 19-13 (somme des points).",
+        open: "fiche",
         sport: "padel", date: atDays(-4, 18, 30), duration: 90,
         filled: 4, max: 4, mine: true, price: 13,
         // THREE SETS, WON 2-1. The case worth seeding: summing these games
@@ -307,6 +337,8 @@ const PLAN = [
     // resolves silently and looks settled.
     {
         label: "soccer · PLAYED · RESULT ONLY, no score",
+        check: "Qui a gagné, sans chiffres. Pas de 0-0 inventé.",
+        open: "fiche",
         sport: "soccer", date: atDays(-5, 19, 0), duration: 60,
         filled: 10, max: 10, mine: true, price: 7,
         // Who won, with nobody having typed a scoreline. The state a game sits
@@ -315,6 +347,8 @@ const PLAN = [
     },
     {
         label: "soccer · PLAYED · DRAW agreed",
+        check: "Match nul explicite, pas « pas de résultat ».",
+        open: "fiche",
         sport: "soccer", date: atDays(-6, 20, 0), duration: 60,
         filled: 10, max: 10, mine: true, price: 6,
         // `is_draw` is explicit so a proposed draw is never read as an unset
@@ -324,6 +358,8 @@ const PLAN = [
     },
     {
         label: "soccer · PLAYED · SCORE PROPOSED, not yet agreed",
+        check: "Proposé par un autre : on doit me demander de valider.",
+        open: "wrapup",
         sport: "soccer", date: atDays(-7, 19, 30), duration: 60,
         filled: 10, max: 10, mine: true, price: 8,
         // Proposed by somebody else, with Tim NOT in agreed_by. The wrap-up
@@ -335,6 +371,8 @@ const PLAN = [
     },
     {
         label: "soccer · PLAYED · SCORE CONTESTED (two claims)",
+        check: "Deux scores, une voix chacun : AUCUN ne doit s'afficher comme acquis.",
+        open: "fiche",
         sport: "soccer", date: atDays(-8, 18, 0), duration: 60,
         filled: 10, max: 10, mine: true, price: 6,
         // Two proposals, two different scorelines, one agreement each. Ties
@@ -347,6 +385,8 @@ const PLAN = [
     },
     {
         label: "padel · PLAYED · SETS PROPOSED by a partner",
+        check: "Sets proposés par le partenaire, en attente de moi.",
+        open: "wrapup",
         sport: "padel", date: atDays(-9, 18, 30), duration: 90,
         filled: 4, max: 4, mine: true, price: 12,
         // Three sets, and the match is decided on SETS WON rather than points:
@@ -377,16 +417,22 @@ const PLAN = [
     // Tim already receives plenty. These are on test games only.
     {
         label: "soccer · INVITED · future, half empty",
+        check: "Invitation en attente sur Home, avec le nom de qui invite.",
+        open: "fiche",
         sport: "soccer", date: atDays(2, 19, 30), duration: 60,
         filled: 4, max: 10, mine: false, price: 7, invite: true,
     },
     {
         label: "padel · INVITED · future, one spot left",
+        check: "Invité sur un padel presque complet.",
+        open: "fiche",
         sport: "padel", date: atDays(3, 18, 0), duration: 90,
         filled: 3, max: 4, mine: false, price: 13, invite: true,
     },
     {
         label: "soccer · INVITED · in-app, needs paying",
+        check: "Invité ET à payer : l'invitation doit le dire avant la feuille.",
+        open: "fiche",
         sport: "soccer", date: atDays(4, 20, 15), duration: 60,
         filled: 6, max: 10, mine: false, price: 8, inApp: true, invite: true,
     },
@@ -399,6 +445,8 @@ const PLAN = [
         // l'app", and the Autoriser CTA. The only in-app fixture: 93.5% of
         // real games are on-site, and the timeline must never show for those.
         label: "JOIN 19:38 · soccer · IN-APP + LEVEL · timeline + Autoriser",
+        check: "Feuille Rejoindre : timeline pliée, « Autoriser 10 € », niveaux.",
+        open: "fiche",
         sport: "soccer", date: atDays(1, 19, 38), duration: 60,
         // LEVELS HERE TOO (Tim, 2026-09-11). This is the fixture anyone
         // opens first, and without deltas the level row correctly renders
@@ -414,6 +462,8 @@ const PLAN = [
         // how it is paid, badge hard right. This is also the shape whose
         // divide-by-zero crashed the sheet, so it is worth having seeded.
         label: "JOIN 20:47 · soccer · DISCOUNT -42% · in-app",
+        check: "15 € barré, 10 €, badge -33%. Le total suit le sélecteur de places.",
+        open: "fiche",
         sport: "soccer", date: atDays(1, 20, 47), duration: 60,
         filled: 6, max: 10, mine: false, price: 7,
         priceUndiscounted: 12, inApp: true,
@@ -423,6 +473,8 @@ const PLAN = [
         // "Sans engagement" line, and the pinned footer buying IN PLACE.
         // Never rendered by anyone before today.
         label: "JOIN 21:53 · soccer · GOLD ONLY · plans + buy in place",
+        check: "Gold obligatoire : trois formules, achat sans quitter la feuille.",
+        open: "fiche",
         sport: "soccer", date: atDays(2, 21, 53), duration: 60,
         // PRICED AND IN-APP on purpose: Gold's argument is what it saves on
         // in-app games, and at price 0 the sheet would just say "Gratuit"
@@ -434,6 +486,8 @@ const PLAN = [
         // the middle three buckets lit. On-site and free, so the sheet is
         // just card + level + CTA: the plainest possible Join sheet.
         label: "JOIN 07:12 · soccer · LEVEL 3-4/5-6/7-8 · on-site free",
+        check: "Gratuit sur place : AUCUNE timeline de paiement.",
+        open: "fiche",
         sport: "soccer", date: atDays(2, 7, 12), duration: 60,
         filled: 6, max: 10, mine: false, price: 0,
         levelDeltas: ["three_four", "five_six", "seven_eight"],
@@ -444,6 +498,8 @@ const PLAN = [
         // fully lit scale says nothing. Padel, so the level copy and the
         // card colour are both on their padel branch.
         label: "JOIN 02:32 · padel · ALL LEVELS · words not a bar",
+        check: "Tous niveaux : une phrase, pas une barre de niveau.",
+        open: "fiche",
         sport: "padel", date: atDays(3, 2, 32), duration: 90,
         filled: 1, max: 4, mine: false, price: 11,
         levelDeltas: ["one_two", "three_four", "five_six", "seven_eight", "nine_plus"],
@@ -768,6 +824,21 @@ async function run() {
         const data = {
             seed_tag: TAG,
             is_test_game: true,
+            // WHAT TO LOOK AT, and WHERE (Tim, 2026-09-15: "I should
+            // understand what to test exactly for each item").
+            //
+            // The label says what the game IS; these say what should be on
+            // screen and which surface to judge it on. They live on the
+            // fixture because the fixture is what knows -- deriving "what to
+            // check" in Dart from a label string means the panel guessing at
+            // the seeder's intent, and the two drift the moment a fixture
+            // changes.
+            //
+            // NOT in `description`: that field is realistic pitch copy shown
+            // in the app, and it is deliberately mundane because a fixture
+            // description must never look like a Gold-gate bypass target.
+            test_check: p.check || '',
+            test_open: p.open || 'fiche',
             // GUARD 1: never anything but private.
             visibility: REQUIRED_VISIBILITY,
             date: admin.firestore.Timestamp.fromDate(date),
