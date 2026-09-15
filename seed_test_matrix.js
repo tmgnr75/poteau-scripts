@@ -293,6 +293,104 @@ const PLAN = [
     // starts at a deliberately odd HH:MM, so the card alone tells you which
     // case you are looking at without opening anything.
     //
+    // ── EVERY RESULT AND SCORE STATE ────────────────────────────────────
+    //
+    // A played game carries TWO independent arrays and the app reads them
+    // separately: `result_proposals` (who won -- no numbers, deliberately) and
+    // `score_proposals` (the scoreline, as periods). The two existing PLAYED
+    // fixtures seed a score and no result, which is only one of the shapes a
+    // real game reaches. These are the rest.
+    //
+    // Contested values resolve BY AGREEMENT COUNT, never by who proposed
+    // first (ResultProposalStruct's own note), so a contested pair needs two
+    // proposals with different claims and different agreement counts, or it
+    // resolves silently and looks settled.
+    {
+        label: "soccer · PLAYED · RESULT ONLY, no score",
+        sport: "soccer", date: atDays(-5, 19, 0), duration: 60,
+        filled: 10, max: 10, mine: true, price: 7,
+        // Who won, with nobody having typed a scoreline. The state a game sits
+        // in when the group agrees on the outcome and nobody remembers 3-2.
+        finalResult: { winningSide: "team_a", agreedBy: [TIM] },
+    },
+    {
+        label: "soccer · PLAYED · DRAW agreed",
+        sport: "soccer", date: atDays(-6, 20, 0), duration: 60,
+        filled: 10, max: 10, mine: true, price: 6,
+        // `is_draw` is explicit so a proposed draw is never read as an unset
+        // result -- the struct says so, and this is the fixture that proves it.
+        finalResult: { isDraw: true, agreedBy: [TIM, POOL[0]] },
+        finalScore: [{ team_a: 2, team_b: 2 }],
+    },
+    {
+        label: "soccer · PLAYED · SCORE PROPOSED, not yet agreed",
+        sport: "soccer", date: atDays(-7, 19, 30), duration: 60,
+        filled: 10, max: 10, mine: true, price: 8,
+        // Proposed by somebody else, with Tim NOT in agreed_by. The wrap-up
+        // should be asking him to confirm rather than showing a settled band.
+        finalScore: [{ team_a: 4, team_b: 1 }],
+        scoreProposedBy: POOL[0],
+        scoreAgreedBy: [POOL[0]],
+        finalResult: { winningSide: "team_a", proposedBy: POOL[0], agreedBy: [POOL[0]] },
+    },
+    {
+        label: "soccer · PLAYED · SCORE CONTESTED (two claims)",
+        sport: "soccer", date: atDays(-8, 18, 0), duration: 60,
+        filled: 10, max: 10, mine: true, price: 6,
+        // Two proposals, two different scorelines, one agreement each. Ties
+        // resolve to NOTHING, so this game has no agreed score at all -- the
+        // state that must not render as though it did.
+        contestedScores: [
+            { periods: [{ team_a: 3, team_b: 1 }], by: TIM },
+            { periods: [{ team_a: 2, team_b: 2 }], by: POOL[0] },
+        ],
+    },
+    {
+        label: "padel · PLAYED · SETS PROPOSED by a partner",
+        sport: "padel", date: atDays(-9, 18, 30), duration: 90,
+        filled: 4, max: 4, mine: true, price: 12,
+        // Three sets, and the match is decided on SETS WON rather than points:
+        // summing gives 19-18 and the sheet must read 2-1.
+        finalScore: [
+            { team_a: 6, team_b: 4 },
+            { team_a: 5, team_b: 7 },
+            { team_a: 8, team_b: 7 },
+        ],
+        scoreProposedBy: POOL[1],
+        scoreAgreedBy: [POOL[1]],
+    },
+
+    // ── INVITED, BUT NOT IN THE GAME ────────────────────────────────────
+    //
+    // Tim asked for games he was not in and "should have been invited to".
+    // `mine: false` alone only leaves him out of the roster; the invitation is
+    // a separate document and a different relationship from `interested`,
+    // which is what the two FOLLOWED fixtures above use.
+    //
+    // Home queries `invitee == me AND status == 'pending' AND game_date >=
+    // now`, so `game_date` is not optional -- an invitation without it is
+    // invisible, which is the failure mode worth avoiding rather than
+    // debugging later.
+    //
+    // FABRICATED ONLY FOR FIXTURES. undeclineFutureInvitations() deliberately
+    // does not invent invitations on real games, and that reasoning stands:
+    // Tim already receives plenty. These are on test games only.
+    {
+        label: "soccer · INVITED · future, half empty",
+        sport: "soccer", date: atDays(2, 19, 30), duration: 60,
+        filled: 4, max: 10, mine: false, price: 7, invite: true,
+    },
+    {
+        label: "padel · INVITED · future, one spot left",
+        sport: "padel", date: atDays(3, 18, 0), duration: 90,
+        filled: 3, max: 4, mine: false, price: 13, invite: true,
+    },
+    {
+        label: "soccer · INVITED · in-app, needs paying",
+        sport: "soccer", date: atDays(4, 20, 15), duration: 60,
+        filled: 6, max: 10, mine: false, price: 8, inApp: true, invite: true,
+    },
+
     // ALL FIVE ARE `mine: false`, and that is forced, not a preference: the
     // Join sheet only opens on a game Tim is NOT already in. It also means
     // they appear as FOLLOWED on Home, which is where you tap to reach them.
@@ -739,14 +837,48 @@ async function run() {
         // sport-dependent and deliberately not stored -- football sums them,
         // padel counts sets won. See matchScore() in gen2/recomputeUserStats.js
         // and finalScoreNumbers() in the app.
+        // WHEN the proposal was made: just after the final whistle, which is
+        // when a real one lands.
+        const proposedAt = admin.firestore.Timestamp.fromDate(
+            new Date(date.getTime() + p.duration * MIN)
+        );
+
         if (p.finalScore) {
             data.score_proposals = [{
                 periods: p.finalScore,
-                proposed_by: TIM,
-                proposed_at: admin.firestore.Timestamp.fromDate(
-                    new Date(date.getTime() + p.duration * MIN)
-                ),
-                agreed_by: [TIM],
+                // Overridable, so a fixture can seed a score SOMEBODY ELSE
+                // proposed and Tim has not agreed to. Defaulting both to Tim
+                // is what made every seeded score look already settled.
+                proposed_by: p.scoreProposedBy || TIM,
+                proposed_at: proposedAt,
+                agreed_by: p.scoreAgreedBy || [TIM],
+            }];
+        }
+
+        // TWO CLAIMS, ONE EACH. Contested values resolve by agreement count and
+        // a tie resolves to NOTHING, so this game ends with no agreed score --
+        // the state that must not render as though it had one.
+        if (p.contestedScores) {
+            data.score_proposals = p.contestedScores.map((s) => ({
+                periods: s.periods,
+                proposed_by: s.by,
+                proposed_at: proposedAt,
+                agreed_by: [s.by],
+            }));
+        }
+
+        // WHO WON, carrying no numbers by design: disputing a scoreline must
+        // not destroy the outcome everyone agrees on (ResultProposalStruct).
+        // `winning_side` is a TeamsSides value -- team_a / team_b -- and is
+        // null for a draw, where `is_draw` says so explicitly.
+        if (p.finalResult) {
+            const r = p.finalResult;
+            data.result_proposals = [{
+                winning_side: r.isDraw ? null : (r.winningSide || "team_a"),
+                is_draw: r.isDraw === true,
+                proposed_by: r.proposedBy || TIM,
+                proposed_at: proposedAt,
+                agreed_by: r.agreedBy || [TIM],
             }];
         }
 
@@ -764,6 +896,27 @@ async function run() {
 
         const ref = await db.collection("games").add(data);
         if (p.played) feedbackRefs.push(ref);
+
+        // A PENDING INVITATION on a game Tim is not in.
+        //
+        // `game_date` is NOT optional: Home queries `invitee == me AND status
+        // == 'pending' AND game_date >= now`, so an invitation without it is
+        // written, stored, and invisible.
+        //
+        // The inviter is the game's organizer, which is a POOL test account on
+        // every `mine: false` fixture -- an invitation from nobody would be a
+        // shape the app never produces. Purged with its game: the purge above
+        // already deletes game_invitations by `game` ref.
+        if (p.invite && WRITE) {
+            await db.collection("game_invitations").add({
+                inviter: db.collection("users").doc(mine ? TIM : POOL[0]),
+                invitee: timRef,
+                game: ref,
+                game_date: admin.firestore.Timestamp.fromDate(date),
+                status: "pending",
+                created: admin.firestore.FieldValue.serverTimestamp(),
+            });
+        }
 
         // The score is a LOG, never a stored number. Points are appended as
         // ordinary events and the fold derives the score from them, exactly as
