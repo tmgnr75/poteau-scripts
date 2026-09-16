@@ -45,7 +45,13 @@ async function main() {
     const since = last || new Date(Date.now() - 2 * 3600 * 1000);
     const now = new Date();
 
-    console.log(`since ${since.toISOString().slice(11, 16)}${last ? "" : "  (first run, 2h fallback)"}`);
+    // Paris, not UTC. Tim reads these next to his own clock, and a UTC time
+    // two hours behind reads as a stale or broken watermark.
+    const paris = (d) => d.toLocaleString("fr-FR", {
+        timeZone: "Europe/Paris", day: "2-digit", month: "2-digit",
+        hour: "2-digit", minute: "2-digit",
+    });
+    console.log(`since ${paris(since)} Paris → now ${paris(now)}${last ? "" : "  (first run, 2h fallback)"}`);
 
     const users = await db.collection("users")
         .where("created_time", ">=", admin.firestore.Timestamp.fromDate(since))
@@ -112,10 +118,10 @@ async function main() {
     for (const r of report) {
         const tag = r.hard.length ? "ACT" : "   ";
         console.log(`${tag} ${r.uid} | ${r.x.display_name || "(no name)"} | ${r.x.email}`);
-        console.log(`    ${r.created?.toISOString().slice(11, 16)} ${r.x.connector || "?"} | ${r.x.phone_number || "no phone"} | ${r.gs.length} game(s) | ${r.human.length} msg(s)`);
+        console.log(`    ${paris(r.created)} ${r.x.connector || "?"} | ${r.x.phone_number || "no phone"} | ${r.gs.length} game(s) | ${r.human.length} msg(s)`);
         if (r.hard.length) console.log(`    HARD: ${r.hard.join(" · ")}`);
         if (r.soft.length) console.log(`    soft: ${r.soft.join(" · ")}`);
-        r.gs.forEach((g) => console.log(`      ${g.centre} | ${g.status} | kickoff ${g.date?.toDate?.().toISOString().slice(0, 16) || "?"}`));
+        r.gs.forEach((g) => console.log(`      ${g.centre} | ${g.status} | kickoff ${g.date?.toDate?.() ? paris(g.date.toDate()) : "?"}`));
         r.human.slice(0, 2).forEach((m) => console.log(`      "${(m.text || "").replace(/\n/g, " ").slice(0, 120)}"`));
         console.log("");
     }
