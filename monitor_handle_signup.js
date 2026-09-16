@@ -9,8 +9,10 @@
  *
  * Baseline measured 2026-09-15: ~65 signups/day, ~9/day on the email OTC path.
  *
- * Posts to Slack. Defaults to #health-reports; set MONITORING_WEBHOOK_ENV to a
- * #monitoring webhook file once one exists. Use --dry to print only.
+ * Posts to #monitoring via ~/.poteau/slack_webhook.env. That file is still
+ * named for #health-reports because the channel was RENAMED on 2026-09-16 and
+ * kept its ID; a webhook binds to the ID, so nothing broke and no new webhook
+ * is needed. Do not create a second one. Use --dry to print only.
  */
 const fs = require("fs");
 const os = require("os");
@@ -27,16 +29,17 @@ const DRY = process.argv.includes("--dry");
 const BASELINE_PER_DAY = 65;
 const BASELINE_EMAIL_PER_DAY = 9;
 
-// A webhook is bound to one channel forever, so #monitoring needs its own file.
-// Falls back to the health webhook rather than failing: a monitor that cannot
-// post is worse than one posting to the wrong channel.
+// slack_webhook.env IS #monitoring: the channel was renamed from
+// #health-reports on 2026-09-16 and a webhook binds to the channel ID, not the
+// name. The env file keeps its old name; the override is kept only so a future
+// split into a genuinely separate channel needs no code change.
 const WEBHOOK_ENV = process.env.MONITORING_WEBHOOK_ENV
     || path.join(os.homedir(), ".poteau", "monitoring_webhook.env");
 const FALLBACK_ENV = path.join(os.homedir(), ".poteau", "slack_webhook.env");
 
 function webhookUrl() {
     if (process.env.SLACK_WEBHOOK_URL) return { url: process.env.SLACK_WEBHOOK_URL, from: "env" };
-    for (const [file, label] of [[WEBHOOK_ENV, "#monitoring"], [FALLBACK_ENV, "#health-reports"]]) {
+    for (const [file, label] of [[WEBHOOK_ENV, "#monitoring (dedicated)"], [FALLBACK_ENV, "#monitoring"]]) {
         try {
             const m = fs.readFileSync(file, "utf8")
                 .match(/^\s*(?:export\s+)?SLACK_WEBHOOK_URL\s*=\s*["']?([^"'\r\n]+)/m);
