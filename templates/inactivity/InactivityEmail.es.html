@@ -7,7 +7,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <meta name="color-scheme" content="light">
     <meta name="supported-color-schemes" content="light">
-    <title>Tu cuenta Poteau</title>
+    <title>Tu Poteau se borra el {{DELETION_DATE}}</title>
     <!--[if mso]>
     <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
     <![endif]-->
@@ -20,29 +20,32 @@
         a { text-decoration: none; }
 
         @media (prefers-color-scheme: dark) {
-            .bg     { background-color: #0e1113 !important; }
-            .card   { background-color: #1b1f22 !important; }
-            .h1     { color: #ffffff !important; }
-            .sub    { color: #b6c0c8 !important; }
-            .muted  { color: #93a0a9 !important; }
-            .rule   { background-color: #2e353a !important; }
-            .statv  { color: #ffffff !important; }
-            .statl  { color: #93a0a9 !important; }
+            .bg      { background-color: #0e1113 !important; }
+            .card    { background-color: #1b1f22 !important; }
+            .h1      { color: #ffffff !important; }
+            .h2      { color: #ffffff !important; }
+            .sub     { color: #b6c0c8 !important; }
+            .strong  { color: #ffffff !important; }
+            .muted   { color: #93a0a9 !important; }
+            .rule    { background-color: #2e353a !important; }
+            .quiet   { background-color: #14181a !important; }
         }
 
         @media only screen and (max-width: 600px) {
             .container { width: 100% !important; }
             .pad { padding-left: 24px !important; padding-right: 24px !important; }
             .h1 { font-size: 26px !important; }
+            .h2 { font-size: 20px !important; }
         }
     </style>
 </head>
 
 <body style="margin:0; padding:0; background-color:#f2f4f5;">
 
-    <!-- Preheader: the date is the one thing that must survive the inbox list. -->
+    <!-- Preheader: the second half of the pitch, never a repeat of the subject.
+         The subject carries the date; this carries the question. -->
     <div style="display:none; font-size:1px; color:#f2f4f5; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-        Guardamos tu plaza hasta el {{DELETION_DATE}}.
+        ¿Has dejado el fútbol? Lo dudamos.
         &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847;
     </div>
 
@@ -52,62 +55,171 @@
 
                 <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
 
-                    <!-- Card -->
                     <tr>
                         <td class="card" style="background-color:#ffffff; border-radius:16px; overflow:hidden;">
 
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 
+                                <!-- App icon. Carries its own #141414 ground, so it
+                                     reads as the app tile rather than floating on
+                                     white. Same asset and treatment as the OTC email.
+                                     It also does real work here: the reader has not
+                                     seen this app in three years and may not place
+                                     the name, so the icon is the fastest possible
+                                     reminder. -->
                                 <tr>
-                                    <td class="pad" style="padding:40px 40px 0 40px;">
-                                        <h1 class="h1" style="margin:0 0 16px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:30px; line-height:1.2; font-weight:800; color:#141414;">
-                                            Cuánto tiempo, {{FIRST_NAME}}
-                                        </h1>
-                                        <p class="sub" style="margin:0 0 20px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            Tu cuenta Poteau lleva tiempo dormida. Estamos limpiando las cuentas inactivas, y la tuya se borra el <strong style="color:#141414;">{{DELETION_DATE}}</strong> si no vuelves antes.
+                                    <td align="center" class="pad" style="padding:44px 40px 0;">
+                                        <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fpoteau-icon-2026-email.png?alt=media&token=f9ba6856-4bcb-43ab-8aaa-3fa5339b64fe"
+                                            width="64" height="64" alt="Poteau"
+                                            style="width:64px; height:64px; border-radius:16px; display:block;">
+                                    </td>
+                                </tr>
+
+                                <!-- The notice. First and unsoftened: it is what
+                                     earns the right to the rest of the email. The
+                                     subject line is NOT repeated here -- the reader
+                                     has just read it, and repeating it wastes the
+                                     one screen that decides whether they keep going. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Hola {{FIRST_NAME}},
                                         </p>
-                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            Pero antes de que te vayas: han pasado muchas cosas desde tu último partido.
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Tu cuenta Poteau lleva tiempo parada. No guardamos las cuentas inactivas para siempre, así que la tuya se borrará el <strong class="strong" style="color:#141414;">{{DELETION_DATE}}</strong>, con todos tus datos.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 32px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            A menos que vuelvas antes. Y antes de que te vayas, dos minutos.
                                         </p>
                                     </td>
                                 </tr>
 
-                                <!-- Stats -->
                                 <tr>
                                     <td class="pad" style="padding:0 40px;">
-                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f9fa; border-radius:12px;">
+                                        <div class="rule" style="height:1px; background-color:#e6eaec; font-size:0; line-height:0;">&nbsp;</div>
+                                    </td>
+                                </tr>
+
+                                <!-- Recontextualisation. Three years is long enough to
+                                     forget the name entirely, and 87% of this list
+                                     never played a game, so there is no memory to jog.
+                                     Said lightly, without making them feel stupid. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <h2 class="h2" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:22px; line-height:1.25; font-weight:800; color:#141414;">
+                                            ¿Poteau no te suena de nada? 😅
+                                        </h2>
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Tranquilo, no nos lo tomamos a mal. En resumen: abres la app, ves los partidos de fútbol cerca de ti, coges una plaza y juegas. No hace falta tener equipo, de hecho está pensado para quien no lo tiene.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 32px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Seguramente por eso te la descargaste en su día.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <div class="rule" style="height:1px; background-color:#e6eaec; font-size:0; line-height:0;">&nbsp;</div>
+                                    </td>
+                                </tr>
+
+                                <!-- The pivot: the real reason they stopped. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <h2 class="h2" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:22px; line-height:1.25; font-weight:800; color:#141414;">
+                                            ¿Has dejado el fútbol? ⚽
+                                        </h2>
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Lo dudamos. Lo que suele pasar es más bien esto: te registras, miras los partidos, y nadie te conoce. Presentarte solo entre desconocidos es la parte difícil. La mayoría se queda ahí.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 24px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Es exactamente lo que hemos pasado dos años arreglando.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <!-- What actually changed. Specific and checkable,
+                                     never adjectival. One emoji per line, as a marker
+                                     rather than decoration. -->
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <table role="presentation" class="quiet" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f9fa; border-radius:12px;">
                                             <tr>
-                                                <td align="center" width="50%" style="padding:24px 12px;">
-                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{NEW_PLAYERS}}</div>
-                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">jugadores nuevos</div>
-                                                </td>
-                                                <td align="center" width="50%" style="padding:24px 12px;">
-                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{GAMES_PLAYED}}</div>
-                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">partidos jugados</div>
+                                                <td style="padding:26px 24px 10px 24px;">
+
+                                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">📊</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Tu nivel, del 1 al 10.</strong><br>Un test rápido lo define, y ya no acabas en un partido demasiado fuerte o demasiado flojo.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">👤</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Perfiles de verdad.</strong><br>Posición, nivel, partidos jugados. Sabes con quién te encuentras en la cancha.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">⚽</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">La alineación, de un vistazo.</strong><br>Quién juega, quién falta, cuántas plazas quedan. Antes de apuntarte.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">🟨</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Tarjetas amarillas y rojas.</strong><br>Al que se cae en el último momento o no aparece, nos encargamos.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">🏟️</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Más de 50 centros asociados.</strong><br>Canchas reservadas de verdad, no partidos que se caen.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
 
+                                <!-- The number. {{ACTIVITY_LINE}} is written by the
+                                     sender: the local figure only where there is
+                                     genuinely something to report, the national one
+                                     otherwise. Paris had 4,956 games within 15 km last
+                                     month and Rouen had 1, so an unconditional local
+                                     claim would be a broken promise. -->
                                 <tr>
                                     <td class="pad" style="padding:28px 40px 0 40px;">
-                                        <p class="sub" style="margin:0 0 12px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            La app también ha cambiado. Es más rápida, por fin se ve el marcador en directo durante el partido, y encontrar una plaza cerca de ti es cuestión de segundos.
+                                        <p class="sub" style="margin:0 0 6px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            {{ACTIVITY_LINE}}
                                         </p>
-                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            Tu perfil, tus estadísticas y tu historial siguen ahí. Abre la app una vez y todo vuelve a arrancar.
+                                        <p class="sub" style="margin:0 0 28px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Seguro que hay uno esta semana que te iría bien.
                                         </p>
                                     </td>
                                 </tr>
 
-                                <!-- CTA -->
                                 <tr>
                                     <td class="pad" align="center" style="padding:0 40px 8px 40px;">
                                         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td align="center" style="background-color:#00204a; border-radius:12px;">
-                                                    <a href="{{CTA_URL}}" style="display:inline-block; padding:16px 36px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:800; color:#ffffff; border-radius:12px;">
+                                                    <a href="{{CTA_URL}}" style="display:inline-block; padding:16px 40px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; font-weight:800; color:#ffffff; border-radius:12px;">
                                                         Volver a abrir Poteau
                                                     </a>
                                                 </td>
@@ -116,10 +228,14 @@
                                     </td>
                                 </tr>
 
+                                <!-- Permission to leave. This paragraph protects the
+                                     complaint rate: someone who feels trapped marks it
+                                     as spam, someone told plainly that doing nothing
+                                     is valid just closes it. -->
                                 <tr>
-                                    <td class="pad" align="center" style="padding:16px 40px 36px 40px;">
-                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.6; color:#6b7880;">
-                                            ¿Ya no juegas? No hagas nada, tu cuenta y tus datos se borrarán solos el {{DELETION_DATE}}.
+                                    <td class="pad" align="center" style="padding:20px 40px 36px 40px;">
+                                        <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:1.6; color:#6b7880;">
+                                            Y si de verdad has pasado página, no hagas nada. El {{DELETION_DATE}}, tu cuenta y tus datos se van solos, sin que muevas un dedo.
                                         </p>
                                     </td>
                                 </tr>
@@ -132,7 +248,10 @@
 
                                 <tr>
                                     <td class="pad" style="padding:24px 40px 36px 40px;">
-                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.6; color:#8a959c;">
+                                        <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.6; color:#3d4a52;">
+                                            El equipo Poteau
+                                        </p>
+                                        <p class="muted" style="margin:12px 0 0 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:1.6; color:#8a959c;">
                                             Te escribimos porque la ley nos pide no conservar indefinidamente los datos de cuentas inactivas. ¿Alguna duda? Responde a este correo, lo leemos todo.
                                         </p>
                                     </td>
@@ -142,10 +261,9 @@
                         </td>
                     </tr>
 
-                    <!-- Footer -->
                     <tr>
                         <td align="center" style="padding:24px 16px 0 16px;">
-                            <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:1.6; color:#8a959c;">
+                            <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:12px; line-height:1.6; color:#8a959c;">
                                 Poteau &middot; 18 bis rue d'Anjou, 75008 Paris<br>
                                 <a href="{{UNSUBSCRIBE_URL}}" style="color:#8a959c; text-decoration:underline;">Dejar de recibir correos</a>
                             </p>

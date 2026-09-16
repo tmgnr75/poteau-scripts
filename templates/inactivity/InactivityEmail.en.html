@@ -7,7 +7,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <meta name="color-scheme" content="light">
     <meta name="supported-color-schemes" content="light">
-    <title>Your Poteau account</title>
+    <title>Your Poteau goes on {{DELETION_DATE}}</title>
     <!--[if mso]>
     <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
     <![endif]-->
@@ -20,29 +20,32 @@
         a { text-decoration: none; }
 
         @media (prefers-color-scheme: dark) {
-            .bg     { background-color: #0e1113 !important; }
-            .card   { background-color: #1b1f22 !important; }
-            .h1     { color: #ffffff !important; }
-            .sub    { color: #b6c0c8 !important; }
-            .muted  { color: #93a0a9 !important; }
-            .rule   { background-color: #2e353a !important; }
-            .statv  { color: #ffffff !important; }
-            .statl  { color: #93a0a9 !important; }
+            .bg      { background-color: #0e1113 !important; }
+            .card    { background-color: #1b1f22 !important; }
+            .h1      { color: #ffffff !important; }
+            .h2      { color: #ffffff !important; }
+            .sub     { color: #b6c0c8 !important; }
+            .strong  { color: #ffffff !important; }
+            .muted   { color: #93a0a9 !important; }
+            .rule    { background-color: #2e353a !important; }
+            .quiet   { background-color: #14181a !important; }
         }
 
         @media only screen and (max-width: 600px) {
             .container { width: 100% !important; }
             .pad { padding-left: 24px !important; padding-right: 24px !important; }
             .h1 { font-size: 26px !important; }
+            .h2 { font-size: 20px !important; }
         }
     </style>
 </head>
 
 <body style="margin:0; padding:0; background-color:#f2f4f5;">
 
-    <!-- Preheader: the date is the one thing that must survive the inbox list. -->
+    <!-- Preheader: the second half of the pitch, never a repeat of the subject.
+         The subject carries the date; this carries the question. -->
     <div style="display:none; font-size:1px; color:#f2f4f5; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-        We're keeping your spot until {{DELETION_DATE}}.
+        Given up football? We doubt it.
         &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847;
     </div>
 
@@ -52,62 +55,171 @@
 
                 <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
 
-                    <!-- Card -->
                     <tr>
                         <td class="card" style="background-color:#ffffff; border-radius:16px; overflow:hidden;">
 
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 
+                                <!-- App icon. Carries its own #141414 ground, so it
+                                     reads as the app tile rather than floating on
+                                     white. Same asset and treatment as the OTC email.
+                                     It also does real work here: the reader has not
+                                     seen this app in three years and may not place
+                                     the name, so the icon is the fastest possible
+                                     reminder. -->
                                 <tr>
-                                    <td class="pad" style="padding:40px 40px 0 40px;">
-                                        <h1 class="h1" style="margin:0 0 16px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:30px; line-height:1.2; font-weight:800; color:#141414;">
-                                            It's been a while, {{FIRST_NAME}}
-                                        </h1>
-                                        <p class="sub" style="margin:0 0 20px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            Your Poteau account has been asleep for a while. We're clearing out inactive accounts, and yours goes on <strong style="color:#141414;">{{DELETION_DATE}}</strong> unless you drop by before then.
+                                    <td align="center" class="pad" style="padding:44px 40px 0;">
+                                        <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fpoteau-icon-2026-email.png?alt=media&token=f9ba6856-4bcb-43ab-8aaa-3fa5339b64fe"
+                                            width="64" height="64" alt="Poteau"
+                                            style="width:64px; height:64px; border-radius:16px; display:block;">
+                                    </td>
+                                </tr>
+
+                                <!-- The notice. First and unsoftened: it is what
+                                     earns the right to the rest of the email. The
+                                     subject line is NOT repeated here -- the reader
+                                     has just read it, and repeating it wastes the
+                                     one screen that decides whether they keep going. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Hi {{FIRST_NAME}},
                                         </p>
-                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            But before you go: a lot has happened since your last game.
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Your Poteau account has been quiet for a while. We don't keep inactive accounts forever, so yours will be deleted on <strong class="strong" style="color:#141414;">{{DELETION_DATE}}</strong>, along with all your data.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 32px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Unless you drop by before then. And before you go, two minutes.
                                         </p>
                                     </td>
                                 </tr>
 
-                                <!-- Stats -->
                                 <tr>
                                     <td class="pad" style="padding:0 40px;">
-                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f9fa; border-radius:12px;">
+                                        <div class="rule" style="height:1px; background-color:#e6eaec; font-size:0; line-height:0;">&nbsp;</div>
+                                    </td>
+                                </tr>
+
+                                <!-- Recontextualisation. Three years is long enough to
+                                     forget the name entirely, and 87% of this list
+                                     never played a game, so there is no memory to jog.
+                                     Said lightly, without making them feel stupid. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <h2 class="h2" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:22px; line-height:1.25; font-weight:800; color:#141414;">
+                                            Poteau doesn't ring a bell? 😅
+                                        </h2>
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            No worries, we're not offended. Short version: you open the app, you see the football games near you, you take a spot, you play. No need for a team, it's actually built for people who don't have one.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 32px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            That's probably why you downloaded it in the first place.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <div class="rule" style="height:1px; background-color:#e6eaec; font-size:0; line-height:0;">&nbsp;</div>
+                                    </td>
+                                </tr>
+
+                                <!-- The pivot: the real reason they stopped. -->
+                                <tr>
+                                    <td class="pad" style="padding:32px 40px 0 40px;">
+                                        <h2 class="h2" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:22px; line-height:1.25; font-weight:800; color:#141414;">
+                                            Given up football? ⚽
+                                        </h2>
+                                        <p class="sub" style="margin:0 0 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            We doubt it. Here's what usually happens instead: you sign up, you look at the games, and nobody knows you. Turning up alone among strangers is the hard part. Most people stop right there.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 24px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            That's exactly what we spent two years fixing.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <!-- What actually changed. Specific and checkable,
+                                     never adjectival. One emoji per line, as a marker
+                                     rather than decoration. -->
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <table role="presentation" class="quiet" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f9fa; border-radius:12px;">
                                             <tr>
-                                                <td align="center" width="50%" style="padding:24px 12px;">
-                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{NEW_PLAYERS}}</div>
-                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">new players</div>
-                                                </td>
-                                                <td align="center" width="50%" style="padding:24px 12px;">
-                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{GAMES_PLAYED}}</div>
-                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">games played</div>
+                                                <td style="padding:26px 24px 10px 24px;">
+
+                                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">📊</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Your level, from 1 to 10.</strong><br>A quick test sets it, so you no longer land in a game that's way above or way below you.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">👤</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Real profiles.</strong><br>Position, level, games played. You know who you're meeting on the pitch.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">⚽</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">The line-up, at a glance.</strong><br>Who's playing, who's missing, how many spots are left. Before you sign up.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">🟨</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Yellow and red cards.</strong><br>Whoever drops out at the last minute or doesn't show up, we deal with it.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="30" valign="top" style="font-size:18px; line-height:1.5; padding-bottom:16px;">🏟️</td>
+                                                            <td valign="top" style="padding-bottom:16px;">
+                                                                <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4a52;">
+                                                                    <strong class="strong" style="color:#141414;">Over 50 partner venues.</strong><br>Pitches genuinely booked, not games that fall through.
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
 
+                                <!-- The number. {{ACTIVITY_LINE}} is written by the
+                                     sender: the local figure only where there is
+                                     genuinely something to report, the national one
+                                     otherwise. Paris had 4,956 games within 15 km last
+                                     month and Rouen had 1, so an unconditional local
+                                     claim would be a broken promise. -->
                                 <tr>
                                     <td class="pad" style="padding:28px 40px 0 40px;">
-                                        <p class="sub" style="margin:0 0 12px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            The app changed too. It’s faster, you can finally follow the score live during the game, and finding a spot near you takes seconds.
+                                        <p class="sub" style="margin:0 0 6px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            {{ACTIVITY_LINE}}
                                         </p>
-                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
-                                            Your profile, your stats and your history are all still there. Open the app once and everything picks up where it left off.
+                                        <p class="sub" style="margin:0 0 28px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            There's probably one this week that would suit you.
                                         </p>
                                     </td>
                                 </tr>
 
-                                <!-- CTA -->
                                 <tr>
                                     <td class="pad" align="center" style="padding:0 40px 8px 40px;">
                                         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td align="center" style="background-color:#00204a; border-radius:12px;">
-                                                    <a href="{{CTA_URL}}" style="display:inline-block; padding:16px 36px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:800; color:#ffffff; border-radius:12px;">
+                                                    <a href="{{CTA_URL}}" style="display:inline-block; padding:16px 40px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:16px; font-weight:800; color:#ffffff; border-radius:12px;">
                                                         Open Poteau again
                                                     </a>
                                                 </td>
@@ -116,10 +228,14 @@
                                     </td>
                                 </tr>
 
+                                <!-- Permission to leave. This paragraph protects the
+                                     complaint rate: someone who feels trapped marks it
+                                     as spam, someone told plainly that doing nothing
+                                     is valid just closes it. -->
                                 <tr>
-                                    <td class="pad" align="center" style="padding:16px 40px 36px 40px;">
-                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.6; color:#6b7880;">
-                                            Not playing anymore? Do nothing, and your account and data will go on their own on {{DELETION_DATE}}.
+                                    <td class="pad" align="center" style="padding:20px 40px 36px 40px;">
+                                        <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; line-height:1.6; color:#6b7880;">
+                                            And if you've genuinely moved on, do nothing. On {{DELETION_DATE}}, your account and your data go on their own, without you lifting a finger.
                                         </p>
                                     </td>
                                 </tr>
@@ -132,7 +248,10 @@
 
                                 <tr>
                                     <td class="pad" style="padding:24px 40px 36px 40px;">
-                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.6; color:#8a959c;">
+                                        <p class="sub" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.6; color:#3d4a52;">
+                                            The Poteau Team
+                                        </p>
+                                        <p class="muted" style="margin:12px 0 0 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:13px; line-height:1.6; color:#8a959c;">
                                             We're writing because the law asks us not to keep data from inactive accounts indefinitely. Any questions? Reply to this email, we read everything.
                                         </p>
                                     </td>
@@ -142,10 +261,9 @@
                         </td>
                     </tr>
 
-                    <!-- Footer -->
                     <tr>
                         <td align="center" style="padding:24px 16px 0 16px;">
-                            <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:1.6; color:#8a959c;">
+                            <p class="muted" style="margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:12px; line-height:1.6; color:#8a959c;">
                                 Poteau &middot; 18 bis rue d'Anjou, 75008 Paris<br>
                                 <a href="{{UNSUBSCRIBE_URL}}" style="color:#8a959c; text-decoration:underline;">Unsubscribe from emails</a>
                             </p>
