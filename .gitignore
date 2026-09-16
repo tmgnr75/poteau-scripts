@@ -27,3 +27,4 @@ backfill_manifest_*.jsonl
 
 # Le Park watch state (local, regenerated)
 .lepark_watch_state.json
+.signup_check_state.json
