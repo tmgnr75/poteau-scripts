@@ -39,23 +39,32 @@
             box-sizing: border-box;
         }
 
+        /* PADDING SYSTEM. The card had three overlapping sources of spacing --
+           20px table padding, a 50px/30px/20px .container margin, and per-element
+           padding on top of both -- so no edge matched any other and the top was
+           visibly tighter than the bottom. All of it now comes from .container:
+           one value for the sides, one for top and bottom. */
         table.inner {
             max-width: 500px;
             width: 100%;
             background-color: #FFF;
             margin: 60px auto;
             box-sizing: border-box;
-            padding: 20px 0;
+            padding: 0;
             box-shadow: 0 0 30px 20px #00000034;
         }
 
         h1 {
-            padding: 20px 0 0;
+            padding: 0;
             font-weight: 900;
             color: #131313;
             text-align: left;
             font-size: 1.4em;
-            margin: 15px auto;
+            /* line-height 1.2 with a negative top margin cancels the half-leading
+               the font adds above the cap height, so the measured gap above the
+               title matches the 36px on the sides instead of reading as 43px. */
+            line-height: 1.2;
+            margin: -6px 0 12px;
         }
 
         p {
@@ -107,21 +116,40 @@
             color: white;
         }
 
+        /* Icon + sign-off are one block at the foot of the card: the icon sits
+           directly above "L'équipe Poteau", both centred. 40px because it closes
+           the email rather than opening it -- at 56px the dark tile pulled the
+           eye away from the message. The image carries its own padding (the P
+           fills 52% of the tile), so it reads as a mark and not a slab. */
+        /* The gap that used to sit above .footer lives here now, because the
+           icon is the first thing in the sign-off block. */
+        #logo {
+            padding: 40px 0 0;
+        }
+
         #logo img {
-            margin: 0 auto 50px;
-            width: 70px;
+            margin: 0 auto 12px;
+            width: 40px;
             display: block;
+            border-radius: 10px;
         }
 
         .footer {
-            padding: 70px 0 0;
+            padding: 0;
             text-align: center;
-            font-weight: 600;
+            /* Was bold black, which made it read as a heading for whatever came
+               after it. It is a sign-off; the other templates render it at
+               #8a949e, not 600 weight. */
+            font-weight: 400;
             font-size: 0.9em;
+            color: #8a949e;
         }
 
         .container {
-            margin: 50px 30px 20px;
+            /* The only source of padding inside the card. Equal on all four
+               sides; the sign-off block adds its own gap above itself. */
+            padding: 36px;
+            margin: 0;
             box-sizing: border-box;
         }
 
@@ -165,7 +193,12 @@
                                         </div>
                                         {{/if}}
                                         <h1>{{{heading_text}}}</h1>
-                                        <p>{{{main_body_text}}} ⤵️</p>
+                                        <!-- No trailing arrow. It was appended to
+                                             every body regardless of whether the
+                                             CTA was worth pointing at, and the
+                                             newer templates (InvitationEmail, OTC)
+                                             do not use one. -->
+                                        <p>{{{main_body_text}}}</p>
                                         <a href="{{cta_link_url}}">
                                             <div class="button">
                                                 <strong>
@@ -173,11 +206,12 @@
                                                 </strong>
                                             </div>
                                         </a>
+                                        <div id="logo">
+                                            <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fpoteau-icon-2026-email.png?alt=media&token=f9ba6856-4bcb-43ab-8aaa-3fa5339b64fe"
+                                                width="40" height="40" alt="Poteau"
+                                                style="width:40px;height:40px;border-radius:10px;display:block;margin:0 auto 12px;">
+                                        </div>
                                         <p class="footer">{{{footer_text}}}</p>
-                                    </div>
-                                    <div id="logo">
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/krank-club.appspot.com/o/images%2Fpoteau-circle.png?alt=media&token=1413a238-0640-472b-bbb6-50c8c53a3ba9"
-                                            alt="Logo, vintage ball">
                                     </div>
                                 </td>
                             </tr>
