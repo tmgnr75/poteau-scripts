@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <title>Your Poteau account</title>
+    <!--[if mso]>
+    <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+    <![endif]-->
+    <style>
+        /* Client resets. Inline styles below carry the real design -- these only
+           patch clients that strip or misread the inline attributes. */
+        body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
+        a { text-decoration: none; }
+
+        @media (prefers-color-scheme: dark) {
+            .bg     { background-color: #0e1113 !important; }
+            .card   { background-color: #1b1f22 !important; }
+            .h1     { color: #ffffff !important; }
+            .sub    { color: #b6c0c8 !important; }
+            .muted  { color: #93a0a9 !important; }
+            .rule   { background-color: #2e353a !important; }
+            .statv  { color: #ffffff !important; }
+            .statl  { color: #93a0a9 !important; }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .pad { padding-left: 24px !important; padding-right: 24px !important; }
+            .h1 { font-size: 26px !important; }
+        }
+    </style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f2f4f5;">
+
+    <!-- Preheader: the date is the one thing that must survive the inbox list. -->
+    <div style="display:none; font-size:1px; color:#f2f4f5; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+        We're keeping your spot until {{DELETION_DATE}}.
+        &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847; &#8199;&#65279;&#847;
+    </div>
+
+    <table role="presentation" class="bg" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f2f4f5;">
+        <tr>
+            <td align="center" style="padding:40px 12px;">
+
+                <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+
+                    <!-- Card -->
+                    <tr>
+                        <td class="card" style="background-color:#ffffff; border-radius:16px; overflow:hidden;">
+
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+                                <tr>
+                                    <td class="pad" style="padding:40px 40px 0 40px;">
+                                        <h1 class="h1" style="margin:0 0 16px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:30px; line-height:1.2; font-weight:800; color:#141414;">
+                                            It's been a while, {{FIRST_NAME}}
+                                        </h1>
+                                        <p class="sub" style="margin:0 0 20px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Your Poteau account has been asleep for a while. We're clearing out inactive accounts, and yours goes on <strong style="color:#141414;">{{DELETION_DATE}}</strong> unless you drop by before then.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            But before you go: a lot has happened since your last game.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <!-- Stats -->
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f9fa; border-radius:12px;">
+                                            <tr>
+                                                <td align="center" width="50%" style="padding:24px 12px;">
+                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{NEW_PLAYERS}}</div>
+                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">new players</div>
+                                                </td>
+                                                <td align="center" width="50%" style="padding:24px 12px;">
+                                                    <div class="statv" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:28px; font-weight:800; color:#141414; line-height:1.1;">{{GAMES_PLAYED}}</div>
+                                                    <div class="statl" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; color:#6b7880; padding-top:6px;">games played</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" style="padding:28px 40px 0 40px;">
+                                        <p class="sub" style="margin:0 0 12px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            The app changed too. It’s faster, you can finally follow the score live during the game, and finding a spot near you takes seconds.
+                                        </p>
+                                        <p class="sub" style="margin:0 0 28px 0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#3d4a52;">
+                                            Your profile, your stats and your history are all still there. Open the app once and everything picks up where it left off.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <!-- CTA -->
+                                <tr>
+                                    <td class="pad" align="center" style="padding:0 40px 8px 40px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td align="center" style="background-color:#00204a; border-radius:12px;">
+                                                    <a href="{{CTA_URL}}" style="display:inline-block; padding:16px 36px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:16px; font-weight:800; color:#ffffff; border-radius:12px;">
+                                                        Open Poteau again
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" align="center" style="padding:16px 40px 36px 40px;">
+                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:14px; line-height:1.6; color:#6b7880;">
+                                            Not playing anymore? Do nothing, and your account and data will go on their own on {{DELETION_DATE}}.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" style="padding:0 40px;">
+                                        <div class="rule" style="height:1px; background-color:#e6eaec; font-size:0; line-height:0;">&nbsp;</div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="pad" style="padding:24px 40px 36px 40px;">
+                                        <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.6; color:#8a959c;">
+                                            We're writing because the law asks us not to keep data from inactive accounts indefinitely. Any questions? Reply to this email, we read everything.
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding:24px 16px 0 16px;">
+                            <p class="muted" style="margin:0; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; line-height:1.6; color:#8a959c;">
+                                Poteau &middot; 18 bis rue d'Anjou, 75008 Paris<br>
+                                <a href="{{UNSUBSCRIBE_URL}}" style="color:#8a959c; text-decoration:underline;">Unsubscribe from emails</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
