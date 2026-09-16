@@ -16,6 +16,7 @@
  *   node deployInactivityEmails.js --dry     # render + validate, send nothing
  *
  * Variables used by the templates:
+ *   {{SUBJECT}}         the subject line, chosen per recipient by the A/B arm
  *   {{FIRST_NAME}}      the person's first name, or a neutral fallback
  *   {{DELETION_DATE}}   localised date the account goes, e.g. "1er juin 2027"
  *   {{ACTIVITY_LINE}}   the HTML activity sentence (local or national)
@@ -35,12 +36,18 @@ const {
 const REGION = 'eu-north-1';
 const DRY = process.argv.includes('--dry');
 
-// Subject lines live in the SES template, so they are translated here.
-// The deletion date is in the subject deliberately: it is the one fact that
-// decides whether the email gets opened at all.
+// The subject is NOT stored in the template. It is supplied per recipient as
+// {{SUBJECT}}, because the send runs a seven-arm subject-line test and
+// SendTemplatedEmailCommand cannot override a stored subject. Storing them
+// would mean seven templates per language, 28 in total, all needing to stay in
+// sync through every copy change.
+//
+// The arms and their rationale live in gen2/enforceAccountRetention.js
+// (SUBJECT_VARIANTS). Only French is split; EN, ES and IT get their own
+// control subject from the same file.
 const LANGS = {
     fr: {
-        subject: 'Ton Poteau part le {{DELETION_DATE}}',
+        subject: '{{SUBJECT}}',
         text: [
             'Salut {{FIRST_NAME}},',
             '',
@@ -73,7 +80,7 @@ const LANGS = {
         ].join('\n'),
     },
     en: {
-        subject: 'Your Poteau goes on {{DELETION_DATE}}',
+        subject: '{{SUBJECT}}',
         text: [
             'Hi {{FIRST_NAME}},',
             '',
@@ -106,7 +113,7 @@ const LANGS = {
         ].join('\n'),
     },
     es: {
-        subject: 'Tu Poteau se borra el {{DELETION_DATE}}',
+        subject: '{{SUBJECT}}',
         text: [
             'Hola {{FIRST_NAME}},',
             '',
@@ -139,7 +146,7 @@ const LANGS = {
         ].join('\n'),
     },
     it: {
-        subject: 'Il tuo Poteau sparisce il {{DELETION_DATE}}',
+        subject: '{{SUBJECT}}',
         text: [
             'Ciao {{FIRST_NAME}},',
             '',
@@ -201,8 +208,12 @@ async function main() {
                 failures++;
             }
         }
-        if (!meta.subject.includes('{{DELETION_DATE}}')) {
-            console.error(`${lang}: subject is missing {{DELETION_DATE}}`);
+        // The subject is supplied per recipient, not stored, because the send
+        // runs a seven-arm subject-line test and SendTemplatedEmailCommand
+        // cannot override a stored subject. Seven arms x four languages would
+        // otherwise be 28 templates to keep in sync.
+        if (!meta.subject.includes('{{SUBJECT}}')) {
+            console.error(`${lang}: subject must be {{SUBJECT}}, supplied by the sender`);
             failures++;
         }
 
