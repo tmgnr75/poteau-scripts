@@ -36,6 +36,45 @@ const {
 const REGION = 'eu-north-1';
 const DRY = process.argv.includes('--dry');
 
+/**
+ * AWS credentials, from the environment or straight out of ~/.poteau/aws_ses.env.
+ *
+ * Reading the file here rather than relying on `source` matters: the values in
+ * it are quoted, so passing them through `env VAR=$(grep ...)` hands SES a
+ * secret with literal quote characters on both ends and the request fails with
+ * SignatureDoesNotMatch, which reads like a wrong key rather than a quoting bug.
+ *
+ * Same helper as sendInactivityPreview.js, which has always done this. The
+ * deploy script requiring a `source` when the preview script did not was a trap
+ * of its own: the two are run back to back and only one of them needed it.
+ */
+function loadAwsCredentials() {
+    if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+        return {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        };
+    }
+    const envFile = path.join(require('os').homedir(), '.poteau', 'aws_ses.env');
+    if (!fs.existsSync(envFile)) return {};
+
+    const out = {};
+    for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
+        const t = line.trim().replace(/^export\s+/, '');
+        if (!t || t.startsWith('#')) continue;
+        const eq = t.indexOf('=');
+        if (eq === -1) continue;
+        const key = t.slice(0, eq).trim();
+        let value = t.slice(eq + 1).trim().replace(/\r$/, '');
+        value = value.replace(/^(['"])(.*)\1$/, '$2');
+        out[key] = value;
+    }
+    return {
+        accessKeyId: out.AWS_ACCESS_KEY_ID,
+        secretAccessKey: out.AWS_SECRET_ACCESS_KEY,
+    };
+}
+
 // The subject is NOT stored in the template. It is supplied per recipient as
 // {{SUBJECT}}, because the send runs a seven-arm subject-line test and
 // SendTemplatedEmailCommand cannot override a stored subject. Storing them
@@ -222,10 +261,9 @@ async function main() {
 
         if (DRY) continue;
 
-        const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-        const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+        const { accessKeyId, secretAccessKey } = loadAwsCredentials();
         if (!accessKeyId || !secretAccessKey) {
-            console.error('AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY not set. source ~/.poteau/aws_ses.env first.');
+            console.error('No AWS credentials in the environment or in ~/.poteau/aws_ses.env');
             process.exit(1);
         }
         const client = new SESv2Client({ region: REGION, credentials: { accessKeyId, secretAccessKey } });
