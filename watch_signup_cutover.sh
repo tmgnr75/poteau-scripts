@@ -11,10 +11,12 @@
 #      connector but no signup_handled_at is a user who may have received no
 #      verification code, and there is no resend path in the app.
 #
-# Only speaks when something is wrong. A green tick prints locally and posts
-# nothing: at ~9 email signups a day most ticks see zero signups, and a channel
-# that reports "fine" every ten minutes gets muted, which costs the one alert
-# that matters.
+# Posts EVERY tick, green included (Tim's call, 2026-09-16). The usual rule is
+# that a channel reporting "fine" on a timer gets muted, but that trades one
+# problem for a worse one during a cutover: with gen1 deleted and most ticks
+# legitimately seeing zero signups, silence is indistinguishable from a watcher
+# that died. For a two-hour window, twelve messages buy an unambiguous signal.
+# Revert to alert-only once the cutover is proven.
 #
 # Usage: watch_signup_cutover.sh [total_minutes] [interval_seconds]
 set -uo pipefail
@@ -64,8 +66,13 @@ while [ "$(date +%s)" -lt "$DEADLINE" ]; do
 
     if [ -n "$ALERT" ]; then
         echo "  ALERT: $ALERT"
-        node monitor_handle_signup.js 2>&1 | tail -2
     fi
+
+    # Post every tick. The tick number and the invocation count are what make a
+    # green message worth reading: they say the watcher is alive and the trigger
+    # is still attached, which a silent green cannot.
+    POSTED=$(TICK="$TICK" INVOCATIONS="$INVOCATIONS" node monitor_handle_signup.js 2>&1 | tail -1)
+    echo "  $POSTED"
 
     sleep "$INTERVAL"
 done

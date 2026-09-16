@@ -98,10 +98,18 @@ async function main() {
     }
 
     const icon = { green: "✅", orange: "🟠", red: "🚨", grey: "⏳" }[severity];
+
+    // TICK and INVOCATIONS come from the watch loop. Without them every green
+    // message is byte-identical, and a reader cannot tell a live watcher from
+    // one that died after posting the same line an hour ago.
+    const tick = process.env.TICK ? ` · tick ${process.env.TICK}` : "";
+    const invocations = process.env.INVOCATIONS
+        ? ` · ${process.env.INVOCATIONS} invocation(s) in 15m` : "";
+
     const lines = [
-        `${icon} *handleSignup — gen2 cutover watch*`,
+        `${icon} *handleSignup — gen2 cutover watch*${tick}`,
         "",
-        `Live ${hoursLive.toFixed(1)}h. *${total}* signups, ${email} via email, ${handled} handled, ${blocked} blocked.`,
+        `Live ${hoursLive.toFixed(1)}h. *${total}* signups, ${email} via email, ${handled} handled, ${blocked} blocked.${invocations}`,
         note,
     ];
 
