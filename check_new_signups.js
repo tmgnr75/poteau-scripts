@@ -127,18 +127,29 @@ async function main() {
     const bannedPhone = new Map();
     const normPhone = (s) => String(s || "")
         .replace(/[\s.\-()]/g, "").replace(/\+33/g, "0").replace(/0033/g, "0");
+    // Carry the ban's ATTRIBUTION, not just the address. A match against an
+    // account banned with no recorded reason is not the same finding as a match
+    // against a spam ban: 697 of 722 bans predate the 2026-09-09 audit that
+    // added banned_by / banned_reason, so their cause is unrecoverable, and
+    // Tim's rule is that those get one second chance rather than a re-ban.
+    const attribution = (y) => {
+        if (y.banned_reason === "spam") return "SPAM BAN";
+        if (y.banned_by) return `banned by ${y.banned_by}`;
+        return "no reason recorded — second chance, do not re-ban";
+    };
     const allUsers = await db.collection("users")
-        .select("email", "banned", "display_name", "phone_number").get();
+        .select("email", "banned", "display_name", "phone_number",
+                "banned_by", "banned_reason").get();
     allUsers.forEach((d) => {
         const y = d.data();
         if (y.banned !== true) return;
         const c = canonicalInbox(y.email);
-        if (c.includes("@")) bannedInbox.set(c, y.email);
+        if (c.includes("@")) bannedInbox.set(c, `${y.email} [${attribution(y)}]`);
         // EXACT number, not a 7-digit prefix block. Three of the live prefix
         // blocks already contain legitimate players, so prefix matching here
         // would flag real people; an exact repeat of a banned number does not.
         const p = normPhone(y.phone_number);
-        if (p.length >= 9) bannedPhone.set(p, y.email);
+        if (p.length >= 9) bannedPhone.set(p, `${y.email} [${attribution(y)}]`);
     });
 
     const report = [];
