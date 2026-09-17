@@ -45,6 +45,36 @@ function canonicalInbox(email) {
     return `${local.split("+")[0]}@${domain}`;
 }
 
+/**
+ * Does this domain's mail sit on a known temp-mail host?
+ *
+ * His 28 domains collapse onto four MX signatures — 17 of them share one pair —
+ * so the mail host survives every new domain he registers, while a domain list
+ * only ever describes the ones he has finished with.
+ *
+ * SOFT only. Replayed over every domain our users have signed up with: 99
+ * domains, 112 accounts, 75 unbanned, and 28 of those are real players (one
+ * with 121 positive reports). Never block on this.
+ *
+ * Cached per run, fails open: a DNS timeout must never turn into a signal.
+ */
+const dns = require("dns").promises;
+const mxCache = new Map();
+async function tempMailMx(domain) {
+    if (!domain) return false;
+    if (mxCache.has(domain)) return mxCache.get(domain);
+    let hit = false;
+    try {
+        const recs = await Promise.race([
+            dns.resolveMx(domain),
+            new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 2500)),
+        ]);
+        hit = S.hasTempMailMx((recs || []).map((r) => r.exchange));
+    } catch { hit = false; }
+    mxCache.set(domain, hit);
+    return hit;
+}
+
 const STATE = path.join(__dirname, ".signup_check_state.json");
 const arg = (k) => (process.argv.find((a) => a.startsWith(`--${k}=`)) || "").split("=")[1];
 
@@ -171,6 +201,9 @@ async function main() {
         }
         if (!x.display_name) soft.push("no name");
         if (!x.photo_url) soft.push("no photo");
+
+        const emailDomain = String(x.email || "").toLowerCase().split("@")[1];
+        if (await tempMailMx(emailDomain)) soft.push("temp-mail MX");
 
         // Signup lane. connector === 'email' is the cheap one: any domain, no
         // provider standing between him and an account, so it is where he
