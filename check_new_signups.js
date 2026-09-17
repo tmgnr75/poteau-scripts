@@ -88,7 +88,7 @@ async function main() {
         const o = d.data().organizer;
         if (typeof o !== "string") return;
         if (!byOrg.has(o)) byOrg.set(o, []);
-        byOrg.get(o).push(d.data());
+        byOrg.get(o).push({ ...d.data(), id: d.id });
     });
 
     // Every banned inbox, ever, canonicalised. A fresh signup reaching the same
@@ -133,7 +133,7 @@ async function main() {
 
         const msgs = await db.collection("messages")
             .where("author_id", "==", db.collection("users").doc(doc.id))
-            .select("text", "created")
+            .select("text", "created", "game_id")
             .get();
         const human = msgs.docs.map((m) => m.data())
             .filter((m) => { const t = m.text || ""; return t && !/^(a |⚠)/.test(t); });
@@ -147,6 +147,22 @@ async function main() {
 
         const created = x.created_time?.toDate?.();
         const gs = byOrg.get(doc.id) || [];
+
+        // Posting in a game you do not organise, days old, is the funnel's
+        // other shape: no game of his own, so no venue and no fast-signup
+        // signal, and a pitch too ordinary to match any phrase. That is exactly
+        // how 20y3covv4s@yzcalo.com was missed on 2026-09-17 — signed up 13:27,
+        // posted "on joue en futsal à côté du five ... 3 teams de 5" into
+        // someone else's game at 13:34, and the 15:20 check said nothing.
+        //
+        // Not a HARD signal on its own: plenty of real players chat in games
+        // they joined. But a brand-new account whose FIRST act is a message in
+        // a stranger's game is worth a human glance every time.
+        const ownGames = new Set(gs.map((g) => g.id).filter(Boolean));
+        const foreign = human.filter((m) => m.game_id && !ownGames.has(m.game_id.id));
+        if (foreign.length && gs.length === 0) {
+            soft.push(`posts in others' games (${foreign.length})`);
+        }
         for (const g of gs) {
             const gap = created && g.created_on
                 ? Math.round((g.created_on.toDate() - created) / 60000) : null;
@@ -165,10 +181,17 @@ async function main() {
         // ordinary.
         if (x.connector === "email") soft.push("email lane");
 
-        // Lane-aware threshold. An email signup with two soft signals is worth
-        // a look during an attack; the same two on Google or Apple describe an
-        // ordinary new organiser and would bury the report in noise.
-        const softNeeded = x.connector === "email" ? 2 : 3;
+        // Lane-aware threshold. ONE soft signal is enough on the email lane:
+        // that is the lane he uses at scale, and the 2026-09-17 miss had
+        // exactly one ("posts in others' games") against a threshold of two.
+        // Google and Apple still need three, because there the same signals
+        // describe an ordinary new organiser and would bury the report.
+        //
+        // Cost of this is a longer report during a burst. That is the right
+        // trade: a missed funnel message sits in a real organiser's chat
+        // pulling their players away, and a false line in the report costs a
+        // glance.
+        const softNeeded = x.connector === "email" ? 1 : 3;
         if (hard.length || soft.length >= softNeeded) {
             report.push({ uid: doc.id, x, created, gs, human,
                           hard: [...new Set(hard)], soft: [...new Set(soft)] });
