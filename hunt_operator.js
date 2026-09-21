@@ -51,6 +51,28 @@ const REVIEW_AT = 3;   // report between REVIEW_AT and BAN_AT
 const normPhone = (s) => String(s || "")
     .replace(/[\s.\-()]/g, "").replace(/\+33/g, "0").replace(/0033/g, "0");
 
+/**
+ * A blurhash that means "no picture", not "this picture".
+ *
+ * Measured 2026-09-21: 3,061 accounts share `KCMtaOof0000ay_3xufQ~q` and 298
+ * share `L00000fQfQfQ…`. These are the default avatar and near-blank uploads,
+ * so matching on them says nothing about identity. It produced a false positive
+ * the first time the photo check ran: a new account was scored against
+ * lekmine.najibe@gmail.com purely because both had the blank placeholder.
+ *
+ * The giveaway is the payload: a real blurhash encodes colour variation, while
+ * these degenerate to a run of the same character.
+ */
+function isPlaceholderHash(h) {
+    const s = String(h || "");
+    if (s.length < 12) return true;
+    // `fQfQfQ…`, `0000`, or any hash whose body is one repeated pair.
+    if (/(fQ){4,}/.test(s)) return true;
+    if (/0{4,}/.test(s)) return true;
+    const uniq = new Set(s.slice(2)).size;
+    return uniq <= 6;
+}
+
 const canonicalInbox = (email) => {
     const e = String(email || "").toLowerCase().trim();
     const [l, d] = e.split("@");
@@ -97,20 +119,31 @@ async function main() {
     const bannedPhone = new Map();
     const bannedInbox = new Map();
     const bannedHash = new Map();
+    const bannedLocalTokens = new Map();
     const all = await db.collection("users")
         .select("email", "banned", "phone_number", "hash_pic", "banned_by", "banned_reason").get();
     all.forEach((d) => {
         const y = d.data();
         if (y.banned !== true) return;
-        // Only bans we can read justify acting. An unattributed ban gets a
-        // second chance -- see feedback_unattributed_ban_gets_a_second_chance.
-        const readable = y.banned_reason === "spam" || !!y.banned_by;
-        if (!readable) return;
+        // Only OUR spam bans justify acting on a match.
+        //
+        // An unattributed ban gets a second chance (697 of 722 predate the
+        // audit that added these fields), and a CENTRE's ban is not ours to
+        // enforce: banned_by values like "Stadium Thiais", "LE FIVE Paris 18"
+        // and "Foot POWER 5" mean a venue barred someone from their pitch, not
+        // that we barred them from Poteau. Treating those as ours produced a
+        // false positive on 2026-09-21 against lekmine.najibe@gmail.com.
+        const ours = y.banned_reason === "spam"
+            || /^(tim|hunt_operator|onMessageSpamCheck|scanSpamOffenders)/i.test(y.banned_by || "");
+        if (!ours) return;
         const p = normPhone(y.phone_number);
         if (p.length >= 9) bannedPhone.set(p, y.email);
         const c = canonicalInbox(y.email);
         if (c.includes("@")) bannedInbox.set(c, y.email);
-        if (y.hash_pic && y.hash_pic.length > 8) bannedHash.set(y.hash_pic, y.email);
+        if (y.hash_pic && !isPlaceholderHash(y.hash_pic)) bannedHash.set(y.hash_pic, y.email);
+        String(y.email || "").toLowerCase().split("@")[0]
+            .split(/[^a-z]+/).filter((t) => t.length >= 6)
+            .forEach((t) => { if (!bannedLocalTokens.has(t)) bannedLocalTokens.set(t, y.email); });
     });
 
     const rows = [];
@@ -128,6 +161,29 @@ async function main() {
         // ---- identity reuse: decisive on its own ----
         const ph = normPhone(x.phone_number);
         if (ph.length >= 9 && bannedPhone.has(ph)) add(6, `phone of banned ${bannedPhone.get(ph)}`);
+
+        // NOT DONE: adjacent phone numbers and reused name tokens.
+        //
+        // Both looked compelling and both were wrong, measured 2026-09-21
+        // before shipping. He does buy consecutive burners (0680445698 and
+        // 0680446652 are one apart) and he does recycle a surname across
+        // providers (colinchatelard@aol.com, pro.chatelard@gmail.com,
+        // arthurchatelard95@yahoo.com). But scored against every live account:
+        //
+        //   phone within 2000 of a banned number -> 53 real players
+        //   local-part token shared with a banned account -> 56 real players
+        //
+        // "corentin" alone matched a dozen genuine users, because a banned
+        // account carrying a common French first name poisons the token. The
+        // phone gap fails for the same reason at a different scale: French
+        // mobile ranges are dense, so proximity is coincidence far more often
+        // than it is the same buyer.
+        //
+        // Either could work with a much tighter bound -- a gap under 50, or
+        // tokens that are rare across the whole user base rather than merely
+        // long -- but neither is safe as written, and a signal that bans is not
+        // worth shipping on a guess.
+
         const inbox = canonicalInbox(x.email);
         if (bannedInbox.has(inbox)) add(6, `inbox of banned ${bannedInbox.get(inbox)}`);
         if (x.hash_pic && bannedHash.has(x.hash_pic)) add(6, `photo of banned ${bannedHash.get(x.hash_pic)}`);
