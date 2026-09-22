@@ -38,6 +38,24 @@ const db = admin.firestore();
 const TAG = "kickoff_guards";
 const TIM = "Wy5RXZJefwOZfAKG4MvOS6raU2f2";
 
+/// The seed roster: `is_test_account` users, the same ones
+/// `seed_test_matrix.js` uses. No real player ever stands on a fake pitch.
+///
+/// TIM IS NOT ONE OF THEM, and that is the whole point of these fixtures. The
+/// first version put his uid in `teams` AND in `interested`, so he was already
+/// on the roster -- and a player who is already in a game is never offered
+/// Join, whatever the kickoff guard does (Tim, 2026-09-22: "it's not games I'm
+/// interested or invited, it's games I'm already on -- so I can't join"). The
+/// fixture could not test the thing it was built for.
+const OTHERS = [
+  "zfIAAxFq6RfVtpAZ9DHUnM5U9nz2",
+  "ZtuRCmxdPdeE2iMDW7Y0qvAzzGp1",
+  "8vZmdIBOZTcqMFMQKltTcfc7ffl1",
+  "9si5imsCVUUQ48LF5sc9XFLFtEj1",
+  "Go2YXYj9FFW6xG28HZNBcrDkIJV2",
+  "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2",
+];
+
 const VENUE = {
   centre: "VSD39 Dole",
   place_id: "ChIJeSnd96VNjUcRMB1eWaVkmKs",
@@ -72,12 +90,16 @@ const FIXTURES = [
     when: at(-5), duration: 60, invited: true },
 ];
 
-/** A roster with room left, so "joinable" is never blocked by being full. */
-function teams(organizer, taken, max) {
+/** A roster of OTHER people, with room left.
+ *
+ * Room left matters as much as who is on it: a full game hides Join for its own
+ * reason, which would mask whether the kickoff guard did anything.
+ */
+function teams(max) {
   const out = [];
   for (let i = 0; i < max; i++) {
-    out.push(i < taken
-      ? { user_id: organizer, status: "confirmed", plus_one: i > 0,
+    out.push(i < OTHERS.length
+      ? { user_id: OTHERS[i], status: "confirmed", plus_one: false,
           team_side: i % 2 ? "team_b" : "team_a" }
       : { user_id: "", status: "open", team_side: i % 2 ? "team_b" : "team_a" });
   }
@@ -90,13 +112,16 @@ function teams(organizer, taken, max) {
     console.log(`removing ${snap.size} seeded game(s)`);
     for (const d of snap.docs) {
       // Never delete a game somebody else joined.
-      const others = (d.data().attendees || []).filter((r) => r.id !== TIM);
-      if (others.length) { console.log("  KEEPING", d.id, "- somebody joined"); continue; }
+      // Only a real player joining is a reason to keep it; the seeded test
+      // accounts are expected to be there.
+      const real = (d.data().attendees || [])
+        .filter((r) => r.id !== TIM && !OTHERS.includes(r.id));
+      if (real.length) { console.log("  KEEPING", d.id, "- a real player joined"); continue; }
       await d.ref.delete();
       console.log("  deleted", d.id);
     }
     const inv = await db.collection("game_invitations")
-      .where("inviter", "==", db.collection("users").doc(TIM)).get();
+      .where("invitee", "==", db.collection("users").doc(TIM)).get();
     let n = 0;
     for (const d of inv.docs) {
       const g = d.data().game;
@@ -118,7 +143,9 @@ function teams(organizer, taken, max) {
     if (!WRITE) continue;
 
     const ref = await db.collection("games").add({
-      organizer: TIM,
+      // A TEST ACCOUNT ORGANIZES, not Tim: an organizer sees their own game's
+      // card in a different state entirely and is never offered Join.
+      organizer: OTHERS[0],
       sport: "soccer",
       status: "published",
       // NEVER public.
@@ -127,10 +154,11 @@ function teams(organizer, taken, max) {
       duration: f.duration,
       max_players: 10,
       players_to_find: 4,
-      teams: teams(TIM, 6, 10),
-      attendees: Array(6).fill(db.collection("users").doc(TIM)),
-      // TIM IS INTERESTED, NOT ATTENDING: that is what puts the card on Home
-      // with the notifications state, which is the case under test.
+      teams: teams(10),
+      attendees: OTHERS.map((u) => db.collection("users").doc(u)),
+      // TIM IS INTERESTED ONLY -- never on the roster. That is what puts the
+      // card on his Home in the notifications state with a joinable spot,
+      // which is the case under test.
       interested: [db.collection("users").doc(TIM)],
       centre: VENUE.centre,
       place_id: VENUE.place_id,
@@ -153,7 +181,7 @@ function teams(organizer, taken, max) {
 
     if (f.invited) {
       await db.collection("game_invitations").add({
-        inviter: db.collection("users").doc(TIM),
+        inviter: db.collection("users").doc(OTHERS[0]),
         invitee: db.collection("users").doc(TIM),
         game: ref,
         status: "pending",
