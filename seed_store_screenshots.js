@@ -174,9 +174,11 @@ const MARC = "hQmClsn4bFU79IvwqTJuYrZdOg63";
  * itself rather than about the data:
  *
  *   - 7 men, 2 women.
- *   - The two women appear on PADEL ONLY. French amateur 5-a-side football is
- *     overwhelmingly male and a mixed football roster would read as staged;
- *     padel is genuinely mixed, so that is where the women go.
+ *   - PADEL IS MIXED: two women and two men on a court (Tim, 2026-09-23).
+ *     Mixed doubles is how padel is actually played, so a mixed court is the
+ *     honest picture as well as the better-looking one. Football stays male,
+ *     because French amateur 5-a-side overwhelmingly is and a mixed football
+ *     roster would read as staged.
  *   - The FR cast carries 1-2 North African names, which is representative of
  *     Paris-region amateur football -- and those are FOOTBALL names, never
  *     padel ones.
@@ -212,23 +214,30 @@ const EVERYONE = [...MEN, ...WOMEN];
 const FOOTBALL_POOL = [...MEN];
 
 /**
- * Padel: the two women FIRST, so a 2- or 3-player padel fixture shows them
- * rather than filling with men and burying the point of the split.
+ * Padel: two women and two men, INTERLEAVED so a partly-filled court is mixed
+ * rather than all-women-then-men.
  *
- * The men here are MEN[1] and MEN[2], NOT MEN[0]: MEN[0] is the viewer, and a
- * padel court seats four. Putting him on it would take a seat from one of the
- * two women on the only surface where they appear.
+ * Order matters because a fixture takes the first `filled` entries: a 2/4 game
+ * must not be two women and a 3/4 must not be two women and a man by accident.
+ * Alternating gives a mixed court at every fill level, which is the point.
+ *
+ * The viewer leads, so a padel fixture he is on shows him first, and the
+ * remaining three seats are woman/man/woman.
  */
-const PADEL_POOL = [...WOMEN, MEN[1], MEN[2]];
+const PADEL_POOL = [MEN[0], WOMEN[0], MEN[1], WOMEN[1]];
 
 /** The pool a fixture draws from, given its sport and whether the viewer
  *  (male) is on it. The viewer never stands on a padel fixture: he would take
  *  a seat from one of the two women on a four-player court. */
 function poolFor(sport, viewerJoined) {
-    // The viewer is deliberately absent from PADEL_POOL, so `viewerJoined` on
-    // a padel fixture cannot be honoured and is asserted against in the guards
-    // rather than silently ignored here.
-    if (sport === "padel") return PADEL_POOL;
+    // Padel is mixed and the viewer leads the pool, so he can stand on a padel
+    // court like anyone else. When he is NOT on the fixture he is dropped and
+    // the court is woman/man/woman, still mixed.
+    if (sport === "padel") {
+        return viewerJoined
+            ? PADEL_POOL
+            : PADEL_POOL.filter((u) => u !== SOPHIE);
+    }
     // The viewer leads the roster when he is on the game, so he is the first
     // face shown; otherwise he is excluded entirely and six men remain.
     return viewerJoined
@@ -690,10 +699,10 @@ function buildPlan(cast) {
             duration: 90,
             max: 4,
             filled: 4,
-            // The viewer is male in both casts and padel is the women's surface,
-            // so he is NOT on this court. Screen 4's padel board is captured as
-            // a spectator view, which is also how most Live viewing happens.
-            viewerJoined: false,
+            // Padel is mixed, so the viewer plays: a full court here is him,
+            // two women and one other man. Screen 4's padel board is therefore
+            // scored from a player's own view, which is the common case.
+            viewerJoined: true,
             venue: v.padelA,
             price: 12,
             levelDeltas: ["five_six", "seven_eight"],
@@ -856,14 +865,20 @@ async function assertGuards(plan) {
         );
     }
 
-    // Guard 3b: no padel fixture may claim the viewer. PADEL_POOL deliberately
-    // excludes him, so `viewerJoined: true` on a padel game would be a claim
-    // the roster silently does not honour.
+    // Guard 3b: every padel fixture with 2+ players must be MIXED. Padel is the
+    // one surface where both genders appear, and a court that came out
+    // all-male would quietly undo that -- which is exactly what happens if
+    // PADEL_POOL is ever reordered to group the men together.
     for (const p of plan) {
-        if (p.sport === "padel" && p.viewerJoined) {
+        if (p.sport !== "padel" || p.filled < 2) continue;
+        const court = poolFor(p.sport, p.viewerJoined).slice(0, p.filled);
+        const women = court.filter((u) => WOMEN.includes(u)).length;
+        const men = court.length - women;
+        if (women === 0 || men === 0) {
             throw new Error(
-                `fixture '${p.key}' is padel with viewerJoined: true, but the ` +
-                `viewer is not in PADEL_POOL. Set viewerJoined: false.`
+                `fixture '${p.key}' puts ${men} men and ${women} women on a ` +
+                `padel court. Padel is mixed; reorder PADEL_POOL so every ` +
+                `fill level alternates.`
             );
         }
     }
