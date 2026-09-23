@@ -158,6 +158,17 @@ async function main() {
 
         const add = (p, label) => { points += p; score.push(`${label} (+${p})`); };
 
+        // How fast the account went from signup to its first kickoff. Measured
+        // against the game DATE rather than created_on, because created_on is
+        // absent on games written by the max app and would read as null there.
+        const firstKickoff = gs
+            .map((g) => g.date?.toDate?.())
+            .filter(Boolean)
+            .sort((a, b) => a - b)[0];
+        const firstGameAgeDays = (created && firstKickoff)
+            ? (firstKickoff - created) / 86400000
+            : null;
+
         // ---- identity reuse: decisive on its own ----
         const ph = normPhone(x.phone_number);
         if (ph.length >= 9 && bannedPhone.has(ph)) add(6, `phone of banned ${bannedPhone.get(ph)}`);
@@ -193,6 +204,33 @@ async function main() {
         if (x.signup_blocked_reason) add(6, `signup blocked: ${x.signup_blocked_reason}`);
         if (x.phone_number && S.hasKnownPhone(x.phone_number)) add(6, "known operator phone block");
 
+        // "That's weird" domains: worth a single point, never more.
+        //
+        // He abandoned throwaway domains once they were blocked and moved to
+        // mainstream ones. On 2026-09-22 and 23 he used outlook.fr twice
+        // (samy.zaouali@, louis.breda93@), which is what put it on this list.
+        //
+        // It CANNOT be a gate, and the lift says so. Measured 2026-09-23 across
+        // 107,181 accounts against a 0.0327% platform spam-ban rate:
+        //
+        //   aol.com      40 accounts,  5 spam = 382.8x lift
+        //   gmx.fr       60 accounts,  1 spam =  51.0x
+        //   outlook.fr 1,610 accounts, 2 spam =   3.8x
+        //   yahoo.com    701 accounts, 1 spam =   4.4x
+        //   gmail.com 66,167 accounts, 6 spam =   0.28x
+        //
+        // outlook.fr at 3.8x is below yahoo.com, and nobody thinks yahoo means
+        // anything. 1,577 of its 1,610 accounts are live and hold 13,419
+        // positive reports between them. So it earns +1 and cannot approach
+        // BAN_AT on its own, which needs six.
+        //
+        // aol.com and gmx.fr are already in TEMP_BLOCKED_EXACT_DOMAINS /
+        // OPERATOR_EMAIL_DOMAINS, so isDisposableEmail() above scores them 6 and
+        // this line never double-counts them.
+        const WEIRD_BUT_LEGITIMATE_DOMAINS = new Set(["outlook.fr"]);
+        const emailDomain = String(x.email || "").toLowerCase().split("@")[1] || "";
+        if (WEIRD_BUT_LEGITIMATE_DOMAINS.has(emailDomain)) add(1, `${emailDomain} (weak: 3.8x lift)`);
+
         // ---- what he does with the account ----
         const flagged = gs.filter((g) => S.isFlaggedVenue(g.centre));
         const venues = new Set(gs.map((g) => (g.centre || "").toLowerCase()).filter(Boolean));
@@ -211,6 +249,20 @@ async function main() {
             else if (gs.length >= 3) add(2, `${gs.length} games in the window`);
         } else if (gs.length >= 4) {
             score.push(`${gs.length} games but all at ${venues.size} venue (+0)`);
+        }
+
+        // Straight from signup to one of his five venues. Another "that's
+        // weird": measured 2026-09-23 over the last 30 days, 36 mainstream-domain
+        // accounts organised at a flagged venue within 2 days of signing up. 7
+        // were his and 29 are live and ordinary -- roughly 1 in 5. That is far
+        // too dirty to gate on and exactly the right shape for +1.
+        //
+        // It leans on the venue list, which is only five Paris pitches, so a real
+        // player who happens to book one of them on day one is the common case,
+        // not the exception. The flagged-venue points below are separate and
+        // still apply; this adds the SPEED, which they do not measure.
+        if (flagged.length && firstGameAgeDays !== null && firstGameAgeDays <= 2) {
+            add(1, `at a flagged venue ${firstGameAgeDays.toFixed(1)}d after signup`);
         }
 
         if (flagged.length >= 3) add(3, `${flagged.length} at flagged venues`);
