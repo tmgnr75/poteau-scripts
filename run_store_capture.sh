@@ -261,6 +261,16 @@ xcrun simctl list devices booted 2>/dev/null | grep -q "$UDID" || {
     until xcrun simctl list devices booted 2>/dev/null | grep -q "$UDID"; do sleep 3; done
 }
 
+# Record which build these frames came from. A store screenshot that cannot
+# be traced to a build is a screenshot nobody can re-shoot identically, and
+# 5.2.0 moved 236 -> 238 mid-session over defects that change what renders.
+BUILD="$(grep -m1 '^version:' "$HERE/../poteau-app/pubspec.yaml" | awk '{print $2}')"
+COMMIT="$(git -C "$HERE/../poteau-app" rev-parse --short HEAD 2>/dev/null)"
+log "app build: $BUILD ($COMMIT)"
+printf '%s\nbuild: %s\ncommit: %s\ndevice: %s\n\n' \
+    "$(date '+%Y-%m-%d %H:%M')" "$BUILD" "$COMMIT" "$DEVICE" \
+    >> "$HOME/poteau-store-screenshots/raw-520/CAPTURE_NOTES.md"
+
 log "launching the app"
 relaunch
 
