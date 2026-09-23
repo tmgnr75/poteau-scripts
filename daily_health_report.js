@@ -445,6 +445,113 @@ async function moneySafety(startZ, endZ) {
     return { findings };
 }
 
+// ---------------------------------------------------------- Claude API spend
+
+// What the Anthropic API cost yesterday, and whether that is normal.
+//
+// WHY THIS SECTION EXISTS. On 2026-09-23 the Anthropic org ran out of credits
+// and nothing in this codebase could say where the usage came from: two Cloud
+// Functions call the API and neither logged a token. The Console has the answer
+// and no automation can read it, so the answer took a manual investigation.
+//
+// HOW THE NUMBER IS BUILT. Every Anthropic caller logs its own usage through
+// shared/claudeApiSpend.js; this reads those lines back. The consequence worth
+// understanding: THE TOTAL IS ONLY AS COMPLETE AS THE CALLERS. A new call site
+// that does not use the helper is silently absent — the report will happily
+// show $0.62 while the real bill is ten times that. That is a real limitation,
+// not a rounding error, which is why the helper's contract is documented at the
+// top of that file rather than here.
+//
+// WHY IT PAGES ON A MULTIPLE, NOT A DOLLAR FIGURE. A fixed ceiling is either so
+// low it fires on a busy day or so high it never fires at all — the same trap
+// as `if errors > 0`. The Daily costs a few cents and the Slack bot costs
+// nothing most days, so the signal is not the amount, it is the SHAPE: today
+// against the trailing week. A tenfold jump matters at any absolute size,
+// because it means something started looping.
+const SPEND_BASELINE_DAYS = 7;
+const SPEND_SPIKE_MULTIPLE = 3;   // amber: clearly off-trend
+const SPEND_ALARM_MULTIPLE = 10;  // red: something is looping
+
+async function claudeSpend(startZ, endZ, baselineStartZ) {
+    const MARKER = 'CLAUDE_API_SPEND';
+
+    // Both payload shapes, the same rule as moneySafety. These lines come from
+    // firebase-functions' logger, which emits jsonPayload and no textPayload —
+    // filtering on textPayload alone would match nothing at all.
+    const filter = (from, to) =>
+        `timestamp>="${from}" AND timestamp<"${to}" AND ` +
+        `(textPayload:"${MARKER}" OR jsonPayload.marker="${MARKER}" OR jsonPayload.message:"${MARKER}")`;
+
+    // withDetail so the hosts hand back the structured fields, not just text.
+    const today = await HOST.readLogs(filter(startZ, endZ), { limit: 1000, withDetail: true });
+    const baseline = await HOST.readLogs(filter(baselineStartZ, startZ), { limit: 5000, withDetail: true });
+
+    // Pull the numbers off whichever shape the host returned. A line whose
+    // fields cannot be read is counted as a CALL but contributes no dollars,
+    // and `unpriced` records that so the report can say the figure is partial
+    // rather than quietly under-reporting.
+    const parse = (entries) => {
+        const byCaller = {};
+        let usd = 0, calls = 0, unpriced = 0;
+        for (const en of entries || []) {
+            const j = (en && (en.jsonPayload || en.json)) || en || {};
+            const caller = j.caller || 'unknown';
+            const amount = typeof j.usd === 'number' ? j.usd : null;
+            calls++;
+            if (j.unpriced_model || amount === null) unpriced++;
+            if (amount !== null) usd += amount;
+            const b = byCaller[caller] || (byCaller[caller] = { usd: 0, calls: 0 });
+            b.calls++;
+            if (amount !== null) b.usd += amount;
+        }
+        return { usd, calls, unpriced, byCaller };
+    };
+
+    const cur = parse(today);
+    const base = parse(baseline);
+    // Per-day average over the baseline window, so today compares against a
+    // day and not against a week.
+    const perDay = base.usd / SPEND_BASELINE_DAYS;
+
+    const findings = [];
+
+    // Only judge the trend once there is a trend to judge. With no baseline
+    // (first run after deploy) any number looks infinite, and "spend went up
+    // ∞%" on day one is noise that teaches the reader to ignore this section.
+    if (perDay > 0.01) {
+        const multiple = cur.usd / perDay;
+        if (multiple >= SPEND_ALARM_MULTIPLE) {
+            findings.push({
+                dot: '🔴',
+                what: `Claude API spend ${multiple.toFixed(1)}x the weekly average ($${cur.usd.toFixed(2)} vs $${perDay.toFixed(2)}/day)`,
+                soWhat: 'something is calling the API far more than usual, and the org runs out of credits when it does',
+                doWhat: 'find the caller in the per-caller line below, then check it for a retry loop before topping up credits',
+            });
+        } else if (multiple >= SPEND_SPIKE_MULTIPLE) {
+            findings.push({
+                dot: '🟡',
+                what: `Claude API spend ${multiple.toFixed(1)}x the weekly average ($${cur.usd.toFixed(2)} vs $${perDay.toFixed(2)}/day)`,
+                soWhat: 'off-trend but not yet alarming — a busy day or the start of a loop',
+                doWhat: 'note which caller moved; if it repeats tomorrow, treat it as a loop',
+            });
+        }
+    }
+
+    // An unpriced model is worth saying out loud exactly once: it means the
+    // dollar total is an understatement, so a reader comparing it against the
+    // Console would otherwise conclude the report is broken.
+    if (cur.unpriced) {
+        findings.push({
+            dot: '🟡',
+            what: `${cur.unpriced} Claude call${cur.unpriced === 1 ? '' : 's'} used a model with no known rate`,
+            soWhat: 'those tokens are counted but their cost is not, so the dollar figure below is lower than the real bill',
+            doWhat: 'add the model to RATES in cloud-functions/functions/shared/claudeApiSpend.js',
+        });
+    }
+
+    return { ...cur, perDay, findings };
+}
+
 // -------------------------------------------------------------- cron health
 
 async function crons(asOf) {
@@ -577,7 +684,7 @@ function row(label, c) {
     return `${pad(label, 16)}${padL(N(c.week), 8)}${padL(N(c.prev), 9)}${padL(N(c.cur), 9)}`;
 }
 
-function build(day, a, e, c, h, dep, m) {
+function build(day, a, e, c, h, dep, m, s) {
     // Each warning is: severity dot, bold WHAT, then a plain-language SO WHAT
     // on its own indented line. The consequence is the part worth reading and
     // it should not be buried mid-sentence.
@@ -597,6 +704,11 @@ function build(day, a, e, c, h, dep, m) {
         `${f.code} (${f.n} ${f.n === 1 ? 'time' : 'times'}) — ${f.what}`,
         f.soWhat,
         'find the affected users and refund them BEFORE fixing the cause — the money already moved'));
+
+    // Our own API bill, below the money-safety block on purpose: a wrong charge
+    // to a player outranks a wrong charge to us. Each finding already carries
+    // its own severity because a 3x day and a 10x day need different reactions.
+    ((s && s.findings) || []).forEach(f => warn(f.dot, f.what, f.soWhat, f.doWhat));
 
     if (c.error) warn('🔴', 'Cron liveness check failed', c.error,
         'the report is blind to stale crons until this is fixed — check gcloud auth');
@@ -931,8 +1043,30 @@ function build(day, a, e, c, h, dep, m) {
         `indexes ${e.indexErrors.length ? `${e.indexErrors.length} missing` : 'ok'}`,
         `horizon ${h.depth}d`,
         `${h.published} repeaters`,
+        // Always shown, not only when it spikes: a number you have seen every
+        // morning is one you can judge. A figure that appears only on the bad
+        // day has no baseline in the reader's head.
+        `claude api $${(s && s.usd || 0).toFixed(2)}${s && s.calls ? ` (${s.calls} call${s.calls === 1 ? '' : 's'})` : ''}`,
     ];
     blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: quiet.join('  ·  ') }] });
+
+    // Per-caller attribution, only when more than one caller spent anything.
+    // With a single caller the quiet line above already says everything, and a
+    // second line repeating one number is the padding this report avoids.
+    const spenders = Object.entries((s && s.byCaller) || {})
+        .filter(([, v]) => v.calls > 0)
+        .sort((x, y) => y[1].usd - x[1].usd);
+    if (spenders.length > 1) {
+        blocks.push({
+            type: 'context',
+            elements: [{
+                type: 'mrkdwn',
+                text: '*claude api*  ' + spenders
+                    .map(([k, v]) => `${k} $${v.usd.toFixed(2)} (${v.calls})`)
+                    .join('  ·  '),
+            }],
+        });
+    }
 
     if (dep.length) {
         blocks.push({ type: 'context', elements: [{ type: 'mrkdwn', text: `*shipped*  ${dep.map(d => '`' + d + '`').join('  ')}` }] });
@@ -965,8 +1099,13 @@ async function buildReport(targetDate) {
     const h = await horizon();
     const dep = await deploys(dayStart.toISODate(), dayEnd.toISODate());
     const m = await moneySafety(dayStart.toUTC().toISO(), dayEnd.toUTC().toISO());
+    const s = await claudeSpend(
+        dayStart.toUTC().toISO(),
+        dayEnd.toUTC().toISO(),
+        dayStart.minus({ days: SPEND_BASELINE_DAYS }).toUTC().toISO()
+    );
 
-    return build(target, a, e, c, h, dep, m);
+    return build(target, a, e, c, h, dep, m, s);
 }
 
 module.exports = { buildReport, setHost };

@@ -136,6 +136,21 @@ function readLogs(filter, { limit = 1000, withDetail = false } = {}) {
         // platform blip was still rendered as a red "needs attention today"
         // the following morning, long after it had ended. See recoveredAt.
         timestamp: e.timestamp || "",
+        // The STRUCTURED payload, untouched.
+        //
+        // Everything above is a flattened, human-readable view, which is right
+        // for error triage: the report wants one line to quote. But a check
+        // that reads NUMBERS out of a log line needs the fields themselves —
+        // the Claude API spend section reads `caller` and `usd`, and no amount
+        // of regex over extractText()'s single string can recover them.
+        //
+        // Parsing them back out of text was the alternative and is worse: it
+        // would silently return 0 the first time a value was formatted
+        // differently, and a spend report that under-reports is the exact
+        // failure the section exists to prevent.
+        //
+        // Null for a plain textPayload entry. Callers must handle that.
+        jsonPayload: (e.jsonPayload && typeof e.jsonPayload === "object") ? e.jsonPayload : null,
       };
     });
 }
