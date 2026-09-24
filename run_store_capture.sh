@@ -66,7 +66,7 @@ KEEP="${2:-}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 IDB="$HOME/.poteau/idb-venv/bin/idb"
 BUNDLE="com.krank.club"
-VIEWER="XXIV4AJNHvPoQKpBXwKOaA7C3Ob2"
+VIEWER="Y3V5WDgZGTWsQ3vSZDvNlu0Uo1D2"
 
 case "$DEVICE" in
     iphone) UDID="7506B541-2FE3-4BDC-A2FD-265C61D71F07" ;;

@@ -157,7 +157,19 @@ const MIN_KM_FROM_PARIS = 100;
 //
 // Sophie is the VIEWER on every screen. Tim's account is never used.
 // ---------------------------------------------------------------------------
-const SOPHIE = "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2"; // the viewer
+// THE VIEWER IS TIM'S OWN TEST ACCOUNT (created 2026-09-24), not a borrowed
+// fixture account. It is flagged `is_test_account`, carries a back-view photo
+// with no face in it, and exists only for these screenshots -- so it can be
+// restyled freely and nobody's likeness is involved.
+//
+// The nine ORIGINAL test accounts now all hold roster photos from real Poteau
+// users who gave consent, which is why the viewer had to come from somewhere
+// else: adding a tenth person was the only way to keep all nine.
+const VIEWER = "Y3V5WDgZGTWsQ3vSZDvNlu0Uo1D2";
+
+// Kept under its old name so the rest of the file reads unchanged; SOPHIE is
+// now an ordinary roster member rather than the person holding the camera.
+const SOPHIE = "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2";
 const GINA = "zfIAAxFq6RfVtpAZ9DHUnM5U9nz2";
 const MARCO = "ZtuRCmxdPdeE2iMDW7Y0qvAzzGp1";
 const LUCIA = "8vZmdIBOZTcqMFMQKltTcfc7ffl1";
@@ -206,7 +218,7 @@ const MARC = "hQmClsn4bFU79IvwqTJuYrZdOg63";
 // LUCIA and MARC were picked simply because nothing else depends on them.
 // SOPHIE is the viewer and is male in both casts (Léo M. / Alex R.), so he
 // counts toward the seven men rather than being an eighth person.
-const MEN = [SOPHIE, GINA, MARCO, NOAH, LIAM, TODD, SPARE];
+const MEN = [VIEWER, SOPHIE, GINA, MARCO, NOAH, LIAM, TODD, SPARE];
 const WOMEN = [LUCIA, MARC];
 const EVERYONE = [...MEN, ...WOMEN];
 
@@ -236,13 +248,13 @@ function poolFor(sport, viewerJoined) {
     if (sport === "padel") {
         return viewerJoined
             ? PADEL_POOL
-            : PADEL_POOL.filter((u) => u !== SOPHIE);
+            : PADEL_POOL.filter((u) => u !== VIEWER);
     }
     // The viewer leads the roster when he is on the game, so he is the first
     // face shown; otherwise he is excluded entirely and six men remain.
     return viewerJoined
         ? FOOTBALL_POOL
-        : FOOTBALL_POOL.filter((u) => u !== SOPHIE);
+        : FOOTBALL_POOL.filter((u) => u !== VIEWER);
 }
 
 /**
@@ -257,6 +269,8 @@ function poolFor(sport, viewerJoined) {
  * the first capture pass, re-run with --write, and nothing else changes.
  */
 const CAST_PHOTOS = {
+    "Y3V5WDgZGTWsQ3vSZDvNlu0Uo1D2":
+        "https://storage.googleapis.com/krank-club.appspot.com/store_shots_520/cast/Y3V5WDgZGTWsQ3vSZDvNlu0Uo1D2.jpg",  // viewer  back view, no face
     "XXIV4AJNHvPoQKpBXwKOaA7C3Ob2":
         "https://storage.googleapis.com/krank-club.appspot.com/store_shots_520/cast/XXIV4AJNHvPoQKpBXwKOaA7C3Ob2.jpg",  // viewer  M  Léo M. / Alex R.
     "zfIAAxFq6RfVtpAZ9DHUnM5U9nz2":
@@ -318,7 +332,8 @@ const CASTS = {
         currency: "EUR",
         people: {
             // --- the seven men: football (born ~1991-2005) ---
-            [SOPHIE]: { display: "Maxime L.", first: "Maxime", last: "L.", soccer: 6.2, padel: 5.8 },
+            [VIEWER]: { display: "Tom R.", first: "Tom", last: "R.", soccer: 6.2, padel: 5.8 },
+            [SOPHIE]: { display: "Maxime L.", first: "Maxime", last: "L.", soccer: 6.0, padel: 5.6 },
             [GINA]:   { display: "Romain P.", first: "Romain", last: "P.", soccer: 7.1, padel: 6.4 },
             [MARCO]:  { display: "Mehdi A.",  first: "Mehdi",  last: "A.", soccer: 5.4, padel: 5.1 },
             [NOAH]:   { display: "Quentin D.", first: "Quentin", last: "D.", soccer: 4.9, padel: 5.5 },
@@ -348,7 +363,8 @@ const CASTS = {
         currency: "USD",
         people: {
             // --- the seven men: cross-market football names ---
-            [SOPHIE]: { display: "Lucas R.", first: "Lucas", last: "R.", soccer: 6.2, padel: 5.8 },
+            [VIEWER]: { display: "Tom R.", first: "Tom", last: "R.", soccer: 6.2, padel: 5.8 },
+            [SOPHIE]: { display: "Lucas R.", first: "Lucas", last: "R.", soccer: 6.0, padel: 5.6 },
             [GINA]:   { display: "Mateo G.", first: "Mateo", last: "G.", soccer: 7.1, padel: 6.4 },
             [MARCO]:  { display: "Daniel S.", first: "Daniel", last: "S.", soccer: 5.4, padel: 5.1 },
             [NOAH]:   { display: "Marco B.", first: "Marco", last: "B.", soccer: 4.9, padel: 5.5 },
@@ -1001,7 +1017,7 @@ async function applyCast(cast, dryRun) {
             update.hash_pic = "";
         }
 
-        if (uid === SOPHIE) {
+        if (uid === VIEWER) {
             update.language = cast.viewerLanguage;
             update.stats = stats;
             // The games list header reads "autour de chez toi" from this, and
@@ -1011,14 +1027,14 @@ async function applyCast(cast, dryRun) {
             // Friends with everyone else, so a private game organized by any
             // of them renders undimmed in the list (see the header).
             update.friends = EVERYONE
-                .filter((u) => u !== SOPHIE)
+                .filter((u) => u !== VIEWER)
                 .map((u) => db.collection("users").doc(u));
         }
 
         lines.push(
             `  ${uid.slice(0, 6)}…  ${String(cur.display_name || "?").padEnd(16)} -> ` +
             `${person.display.padEnd(12)} soccer ${person.soccer} padel ${person.padel}` +
-            (uid === SOPHIE
+            (uid === VIEWER
                 ? `  [VIEWER: lang=${cast.viewerLanguage}, stats, friends x${EVERYONE.length - 1}]`
                 : "")
         );
