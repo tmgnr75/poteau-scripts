@@ -47,7 +47,7 @@
  */
 const admin = require("firebase-admin");
 const serviceAccount = require("./krank-club-firebase-adminsdk-bl4zy-d8facdf022.json");
-const { PERSONAS, eveningSlate } = require("./lib/store_personas");
+const { PERSONAS, eveningSlate, inviteSlate } = require("./lib/store_personas");
 const { REMOTE_VENUE, testGame } = require("./lib/test_game");
 
 admin.initializeApp({
@@ -87,13 +87,26 @@ async function loadCast(lang) {
     const snap = await db.collection("users").where("store_persona", "==", lang).get();
     const people = snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
     const p = PERSONAS[lang];
-    const viewer = people.find((x) => x.display_name === p.viewer.display);
+    // THE VIEWER IS THE ANCHOR ACCOUNT, shared by every persona.
+    //
+    // Each persona used to own its own viewer, which meant signing out and in
+    // between personas -- four chances per device for a tap to land on the
+    // wrong button, and they did. switch_persona.js renames ONE account
+    // instead, so the device stays signed in for the whole session.
+    const anchorSnap = await db.collection("users")
+        .where("store_anchor", "==", true).limit(1).get();
+    let viewer;
+    if (!anchorSnap.empty) {
+        viewer = { uid: anchorSnap.docs[0].id, ...anchorSnap.docs[0].data() };
+    } else {
+        viewer = people.find((x) => x.display_name === p.viewer.display);
+    }
     if (!viewer) throw new Error(`no viewer account for ${lang}`);
     const men = p.men.map((n) => people.find((x) => x.display_name === n)).filter(Boolean);
     const women = p.women.map((n) => people.find((x) => x.display_name === n)).filter(Boolean);
     if (men.length < 9) throw new Error(`${lang}: only ${men.length} men, need 9`);
     if (women.length < 2) throw new Error(`${lang}: only ${women.length} women, need 2`);
-    return { viewer, men, women, all: people };
+    return { viewer, men, women, all: [viewer, ...people.filter((x) => x.uid !== viewer.uid)] };
 }
 
 /**
@@ -131,7 +144,7 @@ function roster(filled, max, people) {
  * the least believable thing on the screen. One FULL card gives the list
  * texture without claiming the app is always packed.
  */
-function buildPlan(p, slate) {
+function buildPlan(p, slate, inv) {
     const v = p.venues;
     const eur = p.currency === "EUR";
     const price = (a, b) => (eur ? a : b);
@@ -171,19 +184,19 @@ function buildPlan(p, slate) {
 
         // --- invitations (screen 1) ------------------------------------------
         // Tonight and tomorrow, nearly full, at least one padel.
-        { key: "invite_soccer", screens: "1", sport: "soccer", date: slate[3],
+        { key: "invite_soccer", screens: "1", sport: "soccer", date: inv[0],
           duration: 60, max: 10, filled: 8, viewerJoined: false,
           venue: v.soccerB, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
         { key: "invite_padel", screens: "1", sport: "padel",
-          date: new Date(slate[1].getTime() + 24 * 60 * MIN),
+          date: new Date(inv[1].getTime() + 24 * 60 * MIN),
           duration: 90, max: 4, filled: 3, viewerJoined: false,
           venue: v.padelA, price: price(12, 15),
           levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
         { key: "invite_soccer_2", screens: "1", sport: "soccer",
-          date: new Date(slate[0].getTime() + 24 * 60 * MIN),
+          date: new Date(inv[2].getTime() + 24 * 60 * MIN),
           duration: 60, max: 10, filled: 9, viewerJoined: false,
           venue: v.soccerC, price: price(10, 14),
           levelDeltas: ["five_six"], invitation: true },
@@ -315,7 +328,8 @@ async function run() {
 
     const p = PERSONAS[LANG];
     const slate = eveningSlate();
-    const plan = buildPlan(p, slate);
+    const inv = inviteSlate(slate[0]);
+    const plan = buildPlan(p, slate, inv);
     const cast = await loadCast(LANG);
 
     const pad = (n) => String(n).padStart(2, "0");
@@ -351,9 +365,15 @@ async function run() {
     for (const g of plan) {
         // Padel is mixed: two women lead the court, then men. Football is the
         // men's pool, viewer included when he plays.
+        // Football: nine men plus the viewer is exactly ten, which is a full
+        // 5v5 pitch. The viewer leads when he plays; when he does not, he goes
+        // LAST so a 9/10 roster is the nine other men and the empty spot is
+        // his to take -- which is what screen 3 is selling.
         const pool = g.sport === "padel"
             ? [cast.women[0], cast.men[0], cast.women[1], cast.men[1]]
-            : (g.viewerJoined ? [cast.viewer, ...cast.men] : cast.men);
+            : (g.viewerJoined
+                ? [cast.viewer, ...cast.men]
+                : [...cast.men, cast.viewer]);
         const teams = roster(g.filled, g.max, pool);
         const attendees = teams.filter((t) => t.user_id)
             .map((t) => db.collection("users").doc(t.user_id));
@@ -489,8 +509,22 @@ async function run() {
 
     // "Tes matchs" renders from users.games, NOT from the rosters.
     const mine = created.filter((c) => c.viewerOn).map((c) => c.ref);
+    // The wrap-up card on Home renders from `pending_feedback`, not from the
+    // game's status: a played game the viewer has already given feedback on
+    // shows nothing. Screen 5 depends on this.
+    // pending_feedback is left EMPTY on purpose.
+    //
+    // Home shows one of two cards for a finished game. With the game in
+    // pending_feedback it shows "Alors, ce foot ?", which opens the four-step
+    // feedback FLOW -- and a capture then lands on step one, a dark question
+    // screen, not the share card. With feedback already given it shows
+    // "Voir ta carte du match", which opens the card directly.
+    //
+    // The card is what screen 5 is for, so the fixture is seeded as a game the
+    // viewer has already wrapped up.
     await db.collection("users").doc(cast.viewer.uid).update({
         games: mine,
+        pending_feedback: [],
         // Friends with the whole cast: harmless now the games are public, and
         // it keeps the roster faces on the invitation cards.
         friends: cast.all.filter((x) => x.uid !== cast.viewer.uid)

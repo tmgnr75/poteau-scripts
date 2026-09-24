@@ -195,16 +195,18 @@ app_restart
 # 4 — the Live card, mid-match
 capture 04_live
 
-# 5 — the wrap-up share card
-CARD=$(find_el "card")
-[ -z "$CARD" ] && CARD=$(find_el "carte")
-if [ -n "$CARD" ]; then
-    # The tappable button sits a little below its label's centre.
-    set -- $CARD
-    ui_tap "$1" $(( $2 + 12 )); sleep 7
-    capture 05_share
-else
-    log "SKIP 05_share: no wrap-up card on Home"
-fi
+# 5 — the wrap-up share card.
+#
+# KNOWN GAP (2026-09-24). Home offers "Alors, ce foot ?", which opens the
+# four-step feedback flow; its last step is the share card. The flow's
+# "Valider" button does not respond to a synthetic tap at its reported centre,
+# on any offset tried, so the walk stalls on step 2 (the score confirmation).
+#
+# Clearing `pending_feedback` to get the direct "Voir ta carte du match" entry
+# does not help either: that removes the wrap-up section from Home entirely.
+#
+# So screen 5 is captured MANUALLY for now, and this step records that rather
+# than shipping step 2 of a feedback form as if it were the share card.
+log "SKIP 05_share: wrap-up flow needs a manual walk (see script comment)"
 
 log "done: $(ls "$DIR"/*.png 2>/dev/null | wc -l | tr -d ' ')/5 frames"
