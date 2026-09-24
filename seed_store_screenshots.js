@@ -87,6 +87,7 @@ const serviceAccount = require("./krank-club-firebase-adminsdk-bl4zy-d8facdf022.
 
 const {
     TEST_VENUE,
+    REMOTE_VENUE,
     testGame,
     assertTestRoster,
     purgeTestGames: _unusedBroadPurge, // deliberately NOT used -- see header
@@ -412,6 +413,26 @@ function kmFrom(lat1, lng1, lat2, lng2) {
     return 2 * R * Math.asin(Math.sqrt(a));
 }
 
+/**
+ * A kickoff `minutes` from now, rounded UP to the next :00 or :30.
+ *
+ * THE FIXTURES CANNOT USE WALL-CLOCK TIMES. They used to say 18:30, 19:00 and
+ * so on, which is fine at 15:00 and wrong at 18:51: the early games are then
+ * in the PAST, the sheet shows "Tu as envie de jouer ? / Suivre" instead of
+ * "Rejoindre", and the last spot is not selectable. A store frame of a game
+ * nobody can join is a defect, and it is invisible unless you read the CTA.
+ *
+ * Anchoring to now makes the set correct at any hour of the day. Rounding
+ * keeps the cards looking like real bookings rather than 19:47.
+ */
+function soon(minutes) {
+    const d = new Date(Date.now() + minutes * 60 * 1000);
+    d.setSeconds(0, 0);
+    const m = d.getMinutes();
+    d.setMinutes(m <= 30 ? 30 : 60);
+    return d;
+}
+
 /** Today at a given local hour. The app renders each game in its own timezone,
  *  so local hours are what the card will actually say. */
 function todayAt(hour, minute, dayOffset = 0) {
@@ -553,7 +574,7 @@ function buildPlan(cast) {
             key: "sheet_soccer",
             screens: "2,3",
             sport: "soccer",
-            date: todayAt(18, 30),
+            date: soon(75),
             // 8 of 9, not 9 of 10. The viewer has NOT joined this game, so
             // only the 8 OTHER cast members can stand on it -- 9/10 would need
             // a repeated uid, which is a +1, and the roster guard refuses it.
@@ -570,7 +591,7 @@ function buildPlan(cast) {
             key: "list_padel_1",
             screens: "2",
             sport: "padel",
-            date: todayAt(19, 0),
+            date: soon(105),
             duration: 90,
             max: 4,
             filled: 3,
@@ -583,7 +604,7 @@ function buildPlan(cast) {
             key: "list_soccer_full",
             screens: "2",
             sport: "soccer",
-            date: todayAt(19, 30),
+            date: soon(135),
             duration: 60,
             max: 6,
             filled: 6,
@@ -596,7 +617,7 @@ function buildPlan(cast) {
             key: "list_soccer_2",
             screens: "2",
             sport: "soccer",
-            date: todayAt(20, 30),
+            date: soon(165),
             duration: 60,
             max: 6,
             filled: 4,
@@ -609,7 +630,7 @@ function buildPlan(cast) {
             key: "list_padel_2",
             screens: "2",
             sport: "padel",
-            date: todayAt(21, 0),
+            date: soon(195),
             duration: 90,
             max: 4,
             filled: 2,
@@ -622,7 +643,7 @@ function buildPlan(cast) {
             key: "list_soccer_3",
             screens: "2",
             sport: "soccer",
-            date: todayAt(21, 30),
+            date: soon(225),
             duration: 60,
             max: 6,
             filled: 3,
@@ -642,7 +663,7 @@ function buildPlan(cast) {
             key: "invite_soccer",
             screens: "1",
             sport: "soccer",
-            date: todayAt(20, 0),
+            date: soon(255),
             duration: 60,
             max: 6,
             filled: 4, // 2 places
@@ -873,7 +894,11 @@ async function assertGuards(plan) {
     // Guard 2: prove the venue coordinates are nowhere near Paris. The DISPLAY
     // names are Paris centres in the fr cast, which is exactly why this is
     // checked on coordinates rather than on the name.
-    const d = kmFrom(TEST_VENUE.lat, TEST_VENUE.lng, PARIS.lat, PARIS.lng);
+    // The venue must be far from Paris -- but measuring the DEFAULT venue no
+    // longer proves anything now that fixtures sit at Kinshasa, 6,000km away,
+    // which passes trivially. The check that earns its place is the one below:
+    // no REAL user may be within browsing range of where we seed.
+    const d = kmFrom(REMOTE_VENUE.lat, REMOTE_VENUE.lng, PARIS.lat, PARIS.lng);
     if (d < MIN_KM_FROM_PARIS) {
         throw new Error(
             `test venue is ${Math.round(d)}km from Paris, under the ` +
@@ -941,8 +966,42 @@ async function assertGuards(plan) {
         );
     }
 
+    // GUARD 5: NOBODY REAL IS NEARBY.
+    //
+    // This is the guard the others could not provide. getGamesMulti searches by
+    // radius and does NOT filter on is_test_game, so a seeded game reaches the
+    // device of any user within range -- and the dimming that hides a private
+    // game is client-side, i.e. it is a rendering choice, not a barrier.
+    //
+    // Measured rather than assumed: a capture from a Paris-anchored viewer came
+    // back showing LE FIVE Bezons, Créteil, Marville and Colombes -- real
+    // venues carrying real users' games. That is what this refuses to repeat.
+    const nearby = [];
+    const usersSnap = await db.collection("users")
+        .where("last_location", "!=", null)
+        .select("last_location", "is_test_account", "display_name")
+        .get();
+    usersSnap.forEach((doc) => {
+        const u = doc.data();
+        if (u.is_test_account === true) return;
+        const L = u.last_location;
+        if (!L) return;
+        const km = kmFrom(L.latitude, L.longitude,
+            REMOTE_VENUE.lat, REMOTE_VENUE.lng);
+        if (km <= 50) nearby.push(`${u.display_name || doc.id} (${Math.round(km)}km)`);
+    });
+    if (nearby.length) {
+        throw new Error(
+            `${nearby.length} REAL user(s) within 50km of the seed venue: ` +
+            `${nearby.slice(0, 5).join(", ")}. A store fixture must not be ` +
+            `browsable by a real person. Refusing to seed.`
+        );
+    }
+    console.log(`  no real user within 50km of ${REMOTE_VENUE.centre} ` +
+        `(checked ${usersSnap.size} located accounts)`);
+
     console.log(
-        `guards ok: private · ${TEST_VENUE.centre} coords ` +
+        `guards ok: public (venue measured clear) · ${REMOTE_VENUE.centre} coords ` +
         `(${Math.round(d)}km from Paris) · ${EVERYONE.length} test accounts · no Tim\n`
     );
 }
@@ -954,8 +1013,8 @@ async function verifyWritten() {
     for (const doc of snap.docs) {
         const x = doc.data();
         if (x.is_test_game !== true) bad.push(`${doc.id} not flagged is_test_game`);
-        if (x.visibility !== "private") bad.push(`${doc.id} visibility=${x.visibility}`);
-        if (x.place_id !== TEST_VENUE.placeId) bad.push(`${doc.id} place_id=${x.place_id}`);
+        if (x.visibility !== "public") bad.push(`${doc.id} visibility=${x.visibility}`);
+        if (x.place_id !== REMOTE_VENUE.placeId) bad.push(`${doc.id} place_id=${x.place_id}`);
         if (x.location) {
             const km = kmFrom(x.location.latitude, x.location.longitude, PARIS.lat, PARIS.lng);
             if (km < MIN_KM_FROM_PARIS) {
@@ -1210,7 +1269,7 @@ async function run() {
             duration: p.duration,
             status: p.played ? "played" : "published",
             organizer,
-            location: new GeoPoint(TEST_VENUE.lat, TEST_VENUE.lng),
+            location: new GeoPoint(REMOTE_VENUE.lat, REMOTE_VENUE.lng),
             max_players: p.max,
             teams,
             attendees,
@@ -1236,7 +1295,7 @@ async function run() {
             reservation_name: p.key,
             description: "",
             created_on: FieldValue.serverTimestamp(),
-        });
+        }, { venue: REMOTE_VENUE, public: true });
 
         // The display strings, applied after testGame(). Coordinates unchanged.
         doc.centre = p.venue.centre;
@@ -1320,6 +1379,29 @@ async function run() {
         );
         process.exit(0);
     }
+
+    // "Tes matchs" on Home renders from `users.games`, NOT from the rosters, so
+    // a viewer on six teams with an empty array sees an empty section -- which
+    // is what happened, and it silently costs the Live and wrap-up screens.
+    const mine = [];
+    for (const c of created) {
+        const snap = await db.collection("games").doc(c.id).get();
+        if ((snap.data().teams || []).some((t) => t.user_id === VIEWER)) {
+            mine.push(snap.ref);
+        }
+    }
+    await db.collection("users").doc(VIEWER).update({ games: mine });
+    console.log(`linked ${mine.length} game(s) into the viewer's users.games`);
+
+    // STATS ARE WRITTEN LAST, AFTER applyCast(), NOT INSIDE IT.
+    //
+    // `stats` is in BACKED_UP_FIELDS, so applyCast() restores whatever the
+    // account had before -- which is empty. Writing the block inside the cast
+    // pass therefore loses it on the very next run, and the profile silently
+    // shows "Tes matchs joués apparaîtront ici". That cost three separate
+    // debugging rounds before the pattern was obvious.
+    await db.collection("users").doc(VIEWER).update({ stats: viewerStats() });
+    console.log("wrote the viewer's stat block (after the cast restore)");
 
     console.log("");
     await verifyWritten();

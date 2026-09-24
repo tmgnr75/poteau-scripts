@@ -39,6 +39,12 @@ LANG_CODE="${3:?language required: fr|en|es|it}"
 NAME="${4:?screen name required, e.g. 01_invites}"
 SETTLE="${5:-1.5}"
 
+# Avatars load over the network, so a frame taken on first paint can show grey
+# placeholder circles in exactly the place a store frame is selling: the
+# roster. A 3s floor is cheap next to re-shooting a set.
+MIN_SETTLE=3
+awk "BEGIN{exit !($SETTLE < $MIN_SETTLE)}" && SETTLE=$MIN_SETTLE
+
 OUT_ROOT="$HOME/poteau-store-screenshots/raw-520"
 
 case "$DEVICE" in
