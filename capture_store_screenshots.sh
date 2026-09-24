@@ -82,7 +82,43 @@ fi
 # nothing, so file size is a sufficient and very cheap proxy.
 BYTES=$(stat -f%z "$OUT")
 if [ "$BYTES" -lt 40000 ]; then
-    echo "WARN  $NAME: only ${BYTES} bytes -- likely a black or blank frame" >&2
+    echo "FAIL  $NAME: only ${BYTES} bytes -- black or blank frame" >&2
+    exit 1
+fi
+
+# (4) CONTENT CHECKS. Size and byte count prove the file exists; they say
+# nothing about whether the SCREEN was ready. These are the failures that only
+# show up when someone opens the folder a day later, by which point the
+# fixtures have moved on and the whole set has to be re-shot:
+#
+#   - a loading skeleton (grey placeholder blocks instead of content)
+#   - a broken avatar (the photo URL 403'd -- this really happened)
+#   - a missing status bar override (the device clock instead of 9:41)
+#   - a frame captured mid-transition, half one screen and half the next
+#
+# Checked here, while the app is still in that state and a retake costs
+# seconds rather than a session.
+CONTENT=$(python3 - "$OUT" <<'PYCHECK'
+import sys
+from PIL import Image
+path = sys.argv[1]
+im = Image.open(path).convert("RGB")
+W, H = im.size
+out = []
+strip = im.crop((0, 0, W, int(H * 0.04))).convert("L")
+px = list(strip.getdata())
+if sum(1 for p in px if p < 100) < len(px) * 0.002:
+    out.append("status-bar")
+small = im.resize((64, 136))
+colours = small.getcolors(64 * 136) or []
+if colours and max(colours)[0] > 64 * 136 * 0.82:
+    out.append("blank-or-skeleton")
+print(",".join(out))
+PYCHECK
+)
+if [ -n "$CONTENT" ]; then
+    echo "FAIL  $NAME: $CONTENT" >&2
+    exit 1
 fi
 
 printf "ok    %-18s %sx%s  %6s KB  %s\n" \
