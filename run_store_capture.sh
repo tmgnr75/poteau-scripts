@@ -119,6 +119,46 @@ tap_label() {
     sleep "${2:-2}"
 }
 
+# THE CLOCK FORMAT IS A DEVICE SETTING, AND IT FOLLOWS THE MARKET.
+#
+# format_date.dart is explicit about this: "Driven by the DEVICE clock setting,
+# never by the language." It reads FFAppState().show24h, which device24hFormat
+# fills from the simulator's own 24-hour preference. So the app language does
+# NOT decide whether a time renders "20:00" or "8pm" -- the device does.
+#
+# Which means the split is by MARKET, not by language (Tim, 2026-09-24):
+#
+#   fr, it  -> 24h   European markets
+#   en, es  -> AM/PM US and Latin American markets
+#
+# It is a preferences write plus a reboot, so it is done once per clock format
+# rather than once per language: fr and it share a 24-hour boot, en and es
+# share a 12-hour one.
+set_clock() {
+    local want24="$1"   # "true" or "false"
+    local current
+    current=$(xcrun simctl spawn "$UDID" defaults read "Apple Global Domain" \
+        AppleICUForce24HourTime 2>/dev/null | tr -d '[:space:]')
+    [ "$current" = "1" ] && current="true" || current="false"
+    [ "$current" = "$want24" ] && return 0
+
+    log "  clock -> $([ "$want24" = true ] && echo 24h || echo AM/PM) (reboot)"
+    xcrun simctl terminate "$UDID" "$BUNDLE" >/dev/null 2>&1
+    if [ "$want24" = "true" ]; then
+        xcrun simctl spawn "$UDID" defaults write "Apple Global Domain" \
+            AppleICUForce24HourTime -bool true >/dev/null 2>&1
+    else
+        xcrun simctl spawn "$UDID" defaults delete "Apple Global Domain" \
+            AppleICUForce24HourTime >/dev/null 2>&1
+    fi
+    xcrun simctl shutdown "$UDID" >/dev/null 2>&1
+    sleep 3
+    xcrun simctl boot "$UDID" >/dev/null 2>&1
+    until xcrun simctl list devices booted 2>/dev/null | grep -q "$UDID"; do sleep 3; done
+    xcrun simctl location "$UDID" set 48.8566,2.3522 >/dev/null 2>&1
+    sleep 4
+}
+
 relaunch() {
     xcrun simctl terminate "$UDID" "$BUNDLE" >/dev/null 2>&1
     sleep 1
@@ -277,8 +317,15 @@ relaunch
 # ---------------------------------------------------------------------------
 # 3. Capture, language by language
 # ---------------------------------------------------------------------------
-for LANG_CODE in fr en es it; do
+# Ordered so the two 24-hour languages run together and the two AM/PM ones do
+# too: the clock change costs a reboot, so this pays it twice rather than four
+# times.
+for LANG_CODE in fr it en es; do
     log "=== $LANG_CODE ==="
+    case "$LANG_CODE" in
+        fr|it) set_clock true  ;;   # European markets
+        en|es) set_clock false ;;   # US / Latin American markets
+    esac
     set_language "$LANG_CODE"
     dismiss_overlays
 
