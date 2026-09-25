@@ -44,18 +44,50 @@ log() { printf '[%s %s/android] %s\n' "$(date +%H:%M:%S)" "$LANG_CODE" "$*"; }
 W=1080
 H=1920
 
+# 40 SECONDS, NOT 22.
+#
+# The release build starts slower on this emulator than the debug build did,
+# and a 22-second wait captured a half-painted Home: the quiz card drawn, the
+# roster and the tab bar still blank (2026-09-25). Waiting longer is the whole
+# fix -- there is no readiness signal to poll, because the accessibility tree
+# stays empty on every Poteau screen.
 restart() {
     adb -s "$SERIAL" shell am force-stop "$BUNDLE" >/dev/null 2>&1
     sleep 2
     adb -s "$SERIAL" shell monkey -p "$BUNDLE" \
         -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1
-    sleep 22
+    sleep 40
 }
 
 tap() { adb -s "$SERIAL" shell input tap "$1" "$2" >/dev/null 2>&1; }
 
+# ANDROID'S ANSWER TO `simctl status_bar override` IS SYSUI DEMO MODE.
+#
+# There is no adb equivalent of the iOS override, so the bar would otherwise
+# carry the wall clock and whatever signal the emulator happens to have. Demo
+# mode pins the same 9:41 the iOS frames use, full bars and a full battery, and
+# hides the notification icons.
+#
+# `-e fully true` matters: without it the wifi glyph renders with a "!" badge,
+# the no-internet indicator, which reads as a broken device in a store frame.
+demo_bar() {
+    local D="adb -s $SERIAL shell am broadcast -a com.android.systemui.demo"
+    adb -s "$SERIAL" shell settings put global sysui_demo_allowed 1 >/dev/null 2>&1
+    $D -e command enter >/dev/null 2>&1
+    $D -e command clock -e hhmm 0941 >/dev/null 2>&1
+    $D -e command battery -e level 100 -e plugged false >/dev/null 2>&1
+    $D -e command network -e wifi show -e fully true -e level 4 >/dev/null 2>&1
+    $D -e command network -e mobile show -e fully true -e level 4 -e datatype none >/dev/null 2>&1
+    $D -e command notifications -e visible false >/dev/null 2>&1
+}
+
+# The device's location, which the games list searches around. Without it the
+# list is empty and screen 2 shoots the "no games near you" state.
+adb -s "$SERIAL" emu geo fix 25.1911 0.5153 >/dev/null 2>&1 || true
+
 shoot() {
     local name="$1" out="$DIR/$1.png"
+    demo_bar
     sleep 3
     adb -s "$SERIAL" exec-out screencap -p > "$out" 2>/dev/null
     [ -s "$out" ] || { log "FAIL $name: no file"; return 1; }
@@ -103,6 +135,35 @@ restart
 # 57% and 73% of the width, centred on 88% of the height.
 tap $((W*42/100)) $((H*88/100))
 sleep 7
+
+# THE SLATE ROLLS TO TOMORROW after about 17:15, because eveningSlate() moves
+# the whole evening forward rather than pushing kickoffs into the small hours.
+# The list opens on Today, which is then empty.
+#
+# Whether that happened is asked of FIRESTORE, not of the screen. A pixel test
+# for "the list looks empty" was tried first and failed: the empty state is not
+# a flat colour, it carries two paragraphs of copy, so the detector never
+# fired and screen 2 shot the empty list anyway (2026-09-25).
+ROLLED=$(node -e "
+const a = require('firebase-admin');
+a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
+a.firestore().collection('games').where('seed_tag','==','store_shots_520').get().then(s => {
+  const d = s.docs.find(x => /^list_/.test(x.data().reservation_name || ''));
+  if (!d) { console.log('no'); process.exit(0); }
+  const k = d.data().date.toDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const kday = new Date(k); kday.setHours(0,0,0,0);
+  console.log(kday > today ? 'yes' : 'no');
+  process.exit(0);
+});
+" 2>/dev/null)
+if [ "$ROLLED" = "yes" ]; then
+    log "the slate is dated tomorrow, switching tab"
+    # The day tabs run across the green header at about 16% of the height.
+    # "Tomorrow" is the second, at roughly 35% of the width.
+    tap $((W*35/100)) $((H*16/100))
+    sleep 7
+fi
 shoot 02_games
 
 # --- 3: a game sheet --------------------------------------------------------
