@@ -34,7 +34,10 @@ OUT_ROOT="$HOME/poteau-store-screenshots/raw-520"
 case "$DEVICE" in
     iphone)  UDID="7506B541-2FE3-4BDC-A2FD-265C61D71F07"; EXP_W=1320; EXP_H=2868 ;;
     ipad)    UDID="B9A41AB4-0E39-418E-8DEE-DAF746927A56"; EXP_W=2064; EXP_H=2752 ;;
-    android) UDID="emulator-5554";                        EXP_W=1080; EXP_H=2400 ;;
+    # Play Store: min side 320, max 3840, and the long side may not exceed
+    # twice the short side. 1080x2220 (the stock Pixel 3a) and 1080x1920 (the
+    # recommended size) both qualify, so the height is checked as a RANGE.
+    android) UDID="$(adb devices | awk 'NR==2{print $1}')"; EXP_W=1080; EXP_H=0 ;;
     *) echo "unknown device '$DEVICE'" >&2; exit 1 ;;
 esac
 
@@ -137,7 +140,13 @@ capture() {
     h=$(sips -g pixelHeight "$out" 2>/dev/null | tail -1 | awk '{print $2}')
     bytes=$(stat -f%z "$out")
 
-    if [ "$w" != "$EXP_W" ] || [ "$h" != "$EXP_H" ]; then
+    if [ "$EXP_H" = "0" ]; then
+        # Android: width fixed, height anywhere Play accepts (2:1 max).
+        if [ "$w" != "$EXP_W" ] || [ "$h" -lt "$EXP_W" ] || [ "$h" -gt $((EXP_W * 2)) ]; then
+            log "FAIL $name: ${w}x${h}, want ${EXP_W} wide and within Play's 2:1"
+            rm -f "$out"; return 1
+        fi
+    elif [ "$w" != "$EXP_W" ] || [ "$h" != "$EXP_H" ]; then
         log "FAIL $name: ${w}x${h}, expected ${EXP_W}x${EXP_H}"
         rm -f "$out"; return 1
     fi

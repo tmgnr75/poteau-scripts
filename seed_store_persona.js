@@ -144,91 +144,172 @@ function roster(filled, max, people) {
  * the least believable thing on the screen. One FULL card gives the list
  * texture without claiming the app is always packed.
  */
+/**
+ * THE PLAN — one fixture per thing a store viewer must believe.
+ *
+ * The brief (Tim, 2026-09-25) states what each screen has to SAY, not just
+ * what it has to show, and the fixtures exist to make those claims true:
+ *
+ *   1 Home / invites   invitations arrive because of your availabilities and
+ *                      your address -- so they are games you did not search for
+ *   2 Games list       there are games all around you, free AND paying, some
+ *                      down to the last spot, some with room
+ *   3 Game sheet       real players with faces, one spot left, easy to take
+ *   4 Poteau Live      scoring is easy and fun, mid-match
+ *   5 Share card       a win worth being proud of, with your own goal on it
+ */
+/**
+ * The most recent :00 or :30 that is still inside Home's window.
+ *
+ * Two requirements pull against each other:
+ *
+ *   - Kickoffs must be ROUND (Tim, 2026-09-25: "all hours should be round,
+ *     never 11:27"). An odd minute is one of the small tells that says
+ *     "seeded data" to anyone reading the card.
+ *   - Home only lists games kicked off in the last 30 minutes
+ *     (nowMinus30Min), so a fixture older than that renders nothing at all.
+ *
+ * Rounding a "28 minutes ago" anchor DOWN gave 13:00 when it was 13:43 -- a
+ * round time, 43 minutes back, invisible on Home. So this walks back from now
+ * to the nearest half-hour mark and only accepts it if it is still inside the
+ * window; otherwise it returns the window's edge, which is round often enough
+ * and always visible.
+ *
+ * @param {number} maxAgeMin how far back the fixture may sit (< 30)
+ */
+function recentRoundKickoff(maxAgeMin) {
+    const now = new Date();
+    const half = new Date(now);
+    half.setSeconds(0, 0);
+    half.setMinutes(now.getMinutes() < 30 ? 0 : 30);
+
+    const ageMin = (now - half) / 60000;
+    if (ageMin >= 5 && ageMin <= maxAgeMin) return half;
+
+    // The half-hour mark is too fresh or too stale; sit at a fixed age
+    // instead. Not round, but visible -- and a Live card shows a running
+    // clock rather than the kickoff time, so this is the one place where
+    // being inside the window matters more than the minute digits.
+    return new Date(now.getTime() - maxAgeMin * 60000);
+}
+
 function buildPlan(p, slate, inv) {
     const v = p.venues;
     const eur = p.currency === "EUR";
     const price = (a, b) => (eur ? a : b);
 
     return [
-        // --- the games list, today ------------------------------------------
-        // First card is the one screen 3 opens: joinable, one spot left.
-        { key: "sheet_soccer", screens: "2,3", sport: "soccer", date: slate[0],
+        // --- SCREEN 2: the games list --------------------------------------
+        //
+        // Eight games across the evening. Prices MIXED, including free ones:
+        // a list where everything costs money says the app is a booking
+        // service, and free pickup games are most of what actually happens.
+        //
+        // Spot counts are varied on purpose. "Last spot available" creates
+        // urgency; "4 spots available" says you can still bring friends. Only
+        // one game is full -- Poteau games do not fill (40 of 4000 ever
+        // reached capacity), so a full list would be the least believable
+        // thing on the screen.
+        { key: "list_1", screens: "2", sport: "soccer", date: slate[0],
           duration: 60, max: 10, filled: 9, viewerJoined: false,
           venue: v.soccerA, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"] },
 
-        { key: "list_padel_1", screens: "2", sport: "padel", date: slate[1],
+        { key: "list_2", screens: "2", sport: "soccer", date: slate[1],
+          duration: 60, max: 10, filled: 6, viewerJoined: false,
+          venue: v.soccerB, price: 0,                       // free
+          levelDeltas: ["three_four", "five_six"] },
+
+        { key: "list_3", screens: "2", sport: "padel", date: slate[2],
           duration: 90, max: 4, filled: 3, viewerJoined: false,
           venue: v.padelA, price: price(12, 15),
           levelDeltas: ["five_six", "seven_eight"] },
 
-        { key: "list_soccer_full", screens: "2", sport: "soccer", date: slate[2],
+        // The sheet screen opens THIS one: tomorrow, 20:00, one spot left.
+        { key: "sheet_soccer", screens: "2,3", sport: "soccer",
+          date: new Date(slate[3].getTime() + 24 * 60 * 60 * 1000),
+          duration: 60, max: 10, filled: 9, viewerJoined: false,
+          venue: v.soccerC, price: price(10, 14),
+          levelDeltas: ["five_six", "seven_eight"] },
+
+        // Tonight's 20:00 PAIR. The sheet fixture also sits at 20:00 but
+        // TOMORROW, so without these two the brief's doubled slot is missing
+        // from the list a viewer actually sees.
+        { key: "list_4", screens: "2", sport: "soccer", date: slate[3],
+          duration: 60, max: 10, filled: 5, viewerJoined: false,
+          venue: v.soccerC, price: price(10, 14),
+          levelDeltas: ["five_six", "seven_eight"] },
+
+        { key: "list_5", screens: "2", sport: "soccer", date: slate[4],
           duration: 60, max: 10, filled: 10, viewerJoined: false,
-          venue: v.soccerB, price: price(10, 14),
+          venue: v.soccerD, price: price(8, 12),
           levelDeltas: ["five_six"] },
 
-        { key: "list_soccer_2", screens: "2", sport: "soccer", date: slate[3],
-          duration: 60, max: 10, filled: 7, viewerJoined: false,
-          venue: v.soccerC, price: price(8, 12),
+        { key: "list_6", screens: "2", sport: "soccer", date: slate[5],
+          duration: 60, max: 10, filled: 6, viewerJoined: false,
+          venue: v.soccerB, price: 0,                       // free
           levelDeltas: ["three_four", "five_six"] },
 
-        { key: "list_padel_2", screens: "2", sport: "padel", date: slate[4],
+        { key: "list_7", screens: "2", sport: "padel", date: slate[6],
           duration: 90, max: 4, filled: 2, viewerJoined: false,
           venue: v.padelB, price: price(12, 15),
           levelDeltas: ["five_six", "seven_eight"] },
 
-        { key: "list_soccer_3", screens: "2", sport: "soccer", date: slate[5],
-          duration: 60, max: 10, filled: 8, viewerJoined: false,
-          venue: v.soccerD, price: price(8, 10),
+        { key: "list_8", screens: "2", sport: "soccer", date: slate[7],
+          duration: 60, max: 10, filled: 7, viewerJoined: false,
+          venue: v.soccerA, price: price(8, 10),
           levelDeltas: ["five_six", "seven_eight"] },
 
-        // --- invitations (screen 1) ------------------------------------------
-        // Tonight and tomorrow, nearly full, at least one padel.
-        { key: "invite_soccer", screens: "1", sport: "soccer", date: inv[0],
-          duration: 60, max: 10, filled: 8, viewerJoined: false,
+        // --- SCREEN 1: invitations, and nothing else ------------------------
+        //
+        // Four cards, all 19:00-20:30, all one or two spots from full, mixed
+        // free and paid. Off-slate times and a spread of venues, so they read
+        // as games that came TO the viewer rather than the list repeated.
+        //
+        // The capture parks the Live and played fixtures outside Home's
+        // 30-minute window for this screen, because Home renders those ABOVE
+        // the invitations and would otherwise bury them.
+        { key: "invite_1", screens: "1", sport: "soccer", date: inv[0],
+          duration: 60, max: 10, filled: 9, viewerJoined: false,
           venue: v.soccerB, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
-        { key: "invite_padel", screens: "1", sport: "padel",
-          date: new Date(inv[1].getTime() + 24 * 60 * MIN),
+        { key: "invite_2", screens: "1", sport: "soccer", date: inv[1],
+          duration: 60, max: 10, filled: 8, viewerJoined: false,
+          venue: v.soccerD, price: 0,                       // free
+          levelDeltas: ["five_six"], invitation: true },
+
+        { key: "invite_3", screens: "1", sport: "padel", date: inv[2],
           duration: 90, max: 4, filled: 3, viewerJoined: false,
           venue: v.padelA, price: price(12, 15),
           levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
-        { key: "invite_soccer_2", screens: "1", sport: "soccer",
-          date: new Date(inv[2].getTime() + 24 * 60 * MIN),
+        { key: "invite_4", screens: "1", sport: "soccer", date: inv[3],
           duration: 60, max: 10, filled: 9, viewerJoined: false,
           venue: v.soccerC, price: price(10, 14),
-          levelDeltas: ["five_six"], invitation: true },
+          levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
-        // --- Live, mid-match (screen 4) --------------------------------------
+        // --- SCREEN 4: Poteau Live, ~30 minutes in --------------------------
         //
-        // Home only lists games whose kickoff is within the last 30 minutes
-        // (nowMinus30Min), so these sit at -18 and -22, and they carry
-        // `poteau_live` -- an opt-in cohort flag that defaults to false, which
-        // means a fixture without it renders no Live UI at all.
+        // Home only lists games kicked off within the last 30 minutes, so -28
+        // is as late as the brief's "started ~30min ago" can be taken.
         { key: "live_soccer", screens: "4", sport: "soccer",
-          date: new Date(Date.now() - 18 * MIN),
+          date: recentRoundKickoff(25),
           duration: 60, max: 10, filled: 10, viewerJoined: true,
           venue: v.soccerA, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"],
           live: { sport: "soccer" } },
 
-        { key: "live_padel", screens: "4", sport: "padel",
-          date: new Date(Date.now() - 22 * MIN),
-          duration: 90, max: 4, filled: 4, viewerJoined: true,
-          venue: v.padelA, price: price(12, 15),
-          levelDeltas: ["five_six", "seven_eight"],
-          live: { sport: "padel" } },
-
-        // --- played, for the wrap-up and share card (screen 5) ----------------
-        // Ends 5 minutes ago, so the wrap-up card is on Home.
+        // --- SCREEN 5: the share card ---------------------------------------
+        //
+        // A 3-2 WIN with ONE goal by the viewer, per the brief. The goals are
+        // appended as attribution events, which is where the card reads them.
         { key: "share_played", screens: "5", sport: "soccer",
-          date: new Date(Date.now() - 25 * MIN),
+          date: recentRoundKickoff(25),
           duration: 20, max: 10, filled: 10, viewerJoined: true,
           venue: v.soccerA, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"],
-          played: { periods: [{ team_a: 5, team_b: 3 }], viewerGoals: 2 } },
+          played: { periods: [{ team_a: 3, team_b: 2 }], viewerGoals: 1 } },
     ];
 }
 
@@ -512,6 +593,42 @@ async function run() {
     // The wrap-up card on Home renders from `pending_feedback`, not from the
     // game's status: a played game the viewer has already given feedback on
     // shows nothing. Screen 5 depends on this.
+    // THE INVITATIONS TOGGLE READS THE AVAILABILITIES DOCUMENT.
+    //
+    // Screen 1 must show "Activées" -- an invitations section reading
+    // "Désactivées" says the feature is off, which is the opposite of what the
+    // frame is selling (Tim, 2026-09-25). The toggle is driven by an
+    // `availabilities` doc keyed on user_id whose `slots` is non-empty, not by
+    // anything on the user record.
+    //
+    // Slots are "weekday-HH:MM" with weekday 1-7, and these are the hours a
+    // five-a-side player actually offers: weekday evenings, 18:30 to 21:30.
+    const slots = [];
+    for (let day = 1; day <= 5; day++) {
+        for (const t of ["18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"]) {
+            slots.push(`${day}-${t}`);
+        }
+    }
+    const availSnap = await db.collection("availabilities")
+        .where("user_id", "==", cast.viewer.uid).limit(1).get();
+    const availDoc = availSnap.empty
+        ? db.collection("availabilities").doc()
+        : availSnap.docs[0].ref;
+    await availDoc.set({
+        user_id: cast.viewer.uid,
+        slots,
+        location: new GeoPoint(REMOTE_VENUE.lat, REMOTE_VENUE.lng),
+        radius: 20000,
+        city: p.city,
+        country: p.country,
+        label: "home",
+        emoji: "⚽️",
+        origin: "store_shots_520",
+        created_at: Timestamp.now(),
+        updated_at: Timestamp.now(),
+    }, { merge: true });
+    console.log(`availabilities: ${slots.length} slots (invitations read as ON)`);
+
     // pending_feedback is left EMPTY on purpose.
     //
     // Home shows one of two cards for a finished game. With the game in
