@@ -46,6 +46,17 @@ esac
 DIR="$OUT_ROOT/ios-$DEVICE/$LANG_CODE"
 mkdir -p "$DIR"
 
+# THE GAMES LIST SEARCHES BY RADIUS AROUND THE DEVICE'S LOCATION.
+#
+# A fresh install has none, so `getGamesMulti` finds nothing and screen 2 comes
+# back as "non ci sono partite organizzate vicino a casa tua" -- which is what
+# happened right after the 2026-09-25 rebuild. Pinning it every run costs
+# nothing and removes a failure that looks like a seeding bug but is not.
+#
+# These are the coordinates of the sanctioned remote venue in lib/test_game.js,
+# measured 939 km from the nearest of 106,385 located real users.
+xcrun simctl location "$UDID" set 0.5153,25.1911 >/dev/null 2>&1 || true
+
 log() { printf '[%s %s/%s] %s\n' "$(date +%H:%M:%S)" "$LANG_CODE" "$DEVICE" "$*"; }
 
 # --- device primitives ------------------------------------------------------
@@ -87,12 +98,21 @@ restart() {
     sleep 26
 }
 
-# The status bar is set per screen, because screens 4 and 5 must agree with the
-# game's own clock: a Live card reading "Today at 3pm" under a 9:41 status bar
-# is three clocks disagreeing in one frame.
+# EVERY FRAME CARRIES 9:41, WITHOUT EXCEPTION (Cowork, 2026-09-25).
+#
+# This used to pass the Live fixture's real clock on screens 4 and 5, so the
+# status bar would agree with the card's own "Today at 4pm". That produced a
+# set where screen 1 read 9:41 and the others read 16:14, 16:51, 4:21, 16:33 --
+# inconsistent across a composed listing, where the status bar is chrome rather
+# than content and nobody reads it against the card.
+#
+# One clock for the whole set wins. The card's kickoff and the status bar
+# disagreeing is invisible; frames disagreeing with each other is not.
+STATUS_CLOCK="9:41"
+
 status_bar() {
     xcrun simctl status_bar "$UDID" override \
-        --time "${1:-9:41}" --dataNetwork 5g --wifiBars 3 --cellularBars 4 \
+        --time "$STATUS_CLOCK" --dataNetwork 5g --wifiBars 3 --cellularBars 4 \
         --batteryState charged --batteryLevel 100 >/dev/null 2>&1 || true
 }
 
@@ -143,6 +163,29 @@ else:
 ")
 tap_xy $TAB
 sleep 7
+
+# THE SLATE ROLLS TO TOMORROW WHEN THE EVENING HAS PASSED.
+#
+# eveningSlate() moves the whole slate forward rather than pushing kickoffs into
+# the small hours, so a capture run after ~17:15 seeds games dated TOMORROW.
+# The games list opens on "Today", which is then correctly empty and shoots the
+# "no games organised near you" state (2026-09-25, 18:41).
+#
+# So: if Today has no game card, move to the next day tab. The day tabs are the
+# labelled controls in the green header, and the second one is tomorrow.
+if [ -n "$(find_xy 'no soccer games' 'aucun match' 'non ci sono partite' 'no hay partidos')" ]; then
+    log "today is empty, the slate rolled to tomorrow"
+    # The tab is found BY ITS WORD, not by position in the header. Picking the
+    # "second labelled control near the top" instead opened the location and
+    # radius sheet, because the screen title is itself such a control.
+    NEXT=$(find_xy 'tomorrow' 'demain' 'domani' 'mañana')
+    if [ -n "$NEXT" ]; then
+        tap_xy $NEXT
+        sleep 7
+    else
+        log "WARN: could not find the next-day tab"
+    fi
+fi
 shoot 02_games
 
 # --- 3: a game sheet --------------------------------------------------------
@@ -175,34 +218,6 @@ node "$HERE/park_for_invites.js" --restore >/dev/null 2>&1
 node "$HERE/reset_wrap_goals.js" >/dev/null 2>&1
 restart
 
-# The Live fixture kicks off on a round :00 or :30 at least 15 minutes ago, so
-# the status bar is set to that hour plus ~20 minutes and the card's own
-# "Today at 3pm" agrees with it.
-# THE SIMULATOR'S CLOCK FORMAT DECIDES THE STATUS BAR, not the app language.
-#
-# A French or Italian frame is shot on a 24-hour simulator, so its status bar
-# must read 15:51 rather than 3:51. Reading the same preference the app reads
-# keeps the two consistent whichever way the device is set.
-IS24=$(xcrun simctl spawn "$UDID" defaults read "Apple Global Domain" \
-        AppleICUForce24HourTime 2>/dev/null | tr -d '[:space:]')
-CLOCK=$(node -e "
-const a = require('firebase-admin');
-a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
-const h24 = process.argv[1] === '1';
-a.firestore().collection('games').where('seed_tag','==','store_shots_520').get().then(s => {
-  const d = s.docs.find(x => x.data().reservation_name === 'live_soccer');
-  if (!d) { console.log(h24 ? '9:41' : '9:41'); process.exit(0); }
-  const k = d.data().date.toDate();
-  const t = new Date(k.getTime() + 21*60000);
-  const mm = String(t.getMinutes()).padStart(2,'0');
-  if (h24) { console.log(String(t.getHours()).padStart(2,'0') + ':' + mm); }
-  else { let h = t.getHours() % 12; if (h === 0) h = 12; console.log(h + ':' + mm); }
-  process.exit(0);
-});
-" "$IS24" 2>/dev/null)
-[ -z "$CLOCK" ] && CLOCK="9:41"
-log "clock: $CLOCK"
-
 # HOME ONLY LISTS A GAME THAT KICKED OFF WITHIN THE LAST 30 MINUTES.
 #
 # --restore stamps the kickoff, but the relaunch and the four screens before
@@ -216,22 +231,6 @@ if [ -z "$(find_xy 'my team' 'mon équipe' 'mi equipo' 'mia squadra')" ]; then
     node "$HERE/park_for_invites.js" --restore >/dev/null 2>&1
     node "$HERE/reset_wrap_goals.js" >/dev/null 2>&1
     restart
-    CLOCK=$(node -e "
-const a = require('firebase-admin');
-a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
-const h24 = process.argv[1] === '1';
-a.firestore().collection('games').where('seed_tag','==','store_shots_520').get().then(s => {
-  const d = s.docs.find(x => x.data().reservation_name === 'live_soccer');
-  if (!d) { console.log('9:41'); process.exit(0); }
-  const t = new Date(d.data().date.toDate().getTime() + 21*60000);
-  const mm = String(t.getMinutes()).padStart(2,'0');
-  if (h24) { console.log(String(t.getHours()).padStart(2,'0') + ':' + mm); }
-  else { let h = t.getHours() % 12; if (h === 0) h = 12; console.log(h + ':' + mm); }
-  process.exit(0);
-});
-" "$IS24" 2>/dev/null)
-    [ -z "$CLOCK" ] && CLOCK="9:41"
-    log "clock: $CLOCK"
 fi
 # SCREEN 4 LEADS WITH THE LIVE SCOREBOARD, so the wrap-up card is suppressed
 # for this frame and re-armed for screen 5. Home renders the wrap-up ABOVE the
@@ -247,7 +246,7 @@ db.collection('users').where('store_anchor','==',true).limit(1).get().then(async
 });
 " >/dev/null 2>&1
 restart
-shoot 04_live "$CLOCK"
+shoot 04_live
 
 # Re-arm the wrap-up card for screen 5.
 node "$HERE/park_for_invites.js" --restore >/dev/null 2>&1
@@ -268,7 +267,7 @@ if tap_label "how was it" "alors, ce" "com'è andata" "qué tal"; then
     tap_label "confirm" "valider" "conferma" "confirmar" && sleep 8
     tap_label "continue" "continuer" "continua" "continuar" && sleep 10
     if [ -n "$(find_xy 'played on poteau' 'joué sur poteau' 'giocato su poteau' 'jugado en poteau')" ]; then
-        shoot 05_share "$CLOCK"
+        shoot 05_share
     else
         log "FAIL 05_share: the flow did not reach the share card"
     fi
