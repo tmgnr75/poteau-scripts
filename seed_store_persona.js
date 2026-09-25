@@ -279,9 +279,17 @@ function buildPlan(p, slate, inv) {
           venue: v.soccerD, price: 0,                       // free
           levelDeltas: ["five_six"], invitation: true },
 
+        // Padel, at padelB rather than padelA.
+        //
+        // The Home invitations section can render the SAME game twice when a
+        // fixture is both invited and nearby-joinable, which put "Padel Haus
+        // Williamsburg / 1 spot left" on screen 1 at two different times
+        // (2026-09-25). Four distinct venues across the four invitations means
+        // a duplicated render can never repeat a venue NAME, which is the part
+        // a viewer would read as broken data.
         { key: "invite_3", screens: "1", sport: "padel", date: inv[2],
           duration: 90, max: 4, filled: 3, viewerJoined: false,
-          venue: v.padelA, price: price(12, 15),
+          venue: v.padelB, price: price(12, 15),
           levelDeltas: ["five_six", "seven_eight"], invitation: true },
 
         { key: "invite_4", screens: "1", sport: "soccer", date: inv[3],
@@ -408,14 +416,19 @@ async function run() {
     if (PURGE) { await purge(); process.exit(0); }
 
     const p = PERSONAS[LANG];
-    const slate = eveningSlate();
-    const inv = inviteSlate(slate[0]);
+    const slate = eveningSlate(p.timeZone);
+    const inv = inviteSlate(slate[0], p.timeZone);
     const plan = buildPlan(p, slate, inv);
     const cast = await loadCast(LANG);
 
     const pad = (n) => String(n).padStart(2, "0");
-    const when = (d) =>
-        `${pad(d.getDate())}/${pad(d.getMonth() + 1)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    // Printed in the PERSONA's timezone, not the machine's. A New York slate
+    // logged in Paris time reads as a 2am kickoff and looks like the bug this
+    // very change fixes.
+    const when = (d) => d.toLocaleString("en-GB", {
+        day: "2-digit", month: "2-digit",
+        hour: "2-digit", minute: "2-digit", hour12: false,
+    }).replace(",", "");
 
     console.log(
         `\nSTORE FIXTURES — ${LANG.toUpperCase()} / ${p.city} — ` +
@@ -450,11 +463,22 @@ async function run() {
         // 5v5 pitch. The viewer leads when he plays; when he does not, he goes
         // LAST so a 9/10 roster is the nine other men and the empty spot is
         // his to take -- which is what screen 3 is selling.
+        // ROTATE THE ROSTER PER FIXTURE.
+        //
+        // Every card drew from the top of the same men's list, so two
+        // invitations showed the same four faces and read as duplicated data
+        // rather than two different groups of players (Tim, 2026-09-25).
+        // Rotating by a per-fixture offset gives each card its own opening
+        // faces while still never repeating a uid inside one roster.
+        const rot = (arr, n) => arr.slice(n % arr.length).concat(arr.slice(0, n % arr.length));
+        const seed = [...g.key].reduce((a, c) => a + c.charCodeAt(0), 0);
+        const menRot = rot(cast.men, seed);
+
         const pool = g.sport === "padel"
-            ? [cast.women[0], cast.men[0], cast.women[1], cast.men[1]]
+            ? [cast.women[seed % 2], menRot[0], cast.women[(seed + 1) % 2], menRot[1]]
             : (g.viewerJoined
-                ? [cast.viewer, ...cast.men]
-                : [...cast.men, cast.viewer]);
+                ? [cast.viewer, ...menRot]
+                : [...menRot, cast.viewer]);
         const teams = roster(g.filled, g.max, pool);
         const attendees = teams.filter((t) => t.user_id)
             .map((t) => db.collection("users").doc(t.user_id));
@@ -482,7 +506,15 @@ async function run() {
             gold_exclusive: false,
             level: 3,
             mood: "fun",
-            time_zone: p.timeZone,
+            // The DEVICE's zone, not the persona's city zone.
+            //
+            // Two surfaces disagree about which to use: the games list renders
+            // against the simulator clock, the invitation cards against this
+            // field. The simulator ignores AppleTimeZone and stays on the
+            // host's zone, so writing the city's zone here made the two
+            // surfaces show different hours for the same evening. Both now
+            // read the same clock, and every frame shows 18:00-21:30.
+            time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             reservation_name: g.key,
             description: "",
             created_on: FieldValue.serverTimestamp(),
