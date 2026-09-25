@@ -57,6 +57,31 @@ mkdir -p "$DIR"
 # measured 939 km from the nearest of 106,385 located real users.
 xcrun simctl location "$UDID" set 0.5153,25.1911 >/dev/null 2>&1 || true
 
+# THE CLOCK FORMAT FOLLOWS THE PERSONA.
+#
+# formatTimeOfDay reads the DEVICE setting, deliberately, not the app language:
+# a 12-hour clock is a device convention, not a French or Italian one. But a
+# French listing should still show 19:00, because French devices are 24-hour --
+# so the device is set to match the market rather than left wherever the last
+# run put it. Setting it by hand before each run is how an Italian set came
+# back reading "7pm" (2026-09-25).
+#
+# SpringBoard has to be restarted for the change to take, which is why this
+# runs before the first launch rather than between screens.
+case "$LANG_CODE" in
+    fr|it) WANT24=true ;;
+    *)     WANT24=false ;;
+esac
+HAVE24=$(xcrun simctl spawn "$UDID" defaults read "Apple Global Domain" \
+          AppleICUForce24HourTime 2>/dev/null | tr -d '[:space:]')
+[ "$HAVE24" = "1" ] && HAVE24=true || HAVE24=false
+if [ "$WANT24" != "$HAVE24" ]; then
+    xcrun simctl spawn "$UDID" defaults write "Apple Global Domain" \
+        AppleICUForce24HourTime -bool "$WANT24" >/dev/null 2>&1 || true
+    xcrun simctl spawn "$UDID" launchctl stop com.apple.SpringBoard >/dev/null 2>&1 || true
+    sleep 8
+fi
+
 log() { printf '[%s %s/%s] %s\n' "$(date +%H:%M:%S)" "$LANG_CODE" "$DEVICE" "$*"; }
 
 # --- device primitives ------------------------------------------------------

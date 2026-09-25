@@ -85,6 +85,19 @@ demo_bar() {
 # list is empty and screen 2 shoots the "no games near you" state.
 adb -s "$SERIAL" emu geo fix 25.1911 0.5153 >/dev/null 2>&1 || true
 
+# THE CLOCK FORMAT FOLLOWS THE PERSONA, as it does on the simulators.
+#
+# formatTimeOfDay reads the DEVICE setting, not the app language, so an Italian
+# frame on a 12-hour emulator renders "7 PM" where the Italian iPhone frame
+# renders "19:00" -- the same listing disagreeing with itself across platforms
+# (2026-09-25). French and Italian are 24-hour markets, English and Spanish are
+# 12-hour.
+case "$LANG_CODE" in
+    fr|it) CLOCK24=24 ;;
+    *)     CLOCK24=12 ;;
+esac
+adb -s "$SERIAL" shell settings put system time_12_24 "$CLOCK24" >/dev/null 2>&1 || true
+
 shoot() {
     local name="$1" out="$DIR/$1.png"
     demo_bar
