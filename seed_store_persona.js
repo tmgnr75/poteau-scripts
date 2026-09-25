@@ -312,9 +312,15 @@ function buildPlan(p, slate, inv) {
         //
         // A 3-2 WIN with ONE goal by the viewer, per the brief. The goals are
         // appended as attribution events, which is where the card reads them.
+        // A FULL HOUR, not 20 minutes.
+        //
+        // The share card prints the duration, and "20MIN" under a five-a-side
+        // scoreline reads as broken data -- no game lasts 20 minutes
+        // (2026-09-25). The 20 was a leftover from making the fixture land
+        // inside Home's recent window, which the kickoff already handles.
         { key: "share_played", screens: "5", sport: "soccer",
           date: recentRoundKickoff(25),
-          duration: 20, max: 10, filled: 10, viewerJoined: true,
+          duration: 60, max: 10, filled: 10, viewerJoined: true,
           venue: v.soccerA, price: price(8, 12),
           levelDeltas: ["five_six", "seven_eight"],
           played: { periods: [{ team_a: 3, team_b: 2 }], viewerGoals: 1 } },
