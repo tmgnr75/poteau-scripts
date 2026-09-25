@@ -51,8 +51,21 @@ const LIST = process.argv.includes("--list");
             // 3:07pm" on the card. Step back to the previous :00 or :30 that
             // is at least 15 minutes old instead, so the hour is always round
             // and the match clock still reads 15-45 minutes.
+            // The slot must be 15-30 minutes old: Home only lists a game that
+            // kicked off within the last 30 minutes, and a match clock under
+            // 15 minutes reads as "just started" rather than mid-game.
+            //
+            // Rounding strictly BACKWARDS fights that window -- at 16:08 the
+            // previous :30 is 15:30, already 38 minutes old, so the Live card
+            // had disappeared from Home by the time it was shot. When no round
+            // slot fits, an unrounded 20 minutes ago is better than a rounded
+            // kickoff the app will not display.
             let k = new Date(half);
             while ((now - k) / MIN < 15) k = new Date(k.getTime() - 30 * MIN);
+            if ((now - k) / MIN > 28) {
+                k = new Date(now.getTime() - 20 * MIN);
+                k.setSeconds(0, 0);
+            }
 
             // The two fixtures are not the same game and must not share a slot.
             //

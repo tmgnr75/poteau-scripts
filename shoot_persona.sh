@@ -167,22 +167,81 @@ restart
 # The Live fixture kicks off on a round :00 or :30 at least 15 minutes ago, so
 # the status bar is set to that hour plus ~20 minutes and the card's own
 # "Today at 3pm" agrees with it.
+# THE SIMULATOR'S CLOCK FORMAT DECIDES THE STATUS BAR, not the app language.
+#
+# A French or Italian frame is shot on a 24-hour simulator, so its status bar
+# must read 15:51 rather than 3:51. Reading the same preference the app reads
+# keeps the two consistent whichever way the device is set.
+IS24=$(xcrun simctl spawn "$UDID" defaults read "Apple Global Domain" \
+        AppleICUForce24HourTime 2>/dev/null | tr -d '[:space:]')
 CLOCK=$(node -e "
 const a = require('firebase-admin');
 a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
+const h24 = process.argv[1] === '1';
+a.firestore().collection('games').where('seed_tag','==','store_shots_520').get().then(s => {
+  const d = s.docs.find(x => x.data().reservation_name === 'live_soccer');
+  if (!d) { console.log(h24 ? '9:41' : '9:41'); process.exit(0); }
+  const k = d.data().date.toDate();
+  const t = new Date(k.getTime() + 21*60000);
+  const mm = String(t.getMinutes()).padStart(2,'0');
+  if (h24) { console.log(String(t.getHours()).padStart(2,'0') + ':' + mm); }
+  else { let h = t.getHours() % 12; if (h === 0) h = 12; console.log(h + ':' + mm); }
+  process.exit(0);
+});
+" "$IS24" 2>/dev/null)
+[ -z "$CLOCK" ] && CLOCK="9:41"
+log "clock: $CLOCK"
+
+# HOME ONLY LISTS A GAME THAT KICKED OFF WITHIN THE LAST 30 MINUTES.
+#
+# --restore stamps the kickoff, but the relaunch and the four screens before
+# this one take several minutes, so by the time the Live frame is shot the
+# fixture can already have aged out -- which is how the French 04_live came
+# back showing the wrap-up card and a full game instead of the scoreboard.
+# Confirm the Live card is actually on screen, and if it is not, re-stamp the
+# kickoff and relaunch once.
+if [ -z "$(find_xy 'my team' 'mon équipe' 'mi equipo' 'mia squadra')" ]; then
+    log "Live card aged out, re-stamping kickoff"
+    node "$HERE/park_for_invites.js" --restore >/dev/null 2>&1
+    node "$HERE/reset_wrap_goals.js" >/dev/null 2>&1
+    restart
+    CLOCK=$(node -e "
+const a = require('firebase-admin');
+a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
+const h24 = process.argv[1] === '1';
 a.firestore().collection('games').where('seed_tag','==','store_shots_520').get().then(s => {
   const d = s.docs.find(x => x.data().reservation_name === 'live_soccer');
   if (!d) { console.log('9:41'); process.exit(0); }
-  const k = d.data().date.toDate();
-  const t = new Date(k.getTime() + 21*60000);
-  let h = t.getHours() % 12; if (h === 0) h = 12;
-  console.log(h + ':' + String(t.getMinutes()).padStart(2,'0'));
+  const t = new Date(d.data().date.toDate().getTime() + 21*60000);
+  const mm = String(t.getMinutes()).padStart(2,'0');
+  if (h24) { console.log(String(t.getHours()).padStart(2,'0') + ':' + mm); }
+  else { let h = t.getHours() % 12; if (h === 0) h = 12; console.log(h + ':' + mm); }
   process.exit(0);
 });
-" 2>/dev/null)
-[ -z "$CLOCK" ] && CLOCK="9:41"
-log "clock: $CLOCK"
+" "$IS24" 2>/dev/null)
+    [ -z "$CLOCK" ] && CLOCK="9:41"
+    log "clock: $CLOCK"
+fi
+# SCREEN 4 LEADS WITH THE LIVE SCOREBOARD, so the wrap-up card is suppressed
+# for this frame and re-armed for screen 5. Home renders the wrap-up ABOVE the
+# Live card, which pushed the scoreboard to the middle of the frame and made a
+# finished game the first thing a viewer read on a screen selling Poteau Live.
+node -e "
+const a = require('firebase-admin');
+a.initializeApp({credential: a.credential.cert(require('$HERE/krank-club-firebase-adminsdk-bl4zy-d8facdf022.json')), projectId: 'krank-club'});
+const db = a.firestore();
+db.collection('users').where('store_anchor','==',true).limit(1).get().then(async s => {
+  await s.docs[0].ref.update({ pending_feedback: [] });
+  process.exit(0);
+});
+" >/dev/null 2>&1
+restart
 shoot 04_live "$CLOCK"
+
+# Re-arm the wrap-up card for screen 5.
+node "$HERE/park_for_invites.js" --restore >/dev/null 2>&1
+node "$HERE/reset_wrap_goals.js" >/dev/null 2>&1
+restart
 
 # The wrap-up flow: four steps, each found by label so a moved card cannot send
 # the walk into the Live game sheet instead.
