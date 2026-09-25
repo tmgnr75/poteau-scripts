@@ -120,15 +120,26 @@ shoot 01_invites
 log "state: games list"
 node "$HERE/park_for_invites.js" --list >/dev/null 2>&1
 restart
-# The soccer tab is the second item in the bottom bar. It has no label, so it
-# is the one control found by geometry rather than by text.
+# The soccer tab is the SECOND item in the bottom bar. It has no label, so it
+# is found by position within the bar rather than by text -- and the bar itself
+# is located rather than assumed, because the iPad centres its content in a
+# 500pt column: a fraction-of-width guess that works on a 440pt phone lands on
+# the home tab on a 1032pt tablet.
 TAB=$(tree | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
 app = [e for e in d if e.get('type') == 'Application']
-W = app[0]['frame']['width'] if app else 440
 H = app[0]['frame']['height'] if app else 956
-print(int(W*0.35), int(H*0.90))
+bar = [e for e in d if e.get('type') == 'Image'
+       and (e.get('frame') or {}).get('width', 0) > 0
+       and e['frame']['y'] > H*0.85]
+bar.sort(key=lambda e: e['frame']['x'])
+if len(bar) >= 2:
+    f = bar[1]['frame']
+    print(int(f['x'] + f['width']/2), int(f['y'] + f['height']/2))
+else:
+    W = app[0]['frame']['width'] if app else 440
+    print(int(W*0.35), int(H*0.90))
 ")
 tap_xy $TAB
 sleep 7
