@@ -59,11 +59,27 @@ ui_tree() {
     fi
 }
 
+# TAPS ARE SENT AS ONE-PIXEL SWIPES ON iOS.
+#
+# Proven on 2026-09-25: Tim tapped "Noter le score" by hand and the Live board
+# opened instantly, while nine synthetic taps at every offset around it did
+# nothing. The accessibility tree reports these controls as StaticText, so the
+# real gesture handler sits on a wrapper idb cannot see, and it wants movement
+# rather than an instantaneous touch.
+#
+#   plain tap              ignored
+#   tap --duration 0.15    works for some controls (the Live card)
+#   1px swipe              works for ALL of them, including the wrap-up
+#                          flow's "Valider", which no tap duration would move
+#
+# So a swipe is the primitive and a tap is never used on iOS.
 ui_tap() {
     if is_android; then
         adb -s "$UDID" shell input tap "$1" "$2" >/dev/null 2>&1
     else
-        "$IDB" ui tap --udid "$UDID" "$1" "$2" 2>/dev/null
+        "$IDB" ui swipe --udid "$UDID" "$1" "$2" "$(( $1 + 1 ))" "$2" \
+            --duration 0.2 2>/dev/null
+        return
     fi
 }
 
@@ -140,16 +156,16 @@ capture() {
     h=$(sips -g pixelHeight "$out" 2>/dev/null | tail -1 | awk '{print $2}')
     bytes=$(stat -f%z "$out")
 
-    if [ "$EXP_H" = "0" ]; then
-        # Android: width fixed, height anywhere Play accepts (2:1 max).
-        if [ "$w" != "$EXP_W" ] || [ "$h" -lt "$EXP_W" ] || [ "$h" -gt $((EXP_W * 2)) ]; then
-            log "FAIL $name: ${w}x${h}, want ${EXP_W} wide and within Play's 2:1"
-            rm -f "$out"; return 1
-        fi
-    elif [ "$w" != "$EXP_W" ] || [ "$h" != "$EXP_H" ]; then
-        log "FAIL $name: ${w}x${h}, expected ${EXP_W}x${EXP_H}"
-        rm -f "$out"; return 1
-    fi
+    # SIZE IS NOT A PASS/FAIL GATE (Tim, 2026-09-25).
+    #
+    # These frames are SOURCE MATERIAL. They get composed into a store asset
+    # afterwards -- the OneFootball listing is the reference -- and that asset
+    # carries the store's dimensions, not the raw capture. So a frame that is
+    # the wrong height is still usable, while a frame with the wrong CONTENT
+    # is not, whatever its size.
+    #
+    # The dimensions are recorded rather than enforced, so the composition
+    # step knows what it is working with.
     if [ "$bytes" -lt 40000 ]; then
         log "FAIL $name: ${bytes} bytes, blank frame"
         rm -f "$out"; return 1

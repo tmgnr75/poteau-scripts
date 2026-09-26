@@ -4,6 +4,11 @@
  * Usage:
  *   node seed_store_persona.js --lang en            # dry run, prints the plan
  *   node seed_store_persona.js --lang en --write    # seed
+ * TEARDOWN ORDER MATTERS: --purge FIRST, then create_store_personas.js
+ * --delete. Purge finds the availabilities documents by walking the persona
+ * accounts, so deleting those accounts first leaves the documents orphaned in
+ * a production collection with no way left to find them.
+ *
  *   node seed_store_persona.js --purge              # remove every persona's set
  *
  * Replaces seed_store_screenshots.js, which restyled a SHARED cast of nine
@@ -391,7 +396,32 @@ async function purge() {
         const s = await db.collection("users").where("store_persona", "==", lang).get();
         for (const d of s.docs) await d.ref.update({ games: [] });
     }
-    console.log(`purged ${n} game(s), ${inv.size} invitation(s)`);
+
+    // THE AVAILABILITIES DOC MUST GO TOO.
+    //
+    // Screen 1 needs the invitations toggle to read "On", which is driven by an
+    // `availabilities` document keyed on the viewer's uid. Purge used to leave
+    // it behind, and deleting the persona accounts afterwards turned it into an
+    // ORPHAN in a production collection: 35 slots, label "home", city "New
+    // York", owned by a uid that no longer exists (found at teardown,
+    // 2026-09-26).
+    //
+    // It is matched by uid rather than by a seed tag because the app writes
+    // this collection itself and the document has no tag field to carry one.
+    let avail = 0;
+    for (const lang of Object.keys(PERSONAS)) {
+        const s = await db.collection("users").where("store_persona", "==", lang).get();
+        for (const d of s.docs) {
+            const a = await db.collection("availabilities")
+                .where("user_id", "==", d.id).get();
+            for (const x of a.docs) { await x.ref.delete(); avail += 1; }
+        }
+    }
+
+    console.log(
+        `purged ${n} game(s), ${inv.size} invitation(s), ` +
+        `${avail} availabilities doc(s)`
+    );
     return n;
 }
 
